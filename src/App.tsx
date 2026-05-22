@@ -7,6 +7,7 @@ import { CategoriesPage } from './features/settings/CategoriesPage'
 import { CurrenciesPage } from './features/settings/CurrenciesPage'
 import { ThemePage } from './features/settings/ThemePage'
 import { WalletsPage } from './features/settings/WalletsPage'
+import { WalletFormPage } from './features/settings/WalletFormPage'
 import { SettingsPage } from './features/settings/SettingsPage'
 import { TransactionPage } from './features/transaction/TransactionPage'
 
@@ -28,6 +29,8 @@ export function RoutedApp() {
         <Route path="/balance/wallet/:id" element={<WalletDetailPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/settings/wallets" element={<WalletsPage />} />
+        <Route path="/settings/wallets/new" element={<WalletFormPage />} />
+        <Route path="/settings/wallets/:id" element={<WalletFormPage />} />
         <Route path="/settings/categories" element={<CategoriesPage />} />
         <Route path="/settings/currencies" element={<CurrenciesPage />} />
         <Route path="/settings/theme" element={<ThemePage />} />

@@ -90,4 +90,16 @@ describe('App routing', () => {
     expect(screen.getByRole('heading', { name: 'Wallet not found' })).toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: 'Primary' })).not.toBeInTheDocument()
   })
+
+  it('renders wallet management routes', () => {
+    render(
+      <MemoryRouter initialEntries={['/settings/wallets']}>
+        <RoutedApp />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('heading', { name: 'Wallets' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Add Payment Account/i })).toHaveAttribute('href', '/settings/wallets/new?type=payment')
+    expect(screen.getByRole('link', { name: /Add Credit Card/i })).toHaveAttribute('href', '/settings/wallets/new?type=credit_card')
+  })
 })
