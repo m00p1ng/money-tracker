@@ -14,6 +14,7 @@ import type { TransactionItem, TransactionType } from '../../types/domain'
 import { AmountDisplay } from './AmountDisplay'
 import { CalculatorKeyboard } from './CalculatorKeyboard'
 import { CategoryItemsCard } from './CategoryItemsCard'
+import { CategoryPicker } from './CategoryPicker'
 import { buildTransaction, validateDraft } from './transactionForm'
 
 export function TransactionPage() {
@@ -28,13 +29,15 @@ export function TransactionPage() {
   const [date, setDate] = useState(toDatetimeLocalValue(new Date()))
   const [note, setNote] = useState('')
   const [calc, setCalc] = useState(createCalcState())
+  const [isPickerOpen, setPickerOpen] = useState(false)
   const wallet = wallets.find((item) => item.id === walletId)
   const total = items.reduce((sum, item) => sum + item.amount, 0)
   const firstLeaf = useMemo(() => categories.find((category) => category.type === type && category.parentId), [categories, type])
 
-  function addCategory() {
-    if (!firstLeaf) return
-    setItems((current) => [...current, { categoryId: firstLeaf.id, amount: 0 }])
+  function addCategory(categoryId?: string) {
+    const selectedId = categoryId ?? firstLeaf?.id
+    if (!selectedId) return
+    setItems((current) => [...current, { categoryId: selectedId, amount: 0 }])
     setFocusedIndex(items.length)
     setCalc(createCalcState())
   }
@@ -43,6 +46,15 @@ export function TransactionPage() {
     const next = pressCalcKey(calc, key)
     setCalc(next)
     setItems((current) => current.map((item, index) => (index === focusedIndex ? { ...item, amount: next.result } : item)))
+  }
+
+  function handleFocusItem(index: number) {
+    setFocusedIndex(index)
+    setCalc(createCalcState(items[index]?.amount ?? 0))
+  }
+
+  function handleRemoveItem(index: number) {
+    setItems((current) => current.filter((_, itemIndex) => itemIndex !== index))
   }
 
   async function save() {
@@ -70,7 +82,7 @@ export function TransactionPage() {
           <span className="text-slate-400">฿{wallet?.balance.toFixed(2) ?? '0.00'}</span>
         </div>
       </Card>
-      <CategoryItemsCard items={items} focusedIndex={focusedIndex} onFocus={(index) => { setFocusedIndex(index); setCalc(createCalcState(items[index]?.amount ?? 0)) }} onAdd={addCategory} onRemove={(index) => setItems((current) => current.filter((_, itemIndex) => itemIndex !== index))} />
+      <CategoryItemsCard items={items} focusedIndex={focusedIndex} onFocus={handleFocusItem} onAdd={() => setPickerOpen(true)} onRemove={handleRemoveItem} />
       <Card>
         <label className="block text-sm text-slate-500" htmlFor="tx-date">Date & Time</label>
         <input id="tx-date" className="mt-2 w-full rounded-lg bg-white/5 px-3 py-3 text-slate-100" type="datetime-local" value={date} onChange={(event) => setDate(event.target.value)} />
@@ -79,6 +91,17 @@ export function TransactionPage() {
         <label className="block text-sm text-slate-500" htmlFor="tx-note">Note</label>
         <textarea id="tx-note" className="mt-2 min-h-24 w-full rounded-lg bg-white/5 px-3 py-3 text-slate-100" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Add note" />
       </Card>
+      {isPickerOpen ? (
+        <CategoryPicker
+          categories={categories}
+          type={type}
+          onClose={() => setPickerOpen(false)}
+          onSelect={(category) => {
+            addCategory(category.id)
+            setPickerOpen(false)
+          }}
+        />
+      ) : null}
       <CalculatorKeyboard onPress={press} />
     </div>
   )

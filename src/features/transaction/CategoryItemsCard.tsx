@@ -40,9 +40,9 @@ export function CategoryItemsCard({
                 <span className="block truncate text-sm text-slate-500">{parent?.name ?? ''}</span>
               </span>
               <span className="font-semibold">{formatAmount(item.amount)}</span>
-              <span role="button" tabIndex={0} className="text-slate-500" onClick={(event) => { event.stopPropagation(); onRemove(index) }}>
+              <button aria-label="Remove category" className="border-0 bg-transparent text-slate-500" type="button" onClick={(event) => { event.stopPropagation(); onRemove(index) }}>
                 <Icon name="fa-xmark" />
-              </span>
+              </button>
             </button>
           )
         })}
