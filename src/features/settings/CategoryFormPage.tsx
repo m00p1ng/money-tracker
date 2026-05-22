@@ -24,6 +24,13 @@ export function CategoryFormPage() {
       setError('Name is required')
       return
     }
+    if (form.parentId) {
+      const parent = categories.find((c) => c.id === form.parentId)
+      if (parent && parent.type !== form.type) {
+        setError('Category type must match parent type')
+        return
+      }
+    }
     try {
       await (existing ? update(form) : add(form))
       navigate('/settings/categories')
