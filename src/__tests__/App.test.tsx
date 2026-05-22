@@ -28,6 +28,18 @@ describe('App routing', () => {
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
   })
 
+  it('renders the Balance tab account groups', () => {
+    render(
+      <MemoryRouter initialEntries={['/balance']}>
+        <RoutedApp />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('heading', { name: 'Balance' })).toBeInTheDocument()
+    expect(screen.getByText('Payment Accounts')).toBeInTheDocument()
+    expect(screen.getByText('Credit Cards')).toBeInTheDocument()
+  })
+
   it('enables Home Balance and Setting in bottom navigation', () => {
     render(
       <MemoryRouter initialEntries={['/balance']}>
@@ -60,7 +72,7 @@ describe('App routing', () => {
       </MemoryRouter>
     )
 
-    expect(screen.getByRole('heading', { name: 'Wallet Detail' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Wallet not found' })).toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: 'Primary' })).not.toBeInTheDocument()
   })
 })
