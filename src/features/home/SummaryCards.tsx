@@ -1,6 +1,4 @@
 import { Icon } from '../../components/Icon'
-import { Card } from '../../components/ui/Card'
-import { monthRangeLabel } from '../../lib/date'
 import { formatAmount } from '../../lib/format'
 import { useTransactionStore } from '../../stores/transactionStore'
 
@@ -11,23 +9,24 @@ export function SummaryCards() {
   const expense = monthlyExpense()
 
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <Card className="border-emerald-400/20">
-        <div className="mb-3 flex items-center justify-between text-sm text-slate-400">
-          <span>Income</span>
-          <Icon name="fa-arrow-up" className="text-emerald-300" />
+    <div>
+      <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[2px] text-white/30">This Month</h2>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-emerald-400/10 to-emerald-600/5 p-4 backdrop-blur">
+          <div className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[1px] text-emerald-400">
+            <Icon name="fa-arrow-up" />
+            <span>Income</span>
+          </div>
+          <p className="text-xl font-bold text-emerald-300">{formatAmount(income)}</p>
         </div>
-        <p className="text-lg font-semibold text-emerald-300">{formatAmount(income)}</p>
-        <p className="mt-1 text-[11px] text-slate-500">{monthRangeLabel()}</p>
-      </Card>
-      <Card className="border-rose-400/20">
-        <div className="mb-3 flex items-center justify-between text-sm text-slate-400">
-          <span>Expense</span>
-          <Icon name="fa-arrow-down" className="text-rose-300" />
+        <div className="rounded-2xl border border-rose-400/20 bg-gradient-to-br from-rose-400/10 to-rose-600/5 p-4 backdrop-blur">
+          <div className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[1px] text-rose-400">
+            <Icon name="fa-arrow-down" />
+            <span>Expense</span>
+          </div>
+          <p className="text-xl font-bold text-rose-300">{formatAmount(expense)}</p>
         </div>
-        <p className="text-lg font-semibold text-rose-300">{formatAmount(expense)}</p>
-        <p className="mt-1 text-[11px] text-slate-500">{monthRangeLabel()}</p>
-      </Card>
+      </div>
     </div>
   )
 }

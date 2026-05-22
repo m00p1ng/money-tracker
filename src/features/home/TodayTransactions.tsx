@@ -1,6 +1,5 @@
 import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
-import { Card } from '../../components/ui/Card'
 import { formatShortDate } from '../../lib/date'
 import { formatAmount } from '../../lib/format'
 import { useCategoryStore } from '../../stores/categoryStore'
@@ -15,18 +14,18 @@ export function TodayTransactions() {
   return (
     <section>
       <div className="mb-3 flex items-end justify-between">
-        <h2 className="text-lg font-semibold">Today</h2>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[2px] text-white/30">Today</h2>
         <span className="text-sm text-slate-400">{formatShortDate(new Date())}</span>
       </div>
-      <Card className="space-y-1 p-2">
-        {transactions.length === 0 ? <p className="px-2 py-8 text-center text-sm text-slate-500">No transactions today</p> : null}
+      <div className="space-y-2">
+        {transactions.length === 0 ? <p className="py-8 text-center text-sm text-slate-500">No transactions today</p> : null}
         {transactions.map((transaction) =>
           transaction.items.map((item, index) => {
             const category = findCategory(item.categoryId)
             const parent = category ? parentOf(category) : undefined
             return (
-              <Link key={`${transaction.id}-${index}`} to={`/transaction/${transaction.id}`} className="flex items-center gap-3 rounded-lg px-2 py-3 hover:bg-white/5">
-                <span className="grid h-10 w-10 place-items-center rounded-lg" style={{ backgroundColor: `${category?.color ?? '#64748b'}25`, color: category?.color ?? '#94a3b8' }}>
+              <Link key={`${transaction.id}-${index}`} to={`/transaction/${transaction.id}`} className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-3.5 backdrop-blur transition-colors hover:bg-white/[0.07]">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ backgroundColor: `${category?.color ?? '#64748b'}25`, color: category?.color ?? '#94a3b8' }}>
                   <Icon name={category?.icon ?? 'fa-ellipsis'} />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -41,7 +40,7 @@ export function TodayTransactions() {
             )
           }),
         )}
-      </Card>
+      </div>
     </section>
   )
 }

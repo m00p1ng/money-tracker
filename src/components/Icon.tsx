@@ -21,6 +21,7 @@ import {
   faPlane,
   faSpa,
   faUtensils,
+  faPlus,
   faWallet,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
@@ -46,6 +47,7 @@ library.add(
   faPlane,
   faSpa,
   faUtensils,
+  faPlus,
   faWallet,
   faXmark,
 )
