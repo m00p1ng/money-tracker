@@ -40,7 +40,8 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
     if (normalized.isBase) await get().setBase(normalized.code)
   },
   async update(currency) {
-    const normalized = normalizeCurrency(currency)
+    const existing = await db.currencies.get(currency.code.trim().toUpperCase())
+    const normalized = normalizeCurrency(existing?.isBase ? { ...currency, isBase: true } : currency)
     await db.currencies.put(normalized)
     set({ items: get().items.map((item) => (item.code === normalized.code ? normalized : item)) })
     if (normalized.isBase) await get().setBase(normalized.code)

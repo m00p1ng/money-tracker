@@ -311,4 +311,20 @@ describe('stores', () => {
     await expect(useCurrencyStore.getState().remove('USD')).rejects.toThrow('Base currency cannot be deleted')
     expect(await db.currencies.get('USD')).toBeDefined()
   })
+
+  it('keeps the current base currency base when updated with isBase false', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useCurrencyStore.getState().update({
+      code: 'THB',
+      symbol: '฿',
+      name: 'Thai Baht',
+      isBase: false,
+      rate: 36,
+    })
+
+    expect(await db.currencies.get('THB')).toMatchObject({ isBase: true, rate: 1 })
+    expect(useCurrencyStore.getState().findByCode('THB')).toMatchObject({ isBase: true, rate: 1 })
+  })
 })
