@@ -201,4 +201,20 @@ describe('stores', () => {
     expect(await db.currencies.get('EUR')).toMatchObject({ isBase: false, rate: 39 })
     expect(useCurrencyStore.getState().items).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'EUR' })]))
   })
+
+  it('checks Dexie before deleting base currencies when store state is stale', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await db.currencies.put({
+      code: 'USD',
+      symbol: '$',
+      name: 'US Dollar',
+      isBase: true,
+      rate: 1,
+    })
+
+    await expect(useCurrencyStore.getState().remove('USD')).rejects.toThrow('Base currency cannot be deleted')
+    expect(await db.currencies.get('USD')).toBeDefined()
+  })
 })

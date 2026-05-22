@@ -47,7 +47,7 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
   },
   async remove(code) {
     const normalizedCode = code.trim().toUpperCase()
-    const currency = get().findByCode(normalizedCode)
+    const currency = await db.currencies.get(normalizedCode)
     if (currency?.isBase) throw new Error('Base currency cannot be deleted')
 
     const wallets = await db.wallets.toArray()
