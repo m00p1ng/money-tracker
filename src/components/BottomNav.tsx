@@ -2,36 +2,35 @@ import { Link, useLocation } from 'react-router'
 import { Icon } from './Icon'
 
 const navItems = [
-  { label: 'Home', icon: 'fa-home', to: '/' },
-  { label: 'Balance', icon: 'fa-wallet', to: null },
-  { label: 'Budget', icon: 'fa-chart-pie', to: null },
-  { label: 'Report', icon: 'fa-chart-line', to: null },
-  { label: 'Setting', icon: 'fa-gear', to: null },
-]
+  { label: 'Home', to: '/', icon: 'fa-home', enabled: true },
+  { label: 'Balance', to: '/balance', icon: 'fa-wallet', enabled: true },
+  { label: 'Budget', to: '/budget', icon: 'fa-chart-pie', enabled: false },
+  { label: 'Report', to: '/report', icon: 'fa-chart-line', enabled: false },
+  { label: 'Setting', to: '/settings', icon: 'fa-gear', enabled: true },
+] as const
 
 export function BottomNav() {
-  const { pathname } = useLocation()
+  const location = useLocation()
 
   return (
-    <nav aria-label="Primary" className="fixed inset-x-0 bottom-0 z-20 border-t border-white/[0.06] bg-black/80 pb-7 pt-2 backdrop-blur-xl">
-      <div className="mx-auto grid max-w-[430px] grid-cols-5">
-        {navItems.map(({ label, icon, to }) => {
-          const active = to !== null && pathname === to
-          const inner = (
-            <>
-              <Icon name={icon} className={`text-[19px] ${active ? 'text-accent' : 'text-white/25'}`} />
-              <span className={`text-[10px] ${active ? 'font-semibold text-accent' : 'text-white/25'}`}>{label}</span>
-              {active && <span className="mx-auto mt-1 h-1 w-1 rounded-full bg-accent shadow-[0_0_6px_var(--accent)]" />}
-            </>
-          )
-          return to ? (
-            <Link key={label} to={to} className="flex flex-col items-center gap-1 py-1.5">
-              {inner}
+    <nav aria-label="Primary" className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--nav-border)] bg-black/45 px-4 pb-4 pt-2 backdrop-blur-xl">
+      <div className="mx-auto grid max-w-[430px] grid-cols-5 text-xs">
+        {navItems.map((item) => {
+          const active = item.to === '/' ? location.pathname === '/' : location.pathname.startsWith(item.to)
+          const className = `flex flex-col items-center gap-1 ${active ? 'text-accent' : 'text-slate-500'}`
+          if (!item.enabled) {
+            return (
+              <button key={item.label} className={className} disabled type="button">
+                <Icon name={item.icon} />
+                <span>{item.label}</span>
+              </button>
+            )
+          }
+          return (
+            <Link key={item.label} className={className} to={item.to}>
+              <Icon name={item.icon} />
+              <span>{item.label}</span>
             </Link>
-          ) : (
-            <button key={label} type="button" disabled className="flex flex-col items-center gap-1 py-1.5">
-              {inner}
-            </button>
           )
         })}
       </div>
