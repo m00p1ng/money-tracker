@@ -83,6 +83,35 @@ describe('stores', () => {
     await expect(useWalletStore.getState().remove('wallet-card')).rejects.toThrow('Wallet has existing transactions')
   })
 
+  it('blocks deleting wallets used as transfer destinations', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useWalletStore.getState().add({
+      id: 'wallet-card',
+      name: 'Visa',
+      type: 'credit_card',
+      currency: 'THB',
+      balance: 0,
+      creditLimit: 10000,
+      color: '#ef4444',
+      icon: 'fa-credit-card',
+    })
+    await useTransactionStore.getState().add({
+      id: 'tx-card',
+      type: 'expense',
+      walletId: 'wallet-cash',
+      toWalletId: 'wallet-card',
+      currency: 'THB',
+      items: [{ categoryId: 'expense-shopping-clothes', amount: 500 }],
+      date: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    })
+
+    await expect(useWalletStore.getState().remove('wallet-card')).rejects.toThrow('Wallet has existing transactions')
+    expect(await db.wallets.get('wallet-card')).toBeDefined()
+  })
+
   it('writes categories through to Dexie and blocks deleting parents with children', async () => {
     await seedDatabase()
     await bootstrapStores()
@@ -145,6 +174,71 @@ describe('stores', () => {
 
     await expect(useCategoryStore.getState().remove('expense-custom')).rejects.toThrow('Category has child categories')
     expect(await db.categories.get('expense-custom')).toBeDefined()
+  })
+
+  it('validates category parents from Dexie when store state is stale', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    useCategoryStore.setState({
+      items: [
+        ...useCategoryStore.getState().items,
+        {
+          id: 'expense-custom',
+          name: 'Custom',
+          type: 'expense',
+          level: 1,
+          icon: 'fa-tag',
+          color: '#64748b',
+          isDefault: false,
+        },
+      ],
+    })
+
+    await expect(
+      useCategoryStore.getState().add({
+        id: 'expense-custom-child',
+        name: 'Custom Child',
+        type: 'expense',
+        parentId: 'expense-custom',
+        level: 2,
+        icon: 'fa-tag',
+        color: '#64748b',
+        isDefault: false,
+      }),
+    ).rejects.toThrow('Parent category does not exist')
+    expect(await db.categories.get('expense-custom-child')).toBeUndefined()
+
+    await expect(
+      useCategoryStore.getState().update({
+        id: 'expense-food-and-drink',
+        name: 'Food & Drink',
+        type: 'expense',
+        parentId: 'expense-custom',
+        level: 2,
+        icon: 'fa-utensils',
+        color: '#65a30d',
+        isDefault: true,
+      }),
+    ).rejects.toThrow('Parent category does not exist')
+  })
+
+  it('blocks unsafe category hierarchy updates when children exist', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await expect(
+      useCategoryStore.getState().update({
+        id: 'expense-shopping',
+        name: 'Shopping',
+        type: 'income',
+        level: 1,
+        icon: 'fa-bag-shopping',
+        color: '#db2777',
+        isDefault: true,
+      }),
+    ).rejects.toThrow('Category has child categories')
+    expect(await db.categories.get('expense-shopping')).toMatchObject({ type: 'expense', level: 1 })
   })
 
   it('writes currencies through to Dexie, sets the base currency, and blocks deleting it', async () => {

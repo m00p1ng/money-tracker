@@ -25,8 +25,10 @@ export const useWalletStore = create<WalletStore>((set, get) => ({
     set({ items: get().items.map((item) => (item.id === wallet.id ? wallet : item)) })
   },
   async remove(id) {
-    const transactionCount = await db.transactions.where('walletId').equals(id).count()
-    if (transactionCount > 0) throw new Error('Wallet has existing transactions')
+    const transactions = await db.transactions.toArray()
+    if (transactions.some((transaction) => transaction.walletId === id || transaction.toWalletId === id)) {
+      throw new Error('Wallet has existing transactions')
+    }
 
     await db.wallets.delete(id)
     set({ items: get().items.filter((wallet) => wallet.id !== id) })
