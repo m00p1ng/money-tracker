@@ -31,6 +31,7 @@ export type Wallet = {
   type: WalletType
   currency: string
   balance: number
+  creditLimit?: number
   color: string
   icon: string
 }
