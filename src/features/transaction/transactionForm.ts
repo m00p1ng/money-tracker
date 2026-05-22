@@ -7,9 +7,15 @@ export type TransactionDraft = {
 
 export function validateDraft(draft: TransactionDraft): string[] {
   const errors: string[] = []
-  if (!draft.walletId) errors.push('Select a wallet')
-  if (draft.items.length === 0) errors.push('Add at least one category')
-  if (draft.items.some((item) => item.amount <= 0)) errors.push('Enter an amount for every category')
+  if (!draft.walletId) {
+    errors.push('Select a wallet')
+  }
+  if (draft.items.length === 0) {
+    errors.push('Add at least one category')
+  }
+  if (draft.items.some((item) => item.amount <= 0)) {
+    errors.push('Enter an amount for every category')
+  }
   return errors
 }
 

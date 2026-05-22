@@ -13,7 +13,9 @@ export function transactionTotal(transaction: Transaction): number {
 
 export function signedWalletAmount(wallet: Wallet, transaction: Transaction): number {
   const total = transactionTotal(transaction)
-  if (wallet.type === 'credit_card') return transaction.type === 'expense' ? total : -total
+  if (wallet.type === 'credit_card') {
+    return transaction.type === 'expense' ? total : -total
+  }
   return transaction.type === 'income' ? total : -total
 }
 

@@ -13,7 +13,9 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
   settings: undefined,
   async load() {
     const settings = await db.settings.get('default')
-    if (settings) applyTheme(settings.theme)
+    if (settings) {
+      applyTheme(settings.theme)
+    }
     set({ settings })
   },
   async update(settings) {

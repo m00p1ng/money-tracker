@@ -19,13 +19,27 @@ export function CurrencyFormPage() {
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault()
-    if (!form.code.trim()) { setError('Code is required'); return }
-    if (!form.symbol.trim()) { setError('Symbol is required'); return }
-    if (!form.name.trim()) { setError('Name is required'); return }
-    if (form.rate <= 0) { setError('Rate must be greater than 0'); return }
+    if (!form.code.trim()) {
+      setError('Code is required')
+      return
+    }
+    if (!form.symbol.trim()) {
+      setError('Symbol is required')
+      return
+    }
+    if (!form.name.trim()) {
+      setError('Name is required')
+      return
+    }
+    if (form.rate <= 0) {
+      setError('Rate must be greater than 0')
+      return
+    }
     try {
       await (existing ? update(form) : add(form))
-      if (form.isBase) await setBase(form.code.toUpperCase())
+      if (form.isBase) {
+        await setBase(form.code.toUpperCase())
+      }
       navigate('/settings/currencies')
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unable to save currency')
@@ -33,7 +47,9 @@ export function CurrencyFormPage() {
   }
 
   async function onDelete() {
-    if (!existing) return
+    if (!existing) {
+      return
+    }
     try {
       await remove(existing.code)
       navigate('/settings/currencies')

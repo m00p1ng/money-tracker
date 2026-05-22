@@ -58,7 +58,9 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
   }
 
   if (key === '.') {
-    if (state.display.includes('.')) return state
+    if (state.display.includes('.')) {
+      return state
+    }
     if (state.lastKey === '=') {
       return { display: '0.', expression: '0.', result: 0, lastKey: key }
     }
@@ -68,19 +70,25 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
   }
 
   if (operators.includes(key as Operator)) {
-    if (!state.display) return state
+    if (!state.display) {
+      return state
+    }
     return { ...state, display: '', expression: `${state.expression} ${key} `, lastKey: key }
   }
 
   if (key === '=') {
-    if (state.lastKey === '=') return { ...state, lastKey: key }
+    if (state.lastKey === '=') {
+      return { ...state, lastKey: key }
+    }
     const rawTokens = tokens(state.expression, state.display)
     const result = evaluate(rawTokens)
     return { display: String(result), expression: rawTokens.join(' '), result, lastKey: key }
   }
 
   if (key === '±') {
-    if (!state.display) return state
+    if (!state.display) {
+      return state
+    }
     const display = state.display.startsWith('-') ? state.display.slice(1) : `-${state.display}`
     const expression = updateExpression(state.expression, state.display, display)
     return { display, expression, result: Number(display) || 0, lastKey: key }

@@ -37,7 +37,9 @@ export function TransactionPage() {
 
   function addCategory(categoryId?: string) {
     const selectedId = categoryId ?? firstLeaf?.id
-    if (!selectedId) return
+    if (!selectedId) {
+      return
+    }
     setItems((current) => [...current, { categoryId: selectedId, amount: 0 }])
     setFocusedIndex(items.length)
     setCalc(createCalcState())
@@ -84,8 +86,12 @@ export function TransactionPage() {
   }
 
   async function deleteTransaction() {
-    if (!existing) return
-    if (!window.confirm('Delete this transaction?')) return
+    if (!existing) {
+      return
+    }
+    if (!window.confirm('Delete this transaction?')) {
+      return
+    }
     await remove(existing.id)
     navigate('/')
   }

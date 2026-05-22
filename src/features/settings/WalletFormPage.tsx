@@ -51,7 +51,9 @@ export function WalletFormPage() {
   }
 
   async function onDelete() {
-    if (!wallet) return
+    if (!wallet) {
+      return
+    }
     try {
       await remove(wallet.id)
       navigate('/settings/wallets')

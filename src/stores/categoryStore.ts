@@ -15,27 +15,45 @@ type CategoryStore = {
 }
 
 async function validateCategory(category: Category): Promise<void> {
-  if (!category.name.trim()) throw new Error('Category name is required')
-  if (category.level < 1 || category.level > 5) throw new Error('Category level must be between 1 and 5')
+  if (!category.name.trim()) {
+    throw new Error('Category name is required')
+  }
+  if (category.level < 1 || category.level > 5) {
+    throw new Error('Category level must be between 1 and 5')
+  }
 
   if (!category.parentId) {
-    if (category.level !== 1) throw new Error('Root category must be level 1')
+    if (category.level !== 1) {
+      throw new Error('Root category must be level 1')
+    }
     return
   }
 
   const parent = await db.categories.get(category.parentId)
-  if (!parent) throw new Error('Parent category does not exist')
-  if (parent.id === category.id) throw new Error('Parent category does not exist')
-  if (parent.type !== category.type) throw new Error('Parent category type must match')
-  if (category.level !== parent.level + 1) throw new Error('Child category level must be parent level plus 1')
+  if (!parent) {
+    throw new Error('Parent category does not exist')
+  }
+  if (parent.id === category.id) {
+    throw new Error('Parent category does not exist')
+  }
+  if (parent.type !== category.type) {
+    throw new Error('Parent category type must match')
+  }
+  if (category.level !== parent.level + 1) {
+    throw new Error('Child category level must be parent level plus 1')
+  }
 }
 
 async function validateSafeUpdate(category: Category): Promise<void> {
   const existing = await db.categories.get(category.id)
-  if (!existing) return
+  if (!existing) {
+    return
+  }
 
   const childCount = await db.categories.where('parentId').equals(category.id).count()
-  if (childCount === 0) return
+  if (childCount === 0) {
+    return
+  }
 
   const parentChanged = existing.parentId !== category.parentId
   if (existing.type !== category.type || existing.level !== category.level || parentChanged) {
@@ -62,7 +80,9 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
   },
   async remove(id) {
     const childCount = await db.categories.where('parentId').equals(id).count()
-    if (childCount > 0) throw new Error('Category has child categories')
+    if (childCount > 0) {
+      throw new Error('Category has child categories')
+    }
 
     const transactions = await db.transactions.toArray()
     if (transactions.some((transaction) => transaction.items.some((item) => item.categoryId === id))) {

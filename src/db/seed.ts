@@ -93,7 +93,9 @@ function buildCategories(): Category[] {
 
 export async function seedDatabase(): Promise<void> {
   const walletCount = await db.wallets.count()
-  if (walletCount > 0) return
+  if (walletCount > 0) {
+    return
+  }
 
   await db.transaction('rw', db.wallets, db.currencies, db.settings, db.categories, async () => {
     await db.wallets.put(wallet)
