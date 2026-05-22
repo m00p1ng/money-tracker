@@ -112,6 +112,24 @@ describe('stores', () => {
     expect(await db.wallets.get('wallet-card')).toBeDefined()
   })
 
+  it('writes wallet updates through to Dexie and state', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useWalletStore.getState().update({
+      id: 'wallet-cash',
+      name: 'Petty Cash',
+      type: 'payment',
+      currency: 'THB',
+      balance: 1500,
+      color: '#10b981',
+      icon: 'fa-wallet',
+    })
+
+    expect(await db.wallets.get('wallet-cash')).toMatchObject({ name: 'Petty Cash', balance: 1500 })
+    expect(useWalletStore.getState().findById('wallet-cash')).toMatchObject({ name: 'Petty Cash', balance: 1500 })
+  })
+
   it('writes categories through to Dexie and blocks deleting parents with children', async () => {
     await seedDatabase()
     await bootstrapStores()
@@ -239,6 +257,27 @@ describe('stores', () => {
       }),
     ).rejects.toThrow('Category has child categories')
     expect(await db.categories.get('expense-shopping')).toMatchObject({ type: 'expense', level: 1 })
+  })
+
+  it('writes non-structural category updates through to Dexie and state', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useCategoryStore.getState().update({
+      id: 'expense-shopping',
+      name: 'Retail',
+      type: 'expense',
+      level: 1,
+      icon: 'fa-bag-shopping',
+      color: '#ef4444',
+      isDefault: true,
+    })
+
+    expect(await db.categories.get('expense-shopping')).toMatchObject({ name: 'Retail', color: '#ef4444' })
+    expect(useCategoryStore.getState().findById('expense-shopping')).toMatchObject({
+      name: 'Retail',
+      color: '#ef4444',
+    })
   })
 
   it('writes currencies through to Dexie, sets the base currency, and blocks deleting it', async () => {
