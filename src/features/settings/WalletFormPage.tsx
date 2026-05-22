@@ -8,6 +8,8 @@ import { useCurrencyStore } from '../../stores/currencyStore'
 import { useWalletStore } from '../../stores/walletStore'
 import type { Wallet, WalletType } from '../../types/domain'
 
+const DEFAULT_CURRENCY = 'THB'
+
 export function WalletFormPage() {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
@@ -23,7 +25,7 @@ export function WalletFormPage() {
     id: createId(),
     name: '',
     type: initialType,
-    currency: currencies[0]?.code ?? 'THB',
+    currency: currencies[0]?.code ?? DEFAULT_CURRENCY,
     balance: 0,
     color: '#10b981',
     icon: initialType === 'credit_card' ? 'fa-credit-card' : 'fa-wallet',
@@ -40,8 +42,12 @@ export function WalletFormPage() {
       setError('Credit limit must be greater than 0')
       return
     }
-    await (wallet ? update(form) : add(form))
-    navigate('/settings/wallets')
+    try {
+      await (wallet ? update(form) : add(form))
+      navigate('/settings/wallets')
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Unable to save wallet')
+    }
   }
 
   async function onDelete() {

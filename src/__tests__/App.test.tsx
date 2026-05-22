@@ -1,10 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import App, { RoutedApp } from '../App'
 import { useWalletStore } from '../stores/walletStore'
 
 describe('App routing', () => {
+  afterEach(() => {
+    useWalletStore.setState({ items: [] })
+  })
   it('renders the home route with bottom navigation', () => {
     render(<App />)
     expect(screen.getByText('Overview')).toBeInTheDocument()
