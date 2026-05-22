@@ -14,7 +14,7 @@ export function HomePage() {
         </div>
         <Link
           to="/transaction/new"
-          className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white shadow-[0_6px_20px_rgba(16,185,129,0.45)]"
+          className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white"
           aria-label="Add transaction"
         >
           <Icon name="fa-plus" />

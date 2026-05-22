@@ -42,3 +42,11 @@ export function toDatetimeLocalValue(date: Date): string {
   const offsetMs = date.getTimezoneOffset() * 60_000
   return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16)
 }
+
+const displayDateFormatter = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+
+export function formatDatetimeLocalDisplay(value: string): string {
+  const [datePart, timePart] = value.split('T')
+  const date = new Date(`${datePart}T00:00:00`)
+  return `${displayDateFormatter.format(date)} · ${timePart}`
+}

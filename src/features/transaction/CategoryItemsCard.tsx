@@ -1,6 +1,4 @@
 import { Icon } from '../../components/Icon'
-import { Button } from '../../components/ui/Button'
-import { Card } from '../../components/ui/Card'
 import { formatAmount } from '../../lib/format'
 import { useCategoryStore } from '../../stores/categoryStore'
 import type { TransactionItem } from '../../types/domain'
@@ -23,34 +21,59 @@ export function CategoryItemsCard({
   const total = items.reduce((sum, item) => sum + item.amount, 0)
 
   return (
-    <Card className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="font-semibold">Categories</h2>
-        <Button onClick={onAdd} type="button">+ Add</Button>
+    <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.04]">
+      <div className="flex items-center justify-between border-b border-white/[0.05] px-4 py-2.5">
+        <span className="text-[11px] uppercase tracking-[1px] text-white/35">Categories</span>
+        <button onClick={onAdd} type="button" className="flex items-center gap-1 text-[11px] font-semibold text-accent-light">
+          <Icon name="fa-plus" className="text-[10px]" /> Add
+        </button>
       </div>
-      <div className="space-y-2">
-        {items.map((item, index) => {
-          const category = findCategory(item.categoryId)
-          const parent = category ? parentOf(category) : undefined
-          return (
-            <div key={`${item.categoryId}-${index}`} role="button" tabIndex={0} className={`flex w-full items-center gap-3 rounded-lg border-l-2 px-2 py-3 text-left ${focusedIndex === index ? 'border-accent bg-white/8' : 'border-transparent bg-transparent'}`} onClick={() => onFocus(index)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onFocus(index) } }}>
-              <Icon name={category?.icon ?? 'fa-ellipsis'} className="text-accent-light" />
-              <span className="min-w-0 flex-1">
-                <span className="block truncate font-medium">{category?.name ?? 'Unknown'}</span>
-                <span className="block truncate text-sm text-slate-500">{parent?.name ?? ''}</span>
-              </span>
-              <span className="font-semibold">{formatAmount(item.amount)}</span>
-              <button aria-label="Remove category" className="border-0 bg-transparent text-slate-500" type="button" onClick={(event) => { event.stopPropagation(); onRemove(index) }}>
-                <Icon name="fa-xmark" />
-              </button>
+
+      {items.map((item, index) => {
+        const category = findCategory(item.categoryId)
+        const parent = category ? parentOf(category) : undefined
+        const isFocused = focusedIndex === index
+        return (
+          <div
+            key={`${item.categoryId}-${index}`}
+            role="button"
+            tabIndex={0}
+            className={`flex items-center gap-3 border-b border-white/[0.04] px-4 py-3 last:border-b-0 ${isFocused ? 'bg-[var(--accent)]/[0.06]' : ''}`}
+            onClick={() => onFocus(index)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                onFocus(index)
+              }
+            }}
+          >
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[9px] bg-[var(--accent)]/15 text-sm text-accent-light">
+              <Icon name={category?.icon ?? 'fa-ellipsis'} />
             </div>
-          )
-        })}
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold">{category?.name ?? 'Unknown'}</p>
+              <p className="truncate text-[11px] text-white/30">{parent?.name ?? ''}</p>
+            </div>
+            <span className="flex-shrink-0 text-sm font-bold text-red-400">{formatAmount(item.amount)}</span>
+            <button
+              aria-label="Remove category"
+              className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-red-500/10 text-[10px] text-red-400"
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                onRemove(index)
+              }}
+            >
+              <Icon name="fa-xmark" />
+            </button>
+          </div>
+        )
+      })}
+
+      <div className="flex items-center justify-between border-t border-[var(--accent)]/15 bg-[var(--accent)]/[0.06] px-4 py-2.5">
+        <span className="text-[12px] uppercase tracking-[1px] text-white/40">Total</span>
+        <span className="text-lg font-bold">{formatAmount(total)}</span>
       </div>
-      <div className="flex justify-between border-t border-white/10 pt-3 font-semibold">
-        <span>Total</span>
-        <span>{formatAmount(total)}</span>
-      </div>
-    </Card>
+    </div>
   )
 }

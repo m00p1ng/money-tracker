@@ -1,17 +1,14 @@
 import { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { Icon } from '../../components/Icon'
-import { Button } from '../../components/ui/Button'
-import { Card } from '../../components/ui/Card'
 import { SegmentedControl } from '../../components/ui/SegmentedControl'
 import { createCalcState, pressCalcKey } from '../../lib/calculator'
 import { createId } from '../../lib/id'
-import { toDatetimeLocalValue } from '../../lib/date'
+import { formatDatetimeLocalDisplay, toDatetimeLocalValue } from '../../lib/date'
 import { useCategoryStore } from '../../stores/categoryStore'
 import { useTransactionStore } from '../../stores/transactionStore'
 import { useWalletStore } from '../../stores/walletStore'
 import type { TransactionItem, TransactionType } from '../../types/domain'
-import { AmountDisplay } from './AmountDisplay'
 import { CalculatorKeyboard } from './CalculatorKeyboard'
 import { CategoryItemsCard } from './CategoryItemsCard'
 import { CategoryPicker } from './CategoryPicker'
@@ -36,7 +33,6 @@ export function TransactionPage() {
   const [calc, setCalc] = useState(createCalcState())
   const [isPickerOpen, setPickerOpen] = useState(false)
   const wallet = wallets.find((item) => item.id === walletId)
-  const total = items.reduce((sum, item) => sum + item.amount, 0)
   const firstLeaf = useMemo(() => categories.find((category) => category.type === type && category.parentId), [categories, type])
 
   function addCategory(categoryId?: string) {
@@ -95,34 +91,83 @@ export function TransactionPage() {
   }
 
   return (
-    <div className="space-y-4 pb-64">
-      <header className="grid grid-cols-[44px_1fr_44px] items-center gap-3">
-        <Button aria-label="Back" onClick={() => navigate('/')} className="px-0" type="button"><Icon name="fa-chevron-left" /></Button>
+    <div className="space-y-3 pb-64">
+      <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
+        <button
+          aria-label="Back"
+          onClick={() => navigate('/')}
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
+          type="button"
+        >
+          <Icon name="fa-chevron-left" />
+        </button>
         <SegmentedControl value={type} onChange={setType} segments={[{ label: 'Expense', value: 'expense' }, { label: 'Income', value: 'income' }]} />
-        <Button aria-label="Save" onClick={save} className="px-0" variant="accent" type="button"><Icon name="fa-check" /></Button>
+        <button
+          aria-label="Save"
+          onClick={save}
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_2px_10px_rgba(16,185,129,0.4)]"
+          type="button"
+        >
+          <Icon name="fa-check" />
+        </button>
       </header>
-      <AmountDisplay amount={total} expression={calc.expression} type={type} />
-      <Card>
-        <p className="text-sm text-slate-500">Wallet</p>
-        <div className="mt-2 flex items-center justify-between">
-          <span className="flex items-center gap-2"><Icon name="fa-wallet" />{wallet?.name ?? 'Cash'}</span>
-          <span className="text-slate-400">฿{wallet?.balance.toFixed(2) ?? '0.00'}</span>
+
+      <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-sky-400/15 text-sky-400 text-xs">
+          <Icon name="fa-wallet" />
         </div>
-      </Card>
+        <div>
+          <p className="text-[11px] text-white/35">Wallet</p>
+          <p className="text-sm font-medium">{wallet?.name ?? 'Cash'} · ฿{wallet?.balance.toFixed(2) ?? '0.00'}</p>
+        </div>
+      </div>
+
       <CategoryItemsCard items={items} focusedIndex={focusedIndex} onFocus={handleFocusItem} onAdd={() => setPickerOpen(true)} onRemove={handleRemoveItem} />
-      <Card>
-        <label className="block text-sm text-slate-500" htmlFor="tx-date">Date & Time</label>
-        <input id="tx-date" className="mt-2 w-full rounded-lg bg-white/5 px-3 py-3 text-slate-100" type="datetime-local" value={date} onChange={(event) => setDate(event.target.value)} />
-      </Card>
-      <Card>
-        <label className="block text-sm text-slate-500" htmlFor="tx-note">Note</label>
-        <textarea id="tx-note" className="mt-2 min-h-24 w-full rounded-lg bg-white/5 px-3 py-3 text-slate-100" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Add note" />
-      </Card>
+
+      <label htmlFor="tx-date" className="flex cursor-pointer items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-400/15 text-emerald-400 text-xs">
+          <Icon name="fa-calendar" />
+        </div>
+        <div className="relative min-w-0 flex-1">
+          <p className="text-[11px] text-white/35">Date & Time</p>
+          <p className="mt-0.5 text-sm font-medium">{formatDatetimeLocalDisplay(date)}</p>
+          <input
+            id="tx-date"
+            className="absolute inset-0 cursor-pointer opacity-0"
+            type="datetime-local"
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+          />
+        </div>
+      </label>
+
+      <div className="flex items-start gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
+        <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.07] text-slate-400 text-xs">
+          <Icon name="fa-pencil" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <label className="text-[11px] text-white/35" htmlFor="tx-note">Note</label>
+          <textarea
+            id="tx-note"
+            className="mt-0.5 min-h-16 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-white/30"
+            value={note}
+            onChange={(event) => setNote(event.target.value)}
+            placeholder="Add note…"
+          />
+        </div>
+      </div>
+
       {isEditMode ? (
-        <Button aria-label="Delete transaction" className="w-full" variant="danger" onClick={deleteTransaction} type="button">
+        <button
+          aria-label="Delete transaction"
+          className="w-full rounded-xl bg-red-500/15 py-3 text-sm font-medium text-red-300"
+          onClick={deleteTransaction}
+          type="button"
+        >
           Delete
-        </Button>
+        </button>
       ) : null}
+
       {isPickerOpen ? (
         <CategoryPicker
           categories={categories}

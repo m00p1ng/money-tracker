@@ -10,11 +10,11 @@ export function SegmentedControl<T extends string>({
   onChange: (value: T) => void
 }) {
   return (
-    <div className="grid rounded-lg bg-white/5 p-1" style={{ gridTemplateColumns: `repeat(${segments.length}, minmax(0, 1fr))` }}>
+    <div className="grid rounded-xl bg-white/[0.06] p-0.5" style={{ gridTemplateColumns: `repeat(${segments.length}, minmax(0, 1fr))` }}>
       {segments.map((segment) => (
         <button
           key={segment.value}
-          className={`rounded-md px-3 py-2 text-sm font-semibold ${segment.value === value ? 'bg-gradient-to-br from-[var(--accent-btn-1)] to-[var(--accent-btn-2)] text-white' : 'text-slate-400'}`}
+          className={`rounded-[9px] px-3.5 py-1.5 text-xs font-semibold ${segment.value === value ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_2px_10px_rgba(16,185,129,0.4)]' : 'text-white/40'}`}
           onClick={() => onChange(segment.value)}
           type="button"
         >

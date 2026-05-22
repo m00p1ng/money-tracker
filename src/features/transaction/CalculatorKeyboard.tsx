@@ -11,7 +11,7 @@ export function CalculatorKeyboard({ onPress }: { onPress: (key: string) => void
           return (
             <button
               key={key}
-              className={`h-12 rounded-lg text-lg font-semibold ${isDelete ? 'col-span-2 bg-red-500/20 text-red-200' : isOperator ? 'bg-[var(--accent)]/15 text-accent-light' : isAccent ? 'bg-[var(--accent)]/25 text-white disabled:opacity-50' : 'bg-white/8 text-slate-100'}`}
+              className={`h-12 rounded-lg text-lg font-semibold ${isDelete ? 'col-span-2 border border-red-500/20 bg-red-500/10 text-red-400' : isOperator ? 'border border-[var(--accent)]/25 bg-[var(--accent)]/15 text-accent-light' : isAccent ? 'border border-[var(--accent)]/30 bg-[var(--accent)]/25 text-white disabled:opacity-50' : 'border border-white/[0.06] bg-white/[0.07] text-slate-100'}`}
               disabled={key === 'THB'}
               onClick={() => onPress(key)}
               type="button"

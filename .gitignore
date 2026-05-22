@@ -30,3 +30,4 @@ template/src/__tests__/__snapshots__/
 
 .superpowers/brainstorm
 docs/superpowers/plans/
+.playwright-mcp
