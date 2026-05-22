@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
@@ -19,15 +19,20 @@ import { buildTransaction, validateDraft } from './transactionForm'
 
 export function TransactionPage() {
   const navigate = useNavigate()
+  const { id } = useParams()
+  const existing = useTransactionStore((state) => (id ? state.findById(id) : undefined))
   const add = useTransactionStore((state) => state.add)
+  const update = useTransactionStore((state) => state.update)
+  const remove = useTransactionStore((state) => state.remove)
   const wallets = useWalletStore((state) => state.items)
   const categories = useCategoryStore((state) => state.items)
-  const [type, setType] = useState<TransactionType>('expense')
-  const [walletId] = useState('wallet-cash')
-  const [items, setItems] = useState<TransactionItem[]>([])
+  const isEditMode = Boolean(id && existing)
+  const [type, setType] = useState<TransactionType>(existing?.type ?? 'expense')
+  const [walletId] = useState(existing?.walletId ?? 'wallet-cash')
+  const [items, setItems] = useState<TransactionItem[]>(existing?.items ?? [])
   const [focusedIndex, setFocusedIndex] = useState(0)
-  const [date, setDate] = useState(toDatetimeLocalValue(new Date()))
-  const [note, setNote] = useState('')
+  const [date, setDate] = useState(existing ? toDatetimeLocalValue(new Date(existing.date)) : toDatetimeLocalValue(new Date()))
+  const [note, setNote] = useState(existing?.note ?? '')
   const [calc, setCalc] = useState(createCalcState())
   const [isPickerOpen, setPickerOpen] = useState(false)
   const wallet = wallets.find((item) => item.id === walletId)
@@ -63,7 +68,29 @@ export function TransactionPage() {
       alert(errors[0])
       return
     }
-    await add(buildTransaction({ type, walletId, currency: 'THB', items, date, note, now: new Date().toISOString(), createId }))
+    const transaction = buildTransaction({
+      id: existing?.id,
+      type,
+      walletId,
+      currency: 'THB',
+      items,
+      date,
+      note,
+      now: existing?.createdAt ?? new Date().toISOString(),
+      createId,
+    })
+    if (isEditMode) {
+      await update(transaction)
+    } else {
+      await add(transaction)
+    }
+    navigate('/')
+  }
+
+  async function deleteTransaction() {
+    if (!existing) return
+    if (!confirm('Delete this transaction?')) return
+    await remove(existing.id)
     navigate('/')
   }
 
@@ -91,6 +118,11 @@ export function TransactionPage() {
         <label className="block text-sm text-slate-500" htmlFor="tx-note">Note</label>
         <textarea id="tx-note" className="mt-2 min-h-24 w-full rounded-lg bg-white/5 px-3 py-3 text-slate-100" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Add note" />
       </Card>
+      {isEditMode ? (
+        <Button aria-label="Delete transaction" className="w-full" variant="danger" onClick={deleteTransaction} type="button">
+          Delete
+        </Button>
+      ) : null}
       {isPickerOpen ? (
         <CategoryPicker
           categories={categories}
