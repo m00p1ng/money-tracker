@@ -3,7 +3,7 @@ import { AppShell } from './components/AppShell'
 import { HomePage } from './features/home/HomePage'
 import { TransactionPage } from './features/transaction/TransactionPage'
 
-function RoutedApp() {
+export function RoutedApp() {
   const location = useLocation()
   const showBottomNav = location.pathname === '/'
 

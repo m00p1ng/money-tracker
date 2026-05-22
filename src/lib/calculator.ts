@@ -2,6 +2,7 @@ export type CalcState = {
   display: string
   expression: string
   result: number
+  lastKey: string | null
 }
 
 const operators = ['+', '-', '×', '÷'] as const
@@ -12,7 +13,12 @@ export function createCalcState(amount = 0): CalcState {
     display: amount > 0 ? String(amount) : '',
     expression: amount > 0 ? String(amount) : '',
     result: amount,
+    lastKey: null,
   }
+}
+
+function updateExpression(expression: string, oldDisplay: string, newDisplay: string): string {
+  return oldDisplay && expression.endsWith(oldDisplay) ? `${expression.slice(0, -oldDisplay.length)}${newDisplay}` : `${expression}${newDisplay}`
 }
 
 function tokens(expression: string, display: string): string[] {
@@ -43,42 +49,49 @@ function evaluate(rawTokens: string[]): number {
 
 export function pressCalcKey(state: CalcState, key: string): CalcState {
   if (/^\d$/.test(key)) {
+    if (state.lastKey === '=') {
+      return { display: key, expression: key, result: Number(key), lastKey: key }
+    }
     const display = state.display === '0' ? key : `${state.display}${key}`
-    const expression = state.display && state.expression.endsWith(state.display) ? `${state.expression.slice(0, -state.display.length)}${display}` : `${state.expression}${display}`
-    return { display, expression, result: Number(display) || 0 }
+    const expression = updateExpression(state.expression, state.display, display)
+    return { display, expression, result: Number(display) || 0, lastKey: key }
   }
 
   if (key === '.') {
     if (state.display.includes('.')) return state
+    if (state.lastKey === '=') {
+      return { display: '0.', expression: '0.', result: 0, lastKey: key }
+    }
     const display = state.display ? `${state.display}.` : '0.'
-    const expression = state.display && state.expression.endsWith(state.display) ? `${state.expression.slice(0, -state.display.length)}${display}` : `${state.expression}${display}`
-    return { display, expression, result: Number(display) || 0 }
+    const expression = updateExpression(state.expression, state.display, display)
+    return { display, expression, result: Number(display) || 0, lastKey: key }
   }
 
   if (operators.includes(key as Operator)) {
     if (!state.display) return state
-    return { ...state, display: '', expression: `${state.expression} ${key} ` }
+    return { ...state, display: '', expression: `${state.expression} ${key} `, lastKey: key }
   }
 
   if (key === '=') {
+    if (state.lastKey === '=') return { ...state, lastKey: key }
     const rawTokens = tokens(state.expression, state.display)
     const result = evaluate(rawTokens)
-    return { display: String(result), expression: rawTokens.join(' '), result }
+    return { display: String(result), expression: rawTokens.join(' '), result, lastKey: key }
   }
 
   if (key === '±') {
     if (!state.display) return state
     const display = state.display.startsWith('-') ? state.display.slice(1) : `-${state.display}`
-    const expression = state.display && state.expression.endsWith(state.display) ? `${state.expression.slice(0, -state.display.length)}${display}` : display
-    return { display, expression, result: Number(display) || 0 }
+    const expression = updateExpression(state.expression, state.display, display)
+    return { display, expression, result: Number(display) || 0, lastKey: key }
   }
 
   if (key === '⌫') {
     const display = state.display.slice(0, -1)
     const finalDisplay = display === '-' ? '' : display
-    const expression = state.display && state.expression.endsWith(state.display) ? `${state.expression.slice(0, -state.display.length)}${finalDisplay}` : finalDisplay
-    return { display: finalDisplay, expression, result: Number(finalDisplay) || 0 }
+    const expression = updateExpression(state.expression, state.display, finalDisplay)
+    return { display: finalDisplay, expression, result: Number(finalDisplay) || 0, lastKey: key }
   }
 
-  return state
+  return { ...state, lastKey: key }
 }

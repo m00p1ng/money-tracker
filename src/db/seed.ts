@@ -11,7 +11,7 @@ const expenseRoots = [
   ['Education', 'fa-graduation-cap', '#2563eb', ['Books', 'Courses', 'Supplies']],
   ['Personal Care', 'fa-spa', '#be185d', ['Haircut', 'Cosmetics', 'Spa']],
   ['Travel', 'fa-plane', '#0891b2', ['Hotel', 'Flight', 'Activities']],
-  ['Other', 'fa-ellipsis', '#64748b', ['Miscellaneous']],
+  ['Other', 'fa-ellipsis', '#64748b', ['Miscellaneous', 'Uncategorized', 'Adjustment']],
 ] as const
 
 const incomeRoots = [
@@ -19,7 +19,7 @@ const incomeRoots = [
   ['Freelance', 'fa-laptop-code', '#0d9488', ['Project', 'Consulting', 'Design']],
   ['Investment', 'fa-chart-line', '#4f46e5', ['Dividends', 'Interest', 'Capital Gains']],
   ['Gift', 'fa-gift', '#e11d48', ['Birthday', 'Holiday', 'Other Gift']],
-  ['Other', 'fa-circle-plus', '#64748b', ['Miscellaneous']],
+  ['Other', 'fa-circle-plus', '#64748b', ['Miscellaneous', 'Refund', 'Adjustment']],
 ] as const
 
 const wallet: Wallet = {

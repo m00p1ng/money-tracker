@@ -16,7 +16,7 @@ const rangeFormatter = new Intl.DateTimeFormat('en-GB', {
 })
 
 export function formatHeaderDate(date: Date): string {
-  return headerFormatter.format(date).replace(',', ',')
+  return headerFormatter.format(date)
 }
 
 export function formatShortDate(date: Date): string {

@@ -15,8 +15,8 @@ describe('seedDatabase', () => {
     expect(await db.wallets.count()).toBe(1)
     expect(await db.currencies.count()).toBe(1)
     expect(await db.settings.count()).toBe(1)
-    expect(await db.categories.where('type').equals('expense').count()).toBe(38)
-    expect(await db.categories.where('type').equals('income').count()).toBe(18)
+    expect(await db.categories.where('type').equals('expense').count()).toBe(40)
+    expect(await db.categories.where('type').equals('income').count()).toBe(20)
 
     await expect(db.wallets.get('wallet-cash')).resolves.toMatchObject({
       name: 'Cash',

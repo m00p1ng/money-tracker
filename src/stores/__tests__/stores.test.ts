@@ -3,6 +3,8 @@ import { db } from '../../db/schema'
 import { seedDatabase } from '../../db/seed'
 import { bootstrapStores } from '../bootstrap'
 import { useCategoryStore } from '../categoryStore'
+import { useCurrencyStore } from '../currencyStore'
+import { useSettingsStore } from '../settingsStore'
 import { useTransactionStore } from '../transactionStore'
 import { useWalletStore } from '../walletStore'
 
@@ -13,6 +15,8 @@ describe('stores', () => {
     useTransactionStore.setState({ items: [] })
     useWalletStore.setState({ items: [] })
     useCategoryStore.setState({ items: [] })
+    useCurrencyStore.setState({ items: [] })
+    useSettingsStore.setState({ settings: undefined })
   })
 
   it('loads seeded data during bootstrap', async () => {
@@ -21,6 +25,8 @@ describe('stores', () => {
 
     expect(useWalletStore.getState().items).toHaveLength(1)
     expect(useCategoryStore.getState().items.length).toBe(60)
+    expect(useCurrencyStore.getState().items).toHaveLength(1)
+    expect(useSettingsStore.getState().settings).toBeDefined()
   })
 
   it('writes transactions through to Dexie and exposes selectors', async () => {

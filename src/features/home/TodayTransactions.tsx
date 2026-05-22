@@ -21,11 +21,11 @@ export function TodayTransactions() {
       <Card className="space-y-1 p-2">
         {transactions.length === 0 ? <p className="px-2 py-8 text-center text-sm text-slate-500">No transactions today</p> : null}
         {transactions.map((transaction) =>
-          transaction.items.map((item) => {
+          transaction.items.map((item, index) => {
             const category = findCategory(item.categoryId)
             const parent = category ? parentOf(category) : undefined
             return (
-              <Link key={`${transaction.id}-${item.categoryId}`} to={`/transaction/${transaction.id}`} className="flex items-center gap-3 rounded-lg px-2 py-3 hover:bg-white/5">
+              <Link key={`${transaction.id}-${index}`} to={`/transaction/${transaction.id}`} className="flex items-center gap-3 rounded-lg px-2 py-3 hover:bg-white/5">
                 <span className="grid h-10 w-10 place-items-center rounded-lg" style={{ backgroundColor: `${category?.color ?? '#64748b'}25`, color: category?.color ?? '#94a3b8' }}>
                   <Icon name={category?.icon ?? 'fa-ellipsis'} />
                 </span>

@@ -33,7 +33,7 @@ export function CategoryItemsCard({
           const category = findCategory(item.categoryId)
           const parent = category ? parentOf(category) : undefined
           return (
-            <button key={`${item.categoryId}-${index}`} className={`flex w-full items-center gap-3 rounded-lg border-l-2 px-2 py-3 text-left ${focusedIndex === index ? 'border-accent bg-white/8' : 'border-transparent bg-transparent'}`} onClick={() => onFocus(index)} type="button">
+            <div key={`${item.categoryId}-${index}`} role="button" tabIndex={0} className={`flex w-full items-center gap-3 rounded-lg border-l-2 px-2 py-3 text-left ${focusedIndex === index ? 'border-accent bg-white/8' : 'border-transparent bg-transparent'}`} onClick={() => onFocus(index)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onFocus(index) } }}>
               <Icon name={category?.icon ?? 'fa-ellipsis'} className="text-accent-light" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-medium">{category?.name ?? 'Unknown'}</span>
@@ -43,7 +43,7 @@ export function CategoryItemsCard({
               <button aria-label="Remove category" className="border-0 bg-transparent text-slate-500" type="button" onClick={(event) => { event.stopPropagation(); onRemove(index) }}>
                 <Icon name="fa-xmark" />
               </button>
-            </button>
+            </div>
           )
         })}
       </div>

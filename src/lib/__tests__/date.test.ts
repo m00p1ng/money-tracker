@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatHeaderDate, formatShortDate, isTodayInLocalTime, monthRangeLabel } from '../date'
+import { formatHeaderDate, formatShortDate, isTodayInLocalTime, monthRangeLabel, toDatetimeLocalValue } from '../date'
 
 describe('date utilities', () => {
   it('formats the header date', () => {
@@ -18,5 +18,10 @@ describe('date utilities', () => {
 
   it('formats current month range', () => {
     expect(monthRangeLabel(new Date('2026-05-22T09:00:00'))).toBe('1 May - 31 May')
+  })
+
+  it('converts to datetime-local value', () => {
+    const date = new Date('2026-05-22T10:30:00')
+    expect(toDatetimeLocalValue(date)).toBe('2026-05-22T10:30')
   })
 })

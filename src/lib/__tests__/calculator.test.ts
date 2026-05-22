@@ -30,4 +30,22 @@ describe('calculator', () => {
     expect(state.display).toBe('')
     expect(state.result).toBe(0)
   })
+
+  it('starts fresh after equals', () => {
+    let state = createCalcState()
+    for (const key of ['2', '+', '3', '=', '7']) {
+      state = pressCalcKey(state, key)
+    }
+    expect(state.display).toBe('7')
+    expect(state.result).toBe(7)
+  })
+
+  it('repeats result when equals pressed twice', () => {
+    let state = createCalcState()
+    for (const key of ['2', '+', '3', '=', '=']) {
+      state = pressCalcKey(state, key)
+    }
+    expect(state.display).toBe('5')
+    expect(state.result).toBe(5)
+  })
 })

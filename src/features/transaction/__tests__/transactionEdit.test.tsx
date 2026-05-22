@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { toDatetimeLocalValue } from '../../../lib/date'
 import { useCategoryStore } from '../../../stores/categoryStore'
 import { useTransactionStore } from '../../../stores/transactionStore'
 import { useWalletStore } from '../../../stores/walletStore'
@@ -34,5 +36,105 @@ describe('TransactionPage edit mode', () => {
 
     expect(screen.getByRole('button', { name: 'Delete transaction' })).toBeInTheDocument()
     expect(screen.getAllByText('฿28.00').length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('hydrates form fields with existing transaction data', () => {
+    const transactionDate = new Date('2024-01-15T10:30:00.000Z')
+    const expectedDateValue = toDatetimeLocalValue(transactionDate)
+
+    useTransactionStore.setState({
+      items: [{
+        id: 'tx-1',
+        type: 'income',
+        walletId: 'wallet-cash',
+        currency: 'THB',
+        items: [{ categoryId: 'expense-food-and-drink-coffee', amount: 150 }],
+        date: transactionDate.toISOString(),
+        createdAt: transactionDate.toISOString(),
+        note: 'Test note',
+      }],
+    })
+
+    render(
+      <MemoryRouter initialEntries={['/transaction/tx-1']}>
+        <Routes>
+          <Route path="/transaction/:id" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('button', { name: 'Income' })).toHaveClass('bg-gradient-to-br')
+    expect(screen.getAllByText('฿150.00').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByLabelText('Date & Time')).toHaveValue(expectedDateValue)
+    expect(screen.getByLabelText('Note')).toHaveValue('Test note')
+  })
+
+  it('calls update when saving an edited transaction', async () => {
+    const updateSpy = vi.spyOn(useTransactionStore.getState(), 'update')
+
+    render(
+      <MemoryRouter initialEntries={['/transaction/tx-1']}>
+        <Routes>
+          <Route path="/transaction/:id" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    const saveButton = screen.getByRole('button', { name: 'Save' })
+    await userEvent.click(saveButton)
+
+    expect(updateSpy).toHaveBeenCalledTimes(1)
+    expect(updateSpy).toHaveBeenCalledWith(expect.objectContaining({
+      id: 'tx-1',
+      type: 'expense',
+      walletId: 'wallet-cash',
+    }))
+
+    updateSpy.mockRestore()
+  })
+
+  it('shows confirm dialog and removes transaction on delete', async () => {
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
+    const removeSpy = vi.spyOn(useTransactionStore.getState(), 'remove')
+
+    render(
+      <MemoryRouter initialEntries={['/transaction/tx-1']}>
+        <Routes>
+          <Route path="/transaction/:id" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    const deleteButton = screen.getByRole('button', { name: 'Delete transaction' })
+    await userEvent.click(deleteButton)
+
+    expect(confirmSpy).toHaveBeenCalledWith('Delete this transaction?')
+    expect(removeSpy).toHaveBeenCalledTimes(1)
+    expect(removeSpy).toHaveBeenCalledWith('tx-1')
+
+    confirmSpy.mockRestore()
+    removeSpy.mockRestore()
+  })
+
+  it('does not remove transaction when confirm is cancelled', async () => {
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false)
+    const removeSpy = vi.spyOn(useTransactionStore.getState(), 'remove')
+
+    render(
+      <MemoryRouter initialEntries={['/transaction/tx-1']}>
+        <Routes>
+          <Route path="/transaction/:id" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    const deleteButton = screen.getByRole('button', { name: 'Delete transaction' })
+    await userEvent.click(deleteButton)
+
+    expect(confirmSpy).toHaveBeenCalledWith('Delete this transaction?')
+    expect(removeSpy).not.toHaveBeenCalled()
+
+    confirmSpy.mockRestore()
+    removeSpy.mockRestore()
   })
 })

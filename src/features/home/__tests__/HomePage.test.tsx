@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { formatShortDate } from '../../../lib/date'
 import { useCategoryStore } from '../../../stores/categoryStore'
 import { useTransactionStore } from '../../../stores/transactionStore'
 import { HomePage } from '../HomePage'
@@ -40,5 +41,36 @@ describe('HomePage', () => {
     expect(screen.getByText('฿28.00')).toBeInTheDocument()
     expect(screen.getByText('Coffee')).toBeInTheDocument()
     expect(screen.getByText('Food & Drink')).toBeInTheDocument()
+  })
+
+  it('shows empty state when there are no transactions today', () => {
+    useTransactionStore.setState({ items: [] })
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('No transactions today')).toBeInTheDocument()
+  })
+
+  it('shows add transaction link', () => {
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByLabelText('Add transaction')).toBeInTheDocument()
+  })
+
+  it('shows the date', () => {
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText(formatShortDate(new Date()))).toBeInTheDocument()
   })
 })
