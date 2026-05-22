@@ -3,6 +3,10 @@ import { AppShell } from './components/AppShell'
 import { BalancePage } from './features/balance/BalancePage'
 import { WalletDetailPage } from './features/balance/WalletDetailPage'
 import { HomePage } from './features/home/HomePage'
+import { CategoriesPage } from './features/settings/CategoriesPage'
+import { CurrenciesPage } from './features/settings/CurrenciesPage'
+import { ThemePage } from './features/settings/ThemePage'
+import { WalletsPage } from './features/settings/WalletsPage'
 import { SettingsPage } from './features/settings/SettingsPage'
 import { TransactionPage } from './features/transaction/TransactionPage'
 
@@ -19,6 +23,10 @@ export function RoutedApp() {
         <Route path="/balance" element={<BalancePage />} />
         <Route path="/balance/wallet/:id" element={<WalletDetailPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/settings/wallets" element={<WalletsPage />} />
+        <Route path="/settings/categories" element={<CategoriesPage />} />
+        <Route path="/settings/currencies" element={<CurrenciesPage />} />
+        <Route path="/settings/theme" element={<ThemePage />} />
         <Route path="/transaction/new" element={<TransactionPage />} />
         <Route path="/transaction/:id" element={<TransactionPage />} />
       </Routes>

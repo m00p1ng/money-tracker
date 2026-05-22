@@ -65,6 +65,21 @@ describe('App routing', () => {
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument()
   })
 
+  it('renders Settings menu rows and child settings routes', () => {
+    render(
+      <MemoryRouter initialEntries={['/settings']}>
+        <RoutedApp />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('link', { name: /Wallets/i })).toHaveAttribute('href', '/settings/wallets')
+    expect(screen.getByRole('link', { name: /Categories/i })).toHaveAttribute('href', '/settings/categories')
+    expect(screen.getByRole('link', { name: /Currencies/i })).toHaveAttribute('href', '/settings/currencies')
+    expect(screen.getByRole('link', { name: /Theme/i })).toHaveAttribute('href', '/settings/theme')
+    expect(screen.getByText('English')).toBeInTheDocument()
+    expect(screen.getByText('DD MMM YYYY')).toBeInTheDocument()
+  })
+
   it('hides bottom navigation on wallet detail route', () => {
     render(
       <MemoryRouter initialEntries={['/balance/wallet/wallet-cash']}>
