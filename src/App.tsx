@@ -10,11 +10,15 @@ import { WalletsPage } from './features/settings/WalletsPage'
 import { SettingsPage } from './features/settings/SettingsPage'
 import { TransactionPage } from './features/transaction/TransactionPage'
 
-const bottomNavRoutes = new Set(['/', '/balance', '/settings'])
+const bottomNavRoutes = ['/', '/balance', '/settings']
 
 export function RoutedApp() {
   const location = useLocation()
-  const showBottomNav = bottomNavRoutes.has(location.pathname)
+  const showBottomNav = bottomNavRoutes.some((route) => {
+    if (route === '/') return location.pathname === '/'
+    if (route === '/settings') return location.pathname === '/settings' || location.pathname.startsWith('/settings/')
+    return location.pathname === route
+  })
 
   return (
     <AppShell showBottomNav={showBottomNav}>
