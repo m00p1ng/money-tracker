@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import App, { RoutedApp } from '../App'
+import { useWalletStore } from '../stores/walletStore'
 
 describe('App routing', () => {
   it('renders the home route with bottom navigation', () => {
@@ -101,5 +102,31 @@ describe('App routing', () => {
     expect(screen.getByRole('heading', { name: 'Wallets' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Add Payment Account/i })).toHaveAttribute('href', '/settings/wallets/new?type=payment')
     expect(screen.getByRole('link', { name: /Add Credit Card/i })).toHaveAttribute('href', '/settings/wallets/new?type=credit_card')
+  })
+
+  it('renders wallet new form route', () => {
+    render(
+      <MemoryRouter initialEntries={['/settings/wallets/new?type=payment']}>
+        <RoutedApp />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('heading', { name: 'New Wallet' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
+  })
+
+  it('renders wallet edit form route', () => {
+    useWalletStore.setState({
+      items: [{ id: 'wallet-cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' }],
+    })
+    render(
+      <MemoryRouter initialEntries={['/settings/wallets/wallet-cash']}>
+        <RoutedApp />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('heading', { name: 'Edit Wallet' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument()
   })
 })
