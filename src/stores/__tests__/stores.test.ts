@@ -114,6 +114,39 @@ describe('stores', () => {
     await expect(useCategoryStore.getState().remove('expense-custom')).rejects.toThrow('Category has child categories')
   })
 
+  it('checks Dexie before deleting category parents when store state is stale', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await db.categories.bulkPut([
+      {
+        id: 'expense-custom',
+        name: 'Custom',
+        type: 'expense',
+        level: 1,
+        icon: 'fa-tag',
+        color: '#64748b',
+        isDefault: false,
+      },
+      {
+        id: 'expense-custom-child',
+        name: 'Custom Child',
+        type: 'expense',
+        parentId: 'expense-custom',
+        level: 2,
+        icon: 'fa-tag',
+        color: '#64748b',
+        isDefault: false,
+      },
+    ])
+    useCategoryStore.setState({
+      items: [...useCategoryStore.getState().items, (await db.categories.get('expense-custom'))!],
+    })
+
+    await expect(useCategoryStore.getState().remove('expense-custom')).rejects.toThrow('Category has child categories')
+    expect(await db.categories.get('expense-custom')).toBeDefined()
+  })
+
   it('writes currencies through to Dexie, sets the base currency, and blocks deleting it', async () => {
     await seedDatabase()
     await bootstrapStores()
@@ -139,5 +172,33 @@ describe('stores', () => {
     expect(await db.currencies.get('THB')).toMatchObject({ isBase: false })
     expect(useCurrencyStore.getState().findByCode('USD')).toMatchObject({ isBase: true, rate: 1 })
     await expect(useCurrencyStore.getState().remove('USD')).rejects.toThrow('Base currency cannot be deleted')
+  })
+
+  it('sets exactly one base currency in Dexie when store state is stale', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useCurrencyStore.getState().add({
+      code: 'USD',
+      symbol: '$',
+      name: 'US Dollar',
+      isBase: false,
+      rate: 36,
+    })
+    await db.currencies.put({
+      code: 'EUR',
+      symbol: '€',
+      name: 'Euro',
+      isBase: true,
+      rate: 39,
+    })
+
+    await useCurrencyStore.getState().setBase('USD')
+
+    const currencies = await db.currencies.toArray()
+    expect(currencies.filter((currency) => currency.isBase).map((currency) => currency.code)).toEqual(['USD'])
+    expect(await db.currencies.get('USD')).toMatchObject({ isBase: true, rate: 1 })
+    expect(await db.currencies.get('EUR')).toMatchObject({ isBase: false, rate: 39 })
+    expect(useCurrencyStore.getState().items).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'EUR' })]))
   })
 })

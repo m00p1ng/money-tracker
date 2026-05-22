@@ -45,7 +45,8 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
     set({ items: get().items.map((item) => (item.id === category.id ? category : item)) })
   },
   async remove(id) {
-    if (get().items.some((category) => category.parentId === id)) throw new Error('Category has child categories')
+    const childCount = await db.categories.where('parentId').equals(id).count()
+    if (childCount > 0) throw new Error('Category has child categories')
 
     const transactions = await db.transactions.toArray()
     if (transactions.some((transaction) => transaction.items.some((item) => item.categoryId === id))) {

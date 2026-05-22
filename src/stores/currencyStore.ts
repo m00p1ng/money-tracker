@@ -58,9 +58,10 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
   },
   async setBase(code) {
     const normalizedCode = code.trim().toUpperCase()
-    if (!get().items.some((currency) => currency.code === normalizedCode)) throw new Error('Currency not found')
+    const currencies = await db.currencies.toArray()
+    if (!currencies.some((currency) => currency.code === normalizedCode)) throw new Error('Currency not found')
 
-    const items = get().items.map((currency) => ({
+    const items = currencies.map((currency) => ({
       ...currency,
       isBase: currency.code === normalizedCode,
       rate: currency.code === normalizedCode ? 1 : currency.rate,
