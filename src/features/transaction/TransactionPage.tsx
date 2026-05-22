@@ -85,7 +85,7 @@ export function TransactionPage() {
 
   async function deleteTransaction() {
     if (!existing) return
-    if (!confirm('Delete this transaction?')) return
+    if (!window.confirm('Delete this transaction?')) return
     await remove(existing.id)
     navigate('/')
   }
@@ -133,6 +133,7 @@ export function TransactionPage() {
           <p className="mt-0.5 text-sm font-medium">{formatDatetimeLocalDisplay(date)}</p>
           <input
             id="tx-date"
+            aria-label="Date & Time"
             className="absolute inset-0 cursor-pointer opacity-0"
             type="datetime-local"
             value={date}

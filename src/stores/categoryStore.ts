@@ -50,6 +50,7 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
   },
   async add(category) {
     await validateCategory(category)
+    await validateSafeUpdate(category)
     await db.categories.put(category)
     set({ items: [...get().items.filter((item) => item.id !== category.id), category] })
   },

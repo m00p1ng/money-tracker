@@ -361,6 +361,24 @@ describe('stores', () => {
     expect(await db.categories.get('expense-shopping')).toMatchObject({ type: 'expense', level: 1 })
   })
 
+  it('blocks duplicate category adds from structurally mutating parents with children', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await expect(
+      useCategoryStore.getState().add({
+        id: 'expense-shopping',
+        name: 'Shopping',
+        type: 'income',
+        level: 1,
+        icon: 'fa-bag-shopping',
+        color: '#db2777',
+        isDefault: true,
+      }),
+    ).rejects.toThrow('Category has child categories')
+    expect(await db.categories.get('expense-shopping')).toMatchObject({ type: 'expense', level: 1 })
+  })
+
   it('writes non-structural category updates through to Dexie and state', async () => {
     await seedDatabase()
     await bootstrapStores()
