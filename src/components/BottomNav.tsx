@@ -6,7 +6,7 @@ const navItems = [
   { label: 'Balance', to: '/balance', icon: 'fa-wallet', enabled: true },
   { label: 'Budget', to: '/budget', icon: 'fa-chart-pie', enabled: false },
   { label: 'Report', to: '/report', icon: 'fa-chart-line', enabled: false },
-  { label: 'Setting', to: '/settings', icon: 'fa-gear', enabled: true },
+  { label: 'Settings', to: '/settings', icon: 'fa-gear', enabled: true },
 ] as const
 
 export function BottomNav() {

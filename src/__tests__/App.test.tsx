@@ -37,7 +37,7 @@ describe('App routing', () => {
 
     expect(screen.getByRole('link', { name: /Home/i })).toHaveAttribute('href', '/')
     expect(screen.getByRole('link', { name: /Balance/i })).toHaveAttribute('href', '/balance')
-    expect(screen.getByRole('link', { name: /Setting/i })).toHaveAttribute('href', '/settings')
+    expect(screen.getByRole('link', { name: /Settings/i })).toHaveAttribute('href', '/settings')
     expect(screen.getByRole('button', { name: /Budget/i })).toBeDisabled()
     expect(screen.getByRole('button', { name: /Report/i })).toBeDisabled()
   })
