@@ -161,6 +161,39 @@ describe('stores', () => {
     await expect(useCategoryStore.getState().remove('expense-custom')).rejects.toThrow('Category has child categories')
   })
 
+  it('blocks deleting categories used by transactions', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useTransactionStore.getState().add({
+      id: 'tx-card',
+      type: 'expense',
+      walletId: 'wallet-cash',
+      currency: 'THB',
+      items: [{ categoryId: 'expense-shopping-clothes', amount: 500 }],
+      date: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    })
+
+    await expect(useCategoryStore.getState().remove('expense-shopping-clothes')).rejects.toThrow(
+      'Category has existing transactions',
+    )
+    expect(await db.categories.get('expense-shopping-clothes')).toBeDefined()
+  })
+
+  it('exposes category type and parent selectors', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    const expenseCategories = useCategoryStore.getState().byType('expense')
+    const incomeCategories = useCategoryStore.getState().byType('income')
+    const child = useCategoryStore.getState().findById('expense-shopping-clothes')!
+
+    expect(expenseCategories).toEqual(expect.arrayContaining([expect.objectContaining({ id: 'expense-shopping' })]))
+    expect(incomeCategories).toEqual(expect.arrayContaining([expect.objectContaining({ id: 'income-salary' })]))
+    expect(useCategoryStore.getState().parentOf(child)).toMatchObject({ id: 'expense-shopping' })
+  })
+
   it('checks Dexie before deleting category parents when store state is stale', async () => {
     await seedDatabase()
     await bootstrapStores()
@@ -305,6 +338,48 @@ describe('stores', () => {
     expect(await db.currencies.get('THB')).toMatchObject({ isBase: false })
     expect(useCurrencyStore.getState().findByCode('USD')).toMatchObject({ isBase: true, rate: 1 })
     await expect(useCurrencyStore.getState().remove('USD')).rejects.toThrow('Base currency cannot be deleted')
+  })
+
+  it('normalizes currency code and base rate when adding currencies', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useCurrencyStore.getState().add({
+      code: ' usd ',
+      symbol: '$',
+      name: 'US Dollar',
+      isBase: true,
+      rate: 36,
+    })
+
+    expect(await db.currencies.get('USD')).toMatchObject({ code: 'USD', isBase: true, rate: 1 })
+    expect(useCurrencyStore.getState().findByCode(' usd ')).toMatchObject({ code: 'USD', isBase: true, rate: 1 })
+    expect(await db.currencies.get('THB')).toMatchObject({ isBase: false })
+  })
+
+  it('blocks deleting currencies used by wallets', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useCurrencyStore.getState().add({
+      code: 'USD',
+      symbol: '$',
+      name: 'US Dollar',
+      isBase: false,
+      rate: 36,
+    })
+    await useWalletStore.getState().update({
+      id: 'wallet-cash',
+      name: 'Cash',
+      type: 'payment',
+      currency: 'USD',
+      balance: 0,
+      color: '#10b981',
+      icon: 'fa-wallet',
+    })
+
+    await expect(useCurrencyStore.getState().remove('USD')).rejects.toThrow('Currency is used by wallets')
+    expect(await db.currencies.get('USD')).toBeDefined()
   })
 
   it('sets exactly one base currency in Dexie when store state is stale', async () => {
