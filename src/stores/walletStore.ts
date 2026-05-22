@@ -11,18 +11,24 @@ type WalletStore = {
   findById: (id: string) => Wallet | undefined
 }
 
+function normalizeWallet(wallet: Wallet): Wallet {
+  return { ...wallet, currency: wallet.currency.trim().toUpperCase() }
+}
+
 export const useWalletStore = create<WalletStore>((set, get) => ({
   items: [],
   async load() {
     set({ items: await db.wallets.toArray() })
   },
   async add(wallet) {
-    await db.wallets.put(wallet)
-    set({ items: [...get().items.filter((item) => item.id !== wallet.id), wallet] })
+    const normalized = normalizeWallet(wallet)
+    await db.wallets.put(normalized)
+    set({ items: [...get().items.filter((item) => item.id !== normalized.id), normalized] })
   },
   async update(wallet) {
-    await db.wallets.put(wallet)
-    set({ items: get().items.map((item) => (item.id === wallet.id ? wallet : item)) })
+    const normalized = normalizeWallet(wallet)
+    await db.wallets.put(normalized)
+    set({ items: [...get().items.filter((item) => item.id !== normalized.id), normalized] })
   },
   async remove(id) {
     const transactions = await db.transactions.toArray()

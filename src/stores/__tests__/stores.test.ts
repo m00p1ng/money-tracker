@@ -130,6 +130,75 @@ describe('stores', () => {
     expect(useWalletStore.getState().findById('wallet-cash')).toMatchObject({ name: 'Petty Cash', balance: 1500 })
   })
 
+  it('keeps state in sync when updating rows missing from store state', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await db.wallets.put({
+      id: 'wallet-card',
+      name: 'Visa',
+      type: 'credit_card',
+      currency: 'THB',
+      balance: 0,
+      creditLimit: 10000,
+      color: '#ef4444',
+      icon: 'fa-credit-card',
+    })
+    await db.categories.put({
+      id: 'expense-custom',
+      name: 'Custom',
+      type: 'expense',
+      level: 1,
+      icon: 'fa-tag',
+      color: '#64748b',
+      isDefault: false,
+    })
+    await db.currencies.put({
+      code: 'USD',
+      symbol: '$',
+      name: 'US Dollar',
+      isBase: false,
+      rate: 36,
+    })
+    useWalletStore.setState({ items: [] })
+    useCategoryStore.setState({ items: [] })
+    useCurrencyStore.setState({ items: [] })
+
+    await useWalletStore.getState().update({
+      id: 'wallet-card',
+      name: 'Rewards Visa',
+      type: 'credit_card',
+      currency: 'THB',
+      balance: 250,
+      creditLimit: 10000,
+      color: '#ef4444',
+      icon: 'fa-credit-card',
+    })
+    await useCategoryStore.getState().update({
+      id: 'expense-custom',
+      name: 'Custom Updated',
+      type: 'expense',
+      level: 1,
+      icon: 'fa-tag',
+      color: '#ef4444',
+      isDefault: false,
+    })
+    await useCurrencyStore.getState().update({
+      code: 'USD',
+      symbol: '$',
+      name: 'US Dollar Updated',
+      isBase: false,
+      rate: 35,
+    })
+
+    expect(useWalletStore.getState().findById('wallet-card')).toMatchObject({ name: 'Rewards Visa', balance: 250 })
+    expect(useCategoryStore.getState().findById('expense-custom')).toMatchObject({
+      name: 'Custom Updated',
+      color: '#ef4444',
+    })
+    expect(useCurrencyStore.getState().findByCode('USD')).toMatchObject({ name: 'US Dollar Updated', rate: 35 })
+  })
+
   it('writes categories through to Dexie and blocks deleting parents with children', async () => {
     await seedDatabase()
     await bootstrapStores()
@@ -357,6 +426,24 @@ describe('stores', () => {
     expect(await db.currencies.get('THB')).toMatchObject({ isBase: false })
   })
 
+  it('preserves current base when adding a duplicate base code as non-base', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useCurrencyStore.getState().add({
+      code: 'THB',
+      symbol: '฿',
+      name: 'Thai Baht',
+      isBase: false,
+      rate: 36,
+    })
+
+    const currencies = await db.currencies.toArray()
+    expect(currencies.filter((currency) => currency.isBase).map((currency) => currency.code)).toEqual(['THB'])
+    expect(await db.currencies.get('THB')).toMatchObject({ isBase: true, rate: 1 })
+    expect(useCurrencyStore.getState().findByCode('THB')).toMatchObject({ isBase: true, rate: 1 })
+  })
+
   it('blocks deleting currencies used by wallets', async () => {
     await seedDatabase()
     await bootstrapStores()
@@ -373,6 +460,31 @@ describe('stores', () => {
       name: 'Cash',
       type: 'payment',
       currency: 'USD',
+      balance: 0,
+      color: '#10b981',
+      icon: 'fa-wallet',
+    })
+
+    await expect(useCurrencyStore.getState().remove('USD')).rejects.toThrow('Currency is used by wallets')
+    expect(await db.currencies.get('USD')).toBeDefined()
+  })
+
+  it('blocks deleting currencies used by wallets with non-normalized currency text', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useCurrencyStore.getState().add({
+      code: 'USD',
+      symbol: '$',
+      name: 'US Dollar',
+      isBase: false,
+      rate: 36,
+    })
+    await db.wallets.put({
+      id: 'wallet-cash',
+      name: 'Cash',
+      type: 'payment',
+      currency: ' usd ',
       balance: 0,
       color: '#10b981',
       icon: 'fa-wallet',

@@ -34,7 +34,9 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
     set({ items: await db.currencies.toArray() })
   },
   async add(currency) {
-    const normalized = normalizeCurrency(currency)
+    const incoming = normalizeCurrency(currency)
+    const existing = await db.currencies.get(incoming.code)
+    const normalized = existing?.isBase ? { ...incoming, isBase: true, rate: 1 } : incoming
     await db.currencies.put(normalized)
     set({ items: [...get().items.filter((item) => item.code !== normalized.code), normalized] })
     if (normalized.isBase) await get().setBase(normalized.code)
@@ -43,7 +45,7 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
     const existing = await db.currencies.get(currency.code.trim().toUpperCase())
     const normalized = normalizeCurrency(existing?.isBase ? { ...currency, isBase: true } : currency)
     await db.currencies.put(normalized)
-    set({ items: get().items.map((item) => (item.code === normalized.code ? normalized : item)) })
+    set({ items: [...get().items.filter((item) => item.code !== normalized.code), normalized] })
     if (normalized.isBase) await get().setBase(normalized.code)
   },
   async remove(code) {
@@ -52,7 +54,9 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
     if (currency?.isBase) throw new Error('Base currency cannot be deleted')
 
     const wallets = await db.wallets.toArray()
-    if (wallets.some((wallet) => wallet.currency === normalizedCode)) throw new Error('Currency is used by wallets')
+    if (wallets.some((wallet) => wallet.currency.trim().toUpperCase() === normalizedCode)) {
+      throw new Error('Currency is used by wallets')
+    }
 
     await db.currencies.delete(normalizedCode)
     set({ items: get().items.filter((currency) => currency.code !== normalizedCode) })

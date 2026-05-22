@@ -57,7 +57,7 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
     await validateCategory(category)
     await validateSafeUpdate(category)
     await db.categories.put(category)
-    set({ items: get().items.map((item) => (item.id === category.id ? category : item)) })
+    set({ items: [...get().items.filter((item) => item.id !== category.id), category] })
   },
   async remove(id) {
     const childCount = await db.categories.where('parentId').equals(id).count()
