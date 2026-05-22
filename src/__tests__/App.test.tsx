@@ -118,6 +118,18 @@ describe('App routing', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
   })
 
+  it('renders category currency and theme management routes', () => {
+    render(
+      <MemoryRouter initialEntries={['/settings/theme']}>
+        <RoutedApp />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('heading', { name: 'Theme' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Forest' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Void' })).toBeInTheDocument()
+  })
+
   it('renders wallet edit form route', () => {
     useWalletStore.setState({
       items: [{ id: 'wallet-cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' }],
