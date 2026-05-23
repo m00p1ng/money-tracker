@@ -57,20 +57,17 @@ export function WalletDetailPage() {
 
   return (
     <div className="space-y-4">
-      <header className="flex items-center gap-3">
-        <Link
-          to="/balance"
-          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-sm text-slate-300"
+      <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
+        <button
+          aria-label="Back"
+          onClick={() => backNavigate('/balance')}
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
+          type="button"
         >
           <Icon name="fa-chevron-left" />
-        </Link>
-        <h1 className="flex-1 text-lg font-bold">{wallet.name}</h1>
-        <div
-          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl text-base"
-          style={{ background: hexToRgba(wallet.color, 0.15), color: wallet.color }}
-        >
-          <Icon name={wallet.icon} />
-        </div>
+        </button>
+        <h1 className="text-center text-base font-bold">{wallet.name}</h1>
+        <div />
       </header>
 
       {/* Date range filter */}
