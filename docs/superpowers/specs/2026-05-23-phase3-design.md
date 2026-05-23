@@ -132,7 +132,7 @@ Rules:
 - If transaction currency differs from the source wallet currency, show an exchange-rate field.
 - The field is prefilled from the stored currency rate.
 - The user can override the exchange rate per transaction.
-- Required exchange rates must be positive numbers.
+- Required exchange rates must be positive numbers with up to 4 decimal places.
 - No online exchange-rate fetching is included.
 
 Balance math must centralize conversion rules in shared helpers before UI code consumes them.
@@ -164,7 +164,7 @@ Validation:
 - From Wallet and To Wallet must be different.
 - Amount must be positive.
 - Currency must exist.
-- Required exchange rates must be positive.
+- Required exchange rates must be positive and accept up to 4 decimal places.
 
 Persistence:
 - `type: 'transfer'`
@@ -293,7 +293,7 @@ Blocked save reasons:
 - Missing category item for expense/income.
 - Non-positive transaction amount.
 - Unknown currency.
-- Missing, zero, negative, or non-numeric required exchange rate.
+- Missing, zero, negative, non-numeric, or more-than-4-decimal required exchange rate.
 - Invalid repeat custom interval.
 
 Missing data states:
@@ -308,7 +308,7 @@ Missing data states:
 Add focused tests for:
 - Status derivation for paid, planned, and overdue.
 - Transaction form validation for expense, income, and transfer.
-- Multi-currency exchange-rate validation and defaulting from currency settings.
+- Multi-currency exchange-rate validation, 4-decimal precision, and defaulting from currency settings.
 - Balance calculations with converted currency values.
 - Transfer balance effects for source and destination wallets.
 - Repeat date advancement for daily, every 2 weeks, monthly, yearly, and custom intervals.
@@ -328,6 +328,7 @@ Phase 3 is complete when:
 - Users can save expense, income, and transfer transactions.
 - Transfers update source and destination wallet balances correctly.
 - Users can choose transaction currency and provide manual exchange rates when needed.
+- Manual exchange rates accept up to 4 decimal places.
 - Stored currency rates prefill transaction exchange-rate prompts.
 - Transactions save with correct `paid`, `planned`, or `overdue` status.
 - Users can configure repeat rules on planned and overdue transactions.
