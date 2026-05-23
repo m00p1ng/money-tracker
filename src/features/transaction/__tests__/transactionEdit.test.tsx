@@ -63,7 +63,7 @@ describe('TransactionPage edit mode', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('button', { name: 'Income' })).toHaveClass('bg-gradient-to-br')
+    expect(screen.getByRole('button', { name: 'Income' }).style.background).toContain('linear-gradient')
     expect(screen.getAllByText('฿150.00').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByLabelText('Date & Time')).toHaveValue(expectedDateValue)
     expect(screen.getByLabelText('Note')).toHaveValue('Test note')
