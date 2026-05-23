@@ -1,22 +1,22 @@
 import { useLayoutEffect, useState } from 'react'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router'
-import { AppShell } from './components/AppShell'
-import { BalancePage } from './features/balance/BalancePage'
-import { WalletDetailPage } from './features/balance/WalletDetailPage'
-import { HomePage } from './features/home/HomePage'
-import { CategoriesPage } from './features/settings/CategoriesPage'
-import { CategoryFormPage } from './features/settings/CategoryFormPage'
-import { CurrenciesPage } from './features/settings/CurrenciesPage'
-import { CurrencyFormPage } from './features/settings/CurrencyFormPage'
-import { ThemePage } from './features/settings/ThemePage'
-import { WalletsPage } from './features/settings/WalletsPage'
-import { WalletFormPage } from './features/settings/WalletFormPage'
-import { SettingsPage } from './features/settings/SettingsPage'
-import { CategorySelectionPage } from './features/transaction/CategorySelectionPage'
-import { TransactionPage } from './features/transaction/TransactionPage'
-import { DesignPage } from './features/design/DesignPage'
-import { NavigationDirectionProvider, useNavigationDirection } from './context/navigationDirection'
+import { AppShell } from '@/components/AppShell'
+import { BalancePage } from '@/features/balance/BalancePage'
+import { WalletDetailPage } from '@/features/balance/WalletDetailPage'
+import { HomePage } from '@/features/home/HomePage'
+import { CategoriesPage } from '@/features/settings/CategoriesPage'
+import { CategoryFormPage } from '@/features/settings/CategoryFormPage'
+import { CurrenciesPage } from '@/features/settings/CurrenciesPage'
+import { CurrencyFormPage } from '@/features/settings/CurrencyFormPage'
+import { ThemePage } from '@/features/settings/ThemePage'
+import { WalletsPage } from '@/features/settings/WalletsPage'
+import { WalletFormPage } from '@/features/settings/WalletFormPage'
+import { SettingsPage } from '@/features/settings/SettingsPage'
+import { CategorySelectionPage } from '@/features/transaction/CategorySelectionPage'
+import { TransactionPage } from '@/features/transaction/TransactionPage'
+import { DesignPage } from '@/features/design/DesignPage'
+import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
 
 const TAB_ROUTES = new Set(['/', '/balance', '/settings'])
 
@@ -104,7 +104,6 @@ export function RoutedApp() {
             <Route path="/transaction/new" element={<TransactionPage />} />
             <Route path="/transaction/repeat/:sourceId/:date" element={<TransactionPage />} />
             <Route path="/transaction/:id" element={<TransactionPage />} />
-            <Route path="/design" element={<DesignPage />} />
           </Routes>
         </motion.div>
       </AnimatePresence>
@@ -116,7 +115,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <NavigationDirectionProvider>
-        <RoutedApp />
+        <Routes>
+          <Route path="/design" element={<DesignPage />} />
+          <Route path="/*" element={<RoutedApp />} />
+        </Routes>
       </NavigationDirectionProvider>
     </BrowserRouter>
   )

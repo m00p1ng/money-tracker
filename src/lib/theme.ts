@@ -1,4 +1,4 @@
-import type { ThemePreset } from '../types/domain'
+import type { ThemePreset } from '@/types/domain'
 
 export type ThemeTokens = {
   accent: string

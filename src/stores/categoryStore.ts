@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { db } from '../db/schema'
-import type { Category, TransactionType } from '../types/domain'
+import { db } from '@/db/schema'
+import type { Category, TransactionType } from '@/types/domain'
 
 type CategoryStore = {
   items: Category[]

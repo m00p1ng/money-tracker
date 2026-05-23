@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { NavigationDirectionProvider, useNavigationDirection, useBackNavigate } from './navigationDirection'
+import { NavigationDirectionProvider, useNavigationDirection, useBackNavigate } from '@/context/navigationDirection'
 import { MemoryRouter } from 'react-router'
 
 function wrapper({ children }: { children: React.ReactNode }) {

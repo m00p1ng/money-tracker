@@ -1,6 +1,6 @@
-import { Card } from '../../components/ui/Card'
-import { formatAmount } from '../../lib/format'
-import type { TransactionType } from '../../types/domain'
+import { Card } from '@/components/ui/Card'
+import { formatAmount } from '@/lib/format'
+import type { TransactionType } from '@/types/domain'
 
 export function AmountDisplay({ amount, expression, type }: { amount: number; expression: string; type: TransactionType }) {
   return (

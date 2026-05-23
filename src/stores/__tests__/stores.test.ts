@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { db } from '../../db/schema'
-import { seedDatabase } from '../../db/seed'
-import { bootstrapStores } from '../bootstrap'
-import { useCategoryStore } from '../categoryStore'
-import { useCurrencyStore } from '../currencyStore'
-import { useSettingsStore } from '../settingsStore'
-import { useTransactionStore } from '../transactionStore'
-import { useWalletStore } from '../walletStore'
-import type { Transaction } from '../../types/domain'
+import { db } from '@/db/schema'
+import { seedDatabase } from '@/db/seed'
+import { bootstrapStores } from '@/stores/bootstrap'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useCurrencyStore } from '@/stores/currencyStore'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useTransactionStore } from '@/stores/transactionStore'
+import { useWalletStore } from '@/stores/walletStore'
+import type { Transaction } from '@/types/domain'
 
 function transaction(overrides: Partial<Transaction> = {}): Transaction {
   return {

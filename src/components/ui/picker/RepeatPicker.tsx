@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { BottomSheet, PickerColumn } from '../../components/ui'
-import { Button } from '../../components/ui/Button'
-import { Icon } from '../../components/Icon'
-import type { RepeatConfig, RepeatPreset } from '../../types/domain'
+import { BottomSheet } from '..'
+import { PickerColumn } from '@/components/ui/picker/PickerColumn'
+import { Button } from '@/components/ui/Button'
+import { Icon } from '@/components/Icon'
+import type { RepeatConfig, RepeatPreset } from '@/types/domain'
 
 const PRESETS: { label: string; value: RepeatPreset }[] = [
   { label: 'Never', value: 'never' },

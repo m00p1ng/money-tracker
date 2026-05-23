@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router'
-import { Icon } from './Icon'
+import { Icon } from '@/components/Icon'
 
 const navItems = [
   { label: 'Home', to: '/', icon: 'fa-home', enabled: true },

@@ -1,10 +1,10 @@
 // src/features/design/sections/FeatureSection.tsx
-import { SummaryCards } from '../../home/SummaryCards'
-import { TodayTransactions } from '../../home/TodayTransactions'
-import { UpcomingTransactions } from '../../home/UpcomingTransactions'
-import { AmountDisplay } from '../../transaction/AmountDisplay'
-import { CalculatorKeyboard } from '../../transaction/CalculatorKeyboard'
-import { CategoryItemsCard } from '../../transaction/CategoryItemsCard'
+import { SummaryCards } from '@/features/home/SummaryCards'
+import { TodayTransactions } from '@/features/home/TodayTransactions'
+import { UpcomingTransactions } from '@/features/home/UpcomingTransactions'
+import { AmountDisplay } from '@/features/transaction/AmountDisplay'
+import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard'
+import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
 
 function SubSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (

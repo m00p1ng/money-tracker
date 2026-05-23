@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
-import { BottomNav } from './BottomNav'
-import { useDesignSystemTrigger } from '../hooks/useDesignSystemTrigger'
+import { BottomNav } from '@/components/BottomNav'
+import { useDesignSystemTrigger } from '@/hooks/useDesignSystemTrigger'
 
 export function AppShell({ children, showBottomNav = true }: PropsWithChildren<{ showBottomNav?: boolean }>) {
   const logoRef = useDesignSystemTrigger()

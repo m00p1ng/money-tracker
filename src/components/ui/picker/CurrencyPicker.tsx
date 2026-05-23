@@ -1,6 +1,6 @@
-import { Icon } from '../../components/Icon'
-import { BottomSheet } from '../../components/ui'
-import type { Currency } from '../../types/domain'
+import { Icon } from '@/components/Icon'
+import { BottomSheet } from '..'
+import type { Currency } from '@/types/domain'
 
 function currencyFlag(code: string): string {
   return [...code.slice(0, 2).toUpperCase()]

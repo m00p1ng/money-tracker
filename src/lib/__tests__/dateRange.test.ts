@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { dateOnly, getPresetRange, isWithinDateRange } from '../dateRange'
+import { dateOnly, getPresetRange, isWithinDateRange } from '@/lib/dateRange'
 
 describe('dateRange helpers', () => {
   const now = new Date('2026-05-23T10:30:00.000Z')

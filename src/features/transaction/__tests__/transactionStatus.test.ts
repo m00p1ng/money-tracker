@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deriveTransactionStatus, validateDraft, validateExchangeRate } from '../transactionForm'
+import { deriveTransactionStatus, validateDraft, validateExchangeRate } from '@/features/transaction/transactionForm'
 
 describe('transaction status helpers', () => {
   const now = new Date('2026-05-23T10:00:00.000Z')

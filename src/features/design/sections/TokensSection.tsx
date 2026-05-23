@@ -1,5 +1,5 @@
 // src/features/design/sections/TokensSection.tsx
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 
 const COLOR_TOKENS = [
   { name: 'accent', variable: '--accent' },
@@ -37,11 +37,10 @@ const SPACING_SCALE = [
 ]
 
 function ColorSwatch({ name, variable }: { name: string; variable: string }) {
-  const [resolved, setResolved] = useState('')
-  useEffect(() => {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(variable).trim()
-    setResolved(value)
-  }, [variable])
+  const resolved = useMemo(
+    () => getComputedStyle(document.documentElement).getPropertyValue(variable).trim(),
+    [variable],
+  )
 
   return (
     <div className="overflow-hidden rounded-xl border border-white/[0.08]">

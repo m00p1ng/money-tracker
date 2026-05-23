@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
-import { formatShortDate } from '../../lib/date'
-import { formatAmount } from '../../lib/format'
-import { useCategoryStore } from '../../stores/categoryStore'
-import { useTransactionStore } from '../../stores/transactionStore'
-import { SectionLabel, TransactionRow } from '../../components/ui'
+import { formatShortDate } from '@/lib/date'
+import { formatAmount } from '@/lib/format'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useTransactionStore } from '@/stores/transactionStore'
+import { SectionLabel, TransactionRow } from '@/components/ui'
 
 const listVariants = {
   hidden: {},
@@ -43,7 +43,7 @@ export function TodayTransactions() {
                   primaryLabel={category?.name ?? 'Unknown'}
                   secondaryLabel={parent?.name ?? transaction.type}
                   amount={`${transaction.type === 'income' ? '+' : '-'}${formatAmount(item.amount, transaction.currency)}`}
-                   amountColor={transaction.type === 'income' ? 'text-income' : 'text-expense'}
+                  amountColor={transaction.type === 'income' ? 'text-income' : 'text-expense'}
                 />
               </motion.div>
             )

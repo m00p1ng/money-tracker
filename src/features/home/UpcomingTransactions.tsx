@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
-import { formatAmount } from '../../lib/format'
-import { useCategoryStore } from '../../stores/categoryStore'
-import { useTransactionStore } from '../../stores/transactionStore'
-import { useWalletStore } from '../../stores/walletStore'
-import { SectionLabel, TransactionRow } from '../../components/ui'
+import { formatAmount } from '@/lib/format'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useTransactionStore } from '@/stores/transactionStore'
+import { useWalletStore } from '@/stores/walletStore'
+import { SectionLabel, TransactionRow } from '@/components/ui'
 
 const listVariants = {
   hidden: {},

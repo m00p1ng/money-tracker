@@ -1,6 +1,6 @@
-import { Icon } from '../../components/Icon'
-import { BottomSheet } from '../../components/ui'
-import type { Wallet } from '../../types/domain'
+import { Icon } from '@/components/Icon'
+import { BottomSheet } from '..'
+import type { Wallet } from '@/types/domain'
 
 export function WalletPicker({
   isOpen,

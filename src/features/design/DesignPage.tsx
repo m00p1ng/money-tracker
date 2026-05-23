@@ -1,10 +1,10 @@
 // src/features/design/DesignPage.tsx
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { DesignSidebar, DesignTopNav } from './DesignSidebar'
-import { TokensSection } from './sections/TokensSection'
-import { UIComponentsSection } from './sections/UIComponentsSection'
-import { FeatureSection } from './sections/FeatureSection'
+import { DesignSidebar, DesignTopNav } from '@/features/design/DesignSidebar'
+import { TokensSection } from '@/features/design/sections/TokensSection'
+import { UIComponentsSection } from '@/features/design/sections/UIComponentsSection'
+import { FeatureSection } from '@/features/design/sections/FeatureSection'
 
 const SECTION_IDS = [
   'colors', 'typography', 'spacing',
@@ -23,10 +23,14 @@ export function DesignPage() {
     const observers: IntersectionObserver[] = []
     for (const id of SECTION_IDS) {
       const el = document.getElementById(id)
-      if (!el) continue
+      if (!el) {
+        continue
+      }
       const obs = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) setActiveId(id)
+          if (entry.isIntersecting) {
+            setActiveId(id)
+          }
         },
         { root: contentRef.current, threshold: 0.3 },
       )

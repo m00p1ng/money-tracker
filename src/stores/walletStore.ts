@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { db } from '../db/schema'
-import type { Wallet } from '../types/domain'
+import { db } from '@/db/schema'
+import type { Wallet } from '@/types/domain'
 
 type WalletStore = {
   items: Wallet[]

@@ -1,13 +1,13 @@
 import { FormEvent, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { useBackNavigate } from '../../context/navigationDirection'
-import { Button } from '../../components/ui/Button'
-import { Card } from '../../components/ui/Card'
-import { Field, SelectInput, TextInput } from '../../components/ui/Field'
-import { FormErrorMessage, PageHeader } from '../../components/ui'
-import { createId } from '../../lib/id'
-import { useCategoryStore } from '../../stores/categoryStore'
-import type { Category, TransactionType } from '../../types/domain'
+import { useBackNavigate } from '@/context/navigationDirection'
+import { Button } from '@/components/ui/Button'
+import { Card } from '@/components/ui/Card'
+import { Field, SelectInput, TextInput } from '@/components/ui/Field'
+import { FormErrorMessage, PageHeader } from '@/components/ui'
+import { createId } from '@/lib/id'
+import { useCategoryStore } from '@/stores/categoryStore'
+import type { Category, TransactionType } from '@/types/domain'
 
 export function CategoryFormPage() {
   const { id } = useParams()

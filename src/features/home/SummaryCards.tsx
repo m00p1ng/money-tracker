@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { Icon } from '../../components/Icon'
-import { formatAmount } from '../../lib/format'
-import { useTransactionStore } from '../../stores/transactionStore'
+import { Icon } from '@/components/Icon'
+import { formatAmount } from '@/lib/format'
+import { useTransactionStore } from '@/stores/transactionStore'
 
 const containerVariants = {
   hidden: {},

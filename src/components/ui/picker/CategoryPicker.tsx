@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Icon } from '../../components/Icon'
-import { Button } from '../../components/ui/Button'
-import type { Category, TransactionType } from '../../types/domain'
+import { Icon } from '@/components/Icon'
+import { Button } from '@/components/ui/Button'
+import type { Category, TransactionType } from '@/types/domain'
 
 export function CategoryPicker({
   isOpen,

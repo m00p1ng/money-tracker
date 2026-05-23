@@ -1,10 +1,10 @@
-import { Icon } from '../../components/Icon'
-import { themes } from '../../lib/theme'
-import { formatAmount } from '../../lib/format'
-import { useSettingsStore } from '../../stores/settingsStore'
-import { useWalletStore } from '../../stores/walletStore'
-import type { ThemePreset } from '../../types/domain'
-import { useBackNavigate } from '../../context/navigationDirection'
+import { Icon } from '@/components/Icon'
+import { themes } from '@/lib/theme'
+import { formatAmount } from '@/lib/format'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useWalletStore } from '@/stores/walletStore'
+import type { ThemePreset } from '@/types/domain'
+import { useBackNavigate } from '@/context/navigationDirection'
 
 const names: Record<ThemePreset, string> = {
   forest: 'Forest',

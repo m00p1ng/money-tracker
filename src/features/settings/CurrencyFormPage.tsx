@@ -1,12 +1,12 @@
 import { FormEvent, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { useBackNavigate } from '../../context/navigationDirection'
-import { Button } from '../../components/ui/Button'
-import { Card } from '../../components/ui/Card'
-import { Field, TextInput } from '../../components/ui/Field'
-import { FormErrorMessage, PageHeader } from '../../components/ui'
-import { useCurrencyStore } from '../../stores/currencyStore'
-import type { Currency } from '../../types/domain'
+import { useBackNavigate } from '@/context/navigationDirection'
+import { Button } from '@/components/ui/Button'
+import { Card } from '@/components/ui/Card'
+import { Field, TextInput } from '@/components/ui/Field'
+import { FormErrorMessage, PageHeader } from '@/components/ui'
+import { useCurrencyStore } from '@/stores/currencyStore'
+import type { Currency } from '@/types/domain'
 
 export function CurrencyFormPage() {
   const { code } = useParams()

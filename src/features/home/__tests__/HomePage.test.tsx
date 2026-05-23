@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { formatShortDate } from '../../../lib/date'
-import { useCategoryStore } from '../../../stores/categoryStore'
-import { useTransactionStore } from '../../../stores/transactionStore'
-import { HomePage } from '../HomePage'
+import { formatShortDate } from '@/lib/date'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useTransactionStore } from '@/stores/transactionStore'
+import { HomePage } from '@/features/home/HomePage'
 
 describe('HomePage', () => {
   beforeEach(() => {

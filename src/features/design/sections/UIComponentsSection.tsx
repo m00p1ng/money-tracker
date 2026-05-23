@@ -1,10 +1,10 @@
 // src/features/design/sections/UIComponentsSection.tsx
 import { useState } from 'react'
-import { Button } from '../../../components/ui/Button'
-import { Card } from '../../../components/ui/Card'
-import { Field, TextInput, SelectInput } from '../../../components/ui/Field'
-import { SegmentedControl } from '../../../components/ui/SegmentedControl'
-import { TypePickerDropdown } from '../../../components/ui/TypePickerDropdown'
+import { Button } from '@/components/ui/Button'
+import { Card } from '@/components/ui/Card'
+import { Field, TextInput, SelectInput } from '@/components/ui/Field'
+import { SegmentedControl } from '@/components/ui/SegmentedControl'
+import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
 
 function SubSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (

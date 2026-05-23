@@ -1,4 +1,4 @@
-import type { RepeatConfig, Transaction } from '../../types/domain'
+import type { RepeatConfig, Transaction } from '@/types/domain'
 
 export type VirtualRepeatOccurrence = {
   id: string

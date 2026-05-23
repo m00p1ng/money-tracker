@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { Icon } from '../Icon'
+import { Icon } from '@/components/Icon'
 
 type TransactionRowProps = {
   to: string

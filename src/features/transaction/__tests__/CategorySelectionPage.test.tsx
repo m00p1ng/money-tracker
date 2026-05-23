@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { useCategoryStore } from '../../../stores/categoryStore'
-import { useTransactionDraftStore } from '../../../stores/transactionDraftStore'
-import { CategorySelectionPage } from '../CategorySelectionPage'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
+import { CategorySelectionPage } from '@/features/transaction/CategorySelectionPage'
 
 const categories = [
   { id: 'exp-food', name: 'Food & Drink', type: 'expense' as const, level: 1 as const, icon: 'fa-utensils', color: '#65a30d', isDefault: true },

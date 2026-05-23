@@ -24,7 +24,9 @@ export function useDesignSystemTrigger() {
   // Long-press: 600ms on logo element
   useEffect(() => {
     const el = logoRef.current
-    if (!el) return
+    if (!el) {
+      return
+    }
 
     let timer: ReturnType<typeof setTimeout> | null = null
 

@@ -1,7 +1,7 @@
-import { Icon } from '../../components/Icon'
-import { formatAmount } from '../../lib/format'
-import { useCategoryStore } from '../../stores/categoryStore'
-import type { TransactionItem } from '../../types/domain'
+import { Icon } from '@/components/Icon'
+import { formatAmount } from '@/lib/format'
+import { useCategoryStore } from '@/stores/categoryStore'
+import type { TransactionItem } from '@/types/domain'
 
 export function CategoryItemsCard({
   items,
