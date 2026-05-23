@@ -144,7 +144,12 @@ Hooks do **not** return pre-shaped JSX props — they return raw data and handle
 - `Icon`
 
 **`src/features/design/`**
-- `DesignPage`, `DesignSidebar`, `sections/FeatureSection`, `sections/TokensSection`, `sections/UIComponentsSection`
+- `DesignSidebar`, `sections/FeatureSection`, `sections/TokensSection`, `sections/UIComponentsSection`
+
+### 4-file components (design feature)
+
+**`src/features/design/`**
+- `DesignPage` — sidebar toggle local state → Container + hook
 
 ---
 
