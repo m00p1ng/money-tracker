@@ -1,8 +1,13 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from 'react'
 
-type ButtonProps = PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'accent' | 'ghost' | 'danger' }>
+type ButtonProps = PropsWithChildren<
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: 'accent' | 'ghost' | 'danger'
+    fullWidth?: boolean
+  }
+>
 
-export function Button({ children, className = '', variant = 'ghost', ...props }: ButtonProps) {
+export function Button({ children, className = '', variant = 'ghost', fullWidth = false, ...props }: ButtonProps) {
   const variantClass =
     variant === 'accent'
       ? 'bg-gradient-to-br from-[var(--accent-btn-1)] to-[var(--accent-btn-2)] text-white'
@@ -11,7 +16,10 @@ export function Button({ children, className = '', variant = 'ghost', ...props }
         : 'bg-white/5 text-slate-100'
 
   return (
-    <button className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 font-medium transition active:scale-[0.98] disabled:opacity-40 ${variantClass} ${className}`} {...props}>
+    <button
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 font-medium transition active:scale-[0.98] disabled:opacity-40 ${fullWidth ? 'w-full' : ''} ${variantClass} ${className}`}
+      {...props}
+    >
       {children}
     </button>
   )
