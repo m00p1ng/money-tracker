@@ -23,6 +23,13 @@ function renderPage(search = '') {
   )
 }
 
+async function openTypeDropdown() {
+  // The trigger button text matches the current type label ("Expense", "Income", etc.)
+  // Find the trigger by its chevron-down icon sibling — or find by current label
+  const trigger = screen.getByRole('button', { name: /expense|income|transfer/i })
+  await userEvent.click(trigger)
+}
+
 beforeEach(() => {
   useTransactionDraftStore.getState().clear()
   useCategoryStore.setState({ items: categories })
@@ -35,11 +42,19 @@ describe('CategorySelectionPage', () => {
     expect(screen.queryByText('Salary')).not.toBeInTheDocument()
   })
 
-  it('switches to income categories when Income tab selected', async () => {
+  it('switches to income categories when Income selected from dropdown', async () => {
     renderPage()
+    await openTypeDropdown()
     await userEvent.click(screen.getByRole('button', { name: 'Income' }))
     expect(screen.getByText('Salary')).toBeInTheDocument()
     expect(screen.queryByText('Food & Drink')).not.toBeInTheDocument()
+  })
+
+  it('renders 3-column grid', () => {
+    renderPage()
+    // The grid container has class grid-cols-3
+    const grid = document.querySelector('.grid-cols-3')
+    expect(grid).toBeInTheDocument()
   })
 
   it('drills into sub-categories on parent tap', async () => {
@@ -56,8 +71,9 @@ describe('CategorySelectionPage', () => {
     expect(screen.getByTestId('tx-page')).toBeInTheDocument()
   })
 
-  it('navigates to /transaction/new?type=transfer when Transfer tapped', async () => {
+  it('navigates to /transaction/new?type=transfer when Transfer selected from dropdown', async () => {
     renderPage()
+    await openTypeDropdown()
     await userEvent.click(screen.getByRole('button', { name: 'Transfer' }))
     expect(screen.getByTestId('tx-page')).toBeInTheDocument()
   })
@@ -86,7 +102,6 @@ describe('CategorySelectionPage with draft store', () => {
     await userEvent.click(screen.getByText('Coffee'))
     const draft = useTransactionDraftStore.getState().draft
     expect(draft?.items[0].categoryId).toBe('exp-food-coffee')
-    // navigated back (no longer on category page — tx-page is shown instead via -1 nav, but in MemoryRouter -1 goes back)
     expect(screen.queryByText('Food & Drink')).not.toBeInTheDocument()
   })
 
