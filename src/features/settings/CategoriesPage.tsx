@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { Icon } from '../../components/Icon'
 import { Card } from '../../components/ui/Card'
 import { useCategoryStore } from '../../stores/categoryStore'
 import { useBackNavigate } from '../../context/navigationDirection'
@@ -10,9 +11,17 @@ export function CategoriesPage() {
 
   return (
     <div className="space-y-5">
-      <header>
-        <button type="button" className="text-sm text-accent" onClick={() => backNavigate('/settings')}>Back</button>
-        <h1 className="mt-3 text-2xl font-semibold">Categories</h1>
+      <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
+        <button
+          aria-label="Back"
+          onClick={() => backNavigate('/settings')}
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
+          type="button"
+        >
+          <Icon name="fa-chevron-left" />
+        </button>
+        <h1 className="text-center text-base font-bold">Categories</h1>
+        <div />
       </header>
       {rootCategories.map((category) => (
         <Link key={category.id} to={`/settings/categories/${category.id}`}>

@@ -45,9 +45,17 @@ export function CurrenciesPage() {
 
   return (
     <div className="space-y-5">
-      <header>
-        <button type="button" className="inline-flex items-center gap-1.5 text-sm text-accent" onClick={() => backNavigate('/settings')}><Icon name="fa-chevron-left" className="text-[11px]" />Back</button>
-        <h1 className="mt-3 text-2xl font-semibold">Currencies</h1>
+      <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
+        <button
+          aria-label="Back"
+          onClick={() => backNavigate('/settings')}
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
+          type="button"
+        >
+          <Icon name="fa-chevron-left" />
+        </button>
+        <h1 className="text-center text-base font-bold">Currencies</h1>
+        <div />
       </header>
 
       <div>
