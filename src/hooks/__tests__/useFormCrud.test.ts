@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import React from 'react'
-import { useFormCrud } from '../shared/useFormCrud'
+import { useFormCrud } from '@/hooks/shared/useFormCrud'
 
 const wrapper = ({ children }: { children: React.ReactNode }) =>
   React.createElement(MemoryRouter, null, children)

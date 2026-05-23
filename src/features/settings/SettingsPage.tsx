@@ -1,9 +1,9 @@
-import { Icon } from '../../components/Icon'
-import { ListGroup, ListRow } from '../../components/ui'
-import { useCategoryStore } from '../../stores/categoryStore'
-import { useCurrencyStore } from '../../stores/currencyStore'
-import { useSettingsStore } from '../../stores/settingsStore'
-import { useWalletStore } from '../../stores/walletStore'
+import { Icon } from '@/components/Icon'
+import { ListGroup, ListRow } from '@/components/ui'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useCurrencyStore } from '@/stores/currencyStore'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useWalletStore } from '@/stores/walletStore'
 
 const THEME_LABELS: Record<string, string> = {
   forest: 'Forest Green',

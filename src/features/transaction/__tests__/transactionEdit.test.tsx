@@ -2,11 +2,11 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useCategoryStore } from '../../../stores/categoryStore'
-import { useTransactionDraftStore } from '../../../stores/transactionDraftStore'
-import { useTransactionStore } from '../../../stores/transactionStore'
-import { useWalletStore } from '../../../stores/walletStore'
-import { TransactionPage } from '../TransactionPage'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
+import { useTransactionStore } from '@/stores/transactionStore'
+import { useWalletStore } from '@/stores/walletStore'
+import { TransactionPage } from '@/features/transaction/TransactionPage'
 
 describe('TransactionPage edit mode', () => {
   beforeEach(() => {

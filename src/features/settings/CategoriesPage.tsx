@@ -1,8 +1,8 @@
 import { Link } from 'react-router'
-import { Card } from '../../components/ui/Card'
-import { PageHeader } from '../../components/ui'
-import { useCategoryStore } from '../../stores/categoryStore'
-import { useBackNavigate } from '../../context/navigationDirection'
+import { Card } from '@/components/ui/Card'
+import { PageHeader } from '@/components/ui'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useBackNavigate } from '@/context/navigationDirection'
 
 export function CategoriesPage() {
   const categories = useCategoryStore((state) => state.items)

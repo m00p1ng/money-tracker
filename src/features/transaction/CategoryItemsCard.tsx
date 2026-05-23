@@ -1,7 +1,8 @@
-import { Icon } from '../../components/Icon'
-import { formatAmount } from '../../lib/format'
-import { useCategoryStore } from '../../stores/categoryStore'
-import type { TransactionItem } from '../../types/domain'
+import { Icon } from '@/components/Icon'
+import cx from 'classnames'
+import { formatAmount } from '@/lib/format'
+import { useCategoryStore } from '@/stores/categoryStore'
+import type { TransactionItem } from '@/types/domain'
 
 export function CategoryItemsCard({
   items,
@@ -36,7 +37,7 @@ export function CategoryItemsCard({
         return (
           <div
             key={`${item.categoryId}-${index}`}
-            className={`flex items-center border-b border-white/[0.04] last:border-b-0 ${isFocused ? 'bg-[var(--accent)]/[0.06]' : ''}`}
+            className={cx('flex items-center border-b border-white/[0.04] last:border-b-0', { 'bg-[var(--accent)]/[0.06]': isFocused })}
           >
             {/* Left zone: tap to change category */}
             <button

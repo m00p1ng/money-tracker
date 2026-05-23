@@ -1,12 +1,12 @@
 import { create } from 'zustand'
-import { db } from '../db/schema'
+import { db } from '@/db/schema'
 import {
   materializeRepeatOccurrence as buildRepeatOccurrence,
   projectRepeatOccurrences,
   type VirtualRepeatOccurrence,
-} from '../features/transaction/repeatSchedule'
-import { isTodayInLocalTime } from '../lib/date'
-import type { Transaction } from '../types/domain'
+} from '@/features/transaction/repeatSchedule'
+import { isTodayInLocalTime } from '@/lib/date'
+import type { Transaction } from '@/types/domain'
 
 function total(transaction: Transaction): number {
   return transaction.items.reduce((sum, item) => sum + item.amount, 0)

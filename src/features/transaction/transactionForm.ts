@@ -1,4 +1,4 @@
-import type { RepeatConfig, Transaction, TransactionItem, TransactionStatus, TransactionType } from '../../types/domain'
+import type { RepeatConfig, Transaction, TransactionItem, TransactionStatus, TransactionType } from '@/types/domain'
 
 export type TransactionDraft = {
   type?: TransactionType

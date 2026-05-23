@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router'
-import { Icon } from './Icon'
+import cx from 'classnames'
+import { Icon } from '@/components/Icon'
 
 const navItems = [
   { label: 'Home', to: '/', icon: 'fa-home', enabled: true },
@@ -21,11 +22,11 @@ export function BottomNav() {
             <>
               <Icon
                 name={item.icon}
-                className={`text-[19px] mb-1 ${active ? 'text-accent' : 'text-white/22'}`}
+                className={cx('text-[19px] mb-1', active ? 'text-accent' : 'text-white/22')}
                 style={active ? { color: 'var(--accent-btn-2)' } : undefined}
               />
               <span
-                className={`text-[10px] leading-none ${active ? 'font-semibold bg-gradient-to-br from-[var(--accent-btn-2)] to-[var(--accent)] bg-clip-text text-transparent' : 'text-white/22'}`}
+                className={cx('text-[10px] leading-none', active ? 'font-semibold bg-gradient-to-br from-[var(--accent-btn-2)] to-[var(--accent)] bg-clip-text text-transparent' : 'text-white/22')}
               >{item.label}</span>
               {active && (
                 <span className="mt-1 block h-1 w-1 rounded-full" style={{ background: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }} />

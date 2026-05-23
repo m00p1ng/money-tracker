@@ -1,7 +1,7 @@
-import { useWalletStore } from '../../stores/walletStore'
-import { useBackNavigate } from '../../context/navigationDirection'
-import { AddRow, ListGroup, ListRow, PageHeader } from '../../components/ui'
-import { hexToRgba } from '../../lib/color'
+import { useWalletStore } from '@/stores/walletStore'
+import { useBackNavigate } from '@/context/navigationDirection'
+import { AddRow, ListGroup, ListRow, PageHeader } from '@/components/ui'
+import { hexToRgba } from '@/lib/color'
 
 export function WalletsPage() {
   const wallets = useWalletStore((state) => state.items)

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import { db } from '../db/schema'
-import { applyTheme } from '../lib/theme'
-import type { Settings } from '../types/domain'
+import { db } from '@/db/schema'
+import { applyTheme } from '@/lib/theme'
+import type { Settings } from '@/types/domain'
 
 type SettingsStore = {
   settings?: Settings

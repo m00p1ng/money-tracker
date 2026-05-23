@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { RepeatConfig, TransactionItem, TransactionType } from '../types/domain'
+import type { RepeatConfig, TransactionItem, TransactionType } from '@/types/domain'
 
 export type TransactionDraft = {
   id?: string

@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { BottomSheet, PickerColumn } from '../../components/ui'
-import { Button } from '../../components/ui/Button'
-import { Icon } from '../../components/Icon'
-import type { RepeatConfig, RepeatPreset } from '../../types/domain'
+import cx from 'classnames'
+import { BottomSheet } from '..'
+import { PickerColumn } from '@/components/ui/picker/PickerColumn'
+import { Button } from '@/components/ui/Button'
+import { Icon } from '@/components/Icon'
+import type { RepeatConfig, RepeatPreset } from '@/types/domain'
 
 const PRESETS: { label: string; value: RepeatPreset }[] = [
   { label: 'Never', value: 'never' },
@@ -49,11 +51,11 @@ export function RepeatPicker({
         {PRESETS.map((p) => (
           <button
             key={p.value}
-            className={`flex w-full items-center justify-between rounded-xl px-3.5 py-3 ${preset === p.value ? 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]' : ''}`}
+            className={cx('flex w-full items-center justify-between rounded-xl px-3.5 py-3', { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': preset === p.value })}
             onClick={() => setPreset(p.value)}
             type="button"
           >
-            <span className={`text-sm ${preset === p.value ? 'font-bold text-[var(--accent-light)]' : 'font-medium'}`}>{p.label}</span>
+            <span className={cx('text-sm', preset === p.value ? 'font-bold text-[var(--accent-light)]' : 'font-medium')}>{p.label}</span>
             {preset === p.value && <Icon name="fa-circle-check" className="text-[var(--accent-light)]" />}
           </button>
         ))}

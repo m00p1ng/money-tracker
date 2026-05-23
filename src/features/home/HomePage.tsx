@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router'
-import { Icon } from '../../components/Icon'
-import { formatHeaderDate } from '../../lib/date'
-import { SummaryCards } from './SummaryCards'
-import { TodayTransactions } from './TodayTransactions'
-import { UpcomingTransactions } from './UpcomingTransactions'
+import { Icon } from '@/components/Icon'
+import { formatHeaderDate } from '@/lib/date'
+import { SummaryCards } from '@/features/home/SummaryCards'
+import { TodayTransactions } from '@/features/home/TodayTransactions'
+import { UpcomingTransactions } from '@/features/home/UpcomingTransactions'
 
 const containerVariants = {
   hidden: {},

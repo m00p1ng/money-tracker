@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createId } from '../id'
+import { createId } from '@/lib/id'
 
 describe('id utilities', () => {
   it('returns a non-empty string', () => {

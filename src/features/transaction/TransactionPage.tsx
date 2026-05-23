@@ -1,24 +1,25 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
+import cx from 'classnames'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
-import { useBackNavigate } from '../../context/navigationDirection'
-import { Icon } from '../../components/Icon'
-import { TypePickerDropdown } from '../../components/ui/TypePickerDropdown'
-import { createCalcState, pressCalcKey } from '../../lib/calculator'
-import { createId } from '../../lib/id'
-import { formatDatetimeLocalDisplay, toDatetimeLocalValue } from '../../lib/date'
-import { useCurrencyStore } from '../../stores/currencyStore'
-import { useTransactionDraftStore } from '../../stores/transactionDraftStore'
-import { useTransactionStore } from '../../stores/transactionStore'
-import { useWalletStore } from '../../stores/walletStore'
-import type { RepeatConfig, TransactionType } from '../../types/domain'
-import { CalculatorKeyboard } from './CalculatorKeyboard'
-import { CategoryItemsCard } from './CategoryItemsCard'
-import { CurrencyPicker } from './CurrencyPicker'
-import { DatePickerSheet } from './DatePickerSheet'
-import { RepeatPicker } from './RepeatPicker'
-import { WalletPicker } from './WalletPicker'
-import { buildTransaction, validateDraft, validateExchangeRate } from './transactionForm'
+import { useBackNavigate } from '@/context/navigationDirection'
+import { Icon } from '@/components/Icon'
+import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
+import { createCalcState, pressCalcKey } from '@/lib/calculator'
+import { createId } from '@/lib/id'
+import { formatDatetimeLocalDisplay, toDatetimeLocalValue } from '@/lib/date'
+import { useCurrencyStore } from '@/stores/currencyStore'
+import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
+import { useTransactionStore } from '@/stores/transactionStore'
+import { useWalletStore } from '@/stores/walletStore'
+import type { RepeatConfig, TransactionType } from '@/types/domain'
+import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard'
+import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
+import { CurrencyPicker } from '@/components/ui/picker/CurrencyPicker'
+import { DatePickerSheet } from '@/components/ui/picker/DatePickerSheet'
+import { RepeatPicker } from '@/components/ui/picker/RepeatPicker'
+import { WalletPicker } from '@/components/ui/picker/WalletPicker'
+import { buildTransaction, validateDraft, validateExchangeRate } from '@/features/transaction/transactionForm'
 
 type WalletPickerTarget = 'wallet' | 'toWallet'
 
@@ -202,7 +203,7 @@ export function TransactionPage() {
   }
 
   return (
-    <div className={`space-y-2 ${focusedIndex !== null ? 'pb-64' : 'pb-6'}`}>
+    <div className={cx('space-y-2', focusedIndex !== null ? 'pb-64' : 'pb-6')}>
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"

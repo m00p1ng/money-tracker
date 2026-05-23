@@ -1,10 +1,11 @@
-import { Icon } from '../../components/Icon'
-import { themes } from '../../lib/theme'
-import { formatAmount } from '../../lib/format'
-import { useSettingsStore } from '../../stores/settingsStore'
-import { useWalletStore } from '../../stores/walletStore'
-import type { ThemePreset } from '../../types/domain'
-import { useBackNavigate } from '../../context/navigationDirection'
+import { Icon } from '@/components/Icon'
+import cx from 'classnames'
+import { themes } from '@/lib/theme'
+import { formatAmount } from '@/lib/format'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useWalletStore } from '@/stores/walletStore'
+import type { ThemePreset } from '@/types/domain'
+import { useBackNavigate } from '@/context/navigationDirection'
 
 const names: Record<ThemePreset, string> = {
   forest: 'Forest',
@@ -49,14 +50,14 @@ export function ThemePage() {
               <button
                 key={theme}
                 type="button"
-                className={`rounded-xl border-2 py-2.5 px-2 text-center ${selected === theme ? 'border-accent' : 'border-transparent'}`}
+                className={cx('rounded-xl border-2 py-2.5 px-2 text-center', selected === theme ? 'border-accent' : 'border-transparent')}
                 onClick={() => settings ? update({ ...settings, theme }) : undefined}
               >
                 <span
                   className="mx-auto mb-1.5 block h-9 w-9 rounded-full"
                   style={{ background: `linear-gradient(135deg,${themes[theme].accentBtn1},${themes[theme].accent})` }}
                 />
-                <span className={`text-[10px] font-semibold ${selected === theme ? 'text-accent' : 'text-white/50'}`}>
+                <span className={cx('text-[10px] font-semibold', selected === theme ? 'text-accent' : 'text-white/50')}>
                   {names[theme]}
                 </span>
               </button>

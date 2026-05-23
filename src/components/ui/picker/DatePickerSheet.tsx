@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { DayPicker } from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
-import { BottomSheet, PickerColumn } from '../../components/ui'
-import { Button } from '../../components/ui/Button'
+import { BottomSheet } from '..'
+import { PickerColumn } from '@/components/ui/picker/PickerColumn'
+import { Button } from '@/components/ui/Button'
 
 type TimeValue = { hour: string; minute: string }
 

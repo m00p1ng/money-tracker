@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildTransaction, validateDraft } from '../transactionForm'
+import { buildTransaction, validateDraft } from '@/features/transaction/transactionForm'
 
 describe('transactionForm', () => {
   it('rejects drafts without category items', () => {

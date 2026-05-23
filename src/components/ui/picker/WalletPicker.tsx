@@ -1,6 +1,7 @@
-import { Icon } from '../../components/Icon'
-import { BottomSheet } from '../../components/ui'
-import type { Wallet } from '../../types/domain'
+import cx from 'classnames'
+import { Icon } from '@/components/Icon'
+import { BottomSheet } from '..'
+import type { Wallet } from '@/types/domain'
 
 export function WalletPicker({
   isOpen,
@@ -21,7 +22,7 @@ export function WalletPicker({
         {wallets.map((wallet) => (
           <button
             key={wallet.id}
-            className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-3 ${selectedId === wallet.id ? 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]' : ''}`}
+            className={cx('flex w-full items-center gap-3 rounded-xl px-3.5 py-3', { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': selectedId === wallet.id })}
             onClick={() => {
               onSelect(wallet.id); onClose() 
             }}

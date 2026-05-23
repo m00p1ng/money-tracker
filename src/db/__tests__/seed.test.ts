@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { db } from '../schema'
-import { seedDatabase } from '../seed'
+import { db } from '@/db/schema'
+import { seedDatabase } from '@/db/seed'
 
 describe('seedDatabase', () => {
   beforeEach(async () => {

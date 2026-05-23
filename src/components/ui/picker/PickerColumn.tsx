@@ -1,4 +1,5 @@
 import Picker from 'react-mobile-picker'
+import cx from 'classnames'
 
 type PickerColumnProps = {
   label: string
@@ -18,7 +19,7 @@ export function PickerColumn({ label, name, options, value, onChange, capitalize
           {options.map((opt) => (
             <Picker.Item key={opt} value={opt}>
               {({ selected }) => (
-                <span className={`text-[15px] ${capitalize ? 'capitalize' : ''} ${selected ? 'font-bold text-white' : 'font-medium text-white/30'}`}>
+                <span className={cx('text-[15px]', { capitalize }, selected ? 'font-bold text-white' : 'font-medium text-white/30')}>
                   {opt}
                 </span>
               )}

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { db } from '../db/schema'
-import type { Currency } from '../types/domain'
+import { db } from '@/db/schema'
+import type { Currency } from '@/types/domain'
 
 type CurrencyStore = {
   items: Currency[]

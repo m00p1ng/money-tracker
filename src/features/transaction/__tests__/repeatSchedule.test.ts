@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import type { Transaction } from '../../../types/domain'
+import type { Transaction } from '@/types/domain'
 import {
   materializeRepeatOccurrence,
   nextRepeatDate,
   projectRepeatOccurrences,
-} from '../repeatSchedule'
+} from '@/features/transaction/repeatSchedule'
 
 function transaction(overrides: Partial<Transaction> = {}): Transaction {
   return {

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useNavigate, useSearchParams } from 'react-router'
-import { useBackNavigate } from '../../context/navigationDirection'
-import { Icon } from '../../components/Icon'
-import { TypePickerDropdown } from '../../components/ui/TypePickerDropdown'
-import { useCategoryStore } from '../../stores/categoryStore'
-import { useTransactionDraftStore } from '../../stores/transactionDraftStore'
-import type { Category } from '../../types/domain'
+import { useBackNavigate } from '@/context/navigationDirection'
+import { Icon } from '@/components/Icon'
+import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
+import { useCategoryStore } from '@/stores/categoryStore'
+import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
+import type { Category } from '@/types/domain'
 
 const gridVariants = {
   hidden: {},
