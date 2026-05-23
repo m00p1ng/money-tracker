@@ -19,8 +19,17 @@ type ValidCustomRepeat = RepeatConfig & {
   customUnit: 'day' | 'month' | 'year'
 }
 
-function dateOnly(value: string): string {
-  return value.slice(0, 10)
+function localDateString(value: string): string {
+  if (!value.includes('T')) return value.slice(0, 10)
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value.slice(0, 10)
+
+  return formatDateParts({
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate(),
+  })
 }
 
 function todayString(now: Date): string {
@@ -127,7 +136,7 @@ export function projectRepeatOccurrences(transactions: Transaction[], now = new 
   for (const source of transactions) {
     if (!shouldProjectRepeat(source.repeat)) continue
 
-    let occurrenceDate = dateOnly(source.date)
+    let occurrenceDate = localDateString(source.date)
 
     while (occurrenceDate <= windowEnd) {
       const nextDate = nextRepeatDate(occurrenceDate, source.repeat)
@@ -154,9 +163,21 @@ export function projectRepeatOccurrences(transactions: Transaction[], now = new 
 }
 
 function replaceDate(sourceDate: string, occurrenceDate: string): string {
-  const timeStart = sourceDate.indexOf('T')
-  if (timeStart === -1) return occurrenceDate
-  return `${occurrenceDate}${sourceDate.slice(timeStart)}`
+  const occurrenceParts = parseDateParts(occurrenceDate)
+  if (!occurrenceParts || !sourceDate.includes('T')) return occurrenceDate
+
+  const source = new Date(sourceDate)
+  if (Number.isNaN(source.getTime())) return occurrenceDate
+
+  return new Date(
+    occurrenceParts.year,
+    occurrenceParts.month - 1,
+    occurrenceParts.day,
+    source.getHours(),
+    source.getMinutes(),
+    source.getSeconds(),
+    source.getMilliseconds(),
+  ).toISOString()
 }
 
 export function materializeRepeatOccurrence(

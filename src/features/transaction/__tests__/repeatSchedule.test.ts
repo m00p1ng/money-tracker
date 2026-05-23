@@ -53,6 +53,22 @@ describe('repeatSchedule', () => {
     expect(occurrences.every((occurrence) => occurrence.occurrenceDate <= '2027-02-01')).toBe(true)
   })
 
+  it('projects from the local calendar day for ISO timestamps near midnight', () => {
+    const source = transaction({
+      date: '2026-01-31T17:30:00.000Z',
+      repeat: { preset: 'monthly' },
+    })
+
+    const occurrences = projectRepeatOccurrences([source], new Date('2026-02-01T01:00:00.000Z'))
+
+    expect(occurrences[0]).toMatchObject({
+      id: 'repeat:tx-rent:2026-03-01',
+      sourceId: 'tx-rent',
+      occurrenceDate: '2026-03-01',
+    })
+    expect(occurrences[0].transaction.date).toBe('2026-02-28T17:30:00.000Z')
+  })
+
   it('materializes a repeat occurrence as a paid transaction with repeat metadata', () => {
     const source = transaction({
       date: '2026-01-31T08:45:30.000Z',
@@ -73,6 +89,30 @@ describe('repeatSchedule', () => {
       repeatOccurrenceDate: '2026-03-31',
       createdAt: '2026-03-31T09:00:00.000Z',
       date: '2026-03-31T08:45:30.000Z',
+    })
+    expect(materialized.repeat).toBeUndefined()
+  })
+
+  it('materializes repeat occurrences while preserving local wall-clock time', () => {
+    const source = transaction({
+      date: '2026-01-31T17:30:00.000Z',
+      repeat: { preset: 'monthly' },
+    })
+
+    const materialized = materializeRepeatOccurrence(
+      source,
+      '2026-03-01',
+      () => 'tx-rent-mar',
+      '2026-03-01T09:00:00.000Z',
+    )
+
+    expect(materialized).toMatchObject({
+      id: 'tx-rent-mar',
+      date: '2026-02-28T17:30:00.000Z',
+      status: 'paid',
+      repeatSourceId: 'tx-rent',
+      repeatOccurrenceDate: '2026-03-01',
+      createdAt: '2026-03-01T09:00:00.000Z',
     })
     expect(materialized.repeat).toBeUndefined()
   })
