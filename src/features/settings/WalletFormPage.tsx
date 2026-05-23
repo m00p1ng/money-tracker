@@ -1,5 +1,6 @@
 import { FormEvent, useMemo, useState } from 'react'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
+import { useNavigate, useParams, useSearchParams } from 'react-router'
+import { useBackNavigate } from '../../context/navigationDirection'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Field, SelectInput, TextInput } from '../../components/ui/Field'
@@ -14,6 +15,7 @@ export function WalletFormPage() {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const backNavigate = useBackNavigate()
   const currencies = useCurrencyStore((state) => state.items)
   const wallet = useWalletStore((state) => (id ? state.findById(id) : undefined))
   const add = useWalletStore((state) => state.add)
@@ -65,7 +67,7 @@ export function WalletFormPage() {
   return (
     <form className="space-y-5" onSubmit={onSubmit}>
       <header>
-        <Link className="text-sm text-accent" to="/settings/wallets">Back</Link>
+        <button type="button" className="text-sm text-accent" onClick={() => backNavigate('/settings/wallets')}>Back</button>
         <h1 className="mt-3 text-2xl font-semibold">{title}</h1>
       </header>
       <Card className="space-y-4">

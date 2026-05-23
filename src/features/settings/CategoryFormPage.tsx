@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
+import { useBackNavigate } from '../../context/navigationDirection'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Field, SelectInput, TextInput } from '../../components/ui/Field'
@@ -10,6 +11,7 @@ import type { Category, TransactionType } from '../../types/domain'
 export function CategoryFormPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const backNavigate = useBackNavigate()
   const existing = useCategoryStore((state) => (id ? state.findById(id) : undefined))
   const categories = useCategoryStore((state) => state.items)
   const add = useCategoryStore((state) => state.add)
@@ -53,7 +55,7 @@ export function CategoryFormPage() {
 
   return (
     <form className="space-y-5" onSubmit={onSubmit}>
-      <header><Link className="text-sm text-accent" to="/settings/categories">Back</Link><h1 className="mt-3 text-2xl font-semibold">{existing ? 'Edit Category' : 'New Category'}</h1></header>
+      <header><button type="button" className="text-sm text-accent" onClick={() => backNavigate('/settings/categories')}>Back</button><h1 className="mt-3 text-2xl font-semibold">{existing ? 'Edit Category' : 'New Category'}</h1></header>
       <Card className="space-y-4">
         <Field label="Name"><TextInput value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></Field>
         <Field label="Type"><SelectInput value={form.type} onChange={(event) => setForm({ ...form, type: event.target.value as TransactionType })}><option value="expense">Expense</option><option value="income">Income</option></SelectInput></Field>

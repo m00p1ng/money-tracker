@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
+import { useBackNavigate } from '../../context/navigationDirection'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Field, TextInput } from '../../components/ui/Field'
@@ -9,6 +10,7 @@ import type { Currency } from '../../types/domain'
 export function CurrencyFormPage() {
   const { code } = useParams()
   const navigate = useNavigate()
+  const backNavigate = useBackNavigate()
   const existing = useCurrencyStore((state) => (code ? state.findByCode(code) : undefined))
   const add = useCurrencyStore((state) => state.add)
   const update = useCurrencyStore((state) => state.update)
@@ -60,7 +62,7 @@ export function CurrencyFormPage() {
 
   return (
     <form className="space-y-5" onSubmit={onSubmit}>
-      <header><Link className="text-sm text-accent" to="/settings/currencies">Back</Link><h1 className="mt-3 text-2xl font-semibold">{existing ? 'Edit Currency' : 'New Currency'}</h1></header>
+      <header><button type="button" className="text-sm text-accent" onClick={() => backNavigate('/settings/currencies')}>Back</button><h1 className="mt-3 text-2xl font-semibold">{existing ? 'Edit Currency' : 'New Currency'}</h1></header>
       <Card className="space-y-4">
         <Field label="Code"><TextInput value={form.code} disabled={Boolean(existing)} onChange={(event) => setForm({ ...form, code: event.target.value.toUpperCase() })} /></Field>
         <Field label="Symbol"><TextInput value={form.symbol} onChange={(event) => setForm({ ...form, symbol: event.target.value })} /></Field>
