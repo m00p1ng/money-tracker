@@ -63,7 +63,7 @@ describe('TransactionPage edit mode', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('button', { name: 'Income' }).style.background).toContain('linear-gradient')
+    expect(screen.getByRole('button', { name: /income/i })).toBeInTheDocument()
     expect(screen.getAllByText('฿150.00').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByRole('button', { name: /Date & Time/i })).toBeInTheDocument()
     expect(screen.getByLabelText('Note')).toHaveValue('Test note')
@@ -155,6 +155,7 @@ describe('TransactionPage edit mode', () => {
       </MemoryRouter>
     )
 
+    await user.click(screen.getByRole('button', { name: /expense/i }))
     await user.click(screen.getByRole('button', { name: 'Transfer' }))
     expect(screen.getByText('From Wallet')).toBeInTheDocument()
     expect(screen.getByText('To Wallet')).toBeInTheDocument()

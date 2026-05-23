@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
 import { useBackNavigate } from '../../context/navigationDirection'
 import { Icon } from '../../components/Icon'
-import { SegmentedControl } from '../../components/ui/SegmentedControl'
+import { TypePickerDropdown } from '../../components/ui/TypePickerDropdown'
 import { createCalcState, pressCalcKey } from '../../lib/calculator'
 import { createId } from '../../lib/id'
 import { formatDatetimeLocalDisplay, toDatetimeLocalValue } from '../../lib/date'
@@ -214,14 +214,9 @@ export function TransactionPage() {
         >
           <Icon name="fa-chevron-left" />
         </button>
-        <SegmentedControl
+        <TypePickerDropdown
           value={type}
           onChange={(v) => updateDraft({ type: v as TransactionType })}
-          segments={[
-            { label: 'Expense', value: 'expense' },
-            { label: 'Income', value: 'income' },
-            { label: 'Transfer', value: 'transfer' },
-          ]}
         />
         <button
           aria-label="Save"
