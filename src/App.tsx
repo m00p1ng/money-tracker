@@ -15,6 +15,7 @@ import { WalletFormPage } from './features/settings/WalletFormPage'
 import { SettingsPage } from './features/settings/SettingsPage'
 import { CategorySelectionPage } from './features/transaction/CategorySelectionPage'
 import { TransactionPage } from './features/transaction/TransactionPage'
+import { NavigationDirectionProvider, useNavigationDirection } from './context/navigationDirection'
 
 const TAB_ROUTES = new Set(['/', '/balance', '/settings'])
 
@@ -24,24 +25,30 @@ const tabVariants: Variants = {
   exit: { opacity: 0, y: -8, transition: { duration: 0.12 } },
 }
 
-const pageVariants: Variants = {
-  initial: { opacity: 0, x: 24, scale: 0.98 },
-  animate: { opacity: 1, x: 0, scale: 1, transition: { type: 'spring', stiffness: 350, damping: 30 } },
-  exit: { opacity: 0, x: -24, scale: 0.98, transition: { duration: 0.18, ease: 'easeIn' } },
+function makePageVariants(direction: 'forward' | 'back'): Variants {
+  const enterX = direction === 'back' ? -24 : 24
+  const exitX = direction === 'back' ? 24 : -24
+  return {
+    initial: { opacity: 0, x: enterX, scale: 0.98 },
+    animate: { opacity: 1, x: 0, scale: 1, transition: { type: 'spring', stiffness: 350, damping: 30 } },
+    exit: { opacity: 0, x: exitX, scale: 0.98, transition: { duration: 0.18, ease: 'easeIn' } },
+  }
 }
 
 const bottomNavRoutes = ['/', '/balance', '/settings']
 
 export function RoutedApp() {
   const location = useLocation()
+  const { direction, setDirection } = useNavigationDirection()
   const prevPathRef = useRef(location.pathname)
   const variantsRef = useRef<Variants>(tabVariants)
 
   if (prevPathRef.current !== location.pathname) {
     const isCurrentTab = TAB_ROUTES.has(location.pathname)
     const isPrevTab = TAB_ROUTES.has(prevPathRef.current)
-    variantsRef.current = isCurrentTab && isPrevTab ? tabVariants : pageVariants
+    variantsRef.current = isCurrentTab && isPrevTab ? tabVariants : makePageVariants(direction)
     prevPathRef.current = location.pathname
+    setDirection('forward')
   }
 
   const showBottomNav = bottomNavRoutes.some((route) => {
@@ -94,7 +101,9 @@ export function RoutedApp() {
 export default function App() {
   return (
     <BrowserRouter>
-      <RoutedApp />
+      <NavigationDirectionProvider>
+        <RoutedApp />
+      </NavigationDirectionProvider>
     </BrowserRouter>
   )
 }
