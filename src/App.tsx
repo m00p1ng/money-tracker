@@ -15,6 +15,7 @@ import { WalletFormPage } from './features/settings/WalletFormPage'
 import { SettingsPage } from './features/settings/SettingsPage'
 import { CategorySelectionPage } from './features/transaction/CategorySelectionPage'
 import { TransactionPage } from './features/transaction/TransactionPage'
+import { DesignPage } from './features/design/DesignPage'
 import { NavigationDirectionProvider, useNavigationDirection } from './context/navigationDirection'
 
 const TAB_ROUTES = new Set(['/', '/balance', '/settings'])
@@ -103,6 +104,7 @@ export function RoutedApp() {
             <Route path="/transaction/new" element={<TransactionPage />} />
             <Route path="/transaction/repeat/:sourceId/:date" element={<TransactionPage />} />
             <Route path="/transaction/:id" element={<TransactionPage />} />
+            <Route path="/design" element={<DesignPage />} />
           </Routes>
         </motion.div>
       </AnimatePresence>
