@@ -12,9 +12,11 @@ const TYPES: { label: string; value: TransactionType }[] = [
 export function TypePickerDropdown({
   value,
   onChange,
+  locked = false,
 }: {
   value: TransactionType
   onChange: (type: TransactionType) => void
+  locked?: boolean
 }) {
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -37,13 +39,14 @@ export function TypePickerDropdown({
       <button
         type="button"
         className="flex items-center gap-2 text-base font-bold text-white"
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => { if (!locked) setOpen((prev) => !prev) }}
+        aria-disabled={locked}
       >
         {currentLabel}
-        <Icon name="fa-chevron-down" className="text-[11px] text-white/40" />
+        {!locked && <Icon name="fa-chevron-down" className="text-[11px] text-white/40" />}
       </button>
 
-      {open && (
+      {!locked && open && (
         <div
           className="absolute top-full left-1/2 z-50 mt-1 w-[160px] -translate-x-1/2 rounded-2xl border border-white/[0.1] bg-[var(--bg)] p-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
         >
