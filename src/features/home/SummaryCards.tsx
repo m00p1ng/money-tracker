@@ -23,19 +23,19 @@ export function SummaryCards() {
     <div>
       <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[2px] text-white/30">This Month</h2>
       <motion.div className="grid grid-cols-2 gap-3" variants={containerVariants} initial="hidden" animate="visible">
-        <motion.div variants={cardVariants} className="rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-emerald-400/10 to-emerald-600/5 p-4 backdrop-blur">
-          <div className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[1px] text-emerald-400">
+        <motion.div variants={cardVariants} className="rounded-2xl border border-income/20 bg-gradient-to-br from-income/10 to-income/5 p-4 backdrop-blur">
+          <div className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[1px] text-income">
             <Icon name="fa-arrow-up" />
             <span>Income</span>
           </div>
-          <p className="text-xl font-bold text-emerald-300">{formatAmount(income)}</p>
+          <p className="text-xl font-bold text-income">{formatAmount(income)}</p>
         </motion.div>
-        <motion.div variants={cardVariants} className="rounded-2xl border border-rose-400/20 bg-gradient-to-br from-rose-400/10 to-rose-600/5 p-4 backdrop-blur">
-          <div className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[1px] text-rose-400">
+        <motion.div variants={cardVariants} className="rounded-2xl border border-expense/20 bg-gradient-to-br from-expense/10 to-expense/5 p-4 backdrop-blur">
+          <div className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[1px] text-expense">
             <Icon name="fa-arrow-down" />
             <span>Expense</span>
           </div>
-          <p className="text-xl font-bold text-rose-300">{formatAmount(expense)}</p>
+          <p className="text-xl font-bold text-expense">{formatAmount(expense)}</p>
         </motion.div>
       </motion.div>
     </div>

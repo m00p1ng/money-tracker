@@ -90,11 +90,11 @@ export function WalletDetailPage() {
           <div className="grid grid-cols-3 gap-2">
             <div className="p-3">
               <p className="text-[10px] uppercase tracking-wide text-white/30">Debt</p>
-              <p className="mt-1 text-sm font-bold text-red-300">{formatAmount(currentAmount, wallet.currency)}</p>
+              <p className="mt-1 text-sm font-bold text-expense">{formatAmount(currentAmount, wallet.currency)}</p>
             </div>
             <div className="p-3">
               <p className="text-[10px] uppercase tracking-wide text-white/30">Available</p>
-              <p className="mt-1 text-sm font-bold text-emerald-300">{formatAmount(wallet.creditLimit - currentAmount, wallet.currency)}</p>
+              <p className="mt-1 text-sm font-bold text-income">{formatAmount(wallet.creditLimit - currentAmount, wallet.currency)}</p>
             </div>
             <div className="p-3">
               <p className="text-[10px] uppercase tracking-wide text-white/30">Limit</p>
@@ -104,7 +104,7 @@ export function WalletDetailPage() {
           <div className="p-3">
             <div className="mb-1.5 flex justify-between text-[11px] text-white/35">
               <span>Used {creditUsedRatio.toFixed(1)}%</span>
-              <span className="text-red-400">{formatAmount(currentAmount, wallet.currency)} / {formatAmount(wallet.creditLimit, wallet.currency)}</span>
+              <span className="text-expense">{formatAmount(currentAmount, wallet.currency)} / {formatAmount(wallet.creditLimit, wallet.currency)}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
               <div
@@ -119,11 +119,11 @@ export function WalletDetailPage() {
         <div className="space-y-3">
           <div>
             <div className="mb-1.5 flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-emerald-400">
+              <span className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-income">
                 <Icon name="fa-wallet" />
                 Balance
               </span>
-              <span className="text-xs font-semibold text-emerald-400">{formatAmount(currentAmount, wallet.currency)}</span>
+              <span className="text-xs font-semibold text-income">{formatAmount(currentAmount, wallet.currency)}</span>
             </div>
             <AnimatedBar value={currentAmount} maxValue={currentAmount} colorFrom="#10b981" colorTo="#6ee7b7" textColor="#052e16" currency={wallet.currency} delay={0.1} />
           </div>
@@ -164,10 +164,10 @@ export function WalletDetailPage() {
                   <p className="mt-0.5 text-xs text-white/30">{new Date(row.transaction.date).toLocaleDateString()}</p>
                 </div>
                 <div className="flex-shrink-0 text-right">
-                  <p className={`text-sm font-bold ${row.amount >= 0 ? 'text-emerald-300' : 'text-red-300'}`}>
+                  <p className={`text-sm font-bold ${row.amount >= 0 ? 'text-income' : 'text-expense'}`}>
                     {row.amount >= 0 ? '+' : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
                   </p>
-                  <p className={`mt-0.5 text-xs ${isCredit ? 'text-red-400/70' : 'text-white/28'}`}>
+                  <p className={`mt-0.5 text-xs ${isCredit ? 'text-expense/70' : 'text-white/28'}`}>
                     {isCredit ? `${formatAmount(row.runningAmount, wallet.currency)} debt` : formatAmount(row.runningAmount, wallet.currency)}
                   </p>
                 </div>
@@ -188,12 +188,12 @@ export function WalletDetailPage() {
                 setPreset(p.value); setPresetSheetOpen(false) 
               }}
               className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${preset === p.value
-                ? 'bg-emerald-500/15 text-emerald-300'
+                ? 'bg-accent/15 text-accent-light'
                 : 'text-white/70 hover:bg-white/[0.05]'
               }`}
             >
               {p.label}
-              {preset === p.value && <Icon name="fa-circle-check" className="text-emerald-400" />}
+              {preset === p.value && <Icon name="fa-circle-check" className="text-accent" />}
             </button>
           ))}
         </div>

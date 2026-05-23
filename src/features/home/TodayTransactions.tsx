@@ -43,7 +43,7 @@ export function TodayTransactions() {
                   primaryLabel={category?.name ?? 'Unknown'}
                   secondaryLabel={parent?.name ?? transaction.type}
                   amount={`${transaction.type === 'income' ? '+' : '-'}${formatAmount(item.amount, transaction.currency)}`}
-                  amountColor={transaction.type === 'income' ? 'text-emerald-300' : 'text-rose-300'}
+                   amountColor={transaction.type === 'income' ? 'text-income' : 'text-expense'}
                 />
               </motion.div>
             )

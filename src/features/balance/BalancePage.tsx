@@ -31,7 +31,7 @@ function WalletRow({ wallet, amount }: { wallet: Wallet; amount: number }) {
           </p>
         </div>
         <div className="flex-shrink-0 text-right">
-          <p className={`text-sm font-bold ${isCredit ? 'text-red-300' : 'text-emerald-300'}`}>
+          <p className={`text-sm font-bold ${isCredit ? 'text-expense' : 'text-income'}`}>
             {formatAmount(amount, wallet.currency)}
           </p>
           <p className="mt-0.5 text-xs text-white/30">{wallet.currency}</p>
@@ -59,11 +59,11 @@ export function BalancePage() {
       <div className="space-y-3">
         <div>
           <div className="mb-1.5 flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-emerald-400">
+            <span className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-income">
               <Icon name="fa-arrow-trend-up" />
               Assets
             </span>
-            <span className="text-xs font-semibold text-emerald-400">{formatAmount(assets)}</span>
+            <span className="text-xs font-semibold text-income">{formatAmount(assets)}</span>
           </div>
           <AnimatedBar value={assets} maxValue={assets} colorFrom="#10b981" colorTo="#6ee7b7" textColor="#052e16" currency="" delay={0.1} />
         </div>
