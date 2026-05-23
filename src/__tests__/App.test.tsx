@@ -2,11 +2,13 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it } from 'vitest'
 import App, { RoutedApp } from '../App'
+import { useTransactionStore } from '../stores/transactionStore'
 import { useWalletStore } from '../stores/walletStore'
 
 describe('App routing', () => {
   afterEach(() => {
     useWalletStore.setState({ items: [] })
+    useTransactionStore.setState({ items: [] })
   })
   it('renders the home route with bottom navigation', () => {
     render(<App />)
@@ -154,5 +156,29 @@ describe('App routing', () => {
 
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: 'Primary' })).not.toBeInTheDocument()
+  })
+
+  it('renders upcoming transactions on home', () => {
+    useTransactionStore.setState({
+      items: [{
+        id: 'tx-overdue',
+        type: 'expense',
+        walletId: 'wallet-cash',
+        currency: 'THB',
+        items: [{ categoryId: 'expense-food-and-drink-coffee', amount: 28 }],
+        date: '2026-05-22T10:00:00.000Z',
+        status: 'overdue',
+        createdAt: '2026-05-22T10:00:00.000Z',
+      }],
+    })
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <RoutedApp />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('heading', { name: 'Upcoming' })).toBeInTheDocument()
+    expect(screen.getByText('Overdue')).toBeInTheDocument()
   })
 })

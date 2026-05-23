@@ -3,6 +3,7 @@ import { Icon } from '../../components/Icon'
 import { formatHeaderDate } from '../../lib/date'
 import { SummaryCards } from './SummaryCards'
 import { TodayTransactions } from './TodayTransactions'
+import { UpcomingTransactions } from './UpcomingTransactions'
 
 export function HomePage() {
   return (
@@ -14,13 +15,15 @@ export function HomePage() {
         </div>
         <Link
           to="/transaction/new"
-          className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white"
+          className="grid h-11 w-11 place-items-center rounded-xl text-white"
+          style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))' }}
           aria-label="Add transaction"
         >
           <Icon name="fa-plus" />
         </Link>
       </header>
       <SummaryCards />
+      <UpcomingTransactions />
       <TodayTransactions />
     </div>
   )
