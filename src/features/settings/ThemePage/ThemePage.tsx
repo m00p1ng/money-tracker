@@ -2,10 +2,7 @@ import { Icon } from '@/components/Icon'
 import cx from 'classnames'
 import { themes } from '@/lib/theme'
 import { formatAmount } from '@/lib/format'
-import { useSettingsStore } from '@/stores/settingsStore'
-import { useWalletStore } from '@/stores/walletStore'
-import type { ThemePreset } from '@/types/domain'
-import { useBackNavigate } from '@/context/navigationDirection'
+import type { ThemePreset, Wallet } from '@/types/domain'
 
 const names: Record<ThemePreset, string> = {
   forest: 'Forest',
@@ -18,21 +15,23 @@ const names: Record<ThemePreset, string> = {
   void: 'Void',
 }
 
-export function ThemePage() {
-  const settings = useSettingsStore((state) => state.settings)
-  const update = useSettingsStore((state) => state.update)
-  const selected = settings?.theme ?? 'forest'
-  const firstWallet = useWalletStore((state) => state.items[0])
+interface ThemePageProps {
+  selected: ThemePreset
+  firstWallet: Wallet | undefined
+  onBack: () => void
+  onSelectTheme: (theme: ThemePreset) => void
+}
+
+export function ThemePage({ selected, firstWallet, onBack, onSelectTheme }: ThemePageProps) {
   const previewAccent = themes[selected].accent
   const previewAccentLight = themes[selected].accentLight
-  const backNavigate = useBackNavigate()
 
   return (
     <div className="space-y-5">
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"
-          onClick={() => backNavigate('/settings')}
+          onClick={onBack}
           className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
           type="button"
         >
@@ -51,7 +50,7 @@ export function ThemePage() {
                 key={theme}
                 type="button"
                 className={cx('rounded-xl border-2 py-2.5 px-2 text-center', selected === theme ? 'border-accent' : 'border-transparent')}
-                onClick={() => settings ? update({ ...settings, theme }) : undefined}
+                onClick={() => onSelectTheme(theme)}
               >
                 <span
                   className="mx-auto mb-1.5 block h-9 w-9 rounded-full"

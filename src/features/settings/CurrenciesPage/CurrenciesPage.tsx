@@ -1,8 +1,7 @@
-import { Link } from 'react-router'
-import { Icon } from '@/components/Icon'
 import { AddRow, ListGroup, PageHeader } from '@/components/ui'
-import { useCurrencyStore } from '@/stores/currencyStore'
-import { useBackNavigate } from '@/context/navigationDirection'
+import { Icon } from '@/components/Icon'
+import { Link } from 'react-router'
+import type { Currency } from '@/types/domain'
 
 const FLAG_MAP: Record<string, string> = {
   THB: '🇹🇭', USD: '🇺🇸', EUR: '🇪🇺', JPY: '🇯🇵', GBP: '🇬🇧',
@@ -39,14 +38,16 @@ function CurrencyRow({ code, isBase, rate, baseCode }: { code: string; isBase: b
   )
 }
 
-export function CurrenciesPage() {
-  const currencies = useCurrencyStore((state) => state.items)
-  const baseCode = currencies.find((c) => c.isBase)?.code ?? ''
-  const backNavigate = useBackNavigate()
+interface CurrenciesPageProps {
+  currencies: Currency[]
+  baseCode: string
+  onBack: () => void
+}
 
+export function CurrenciesPage({ currencies, baseCode, onBack }: CurrenciesPageProps) {
   return (
     <div className="space-y-5">
-      <PageHeader title="Currencies" onBack={() => backNavigate('/settings')} />
+      <PageHeader title="Currencies" onBack={onBack} />
 
       <ListGroup label="Currencies & Rates">
         {currencies.map((c) => (

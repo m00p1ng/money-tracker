@@ -1,9 +1,5 @@
 import { Icon } from '@/components/Icon'
 import { ListGroup, ListRow } from '@/components/ui'
-import { useCategoryStore } from '@/stores/categoryStore'
-import { useCurrencyStore } from '@/stores/currencyStore'
-import { useSettingsStore } from '@/stores/settingsStore'
-import { useWalletStore } from '@/stores/walletStore'
 
 const THEME_LABELS: Record<string, string> = {
   forest: 'Forest Green',
@@ -27,16 +23,14 @@ const THEME_COLORS: Record<string, string> = {
   void: '#374151',
 }
 
-export function SettingsPage() {
-  const settings = useSettingsStore((state) => state.settings)
-  const wallets = useWalletStore((state) => state.items)
-  const categories = useCategoryStore((state) => state.items)
-  const currencies = useCurrencyStore((state) => state.items)
+interface SettingsPageProps {
+  walletCount: number
+  categoryCount: number
+  currencyCodes: string
+  theme: string
+}
 
-  const walletCount = wallets.length
-  const categoryCount = categories.length
-  const currencyCodes = currencies.slice(0, 3).map((c) => c.code).join(' · ')
-  const theme = settings?.theme ?? 'forest'
+export function SettingsPage({ walletCount, categoryCount, currencyCodes, theme }: SettingsPageProps) {
   const themeColor = THEME_COLORS[theme] ?? '#10b981'
 
   return (

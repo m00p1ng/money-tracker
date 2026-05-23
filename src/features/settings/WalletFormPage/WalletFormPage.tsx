@@ -1,28 +1,23 @@
 import { FormEvent, useMemo, useState } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router'
-import { useBackNavigate } from '@/context/navigationDirection'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Field, SelectInput, TextInput } from '@/components/ui/Field'
 import { FormErrorMessage, PageHeader } from '@/components/ui'
 import { createId } from '@/lib/id'
-import { useCurrencyStore } from '@/stores/currencyStore'
-import { useWalletStore } from '@/stores/walletStore'
-import type { Wallet, WalletType } from '@/types/domain'
+import type { Currency, Wallet, WalletType } from '@/types/domain'
+
+interface WalletFormPageProps {
+  wallet: Wallet | undefined
+  currencies: Currency[]
+  initialType: WalletType
+  onBack: () => void
+  onSubmit: (form: Wallet, setError: (err: string | null) => void) => Promise<void>
+  onDelete: (setError: (err: string | null) => void) => Promise<void>
+}
 
 const DEFAULT_CURRENCY = 'THB'
 
-export function WalletFormPage() {
-  const { id } = useParams()
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
-  const backNavigate = useBackNavigate()
-  const currencies = useCurrencyStore((state) => state.items)
-  const wallet = useWalletStore((state) => (id ? state.findById(id) : undefined))
-  const add = useWalletStore((state) => state.add)
-  const update = useWalletStore((state) => state.update)
-  const remove = useWalletStore((state) => state.remove)
-  const initialType = (searchParams.get('type') as WalletType) || wallet?.type || 'payment'
+export function WalletFormPage({ wallet, currencies, initialType, onBack, onSubmit, onDelete }: WalletFormPageProps) {
   const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState<Wallet>(() => wallet ?? {
     id: createId(),
@@ -35,37 +30,18 @@ export function WalletFormPage() {
   })
   const title = useMemo(() => (wallet ? 'Edit Wallet' : 'New Wallet'), [wallet])
 
-  async function onSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    if (!form.name.trim()) {
-      setError('Name is required'); return 
-    }
-    if (form.type === 'credit_card' && form.creditLimit !== undefined && form.creditLimit <= 0) {
-      setError('Credit limit must be greater than 0'); return 
-    }
-    try {
-      await (wallet ? update(form) : add(form))
-      navigate('/settings/wallets')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to save wallet')
-    }
+    await onSubmit(form, setError)
   }
 
-  async function onDelete() {
-    if (!wallet) {
-      return
-    }
-    try {
-      await remove(wallet.id)
-      navigate('/settings/wallets')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to delete wallet')
-    }
+  async function handleDelete() {
+    await onDelete(setError)
   }
 
   return (
-    <form className="space-y-5" onSubmit={onSubmit}>
-      <PageHeader title={title} onBack={() => backNavigate('/settings/wallets')} />
+    <form className="space-y-5" onSubmit={handleSubmit}>
+      <PageHeader title={title} onBack={onBack} />
       <Card className="space-y-4">
         <Field label="Name"><TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></Field>
         <Field label="Type"><SelectInput value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as WalletType })}><option value="payment">Payment</option><option value="credit_card">Credit Card</option></SelectInput></Field>
@@ -75,7 +51,7 @@ export function WalletFormPage() {
         <FormErrorMessage error={error} />
       </Card>
       <Button type="submit" variant="accent">Save</Button>
-      {wallet ? <Button type="button" variant="danger" onClick={onDelete}>Delete</Button> : null}
+      {wallet ? <Button type="button" variant="danger" onClick={handleDelete}>Delete</Button> : null}
     </form>
   )
 }

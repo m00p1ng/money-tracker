@@ -1,17 +1,17 @@
-import { useWalletStore } from '@/stores/walletStore'
-import { useBackNavigate } from '@/context/navigationDirection'
 import { AddRow, ListGroup, ListRow, PageHeader } from '@/components/ui'
 import { hexToRgba } from '@/lib/color'
+import type { Wallet } from '@/types/domain'
 
-export function WalletsPage() {
-  const wallets = useWalletStore((state) => state.items)
-  const payments = wallets.filter((w) => w.type === 'payment')
-  const cards = wallets.filter((w) => w.type === 'credit_card')
-  const backNavigate = useBackNavigate()
+interface WalletsPageProps {
+  payments: Wallet[]
+  cards: Wallet[]
+  onBack: () => void
+}
 
+export function WalletsPage({ payments, cards, onBack }: WalletsPageProps) {
   return (
     <div className="space-y-5">
-      <PageHeader title="Wallets" onBack={() => backNavigate('/settings')} />
+      <PageHeader title="Wallets" onBack={onBack} />
 
       <ListGroup label="Payment Accounts">
         {payments.map((w) => (
