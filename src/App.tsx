@@ -13,6 +13,7 @@ import { ThemePage } from './features/settings/ThemePage'
 import { WalletsPage } from './features/settings/WalletsPage'
 import { WalletFormPage } from './features/settings/WalletFormPage'
 import { SettingsPage } from './features/settings/SettingsPage'
+import { CategorySelectionPage } from './features/transaction/CategorySelectionPage'
 import { TransactionPage } from './features/transaction/TransactionPage'
 
 const TAB_ROUTES = new Set(['/', '/balance', '/settings'])
@@ -75,6 +76,7 @@ export function RoutedApp() {
             <Route path="/settings/currencies/new" element={<CurrencyFormPage />} />
             <Route path="/settings/currencies/:code" element={<CurrencyFormPage />} />
             <Route path="/settings/theme" element={<ThemePage />} />
+            <Route path="/transaction/category" element={<CategorySelectionPage />} />
             <Route path="/transaction/new" element={<TransactionPage />} />
             <Route path="/transaction/repeat/:sourceId/:date" element={<TransactionPage />} />
             <Route path="/transaction/:id" element={<TransactionPage />} />
