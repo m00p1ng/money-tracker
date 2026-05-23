@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { useWalletStore } from '../../stores/walletStore'
+import { useBackNavigate } from '../../context/navigationDirection'
 
 function WalletRow({ id, name, icon, color, currency, sub }: { id: string; name: string; icon: string; color: string; currency: string; sub: string }) {
   return (
@@ -40,11 +41,12 @@ export function WalletsPage() {
   const wallets = useWalletStore((state) => state.items)
   const payments = wallets.filter((w) => w.type === 'payment')
   const cards = wallets.filter((w) => w.type === 'credit_card')
+  const backNavigate = useBackNavigate()
 
   return (
     <div className="space-y-5">
       <header>
-        <Link className="inline-flex items-center gap-1.5 text-sm text-accent" to="/settings"><Icon name="fa-chevron-left" className="text-[11px]" />Back</Link>
+        <button type="button" className="inline-flex items-center gap-1.5 text-sm text-accent" onClick={() => backNavigate('/settings')}><Icon name="fa-chevron-left" className="text-[11px]" />Back</button>
         <h1 className="mt-3 text-2xl font-semibold">Wallets</h1>
       </header>
 

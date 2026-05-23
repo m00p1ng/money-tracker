@@ -1,10 +1,10 @@
-import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { themes } from '../../lib/theme'
 import { formatAmount } from '../../lib/format'
 import { useSettingsStore } from '../../stores/settingsStore'
 import { useWalletStore } from '../../stores/walletStore'
 import type { ThemePreset } from '../../types/domain'
+import { useBackNavigate } from '../../context/navigationDirection'
 
 const names: Record<ThemePreset, string> = {
   forest: 'Forest',
@@ -24,11 +24,12 @@ export function ThemePage() {
   const firstWallet = useWalletStore((state) => state.items[0])
   const previewAccent = themes[selected].accent
   const previewAccentLight = themes[selected].accentLight
+  const backNavigate = useBackNavigate()
 
   return (
     <div className="space-y-5">
       <header>
-        <Link className="inline-flex items-center gap-1.5 text-sm text-accent" to="/settings"><Icon name="fa-chevron-left" className="text-[11px]" />Back</Link>
+        <button type="button" className="inline-flex items-center gap-1.5 text-sm text-accent" onClick={() => backNavigate('/settings')}><Icon name="fa-chevron-left" className="text-[11px]" />Back</button>
         <h1 className="mt-3 text-2xl font-semibold">Theme</h1>
       </header>
 

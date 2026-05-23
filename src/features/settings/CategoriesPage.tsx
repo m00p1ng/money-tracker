@@ -1,15 +1,17 @@
 import { Link } from 'react-router'
 import { Card } from '../../components/ui/Card'
 import { useCategoryStore } from '../../stores/categoryStore'
+import { useBackNavigate } from '../../context/navigationDirection'
 
 export function CategoriesPage() {
   const categories = useCategoryStore((state) => state.items)
   const rootCategories = categories.filter((category) => !category.parentId)
+  const backNavigate = useBackNavigate()
 
   return (
     <div className="space-y-5">
       <header>
-        <Link className="text-sm text-accent" to="/settings">Back</Link>
+        <button type="button" className="text-sm text-accent" onClick={() => backNavigate('/settings')}>Back</button>
         <h1 className="mt-3 text-2xl font-semibold">Categories</h1>
       </header>
       {rootCategories.map((category) => (

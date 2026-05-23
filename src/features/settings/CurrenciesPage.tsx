@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { useCurrencyStore } from '../../stores/currencyStore'
+import { useBackNavigate } from '../../context/navigationDirection'
 
 const FLAG_MAP: Record<string, string> = {
   THB: '🇹🇭', USD: '🇺🇸', EUR: '🇪🇺', JPY: '🇯🇵', GBP: '🇬🇧',
@@ -40,11 +41,12 @@ function CurrencyRow({ code, isBase, rate, baseCode }: { code: string; isBase: b
 export function CurrenciesPage() {
   const currencies = useCurrencyStore((state) => state.items)
   const baseCode = currencies.find((c) => c.isBase)?.code ?? ''
+  const backNavigate = useBackNavigate()
 
   return (
     <div className="space-y-5">
       <header>
-        <Link className="inline-flex items-center gap-1.5 text-sm text-accent" to="/settings"><Icon name="fa-chevron-left" className="text-[11px]" />Back</Link>
+        <button type="button" className="inline-flex items-center gap-1.5 text-sm text-accent" onClick={() => backNavigate('/settings')}><Icon name="fa-chevron-left" className="text-[11px]" />Back</button>
         <h1 className="mt-3 text-2xl font-semibold">Currencies</h1>
       </header>
 
