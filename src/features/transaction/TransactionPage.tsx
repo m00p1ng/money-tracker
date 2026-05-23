@@ -415,48 +415,44 @@ export function TransactionPage() {
         </button>
       ) : null}
 
-      {isDatePickerOpen ? (
-        <DatePickerSheet
-          value={new Date(date.replace('T', ' '))}
-          onChange={(d) => updateDraft({ date: toDatetimeLocalValue(d) })}
-          onClose={() => setDatePickerOpen(false)}
-        />
-      ) : null}
+      <DatePickerSheet
+        isOpen={isDatePickerOpen}
+        value={new Date(date.replace('T', ' '))}
+        onChange={(d) => updateDraft({ date: toDatetimeLocalValue(d) })}
+        onClose={() => setDatePickerOpen(false)}
+      />
 
-      {walletPickerTarget !== null ? (
-        <WalletPicker
-          wallets={wallets}
-          selectedId={walletPickerTarget === 'toWallet' ? (toWalletId ?? '') : walletId}
-          onSelect={(selectedId) => {
-            if (walletPickerTarget === 'toWallet') {
-              updateDraft({ toWalletId: selectedId })
-            } else {
-              updateDraft({ walletId: selectedId })
-            }
-          }}
-          onClose={() => setWalletPickerTarget(null)}
-        />
-      ) : null}
+      <WalletPicker
+        isOpen={walletPickerTarget !== null}
+        wallets={wallets}
+        selectedId={walletPickerTarget === 'toWallet' ? (toWalletId ?? '') : walletId}
+        onSelect={(selectedId) => {
+          if (walletPickerTarget === 'toWallet') {
+            updateDraft({ toWalletId: selectedId })
+          } else {
+            updateDraft({ walletId: selectedId })
+          }
+        }}
+        onClose={() => setWalletPickerTarget(null)}
+      />
 
-      {isCurrencyPickerOpen ? (
-        <CurrencyPicker
-          currencies={currencies}
-          selectedCode={currency}
-          onSelect={(code) => updateDraft({ currency: code })}
-          onClose={() => setCurrencyPickerOpen(false)}
-        />
-      ) : null}
+      <CurrencyPicker
+        isOpen={isCurrencyPickerOpen}
+        currencies={currencies}
+        selectedCode={currency}
+        onSelect={(code) => updateDraft({ currency: code })}
+        onClose={() => setCurrencyPickerOpen(false)}
+      />
 
-      {isRepeatPickerOpen ? (
-        <RepeatPicker
-          value={repeatConfig}
-          onConfirm={(config) => {
-            updateDraft({ repeatConfig: config })
-            setRepeatPickerOpen(false)
-          }}
-          onClose={() => setRepeatPickerOpen(false)}
-        />
-      ) : null}
+      <RepeatPicker
+        isOpen={isRepeatPickerOpen}
+        value={repeatConfig}
+        onConfirm={(config) => {
+          updateDraft({ repeatConfig: config })
+          setRepeatPickerOpen(false)
+        }}
+        onClose={() => setRepeatPickerOpen(false)}
+      />
 
       <AnimatePresence>
         {focusedIndex !== null && (
