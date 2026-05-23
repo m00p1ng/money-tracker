@@ -6,6 +6,7 @@ export type ThemeTokens = {
   bg: string
   bgGlow1: string
   bgGlow2: string
+  bgGlow3: string
   accentBtn1: string
   accentBtn2: string
   navBorder: string
@@ -18,6 +19,7 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     bg: '#0a0f0d',
     bgGlow1: '#10b98120',
     bgGlow2: '#06372520',
+    bgGlow3: '#34d39915',
     accentBtn1: '#059669',
     accentBtn2: '#10b981',
     navBorder: '#10b98130',
@@ -28,6 +30,7 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     bg: '#090914',
     bgGlow1: '#6c47ff25',
     bgGlow2: '#1f1b4d25',
+    bgGlow3: '#8b6cff15',
     accentBtn1: '#5537d7',
     accentBtn2: '#6c47ff',
     navBorder: '#6c47ff30',
@@ -38,6 +41,7 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     bg: '#071019',
     bgGlow1: '#0369a125',
     bgGlow2: '#08334425',
+    bgGlow3: '#38bdf815',
     accentBtn1: '#075985',
     accentBtn2: '#0284c7',
     navBorder: '#0369a130',
@@ -48,6 +52,7 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     bg: '#16080d',
     bgGlow1: '#be123c25',
     bgGlow2: '#7f1d1d25',
+    bgGlow3: '#fb718515',
     accentBtn1: '#9f1239',
     accentBtn2: '#e11d48',
     navBorder: '#be123c30',
@@ -58,6 +63,7 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     bg: '#130d05',
     bgGlow1: '#b4530925',
     bgGlow2: '#78350f25',
+    bgGlow3: '#f59e0b15',
     accentBtn1: '#92400e',
     accentBtn2: '#d97706',
     navBorder: '#b4530930',
@@ -68,6 +74,7 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     bg: '#07111f',
     bgGlow1: '#64748b25',
     bgGlow2: '#0f172a30',
+    bgGlow3: '#94a3b815',
     accentBtn1: '#334155',
     accentBtn2: '#475569',
     navBorder: '#94a3b830',
@@ -78,6 +85,7 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     bg: '#150811',
     bgGlow1: '#9d174d25',
     bgGlow2: '#83184325',
+    bgGlow3: '#f472b615',
     accentBtn1: '#831843',
     accentBtn2: '#be185d',
     navBorder: '#9d174d30',
@@ -88,6 +96,7 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     bg: '#030712',
     bgGlow1: '#37415125',
     bgGlow2: '#11182740',
+    bgGlow3: '#6b728015',
     accentBtn1: '#111827',
     accentBtn2: '#1f2937',
     navBorder: '#6b728030',
@@ -102,6 +111,7 @@ export function applyTheme(preset: ThemePreset): void {
   root.style.setProperty('--bg', theme.bg)
   root.style.setProperty('--bg-glow-1', theme.bgGlow1)
   root.style.setProperty('--bg-glow-2', theme.bgGlow2)
+  root.style.setProperty('--bg-glow-3', theme.bgGlow3)
   root.style.setProperty('--accent-btn-1', theme.accentBtn1)
   root.style.setProperty('--accent-btn-2', theme.accentBtn2)
   root.style.setProperty('--nav-border', theme.navBorder)

@@ -1,7 +1,9 @@
 import { Link } from 'react-router'
-import { Card } from '../../components/ui/Card'
+import { Icon } from '../../components/Icon'
 import { themes } from '../../lib/theme'
+import { formatAmount } from '../../lib/format'
 import { useSettingsStore } from '../../stores/settingsStore'
+import { useWalletStore } from '../../stores/walletStore'
 import type { ThemePreset } from '../../types/domain'
 
 const names: Record<ThemePreset, string> = {
@@ -19,22 +21,67 @@ export function ThemePage() {
   const settings = useSettingsStore((state) => state.settings)
   const update = useSettingsStore((state) => state.update)
   const selected = settings?.theme ?? 'forest'
+  const firstWallet = useWalletStore((state) => state.items[0])
+  const previewAccent = themes[selected].accent
+  const previewAccentLight = themes[selected].accentLight
 
   return (
     <div className="space-y-5">
-      <header><Link className="text-sm text-accent" to="/settings">Back</Link><h1 className="mt-3 text-2xl font-semibold">Theme</h1></header>
-      <div className="grid grid-cols-2 gap-3">
-        {(Object.keys(themes) as ThemePreset[]).map((theme) => (
-          <button key={theme} className={`rounded-lg border p-4 text-left ${selected === theme ? 'border-[var(--accent)]' : 'border-white/10'}`} type="button" onClick={() => settings ? update({ ...settings, theme }) : undefined}>
-            <span className="mb-3 block h-8 w-8 rounded-full" style={{ background: themes[theme].accent }} />
-            <span>{names[theme]}</span>
-          </button>
-        ))}
+      <header>
+        <Link className="text-sm text-accent" to="/settings">Back</Link>
+        <h1 className="mt-3 text-2xl font-semibold">Theme</h1>
+      </header>
+
+      <div>
+        <p className="mb-2 pl-1 text-[11px] uppercase tracking-[1.5px] text-white/30">Choose a preset</p>
+        <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/[0.04]">
+          <div className="grid grid-cols-4 gap-2 p-3.5">
+            {(Object.keys(themes) as ThemePreset[]).map((theme) => (
+              <button
+                key={theme}
+                type="button"
+                className={`rounded-xl border-2 py-2.5 px-2 text-center ${selected === theme ? 'border-accent' : 'border-transparent'}`}
+                onClick={() => settings ? update({ ...settings, theme }) : undefined}
+              >
+                <span
+                  className="mx-auto mb-1.5 block h-9 w-9 rounded-full"
+                  style={{ background: `linear-gradient(135deg,${themes[theme].accentBtn1},${themes[theme].accent})` }}
+                />
+                <span className={`text-[10px] font-semibold ${selected === theme ? 'text-accent' : 'text-white/50'}`}>
+                  {names[theme]}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
-      <Card>
-        <p className="text-sm text-slate-400">Preview</p>
-        <p className="mt-2 font-medium">Cash Wallet</p>
-      </Card>
+
+      {firstWallet && (
+        <div>
+          <p className="mb-2 pl-1 text-[11px] uppercase tracking-[1.5px] text-white/30">Preview</p>
+          <div
+            className="flex items-center gap-3 rounded-2xl border p-4"
+            style={{ background: 'rgba(5,15,9,0.9)', borderColor: `${previewAccent}33` }}
+          >
+            <div
+              className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[13px] text-lg text-white"
+              style={{
+                background: `linear-gradient(135deg,${themes[selected].accentBtn1},${previewAccent})`,
+                boxShadow: `0 4px 14px ${previewAccent}66`,
+              }}
+            >
+              <Icon name={firstWallet.icon} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold">{firstWallet.name}</p>
+              <p className="mt-0.5 text-xs text-white/35">{firstWallet.type === 'credit_card' ? 'Credit Card' : 'Payment Account'} · {firstWallet.currency}</p>
+            </div>
+            <span className="text-base font-bold" style={{ color: previewAccentLight }}>
+              {formatAmount(firstWallet.balance, firstWallet.currency)}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

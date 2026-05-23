@@ -1,12 +1,45 @@
 import { Link } from 'react-router'
-import { Card } from '../../components/ui/Card'
-import { formatAmount } from '../../lib/format'
+import { Icon } from '../../components/Icon'
 import { useWalletStore } from '../../stores/walletStore'
+
+function WalletRow({ id, name, icon, color, currency, sub }: { id: string; name: string; icon: string; color: string; currency: string; sub: string }) {
+  return (
+    <Link to={`/settings/wallets/${id}`} className="flex items-center gap-3 border-b border-white/[0.04] px-4 py-[13px] last:border-b-0">
+      <div className="flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-[10px] text-sm" style={{ background: `${color}26`, color }}>
+        <Icon name={icon} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium">{name}</p>
+        <p className="mt-0.5 text-[11px] text-white/30">{sub}</p>
+      </div>
+      <span className="mr-2 text-xs text-white/40">{currency}</span>
+      <Icon name="fa-chevron-right" className="text-[11px] text-white/20" />
+    </Link>
+  )
+}
+
+function AddRow({ label, to }: { label: string; to: string }) {
+  return (
+    <Link to={to} className="flex items-center justify-center gap-1.5 px-4 py-[13px] text-[13px] font-semibold text-accent">
+      <Icon name="fa-plus" />
+      {label}
+    </Link>
+  )
+}
+
+function WalletGroup({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="mb-2 pl-1 text-[11px] uppercase tracking-[1.5px] text-white/30">{label}</p>
+      <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/[0.04]">{children}</div>
+    </div>
+  )
+}
 
 export function WalletsPage() {
   const wallets = useWalletStore((state) => state.items)
-  const payments = wallets.filter((wallet) => wallet.type === 'payment')
-  const cards = wallets.filter((wallet) => wallet.type === 'credit_card')
+  const payments = wallets.filter((w) => w.type === 'payment')
+  const cards = wallets.filter((w) => w.type === 'credit_card')
 
   return (
     <div className="space-y-5">
@@ -14,24 +47,20 @@ export function WalletsPage() {
         <Link className="text-sm text-accent" to="/settings">Back</Link>
         <h1 className="mt-3 text-2xl font-semibold">Wallets</h1>
       </header>
-      <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Payment Accounts</h2>
-        {payments.map((wallet) => (
-          <Link key={wallet.id} to={`/settings/wallets/${wallet.id}`}>
-            <Card className="mb-3 flex items-center justify-between"><span>{wallet.name}</span><span className="text-sm text-slate-400">{formatAmount(wallet.balance, wallet.currency)} ›</span></Card>
-          </Link>
+
+      <WalletGroup label="Payment Accounts">
+        {payments.map((w) => (
+          <WalletRow key={w.id} id={w.id} name={w.name} icon={w.icon} color={w.color} currency={w.currency} sub="Payment Account" />
         ))}
-        <Link className="block text-accent" to="/settings/wallets/new?type=payment">+ Add Payment Account</Link>
-      </section>
-      <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Credit Cards</h2>
-        {cards.map((wallet) => (
-          <Link key={wallet.id} to={`/settings/wallets/${wallet.id}`}>
-            <Card className="mb-3 flex items-center justify-between"><span>{wallet.name}</span><span className="text-sm text-slate-400">{wallet.creditLimit ? formatAmount(wallet.creditLimit, wallet.currency) : wallet.currency} ›</span></Card>
-          </Link>
+        <AddRow label="Add Payment Account" to="/settings/wallets/new?type=payment" />
+      </WalletGroup>
+
+      <WalletGroup label="Credit Cards">
+        {cards.map((w) => (
+          <WalletRow key={w.id} id={w.id} name={w.name} icon={w.icon} color={w.color} currency={w.currency} sub="Credit Card" />
         ))}
-        <Link className="block text-accent" to="/settings/wallets/new?type=credit_card">+ Add Credit Card</Link>
-      </section>
+        <AddRow label="Add Credit Card" to="/settings/wallets/new?type=credit_card" />
+      </WalletGroup>
     </div>
   )
 }
