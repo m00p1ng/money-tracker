@@ -1,4 +1,5 @@
 import cx from 'classnames'
+import { useEffect, useRef } from 'react'
 
 const NAV_GROUPS = [
   {
@@ -47,12 +48,19 @@ interface DesignTopNavProps {
 }
 
 export function DesignTopNav({ activeId }: DesignTopNavProps) {
+  const activeRef = useRef<HTMLButtonElement | null>(null)
+
+  useEffect(() => {
+    activeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }, [activeId])
+
   return (
     <div className="flex overflow-x-auto border-b border-white/[0.08] bg-white/[0.02] px-3 py-2 md:hidden">
       <div className="flex gap-1.5">
         {ALL_ITEMS.map((item) => (
           <button
             key={item.id}
+            ref={item.id === activeId ? activeRef : null}
             type="button"
             onClick={() => scrollTo(item.id)}
             className={cx(
