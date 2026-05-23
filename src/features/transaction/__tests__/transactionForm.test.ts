@@ -3,18 +3,22 @@ import { buildTransaction, validateDraft } from '../transactionForm'
 
 describe('transactionForm', () => {
   it('rejects drafts without category items', () => {
-    expect(validateDraft({ walletId: 'wallet-cash', items: [] })).toEqual(['Add at least one category'])
+    expect(validateDraft({ type: 'expense', walletId: 'wallet-cash', items: [] })).toEqual(['Add at least one category'])
   })
 
   it('rejects drafts without walletId', () => {
-    expect(validateDraft({ items: [{ categoryId: 'expense-food', amount: 28 }] })).toContain('Select a wallet')
+    expect(validateDraft({ type: 'expense', items: [{ categoryId: 'expense-food', amount: 28 }] })).toContain('Select a wallet')
   })
 
   it('rejects drafts with zero amount', () => {
-    expect(validateDraft({ walletId: 'wallet-cash', items: [{ categoryId: 'expense-food', amount: 0 }] })).toContain('Enter an amount for every category')
+    expect(validateDraft({ type: 'expense', walletId: 'wallet-cash', items: [{ categoryId: 'expense-food', amount: 0 }] })).toContain('Enter an amount for every category')
   })
 
   it('accepts valid drafts', () => {
+    expect(validateDraft({ type: 'expense', walletId: 'wallet-cash', items: [{ categoryId: 'expense-food', amount: 28 }] })).toEqual([])
+  })
+
+  it('accepts legacy expense drafts without explicit type', () => {
     expect(validateDraft({ walletId: 'wallet-cash', items: [{ categoryId: 'expense-food', amount: 28 }] })).toEqual([])
   })
 
@@ -94,5 +98,36 @@ describe('transactionForm', () => {
       createId: () => 'tx-1',
     })
     expect(empty.note).toBeUndefined()
+  })
+
+  it('builds a planned transfer transaction for saving', () => {
+    const transaction = buildTransaction({
+      type: 'transfer',
+      walletId: 'wallet-thb',
+      toWalletId: 'wallet-usd',
+      currency: 'USD',
+      exchangeRate: 36.1234,
+      toExchangeRate: 1,
+      transferAmount: 25,
+      items: [],
+      date: '2026-05-24T10:00',
+      markedPaid: false,
+      repeat: { preset: 'monthly' },
+      now: '2026-05-23T10:00:00.000Z',
+      createId: () => 'tx-transfer',
+    })
+
+    expect(transaction).toMatchObject({
+      id: 'tx-transfer',
+      type: 'transfer',
+      walletId: 'wallet-thb',
+      toWalletId: 'wallet-usd',
+      currency: 'USD',
+      exchangeRate: 36.1234,
+      toExchangeRate: 1,
+      status: 'planned',
+      repeat: { preset: 'monthly' },
+      items: [{ categoryId: 'transfer', amount: 25 }],
+    })
   })
 })

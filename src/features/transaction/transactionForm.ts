@@ -1,8 +1,11 @@
-import type { Transaction, TransactionItem, TransactionType } from '../../types/domain'
+import type { RepeatConfig, Transaction, TransactionItem, TransactionStatus, TransactionType } from '../../types/domain'
 
 export type TransactionDraft = {
+  type?: TransactionType
   walletId?: string
+  toWalletId?: string
   items: TransactionItem[]
+  transferAmount?: number
 }
 
 export function validateDraft(draft: TransactionDraft): string[] {
@@ -10,6 +13,19 @@ export function validateDraft(draft: TransactionDraft): string[] {
   if (!draft.walletId) {
     errors.push('Select a wallet')
   }
+
+  if (draft.type === 'transfer') {
+    if (!draft.toWalletId) {
+      errors.push('Select a destination wallet')
+    } else if (draft.walletId === draft.toWalletId) {
+      errors.push('Choose a different destination wallet')
+    }
+    if (!draft.transferAmount || draft.transferAmount <= 0) {
+      errors.push('Enter a transfer amount')
+    }
+    return errors
+  }
+
   if (draft.items.length === 0) {
     errors.push('Add at least one category')
   }
@@ -19,25 +35,81 @@ export function validateDraft(draft: TransactionDraft): string[] {
   return errors
 }
 
+export function validateExchangeRate(value: string | undefined): string | undefined {
+  const trimmed = value?.trim()
+  if (!trimmed) {
+    return 'Enter an exchange rate'
+  }
+
+  const numberValue = Number(trimmed)
+  if (!Number.isFinite(numberValue)) {
+    return 'Enter a valid exchange rate'
+  }
+  if (numberValue <= 0) {
+    return 'Enter a positive exchange rate'
+  }
+
+  const decimalPlaces = trimmed.includes('.') ? trimmed.split('.')[1]?.length ?? 0 : 0
+  if (decimalPlaces > 4) {
+    return 'Enter an exchange rate with up to 4 decimals'
+  }
+
+  return undefined
+}
+
+export function deriveTransactionStatus(input: {
+  date: string
+  markedPaid?: boolean
+  now?: Date
+}): TransactionStatus {
+  if (input.markedPaid ?? true) {
+    return 'paid'
+  }
+
+  const transactionDate = new Date(input.date)
+  const now = input.now ?? new Date()
+  return transactionDate > now ? 'planned' : 'overdue'
+}
+
 export function buildTransaction(input: {
   id?: string
   type: TransactionType
   walletId: string
+  toWalletId?: string
   currency: string
   items: TransactionItem[]
+  transferAmount?: number
+  exchangeRate?: number
+  toExchangeRate?: number
   date: string
   note?: string
+  markedPaid?: boolean
+  repeat?: RepeatConfig
   now: string
   createId: () => string
 }): Transaction {
+  const status = deriveTransactionStatus({
+    date: input.date,
+    markedPaid: input.markedPaid,
+    now: new Date(input.now),
+  })
+  const items = input.type === 'transfer'
+    ? [{ categoryId: 'transfer', amount: input.transferAmount ?? 0 }]
+    : input.items
+
   return {
     id: input.id ?? input.createId(),
     type: input.type,
     walletId: input.walletId,
     currency: input.currency,
-    items: input.items,
+    items,
     date: new Date(input.date).toISOString(),
     note: input.note?.trim() || undefined,
     createdAt: input.now,
+    toWalletId: input.toWalletId,
+    exchangeRate: input.exchangeRate,
+    toExchangeRate: input.toExchangeRate,
+    status,
+    repeat: status === 'paid' ? undefined : input.repeat,
   }
 }
