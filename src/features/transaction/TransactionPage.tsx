@@ -14,6 +14,7 @@ import { CalculatorKeyboard } from './CalculatorKeyboard'
 import { CategoryItemsCard } from './CategoryItemsCard'
 import { CategoryPicker } from './CategoryPicker'
 import { CurrencyPicker } from './CurrencyPicker'
+import { DatePickerSheet } from './DatePickerSheet'
 import { RepeatPicker } from './RepeatPicker'
 import { WalletPicker } from './WalletPicker'
 import { buildTransaction, validateDraft, validateExchangeRate } from './transactionForm'
@@ -66,6 +67,7 @@ export function TransactionPage() {
   const [walletPickerTarget, setWalletPickerTarget] = useState<WalletPickerTarget | null>(null)
   const [isRepeatPickerOpen, setRepeatPickerOpen] = useState(false)
   const [isCurrencyPickerOpen, setCurrencyPickerOpen] = useState(false)
+  const [isDatePickerOpen, setDatePickerOpen] = useState(false)
   const [currency, setCurrency] = useState(initial?.currency ?? wallets.find((w) => w.id === walletId)?.currency ?? 'THB')
   const [exchangeRate, setExchangeRate] = useState(String(initial?.exchangeRate ?? ''))
   const [toExchangeRate, setToExchangeRate] = useState(String(initial?.toExchangeRate ?? ''))
@@ -301,21 +303,18 @@ export function TransactionPage() {
         </>
       )}
 
-      <label htmlFor="tx-date" className="flex cursor-pointer items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
+      <button
+        aria-label="Date & Time"
+        className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+        onClick={() => setDatePickerOpen(true)}
+        type="button"
+      >
         <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-400/15 text-emerald-400 text-xs">
           <Icon name="fa-calendar" />
         </div>
-        <div className="relative min-w-0 flex-1">
+        <div className="min-w-0 flex-1">
           <p className="text-[11px] text-white/35">Date & Time</p>
           <p className="mt-0.5 text-sm font-medium">{formatDatetimeLocalDisplay(date)}</p>
-          <input
-            id="tx-date"
-            aria-label="Date & Time"
-            className="absolute inset-0 cursor-pointer opacity-0"
-            type="datetime-local"
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
-          />
         </div>
         {isPlanned && (
           <div className="flex items-center gap-1.5 rounded-lg border border-amber-400/25 bg-amber-400/12 px-2.5 py-1 text-[11px] font-bold text-amber-400">
@@ -323,7 +322,7 @@ export function TransactionPage() {
             Planned
           </div>
         )}
-      </label>
+      </button>
 
       {isPlanned && (
         <button
@@ -371,6 +370,14 @@ export function TransactionPage() {
         >
           Delete
         </button>
+      ) : null}
+
+      {isDatePickerOpen ? (
+        <DatePickerSheet
+          value={new Date(date.replace('T', ' '))}
+          onChange={(d) => setDate(toDatetimeLocalValue(d))}
+          onClose={() => setDatePickerOpen(false)}
+        />
       ) : null}
 
       {walletPickerTarget !== null ? (

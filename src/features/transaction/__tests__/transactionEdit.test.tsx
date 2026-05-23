@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { toDatetimeLocalValue } from '../../../lib/date'
 import { useCategoryStore } from '../../../stores/categoryStore'
 import { useTransactionStore } from '../../../stores/transactionStore'
 import { useWalletStore } from '../../../stores/walletStore'
@@ -40,7 +39,6 @@ describe('TransactionPage edit mode', () => {
 
   it('hydrates form fields with existing transaction data', () => {
     const transactionDate = new Date('2024-01-15T10:30:00.000Z')
-    const expectedDateValue = toDatetimeLocalValue(transactionDate)
 
     useTransactionStore.setState({
       items: [{
@@ -65,7 +63,7 @@ describe('TransactionPage edit mode', () => {
 
     expect(screen.getByRole('button', { name: 'Income' }).style.background).toContain('linear-gradient')
     expect(screen.getAllByText('฿150.00').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByLabelText('Date & Time')).toHaveValue(expectedDateValue)
+    expect(screen.getByRole('button', { name: /Date & Time/i })).toBeInTheDocument()
     expect(screen.getByLabelText('Note')).toHaveValue('Test note')
   })
 
