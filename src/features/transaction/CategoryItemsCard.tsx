@@ -56,7 +56,7 @@ export function CategoryItemsCard({
             {/* Right zone: tap to focus for keyboard */}
             <button
               type="button"
-              className="flex-shrink-0 px-2 py-3 text-sm font-bold text-red-400"
+              className="flex-shrink-0 px-2 py-3 text-sm font-bold text-danger"
               onClick={() => onFocus(index)}
             >
               {formatAmount(item.amount)}
@@ -65,7 +65,7 @@ export function CategoryItemsCard({
             {items.length > 1 && (
               <button
                 aria-label="Remove category"
-                className="mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-red-500/10 text-[10px] text-red-400"
+                className="mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-danger/10 text-[10px] text-danger"
                 type="button"
                 onClick={() => onRemove(index)}
               >

@@ -350,7 +350,7 @@ export function TransactionPage() {
         onClick={() => setDatePickerOpen(true)}
         type="button"
       >
-        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-400/15 text-emerald-400 text-xs">
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent text-xs">
           <Icon name="fa-calendar" />
         </div>
         <div className="min-w-0 flex-1">
@@ -407,7 +407,7 @@ export function TransactionPage() {
       {isEditMode ? (
         <button
           aria-label="Delete transaction"
-          className="w-full rounded-xl bg-red-500/15 py-3 text-sm font-medium text-red-300"
+          className="w-full rounded-xl bg-danger/15 py-3 text-sm font-medium text-danger"
           onClick={deleteTransaction}
           type="button"
         >

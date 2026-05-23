@@ -12,7 +12,7 @@ export function Button({ children, className = '', variant = 'ghost', fullWidth 
     variant === 'accent'
       ? 'bg-gradient-to-br from-[var(--accent-btn-1)] to-[var(--accent-btn-2)] text-white'
       : variant === 'danger'
-        ? 'bg-red-500/15 text-red-300'
+        ? 'bg-danger/15 text-danger'
         : 'bg-white/5 text-slate-100'
 
   return (
