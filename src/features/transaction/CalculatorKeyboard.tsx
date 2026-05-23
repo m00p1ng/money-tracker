@@ -1,4 +1,26 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faDeleteLeft,
+  faDivide,
+  faEquals,
+  faMinus,
+  faPlusMinus,
+  faPlus,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons'
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+
 const keys = ['+', '1', '2', '3', 'THB', '-', '4', '5', '6', '±', '×', '7', '8', '9', '=', '÷', '.', '0', '⌫']
+
+const keyIcons: Record<string, IconDefinition> = {
+  '+': faPlus,
+  '-': faMinus,
+  '×': faXmark,
+  '÷': faDivide,
+  '±': faPlusMinus,
+  '=': faEquals,
+  '⌫': faDeleteLeft,
+}
 
 export function CalculatorKeyboard({ onPress }: { onPress: (key: string) => void }) {
   return (
@@ -8,6 +30,7 @@ export function CalculatorKeyboard({ onPress }: { onPress: (key: string) => void
           const isOperator = ['+', '-', '×', '÷'].includes(key)
           const isAccent = ['±', '=', 'THB'].includes(key)
           const isDelete = key === '⌫'
+          const icon = keyIcons[key]
           return (
             <button
               key={key}
@@ -16,7 +39,7 @@ export function CalculatorKeyboard({ onPress }: { onPress: (key: string) => void
               onClick={() => onPress(key)}
               type="button"
             >
-              {key}
+              {icon ? <FontAwesomeIcon icon={icon} /> : key}
             </button>
           )
         })}

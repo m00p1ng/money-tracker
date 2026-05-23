@@ -4,6 +4,11 @@ import { library, type IconName } from '@fortawesome/fontawesome-svg-core'
 import {
   faArrowDown,
   faArrowRightArrowLeft,
+  faDeleteLeft,
+  faDivide,
+  faEquals,
+  faMinus,
+  faPlusMinus,
   faArrowTrendUp,
   faArrowUp,
   faBagShopping,
@@ -48,6 +53,11 @@ import {
 library.add(
   faArrowDown,
   faArrowRightArrowLeft,
+  faDeleteLeft,
+  faDivide,
+  faEquals,
+  faMinus,
+  faPlusMinus,
   faArrowTrendUp,
   faArrowUp,
   faBagShopping,
