@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { Card } from '../../components/ui/Card'
@@ -54,6 +55,7 @@ export function BalancePage() {
   const creditCards = wallets.filter((wallet) => wallet.type === 'credit_card')
   const assets = assetsTotal(wallets, transactions)
   const debt = debtTotal(wallets, transactions)
+  const debtWidth = assets > 0 ? Math.min((debt / assets) * 100, 100) : debt > 0 ? 100 : 0
 
   return (
     <div className="space-y-5">
@@ -61,7 +63,7 @@ export function BalancePage() {
         <h1 className="text-2xl font-semibold">Balance</h1>
       </header>
 
-      <Card className="space-y-3">
+      <div className="space-y-3">
         <div>
           <div className="mb-1.5 flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-emerald-400">
@@ -71,9 +73,14 @@ export function BalancePage() {
             <span className="text-xs font-semibold text-emerald-400">{formatAmount(assets)}</span>
           </div>
           <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]">
-            <div className="flex h-full w-full items-center rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-300 px-4 text-base font-bold text-emerald-950">
+            <motion.div
+              className="flex h-full items-center rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-300 px-4 text-base font-bold text-emerald-950"
+              initial={{ width: 0 }}
+              animate={{ width: '100%' }}
+              transition={{ type: 'spring', stiffness: 80, damping: 20, delay: 0.1 }}
+            >
               {formatAmount(assets)}
-            </div>
+            </motion.div>
           </div>
         </div>
         <div>
@@ -86,38 +93,43 @@ export function BalancePage() {
           </div>
           <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]">
             {debt > 0 && (
-              <div
+              <motion.div
                 className="flex h-full items-center rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 text-base font-bold text-amber-950"
-                style={{ width: `${assets > 0 ? Math.min((debt / assets) * 100, 100) : 100}%`, minWidth: '5rem' }}
+                style={{ minWidth: '5rem' }}
+                initial={{ width: 0 }}
+                animate={{ width: `${debtWidth}%` }}
+                transition={{ type: 'spring', stiffness: 80, damping: 20, delay: 0.2 }}
               >
                 {formatAmount(debt)}
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
-      </Card>
+      </div>
 
-      <section>
-        <div className="mb-2.5 flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-widest text-white/30">Payment Accounts</span>
-          <div className="h-px flex-1 bg-white/[0.06]" />
-        </div>
-        {paymentWallets.length === 0 && <Card className="text-sm text-slate-400">No payment accounts yet.</Card>}
-        {paymentWallets.map((wallet) => (
-          <WalletRow key={wallet.id} wallet={wallet} amount={walletCurrentAmount(wallet, transactions)} />
-        ))}
-      </section>
+      {paymentWallets.length > 0 && (
+        <section>
+          <div className="mb-2.5 flex items-center gap-2">
+            <span className="text-xs font-semibold uppercase tracking-widest text-white/30">Payment Accounts</span>
+            <div className="h-px flex-1 bg-white/[0.06]" />
+          </div>
+          {paymentWallets.map((wallet) => (
+            <WalletRow key={wallet.id} wallet={wallet} amount={walletCurrentAmount(wallet, transactions)} />
+          ))}
+        </section>
+      )}
 
-      <section>
-        <div className="mb-2.5 flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-widest text-white/30">Credit Cards</span>
-          <div className="h-px flex-1 bg-white/[0.06]" />
-        </div>
-        {creditCards.length === 0 && <Card className="text-sm text-slate-400">No credit cards yet.</Card>}
-        {creditCards.map((wallet) => (
-          <WalletRow key={wallet.id} wallet={wallet} amount={walletCurrentAmount(wallet, transactions)} />
-        ))}
-      </section>
+      {creditCards.length > 0 && (
+        <section>
+          <div className="mb-2.5 flex items-center gap-2">
+            <span className="text-xs font-semibold uppercase tracking-widest text-white/30">Credit Cards</span>
+            <div className="h-px flex-1 bg-white/[0.06]" />
+          </div>
+          {creditCards.map((wallet) => (
+            <WalletRow key={wallet.id} wallet={wallet} amount={walletCurrentAmount(wallet, transactions)} />
+          ))}
+        </section>
+      )}
     </div>
   )
 }
