@@ -31,7 +31,9 @@ export const useTransactionDraftStore = create<TransactionDraftStore>((set, get)
   },
   update(patch) {
     const current = get().draft
-    if (!current) return
+    if (!current) {
+      return
+    }
     set({ draft: { ...current, ...patch } })
   },
   clear() {
