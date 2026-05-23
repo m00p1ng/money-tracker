@@ -22,7 +22,9 @@ export function TypePickerDropdown({
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!open) return
+    if (!open) {
+      return
+    }
     function handleMouseDown(event: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setOpen(false)
@@ -39,7 +41,11 @@ export function TypePickerDropdown({
       <button
         type="button"
         className="flex items-center gap-2 text-base font-bold text-white"
-        onClick={() => { if (!locked) setOpen((prev) => !prev) }}
+        onClick={() => {
+          if (!locked) {
+            setOpen((prev) => !prev)
+          }
+        }}
         aria-disabled={locked}
       >
         {currentLabel}

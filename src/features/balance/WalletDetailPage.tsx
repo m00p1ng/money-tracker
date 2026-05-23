@@ -31,7 +31,7 @@ function hexToRgba(hex: string, alpha: number): string {
 function formatDateLabel(dateStr: string): string {
   const [year, month, day] = dateStr.split('-').map(Number)
   const monthName = new Date(Date.UTC(year, month - 1, 1))
-    .toLocaleString('en-US', { month: 'long', timeZone: 'UTC' })
+    .toLocaleString('en-US', { month: 'short', timeZone: 'UTC' })
   return `${day} ${monthName} ${year}`
 }
 
@@ -100,41 +100,26 @@ export function WalletDetailPage() {
             <Icon name="fa-ellipsis" />
           </button>
         </div>
-        <div className="flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {PRESETS.map((p) => (
-            <button
-              key={p.value}
-              onClick={() => setPreset(p.value)}
-              className={`flex-shrink-0 rounded-full border px-3 py-1 text-[11px] font-semibold whitespace-nowrap transition-colors ${
-                preset === p.value
-                  ? 'border-emerald-500/35 bg-emerald-500/15 text-emerald-300'
-                  : 'border-white/7 bg-white/[0.04] text-white/40'
-              }`}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Credit card stats */}
       {isCredit && wallet.creditLimit ? (
         <>
           <div className="grid grid-cols-3 gap-2">
-            <Card className="!p-3">
+            <div className="p-3">
               <p className="text-[10px] uppercase tracking-wide text-white/30">Debt</p>
               <p className="mt-1 text-sm font-bold text-red-300">{formatAmount(currentAmount, wallet.currency)}</p>
-            </Card>
-            <Card className="!p-3">
+            </div>
+            <div className="p-3">
               <p className="text-[10px] uppercase tracking-wide text-white/30">Available</p>
               <p className="mt-1 text-sm font-bold text-emerald-300">{formatAmount(wallet.creditLimit - currentAmount, wallet.currency)}</p>
-            </Card>
-            <Card className="!p-3">
+            </div>
+            <div className="p-3">
               <p className="text-[10px] uppercase tracking-wide text-white/30">Limit</p>
               <p className="mt-1 text-sm font-bold text-white/55">{formatAmount(wallet.creditLimit, wallet.currency)}</p>
-            </Card>
+            </div>
           </div>
-          <Card className="!p-3">
+          <div className="p-3">
             <div className="mb-1.5 flex justify-between text-[11px] text-white/35">
               <span>Used {creditUsedRatio.toFixed(1)}%</span>
               <span className="text-red-400">{formatAmount(currentAmount, wallet.currency)} / {formatAmount(wallet.creditLimit, wallet.currency)}</span>
@@ -145,7 +130,7 @@ export function WalletDetailPage() {
                 style={{ width: `${creditUsedRatio}%` }}
               />
             </div>
-          </Card>
+          </div>
         </>
       ) : (
         /* Payment account: balance vs expenses bar */
@@ -264,10 +249,9 @@ export function WalletDetailPage() {
                       setPreset(p.value)
                       setPresetSheetOpen(false)
                     }}
-                    className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
-                      preset === p.value
-                        ? 'bg-emerald-500/15 text-emerald-300'
-                        : 'text-white/70 hover:bg-white/[0.05]'
+                    className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${preset === p.value
+                      ? 'bg-emerald-500/15 text-emerald-300'
+                      : 'text-white/70 hover:bg-white/[0.05]'
                     }`}
                   >
                     {p.label}
