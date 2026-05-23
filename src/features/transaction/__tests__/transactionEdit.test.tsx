@@ -137,4 +137,27 @@ describe('TransactionPage edit mode', () => {
     confirmSpy.mockRestore()
     removeSpy.mockRestore()
   })
+
+  it('shows transfer controls when transfer type is selected', async () => {
+    const user = userEvent.setup()
+    useWalletStore.setState({
+      items: [
+        { id: 'wallet-cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' },
+        { id: 'wallet-bank', name: 'Bank', type: 'payment', currency: 'THB', balance: 0, color: '#0ea5e9', icon: 'fa-building-columns' },
+      ],
+    })
+
+    render(
+      <MemoryRouter initialEntries={['/transaction/new']}>
+        <Routes>
+          <Route path="/transaction/new" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Transfer' }))
+    expect(screen.getByText('From Wallet')).toBeInTheDocument()
+    expect(screen.getByText('To Wallet')).toBeInTheDocument()
+    expect(screen.queryByText('Categories')).not.toBeInTheDocument()
+  })
 })

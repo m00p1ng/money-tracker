@@ -144,4 +144,15 @@ describe('App routing', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument()
   })
+
+  it('renders repeat occurrence route without bottom navigation', () => {
+    render(
+      <MemoryRouter initialEntries={['/transaction/repeat/tx-rent/2026-06-24']}>
+        <RoutedApp />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
+    expect(screen.queryByRole('navigation', { name: 'Primary' })).not.toBeInTheDocument()
+  })
 })

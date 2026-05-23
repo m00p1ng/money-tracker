@@ -45,6 +45,7 @@ export function RoutedApp() {
         <Route path="/settings/currencies/:code" element={<CurrencyFormPage />} />
         <Route path="/settings/theme" element={<ThemePage />} />
         <Route path="/transaction/new" element={<TransactionPage />} />
+        <Route path="/transaction/repeat/:sourceId/:date" element={<TransactionPage />} />
         <Route path="/transaction/:id" element={<TransactionPage />} />
       </Routes>
     </AppShell>
