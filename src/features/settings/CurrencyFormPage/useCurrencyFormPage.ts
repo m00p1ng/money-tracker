@@ -16,16 +16,16 @@ export function useCurrencyFormPage() {
 
   async function onSubmit(form: Currency, setError: (err: string | null) => void) {
     if (!form.code.trim()) {
-      setError('Code is required'); return 
+      setError('Code is required'); return
     }
     if (!form.symbol.trim()) {
-      setError('Symbol is required'); return 
+      setError('Symbol is required'); return
     }
     if (!form.name.trim()) {
-      setError('Name is required'); return 
+      setError('Name is required'); return
     }
     if (form.rate <= 0) {
-      setError('Rate must be greater than 0'); return 
+      setError('Rate must be greater than 0'); return
     }
     try {
       await (existing ? update(form) : add(form))

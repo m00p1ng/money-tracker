@@ -1,7 +1,12 @@
 import cx from 'classnames'
 import { Link } from 'react-router'
 
-import { Icon, AnimatedBar, SectionDivider, Card } from '@/components'
+import {
+  Icon,
+  AnimatedBar,
+  SectionDivider,
+  Card,
+} from '@/components'
 import { hexToRgba, formatAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
@@ -52,7 +57,12 @@ export type BalancePageProps = {
   debt: number
 }
 
-export function BalancePage({ paymentWallets, creditCards, assets, debt }: BalancePageProps) {
+export function BalancePage({
+  paymentWallets,
+  creditCards,
+  assets,
+  debt,
+}: BalancePageProps) {
   return (
     <div className="space-y-5">
       <header>
@@ -68,7 +78,15 @@ export function BalancePage({ paymentWallets, creditCards, assets, debt }: Balan
             </span>
             <span className="text-xs font-semibold text-income">{formatAmount(assets)}</span>
           </div>
-          <AnimatedBar value={assets} maxValue={assets} colorFrom="#10b981" colorTo="#6ee7b7" textColor="#052e16" currency="" delay={0.1} />
+          <AnimatedBar
+            value={assets}
+            maxValue={assets}
+            colorFrom="#10b981"
+            colorTo="#6ee7b7"
+            textColor="#052e16"
+            currency=""
+            delay={0.1}
+          />
         </div>
         <div>
           <div className="mb-1.5 flex items-center justify-between">
@@ -79,7 +97,15 @@ export function BalancePage({ paymentWallets, creditCards, assets, debt }: Balan
             <span className="text-xs font-semibold text-amber-400">{formatAmount(debt)}</span>
           </div>
           {debt > 0 && (
-            <AnimatedBar value={debt} maxValue={assets} colorFrom="#f59e0b" colorTo="#fde047" textColor="#451a03" currency="" delay={0.2} />
+            <AnimatedBar
+              value={debt}
+              maxValue={assets}
+              colorFrom="#f59e0b"
+              colorTo="#fde047"
+              textColor="#451a03"
+              currency=""
+              delay={0.2}
+            />
           )}
           {debt === 0 && <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]" />}
         </div>

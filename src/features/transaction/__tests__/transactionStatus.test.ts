@@ -1,12 +1,24 @@
-import { describe, expect, it } from 'vitest'
+import {
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
-import { deriveTransactionStatus, validateDraft, validateExchangeRate } from '@/features/transaction/transactionForm'
+import {
+  deriveTransactionStatus,
+  validateDraft,
+  validateExchangeRate,
+} from '@/features/transaction/transactionForm'
 
 describe('transaction status helpers', () => {
   const now = new Date('2026-05-23T10:00:00.000Z')
 
   it('derives paid when marked paid', () => {
-    expect(deriveTransactionStatus({ date: '2026-05-24T10:00', markedPaid: true, now })).toBe('paid')
+    expect(deriveTransactionStatus({
+      date: '2026-05-24T10:00',
+      markedPaid: true,
+      now,
+    })).toBe('paid')
   })
 
   it('defaults to paid when markedPaid is omitted', () => {
@@ -14,12 +26,24 @@ describe('transaction status helpers', () => {
   })
 
   it('derives planned for unpaid future transactions', () => {
-    expect(deriveTransactionStatus({ date: '2026-05-24T10:00', markedPaid: false, now })).toBe('planned')
+    expect(deriveTransactionStatus({
+      date: '2026-05-24T10:00',
+      markedPaid: false,
+      now,
+    })).toBe('planned')
   })
 
   it('derives overdue for unpaid current or past transactions', () => {
-    expect(deriveTransactionStatus({ date: '2026-05-23T10:00:00.000Z', markedPaid: false, now })).toBe('overdue')
-    expect(deriveTransactionStatus({ date: '2026-05-22T10:00', markedPaid: false, now })).toBe('overdue')
+    expect(deriveTransactionStatus({
+      date: '2026-05-23T10:00:00.000Z',
+      markedPaid: false,
+      now,
+    })).toBe('overdue')
+    expect(deriveTransactionStatus({
+      date: '2026-05-22T10:00',
+      markedPaid: false,
+      now,
+    })).toBe('overdue')
   })
 
   it('validates exchange rates with up to four decimals', () => {

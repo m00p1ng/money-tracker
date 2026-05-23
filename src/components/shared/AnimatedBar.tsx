@@ -13,7 +13,15 @@ type AnimatedBarProps = {
   delay?: number
 }
 
-export function AnimatedBar({ value, maxValue, colorFrom, colorTo, textColor, currency, delay = 0 }: AnimatedBarProps) {
+export function AnimatedBar({
+  value,
+  maxValue,
+  colorFrom,
+  colorTo,
+  textColor,
+  currency,
+  delay = 0,
+}: AnimatedBarProps) {
   const widthPercent = maxValue > 0 ? `${Math.min((value / maxValue) * 100, 100)}%` : '0%'
 
   return (
@@ -26,7 +34,12 @@ export function AnimatedBar({ value, maxValue, colorFrom, colorTo, textColor, cu
         }}
         initial={{ width: 0 }}
         animate={{ width: widthPercent }}
-        transition={{ type: 'spring', stiffness: 80, damping: 20, delay }}
+        transition={{
+          type: 'spring',
+          stiffness: 80,
+          damping: 20,
+          delay,
+        }}
       >
         {formatAmount(value, currency)}
       </motion.div>

@@ -1,6 +1,15 @@
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import {
+  AnimatePresence,
+  motion,
+  type Variants,
+} from 'framer-motion'
 import { useLayoutEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router'
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router'
 
 import { AppShell } from '@/components'
 import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
@@ -23,17 +32,47 @@ const TAB_ROUTES = new Set(['/', '/balance', '/settings'])
 
 const tabVariants: Variants = {
   initial: { opacity: 0, y: 8 },
-  animate: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 400, damping: 30 } },
-  exit: { opacity: 0, y: -8, transition: { duration: 0.12 } },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 400,
+      damping: 30,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -8,
+    transition: { duration: 0.12 },
+  },
 }
 
 function makePageVariants(direction: 'forward' | 'back'): Variants {
   const enterX = direction === 'back' ? -24 : 24
   const exitX = direction === 'back' ? 24 : -24
   return {
-    initial: { opacity: 0, x: enterX, scale: 0.98 },
-    animate: { opacity: 1, x: 0, scale: 1, transition: { type: 'spring', stiffness: 350, damping: 30 } },
-    exit: { opacity: 0, x: exitX, scale: 0.98, transition: { duration: 0.18, ease: 'easeIn' } },
+    initial: {
+      opacity: 0,
+      x: enterX,
+      scale: 0.98,
+    },
+    animate: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 350,
+        damping: 30,
+      },
+    },
+    exit: {
+      opacity: 0,
+      x: exitX,
+      scale: 0.98,
+      transition: { duration: 0.18, ease: 'easeIn' },
+    },
   }
 }
 

@@ -24,9 +24,12 @@ export function WalletPicker({
         {wallets.map((wallet) => (
           <button
             key={wallet.id}
-            className={cx('flex w-full items-center gap-3 rounded-xl px-3.5 py-3', { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': selectedId === wallet.id })}
+            className={cx(
+              'flex w-full items-center gap-3 rounded-xl px-3.5 py-3',
+              { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': selectedId === wallet.id },
+            )}
             onClick={() => {
-              onSelect(wallet.id); onClose() 
+              onSelect(wallet.id); onClose()
             }}
             type="button"
           >

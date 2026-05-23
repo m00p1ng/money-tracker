@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
-import { beforeEach, describe, expect, it } from 'vitest'
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 import HomePage from '@/features/home/HomePage'
 import { formatShortDate } from '@/lib'
@@ -10,8 +15,25 @@ describe('HomePage', () => {
   beforeEach(() => {
     useCategoryStore.setState({
       items: [
-        { id: 'expense-food-and-drink', name: 'Food & Drink', type: 'expense', level: 1, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
-        { id: 'expense-food-and-drink-coffee', name: 'Coffee', type: 'expense', parentId: 'expense-food-and-drink', level: 2, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
+        {
+          id: 'expense-food-and-drink',
+          name: 'Food & Drink',
+          type: 'expense',
+          level: 1,
+          icon: 'fa-utensils',
+          color: '#65a30d',
+          isDefault: true,
+        },
+        {
+          id: 'expense-food-and-drink-coffee',
+          name: 'Coffee',
+          type: 'expense',
+          parentId: 'expense-food-and-drink',
+          level: 2,
+          icon: 'fa-utensils',
+          color: '#65a30d',
+          isDefault: true,
+        },
       ],
     })
     useTransactionStore.setState({

@@ -2,10 +2,26 @@ import cx from 'classnames'
 import { useState } from 'react'
 import { Link } from 'react-router'
 
-import { Icon, AnimatedBar, BottomSheet, PageHeader, SectionDivider, Card } from '@/components'
+import {
+  Icon,
+  AnimatedBar,
+  BottomSheet,
+  PageHeader,
+  SectionDivider,
+  Card,
+} from '@/components'
 import { walletRunningRows } from '@/features/balance/balanceCalculations'
-import { hexToRgba, type DateRangePreset, getPresetRange, formatAmount } from '@/lib'
-import type { Category, Transaction, Wallet } from '@/types/domain'
+import {
+  hexToRgba,
+  type DateRangePreset,
+  getPresetRange,
+  formatAmount,
+} from '@/lib'
+import type {
+  Category,
+  Transaction,
+  Wallet,
+} from '@/types/domain'
 
 const PRESETS: { label: string; value: DateRangePreset }[] = [
   { label: 'Last 7d', value: 'last-7d' },
@@ -32,7 +48,13 @@ export type WalletDetailPageProps = {
   onBack: () => void
 }
 
-export function WalletDetailPage({ wallet, transactions, categories, currentAmount, onBack }: WalletDetailPageProps) {
+export function WalletDetailPage({
+  wallet,
+  transactions,
+  categories,
+  currentAmount,
+  onBack,
+}: WalletDetailPageProps) {
   const [preset, setPreset] = useState<DateRangePreset>('this-month')
   const [isPresetSheetOpen, setPresetSheetOpen] = useState(false)
 
@@ -72,7 +94,10 @@ export function WalletDetailPage({ wallet, transactions, categories, currentAmou
           <button
             aria-label="More date range options"
             onClick={() => setPresetSheetOpen(true)}
-            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.05] text-white/50"
+            className={[
+              'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl',
+              'border border-white/[0.08] bg-white/[0.05] text-white/50',
+            ].join(' ')}
             type="button"
           >
             <Icon name="fa-ellipsis" />
@@ -89,17 +114,23 @@ export function WalletDetailPage({ wallet, transactions, categories, currentAmou
             </div>
             <div className="p-3">
               <p className="text-[10px] uppercase tracking-wide text-white/30">Available</p>
-              <p className="mt-1 text-sm font-bold text-income">{formatAmount(wallet.creditLimit - currentAmount, wallet.currency)}</p>
+              <p className="mt-1 text-sm font-bold text-income">
+                {formatAmount(wallet.creditLimit - currentAmount, wallet.currency)}
+              </p>
             </div>
             <div className="p-3">
               <p className="text-[10px] uppercase tracking-wide text-white/30">Limit</p>
-              <p className="mt-1 text-sm font-bold text-white/55">{formatAmount(wallet.creditLimit, wallet.currency)}</p>
+              <p className="mt-1 text-sm font-bold text-white/55">
+                {formatAmount(wallet.creditLimit, wallet.currency)}
+              </p>
             </div>
           </div>
           <div className="p-3">
             <div className="mb-1.5 flex justify-between text-[11px] text-white/35">
               <span>Used {creditUsedRatio.toFixed(1)}%</span>
-              <span className="text-expense">{formatAmount(currentAmount, wallet.currency)} / {formatAmount(wallet.creditLimit, wallet.currency)}</span>
+              <span className="text-expense">
+                {formatAmount(currentAmount, wallet.currency)} / {formatAmount(wallet.creditLimit, wallet.currency)}
+              </span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
               <div
@@ -119,7 +150,15 @@ export function WalletDetailPage({ wallet, transactions, categories, currentAmou
               </span>
               <span className="text-xs font-semibold text-income">{formatAmount(currentAmount, wallet.currency)}</span>
             </div>
-            <AnimatedBar value={currentAmount} maxValue={currentAmount} colorFrom="#10b981" colorTo="#6ee7b7" textColor="#052e16" currency={wallet.currency} delay={0.1} />
+            <AnimatedBar
+              value={currentAmount}
+              maxValue={currentAmount}
+              colorFrom="#10b981"
+              colorTo="#6ee7b7"
+              textColor="#052e16"
+              currency={wallet.currency}
+              delay={0.1}
+            />
           </div>
           <div>
             <div className="mb-1.5 flex items-center justify-between">
@@ -127,12 +166,24 @@ export function WalletDetailPage({ wallet, transactions, categories, currentAmou
                 <Icon name="fa-arrow-down" />
                 Expenses
               </span>
-              <span className="text-xs font-semibold text-amber-400">{formatAmount(totalExpenses, wallet.currency)}</span>
+              <span className="text-xs font-semibold text-amber-400">
+                {formatAmount(totalExpenses, wallet.currency)}
+              </span>
             </div>
             {totalExpenses > 0 && (
-              <AnimatedBar value={totalExpenses} maxValue={currentAmount} colorFrom="#f59e0b" colorTo="#fde047" textColor="#451a03" currency={wallet.currency} delay={0.2} />
+              <AnimatedBar
+                value={totalExpenses}
+                maxValue={currentAmount}
+                colorFrom="#f59e0b"
+                colorTo="#fde047"
+                textColor="#451a03"
+                currency={wallet.currency}
+                delay={0.2}
+              />
             )}
-            {totalExpenses === 0 && <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]" />}
+            {totalExpenses === 0 && (
+              <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]" />
+            )}
           </div>
         </div>
       )}
@@ -161,7 +212,9 @@ export function WalletDetailPage({ wallet, transactions, categories, currentAmou
                     {row.amount >= 0 ? '+' : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
                   </p>
                   <p className={cx('mt-0.5 text-xs', isCredit ? 'text-expense/70' : 'text-white/28')}>
-                    {isCredit ? `${formatAmount(row.runningAmount, wallet.currency)} debt` : formatAmount(row.runningAmount, wallet.currency)}
+                    {isCredit
+                      ? `${formatAmount(row.runningAmount, wallet.currency)} debt`
+                      : formatAmount(row.runningAmount, wallet.currency)}
                   </p>
                 </div>
               </Card>
@@ -179,9 +232,11 @@ export function WalletDetailPage({ wallet, transactions, categories, currentAmou
               onClick={() => {
                 setPreset(p.value); setPresetSheetOpen(false)
               }}
-              className={cx('flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors', preset === p.value
-                ? 'bg-accent/15 text-accent-light'
-                : 'text-white/70 hover:bg-white/[0.05]'
+              className={cx(
+                'flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors',
+                preset === p.value
+                  ? 'bg-accent/15 text-accent-light'
+                  : 'text-white/70 hover:bg-white/[0.05]',
               )}
             >
               {p.label}

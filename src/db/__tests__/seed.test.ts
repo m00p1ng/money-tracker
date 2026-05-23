@@ -1,4 +1,9 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 import { db } from '@/db/schema'
 import { seedDatabase } from '@/db/seed'

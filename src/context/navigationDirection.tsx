@@ -1,5 +1,14 @@
-import { createContext, useContext, useState, useCallback } from 'react'
-import { useNavigate, type NavigateOptions, type To } from 'react-router'
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+} from 'react'
+import {
+  useNavigate,
+  type NavigateOptions,
+  type To,
+} from 'react-router'
 
 type Direction = 'forward' | 'back'
 

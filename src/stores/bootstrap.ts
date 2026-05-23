@@ -1,5 +1,11 @@
 import { seedDatabase } from '@/db/seed'
-import { useCategoryStore, useCurrencyStore, useSettingsStore, useTransactionStore, useWalletStore } from '@/stores'
+import {
+  useCategoryStore,
+  useCurrencyStore,
+  useSettingsStore,
+  useTransactionStore,
+  useWalletStore,
+} from '@/stores'
 
 export async function bootstrapStores(): Promise<void> {
   await seedDatabase()

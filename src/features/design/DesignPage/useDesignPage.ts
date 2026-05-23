@@ -1,12 +1,30 @@
-import { useEffect, useRef, useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useNavigate } from 'react-router'
 
 const SECTION_IDS = [
-  'colors', 'typography', 'spacing',
-  'button', 'card', 'field', 'segmented-control', 'type-picker',
-  'category-picker', 'currency-picker', 'date-picker', 'repeat-picker', 'wallet-picker',
-  'summary-cards', 'amount-display', 'calculator-keyboard',
-  'category-items-card', 'today-transactions', 'upcoming-transactions',
+  'colors',
+  'typography',
+  'spacing',
+  'button',
+  'card',
+  'field',
+  'segmented-control',
+  'type-picker',
+  'category-picker',
+  'currency-picker',
+  'date-picker',
+  'repeat-picker',
+  'wallet-picker',
+  'summary-cards',
+  'amount-display',
+  'calculator-keyboard',
+  'category-items-card',
+  'today-transactions',
+  'upcoming-transactions',
 ]
 
 export function useDesignPage() {

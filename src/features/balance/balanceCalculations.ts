@@ -41,21 +41,29 @@ export function signedWalletAmount(wallet: Wallet, transaction: Transaction): nu
 
 export function walletTransactions(walletId: string, transactions: Transaction[], range?: DateRange): Transaction[] {
   return transactions
-    .filter((transaction) => transaction.walletId === walletId || (transaction.type === 'transfer' && transaction.toWalletId === walletId))
+    .filter((transaction) => (
+      transaction.walletId === walletId
+      || (transaction.type === 'transfer' && transaction.toWalletId === walletId)
+    ))
     .filter((transaction) => (range ? isWithinDateRange(transaction.date, range) : true))
     .sort((a, b) => a.date.localeCompare(b.date))
 }
 
 export function walletCurrentAmount(wallet: Wallet, transactions: Transaction[]): number {
-  return walletTransactions(wallet.id, transactions).reduce((sum, transaction) => sum + signedWalletAmount(wallet, transaction), wallet.balance)
+  return walletTransactions(wallet.id, transactions)
+    .reduce((sum, transaction) => sum + signedWalletAmount(wallet, transaction), wallet.balance)
 }
 
 export function assetsTotal(wallets: Wallet[], transactions: Transaction[]): number {
-  return wallets.filter((wallet) => wallet.type === 'payment').reduce((sum, wallet) => sum + walletCurrentAmount(wallet, transactions), 0)
+  return wallets
+    .filter((wallet) => wallet.type === 'payment')
+    .reduce((sum, wallet) => sum + walletCurrentAmount(wallet, transactions), 0)
 }
 
 export function debtTotal(wallets: Wallet[], transactions: Transaction[]): number {
-  return wallets.filter((wallet) => wallet.type === 'credit_card').reduce((sum, wallet) => sum + walletCurrentAmount(wallet, transactions), 0)
+  return wallets
+    .filter((wallet) => wallet.type === 'credit_card')
+    .reduce((sum, wallet) => sum + walletCurrentAmount(wallet, transactions), 0)
 }
 
 export function walletRunningRows(wallet: Wallet, transactions: Transaction[], range: DateRange): RunningWalletRow[] {
@@ -64,7 +72,11 @@ export function walletRunningRows(wallet: Wallet, transactions: Transaction[], r
     .map((transaction) => {
       const amount = signedWalletAmount(wallet, transaction)
       runningAmount += amount
-      return { transaction, amount, runningAmount }
+      return {
+        transaction,
+        amount,
+        runningAmount,
+      }
     })
     .filter((row) => isWithinDateRange(row.transaction.date, range))
     .reverse()

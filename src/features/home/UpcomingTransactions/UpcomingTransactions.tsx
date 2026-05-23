@@ -9,7 +9,15 @@ const listVariants = {
 
 const rowVariants = {
   hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 300, damping: 26 } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring' as const,
+      stiffness: 300,
+      damping: 26,
+    },
+  },
 }
 
 export type UpcomingTransactionRowData = {

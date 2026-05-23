@@ -10,7 +10,14 @@ type PickerColumnProps = {
   capitalize?: boolean
 }
 
-export function PickerColumn({ label, name, options, value, onChange, capitalize = false }: PickerColumnProps) {
+export function PickerColumn({
+  label,
+  name,
+  options,
+  value,
+  onChange,
+  capitalize = false,
+}: PickerColumnProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.04]">
       <p className="pt-2 text-center text-[10px] uppercase tracking-[1px] text-white/30">{label}</p>
@@ -19,7 +26,13 @@ export function PickerColumn({ label, name, options, value, onChange, capitalize
           {options.map((opt) => (
             <Picker.Item key={opt} value={opt}>
               {({ selected }) => (
-                <span className={cx('text-[15px]', { capitalize }, selected ? 'font-bold text-white' : 'font-medium text-white/30')}>
+                <span
+                  className={cx(
+                    'text-[15px]',
+                    { capitalize },
+                    selected ? 'font-bold text-white' : 'font-medium text-white/30',
+                  )}
+                >
                   {opt}
                 </span>
               )}

@@ -59,14 +59,22 @@ function parseDateParts(value: string): DateParts | undefined {
     return undefined
   }
 
-  return { year, month, day }
+  return {
+    year,
+    month,
+    day,
+  }
 }
 
 function daysInMonth(year: number, month: number): number {
   return new Date(Date.UTC(year, month, 0)).getUTCDate()
 }
 
-function formatDateParts({ year, month, day }: DateParts): string {
+function formatDateParts({
+  year,
+  month,
+  day,
+}: DateParts): string {
   return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
 }
 
@@ -95,7 +103,11 @@ function addMonths(value: string, months: number): string {
   const month = target.getUTCMonth() + 1
   const day = Math.min(parts.day, daysInMonth(year, month))
 
-  return formatDateParts({ year, month, day })
+  return formatDateParts({
+    year,
+    month,
+    day,
+  })
 }
 
 function isValidCustomRepeat(repeat: RepeatConfig): repeat is ValidCustomRepeat {

@@ -6,5 +6,12 @@ import { AppShell } from './AppShell'
 
 export function AppShellContainer({ children, showBottomNav = true }: PropsWithChildren<{ showBottomNav?: boolean }>) {
   const logoRef = useDesignSystemTrigger()
-  return <AppShell logoRef={logoRef as React.RefObject<HTMLSpanElement>} showBottomNav={showBottomNav}>{children}</AppShell>
+  return (
+    <AppShell
+      logoRef={logoRef as React.RefObject<HTMLSpanElement>}
+      showBottomNav={showBottomNav}
+    >
+      {children}
+    </AppShell>
+  )
 }

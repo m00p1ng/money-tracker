@@ -13,7 +13,11 @@ interface WalletsPageProps {
   onBack: () => void
 }
 
-export function WalletsPage({ payments, cards, onBack }: WalletsPageProps) {
+export function WalletsPage({
+  payments,
+  cards,
+  onBack,
+}: WalletsPageProps) {
   return (
     <div className="space-y-5">
       <PageHeader title="Wallets" onBack={onBack} />

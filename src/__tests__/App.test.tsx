@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
-import { afterEach, describe, expect, it } from 'vitest'
+import {
+  afterEach,
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 import App, { RoutedApp } from '@/App'
 import { useTransactionStore, useWalletStore } from '@/stores'
@@ -20,7 +25,7 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/transaction/new']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
   })
@@ -29,20 +34,38 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/transaction/123']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
   })
 
   it('renders the Balance tab account groups', () => {
-    useWalletStore.setState({ items: [
-      { id: 'w1', name: 'Cash', type: 'payment' as const, currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' },
-      { id: 'cc1', name: 'Visa', type: 'credit_card' as const, currency: 'THB', balance: 0, color: '#f59e0b', icon: 'fa-credit-card' },
-    ] })
+    useWalletStore.setState({
+      items: [
+        {
+          id: 'w1',
+          name: 'Cash',
+          type: 'payment' as const,
+          currency: 'THB',
+          balance: 0,
+          color: '#10b981',
+          icon: 'fa-wallet',
+        },
+        {
+          id: 'cc1',
+          name: 'Visa',
+          type: 'credit_card' as const,
+          currency: 'THB',
+          balance: 0,
+          color: '#f59e0b',
+          icon: 'fa-credit-card',
+        },
+      ],
+    })
     render(
       <MemoryRouter initialEntries={['/balance']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: 'Balance' })).toBeInTheDocument()
@@ -54,7 +77,7 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/balance']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('link', { name: /Home/i })).toHaveAttribute('href', '/')
@@ -68,7 +91,7 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/settings']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
@@ -79,7 +102,7 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/settings']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('link', { name: /Wallets/i })).toHaveAttribute('href', '/settings/wallets')
@@ -94,7 +117,7 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/balance/wallet/wallet-cash']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: 'Wallet not found' })).toBeInTheDocument()
@@ -105,19 +128,21 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/settings/wallets']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: 'Wallets' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Add Payment Account/i })).toHaveAttribute('href', '/settings/wallets/new?type=payment')
-    expect(screen.getByRole('link', { name: /Add Credit Card/i })).toHaveAttribute('href', '/settings/wallets/new?type=credit_card')
+    expect(screen.getByRole('link', { name: /Add Payment Account/i }))
+      .toHaveAttribute('href', '/settings/wallets/new?type=payment')
+    expect(screen.getByRole('link', { name: /Add Credit Card/i }))
+      .toHaveAttribute('href', '/settings/wallets/new?type=credit_card')
   })
 
   it('renders wallet new form route', () => {
     render(
       <MemoryRouter initialEntries={['/settings/wallets/new?type=payment']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: 'New Wallet' })).toBeInTheDocument()
@@ -128,7 +153,7 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/settings/theme']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: 'Theme' })).toBeInTheDocument()
@@ -138,12 +163,20 @@ describe('App routing', () => {
 
   it('renders wallet edit form route', () => {
     useWalletStore.setState({
-      items: [{ id: 'wallet-cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' }],
+      items: [{
+        id: 'wallet-cash',
+        name: 'Cash',
+        type: 'payment',
+        currency: 'THB',
+        balance: 0,
+        color: '#10b981',
+        icon: 'fa-wallet',
+      }],
     })
     render(
       <MemoryRouter initialEntries={['/settings/wallets/wallet-cash']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: 'Edit Wallet' })).toBeInTheDocument()
@@ -155,7 +188,7 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/transaction/repeat/tx-rent/2026-06-24']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
@@ -179,7 +212,7 @@ describe('App routing', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <RoutedApp />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: 'Upcoming' })).toBeInTheDocument()

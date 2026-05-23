@@ -41,7 +41,10 @@ export function CategoryItemsCard({
         return (
           <div
             key={`${item.categoryId}-${index}`}
-            className={cx('flex items-center border-b border-white/[0.04] last:border-b-0', { 'bg-[var(--accent)]/[0.06]': isFocused })}
+            className={cx(
+              'flex items-center border-b border-white/[0.04] last:border-b-0',
+              { 'bg-[var(--accent)]/[0.06]': isFocused },
+            )}
           >
             {/* Left zone: tap to change category */}
             <button
@@ -50,7 +53,10 @@ export function CategoryItemsCard({
               className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3"
               onClick={() => onChangeCategory(index)}
             >
-              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[9px] bg-[var(--accent)]/15 text-sm text-accent-light">
+              <div className={[
+                'flex h-8 w-8 flex-shrink-0 items-center justify-center',
+                'rounded-[9px] bg-[var(--accent)]/15 text-sm text-accent-light',
+              ].join(' ')}>
                 <Icon name={category?.icon ?? 'fa-ellipsis'} />
               </div>
               <div className="min-w-0 text-left">
@@ -70,7 +76,10 @@ export function CategoryItemsCard({
             {items.length > 1 && (
               <button
                 aria-label="Remove category"
-                className="mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-danger/10 text-[10px] text-danger"
+                className={[
+                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center',
+                  'rounded-md bg-danger/10 text-[10px] text-danger',
+                ].join(' ')}
                 type="button"
                 onClick={() => onRemove(index)}
               >
@@ -86,13 +95,19 @@ export function CategoryItemsCard({
         aria-label="Add Category"
         onClick={onAdd}
         type="button"
-        className="flex w-full items-center justify-center gap-2 border-t border-dashed border-white/[0.08] py-3 text-[12px] font-semibold text-accent-light"
+        className={[
+          'flex w-full items-center justify-center gap-2',
+          'border-t border-dashed border-white/[0.08] py-3 text-[12px] font-semibold text-accent-light',
+        ].join(' ')}
       >
         <Icon name="fa-plus" className="text-[10px]" /> Add Item
       </button>
 
       {/* Total */}
-      <div className="flex items-center justify-between border-t border-[var(--accent)]/15 bg-[var(--accent)]/[0.06] px-4 py-2.5">
+      <div className={[
+        'flex items-center justify-between border-t',
+        'border-[var(--accent)]/15 bg-[var(--accent)]/[0.06] px-4 py-2.5',
+      ].join(' ')}>
         <span className="text-[12px] uppercase tracking-[1px] text-white/40">Total</span>
         <span className="text-lg font-bold">{formatAmount(total)}</span>
       </div>

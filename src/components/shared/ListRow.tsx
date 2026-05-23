@@ -12,9 +12,20 @@ type ListRowProps = {
   to: string
 }
 
-export function ListRow({ icon, iconBg, iconColor, label, sub, trailing, to }: ListRowProps) {
+export function ListRow({
+  icon,
+  iconBg,
+  iconColor,
+  label,
+  sub,
+  trailing,
+  to,
+}: ListRowProps) {
   return (
-    <Link to={to} className="flex items-center gap-3.5 border-b border-white/5 px-4 py-3.5 last:border-b-0 active:bg-white/[0.03]">
+    <Link
+      to={to}
+      className="flex items-center gap-3.5 border-b border-white/5 px-4 py-3.5 last:border-b-0 active:bg-white/[0.03]"
+    >
       <div
         className="flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-[10px] text-sm"
         style={{ background: iconBg, color: iconColor }}

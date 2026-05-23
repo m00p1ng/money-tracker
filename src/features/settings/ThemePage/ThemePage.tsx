@@ -22,7 +22,12 @@ interface ThemePageProps {
   onSelectTheme: (theme: ThemePreset) => void
 }
 
-export function ThemePage({ selected, firstWallet, onBack, onSelectTheme }: ThemePageProps) {
+export function ThemePage({
+  selected,
+  firstWallet,
+  onBack,
+  onSelectTheme,
+}: ThemePageProps) {
   const previewAccent = themes[selected].accent
   const previewAccentLight = themes[selected].accentLight
 
@@ -49,7 +54,10 @@ export function ThemePage({ selected, firstWallet, onBack, onSelectTheme }: Them
               <button
                 key={theme}
                 type="button"
-                className={cx('rounded-xl border-2 py-2.5 px-2 text-center', selected === theme ? 'border-accent' : 'border-transparent')}
+                className={cx(
+                  'rounded-xl border-2 py-2.5 px-2 text-center',
+                  selected === theme ? 'border-accent' : 'border-transparent',
+                )}
                 onClick={() => onSelectTheme(theme)}
               >
                 <span
@@ -73,7 +81,10 @@ export function ThemePage({ selected, firstWallet, onBack, onSelectTheme }: Them
             style={{ background: 'rgba(5,15,9,0.9)', borderColor: `${previewAccent}33` }}
           >
             <div
-              className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[13px] text-lg text-white"
+              className={[
+                'flex h-[42px] w-[42px] flex-shrink-0 items-center',
+                'justify-center rounded-[13px] text-lg text-white',
+              ].join(' ')}
               style={{
                 background: `linear-gradient(135deg,${themes[selected].accentBtn1},${previewAccent})`,
                 boxShadow: `0 4px 14px ${previewAccent}66`,
@@ -83,7 +94,9 @@ export function ThemePage({ selected, firstWallet, onBack, onSelectTheme }: Them
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold">{firstWallet.name}</p>
-              <p className="mt-0.5 text-xs text-white/35">{firstWallet.type === 'credit_card' ? 'Credit Card' : 'Payment Account'} · {firstWallet.currency}</p>
+              <p className="mt-0.5 text-xs text-white/35">
+                {firstWallet.type === 'credit_card' ? 'Credit Card' : 'Payment Account'} · {firstWallet.currency}
+              </p>
             </div>
             <span className="text-base font-bold" style={{ color: previewAccentLight }}>
               {formatAmount(firstWallet.balance, firstWallet.currency)}

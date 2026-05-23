@@ -49,5 +49,9 @@ export function useFormCrud<T extends { id: string }>({
     }
   }
 
-  return { error, onSubmit, onDelete }
+  return {
+    error,
+    onSubmit,
+    onDelete,
+  }
 }

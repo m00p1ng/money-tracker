@@ -1,9 +1,22 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router'
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { buildTransaction, validateDraft, validateExchangeRate } from '@/features/transaction/transactionForm'
+import {
+  buildTransaction,
+  validateDraft,
+  validateExchangeRate,
+} from '@/features/transaction/transactionForm'
 import { toDatetimeLocalValue, createId } from '@/lib'
-import { useCurrencyStore, useTransactionDraftStore, useTransactionStore, useWalletStore } from '@/stores'
+import {
+  useCurrencyStore,
+  useTransactionDraftStore,
+  useTransactionStore,
+  useWalletStore,
+} from '@/stores'
 import type { RepeatConfig, TransactionType } from '@/types/domain'
 
 import type { TransactionPageProps } from './TransactionPage'
@@ -11,7 +24,11 @@ import type { TransactionPageProps } from './TransactionPage'
 export function useTransactionPage(): TransactionPageProps {
   const navigate = useNavigate()
   const backNavigate = useBackNavigate()
-  const { id, sourceId, date: repeatDate } = useParams()
+  const {
+    id,
+    sourceId,
+    date: repeatDate,
+  } = useParams()
   const existing = useTransactionStore((state) => (id ? state.findById(id) : undefined))
   const sourceRepeat = useTransactionStore((state) => (sourceId ? state.findById(sourceId) : undefined))
   const add = useTransactionStore((state) => state.add)
@@ -23,8 +40,12 @@ export function useTransactionPage(): TransactionPageProps {
   const isRepeatMaterialization = Boolean(sourceId && repeatDate)
   const initial = isRepeatMaterialization ? sourceRepeat : existing
   const [searchParams] = useSearchParams()
-  const seedCategoryId = !isEditMode && !isRepeatMaterialization ? searchParams.get('categoryId') ?? undefined : undefined
-  const seedType = !isEditMode && !isRepeatMaterialization ? (searchParams.get('type') ?? 'expense') as TransactionType : undefined
+  const seedCategoryId = !isEditMode && !isRepeatMaterialization
+    ? searchParams.get('categoryId') ?? undefined
+    : undefined
+  const seedType = !isEditMode && !isRepeatMaterialization
+    ? (searchParams.get('type') ?? 'expense') as TransactionType
+    : undefined
 
   const draftStore = useTransactionDraftStore()
   const updateDraft = draftStore.update
@@ -74,7 +95,13 @@ export function useTransactionPage(): TransactionPageProps {
   const wallet = wallets.find((item) => item.id === walletId)
 
   async function onSave() {
-    const errors = validateDraft({ type, walletId, toWalletId, items, transferAmount })
+    const errors = validateDraft({
+      type,
+      walletId,
+      toWalletId,
+      items,
+      transferAmount,
+    })
     if (currency !== wallet?.currency) {
       const rateError = validateExchangeRate(exchangeRate || defaultRate)
       if (rateError) {
@@ -148,7 +175,11 @@ export function useTransactionPage(): TransactionPageProps {
     isEditMode,
     isPlanned,
     defaultRate,
-    onChangeType: (v: TransactionType) => updateDraft({ type: v, items: [], focusedIndex: null }),
+    onChangeType: (v: TransactionType) => updateDraft({
+      type: v,
+      items: [],
+      focusedIndex: null,
+    }),
     onUpdateExchangeRate: (value: string) => updateDraft({ exchangeRate: value }),
     onUpdateToExchangeRate: (value: string) => updateDraft({ toExchangeRate: value }),
     onUpdateDate: (d: Date) => updateDraft({ date: toDatetimeLocalValue(d) }),
@@ -166,7 +197,7 @@ export function useTransactionPage(): TransactionPageProps {
     onOpenCurrencyPicker: () => { /* handled in dumb component */ },
     onSave,
     onBack: () => {
-      clearDraft(); backNavigate('/') 
+      clearDraft(); backNavigate('/')
     },
     onDelete,
   }

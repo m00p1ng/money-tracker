@@ -11,7 +11,15 @@ const gridVariants = {
 
 const cellVariants = {
   hidden: { opacity: 0, scale: 0.9 },
-  visible: { opacity: 1, scale: 1, transition: { type: 'spring' as const, stiffness: 380, damping: 28 } },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: 'spring' as const,
+      stiffness: 380,
+      damping: 28,
+    },
+  },
 }
 
 export interface CategorySelectionPageProps {
@@ -54,7 +62,11 @@ export function CategorySelectionPage({
           variants={gridVariants}
           initial="hidden"
           animate="visible"
-          exit={{ opacity: 0, x: -16, transition: { duration: 0.15 } }}
+          exit={{
+            opacity: 0,
+            x: -16,
+            transition: { duration: 0.15 },
+          }}
           className="grid grid-cols-3 gap-2.5"
         >
           {visible.map((category) => (
@@ -64,7 +76,10 @@ export function CategorySelectionPage({
               whileTap={{ scale: 0.96 }}
               onClick={() => onSelect(category)}
               type="button"
-              className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-2 py-3.5"
+              className={[
+                'flex flex-col items-center gap-3 rounded-2xl',
+                'border border-white/[0.07] bg-white/[0.04] px-2 py-3.5',
+              ].join(' ')}
             >
               <span
                 className="grid h-11 w-11 place-items-center rounded-xl text-xl"

@@ -1,5 +1,10 @@
 import { db } from '@/db/schema'
-import type { Category, Currency, Settings, Wallet } from '@/types/domain'
+import type {
+  Category,
+  Currency,
+  Settings,
+  Wallet,
+} from '@/types/domain'
 
 const expenseRoots = [
   ['Food & Drink', 'fa-utensils', '#65a30d', ['Restaurant', 'Groceries', 'Coffee']],
@@ -56,7 +61,15 @@ function buildCategories(): Category[] {
 
   for (const [name, icon, color, children] of expenseRoots) {
     const rootId = `expense-${slug(name)}`
-    categories.push({ id: rootId, name, type: 'expense', level: 1, icon, color, isDefault: true })
+    categories.push({
+      id: rootId,
+      name,
+      type: 'expense',
+      level: 1,
+      icon,
+      color,
+      isDefault: true,
+    })
     for (const child of children) {
       categories.push({
         id: `${rootId}-${slug(child)}`,
@@ -73,7 +86,15 @@ function buildCategories(): Category[] {
 
   for (const [name, icon, color, children] of incomeRoots) {
     const rootId = `income-${slug(name)}`
-    categories.push({ id: rootId, name, type: 'income', level: 1, icon, color, isDefault: true })
+    categories.push({
+      id: rootId,
+      name,
+      type: 'income',
+      level: 1,
+      icon,
+      color,
+      isDefault: true,
+    })
     for (const child of children) {
       categories.push({
         id: `${rootId}-${slug(child)}`,

@@ -64,7 +64,11 @@ interface SectionHeadingProps {
   description: string
 }
 
-function SectionHeading({ id, title, description }: SectionHeadingProps) {
+function SectionHeading({
+  id,
+  title,
+  description,
+}: SectionHeadingProps) {
   return (
     <div id={id} className="mb-4 scroll-mt-8">
       <h2 className="text-lg font-bold">{title}</h2>
@@ -86,7 +90,11 @@ export function TokensSection() {
       </section>
 
       <section>
-        <SectionHeading id="typography" title="Typography" description="Font: Inter — text size scale used in the app" />
+        <SectionHeading
+          id="typography"
+          title="Typography"
+          description="Font: Inter — text size scale used in the app"
+        />
         <div className="space-y-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
           {TYPE_SCALE.map(({ label, className }) => (
             <div key={label} className="flex items-baseline gap-4">

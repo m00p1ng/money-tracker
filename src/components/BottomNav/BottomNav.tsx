@@ -5,11 +5,36 @@ import { Icon } from '@/components'
 
 
 const navItems = [
-  { label: 'Home', to: '/', icon: 'fa-home', enabled: true },
-  { label: 'Balance', to: '/balance', icon: 'fa-wallet', enabled: true },
-  { label: 'Budget', to: '/budget', icon: 'fa-chart-pie', enabled: false },
-  { label: 'Report', to: '/report', icon: 'fa-chart-line', enabled: false },
-  { label: 'Settings', to: '/settings', icon: 'fa-gear', enabled: true },
+  {
+    label: 'Home',
+    to: '/',
+    icon: 'fa-home',
+    enabled: true,
+  },
+  {
+    label: 'Balance',
+    to: '/balance',
+    icon: 'fa-wallet',
+    enabled: true,
+  },
+  {
+    label: 'Budget',
+    to: '/budget',
+    icon: 'fa-chart-pie',
+    enabled: false,
+  },
+  {
+    label: 'Report',
+    to: '/report',
+    icon: 'fa-chart-line',
+    enabled: false,
+  },
+  {
+    label: 'Settings',
+    to: '/settings',
+    icon: 'fa-gear',
+    enabled: true,
+  },
 ] as const
 
 type BottomNavProps = {
@@ -18,10 +43,18 @@ type BottomNavProps = {
 
 export function BottomNav({ pathname }: BottomNavProps) {
   return (
-    <nav aria-label="Primary" className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--nav-border)] bg-app-bg/95 pb-7 pt-2.5 backdrop-blur-xl">
+    <nav
+      aria-label="Primary"
+      className={[
+        'fixed inset-x-0 bottom-0 z-20 border-t border-[var(--nav-border)]',
+        'bg-app-bg/95 pb-7 pt-2.5 backdrop-blur-xl',
+      ].join(' ')}
+    >
       <div className="mx-auto grid max-w-[430px] grid-cols-5">
         {navItems.map((item) => {
           const active = item.to === '/' ? pathname === '/' : pathname.startsWith(item.to)
+          const activeLabel = 'font-semibold bg-gradient-to-br'
+            + ' from-[var(--accent-btn-2)] to-[var(--accent)] bg-clip-text text-transparent'
           const content = (
             <>
               <Icon
@@ -30,10 +63,18 @@ export function BottomNav({ pathname }: BottomNavProps) {
                 style={active ? { color: 'var(--accent-btn-2)' } : undefined}
               />
               <span
-                className={cx('text-[10px] leading-none', active ? 'font-semibold bg-gradient-to-br from-[var(--accent-btn-2)] to-[var(--accent)] bg-clip-text text-transparent' : 'text-white/22')}
+                className={cx(
+                  'text-[10px] leading-none',
+                  active
+                    ? activeLabel
+                    : 'text-white/22',
+                )}
               >{item.label}</span>
               {active && (
-                <span className="mt-1 block h-1 w-1 rounded-full" style={{ background: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }} />
+                <span
+                  className="mt-1 block h-1 w-1 rounded-full"
+                  style={{ background: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }}
+                />
               )}
             </>
           )

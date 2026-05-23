@@ -1,8 +1,20 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 import { db } from '@/db/schema'
 import { seedDatabase } from '@/db/seed'
-import { bootstrapStores, useCategoryStore, useCurrencyStore, useSettingsStore, useTransactionStore, useWalletStore } from '@/stores'
+import {
+  bootstrapStores,
+  useCategoryStore,
+  useCurrencyStore,
+  useSettingsStore,
+  useTransactionStore,
+  useWalletStore,
+} from '@/stores'
 import type { Transaction } from '@/types/domain'
 
 function transaction(overrides: Partial<Transaction> = {}): Transaction {
@@ -152,9 +164,21 @@ describe('stores', () => {
     expect(upcoming.map((row) => row.id).slice(0, 2)).toEqual(['overdue-older', 'overdue-newer'])
     expect(upcoming).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ kind: 'real', id: 'planned-today', date: '2026-02-10' }),
-        expect.objectContaining({ kind: 'real', id: 'planned-tomorrow', date: '2026-02-11' }),
-        expect.objectContaining({ kind: 'virtual-repeat', id: 'repeat:repeat-source:2026-02-11', date: '2026-02-11' }),
+        expect.objectContaining({
+          kind: 'real',
+          id: 'planned-today',
+          date: '2026-02-10',
+        }),
+        expect.objectContaining({
+          kind: 'real',
+          id: 'planned-tomorrow',
+          date: '2026-02-11',
+        }),
+        expect.objectContaining({
+          kind: 'virtual-repeat',
+          id: 'repeat:repeat-source:2026-02-11',
+          date: '2026-02-11',
+        }),
       ]),
     )
     expect(upcoming.find((row) => row.id === 'planned-too-late')).toBeUndefined()
@@ -400,9 +424,7 @@ describe('stores', () => {
         isDefault: false,
       },
     ])
-    useCategoryStore.setState({
-      items: [...useCategoryStore.getState().items, (await db.categories.get('expense-custom'))!],
-    })
+    useCategoryStore.setState({ items: [...useCategoryStore.getState().items, (await db.categories.get('expense-custom'))!] })
 
     await expect(useCategoryStore.getState().remove('expense-custom')).rejects.toThrow('Category has child categories')
     expect(await db.categories.get('expense-custom')).toBeDefined()
@@ -551,8 +573,16 @@ describe('stores', () => {
       rate: 36,
     })
 
-    expect(await db.currencies.get('USD')).toMatchObject({ code: 'USD', isBase: true, rate: 1 })
-    expect(useCurrencyStore.getState().findByCode(' usd ')).toMatchObject({ code: 'USD', isBase: true, rate: 1 })
+    expect(await db.currencies.get('USD')).toMatchObject({
+      code: 'USD',
+      isBase: true,
+      rate: 1,
+    })
+    expect(useCurrencyStore.getState().findByCode(' usd ')).toMatchObject({
+      code: 'USD',
+      isBase: true,
+      rate: 1,
+    })
     expect(await db.currencies.get('THB')).toMatchObject({ isBase: false })
   })
 
@@ -649,7 +679,9 @@ describe('stores', () => {
     expect(currencies.filter((currency) => currency.isBase).map((currency) => currency.code)).toEqual(['USD'])
     expect(await db.currencies.get('USD')).toMatchObject({ isBase: true, rate: 1 })
     expect(await db.currencies.get('EUR')).toMatchObject({ isBase: false, rate: 39 })
-    expect(useCurrencyStore.getState().items).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'EUR' })]))
+    expect(useCurrencyStore.getState().items).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'EUR' })]),
+    )
   })
 
   it('checks Dexie before deleting base currencies when store state is stale', async () => {

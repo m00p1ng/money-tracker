@@ -6,7 +6,11 @@ type PageHeaderProps = {
   rightSlot?: React.ReactNode
 }
 
-export function PageHeader({ title, onBack, rightSlot }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  onBack,
+  rightSlot,
+}: PageHeaderProps) {
   return (
     <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
       <button

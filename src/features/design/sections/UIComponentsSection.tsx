@@ -1,17 +1,68 @@
 import React, { useState } from 'react'
 
-import { Button, Card, Field, TextInput, SelectInput, CurrencyPicker, DatePickerSheet, RepeatPicker, TypePickerDropdown, WalletPicker, SegmentedControl } from '@/components/ui'
-import type { Currency, Wallet, RepeatConfig } from '@/types/domain'
+import {
+  Button,
+  Card,
+  Field,
+  TextInput,
+  SelectInput,
+  CurrencyPicker,
+  DatePickerSheet,
+  RepeatPicker,
+  TypePickerDropdown,
+  WalletPicker,
+  SegmentedControl,
+} from '@/components/ui'
+import type {
+  Currency,
+  Wallet,
+  RepeatConfig,
+} from '@/types/domain'
 
 const STUB_CURRENCIES: Currency[] = [
-  { code: 'USD', symbol: '$', name: 'US Dollar', isBase: true, rate: 1 },
-  { code: 'EUR', symbol: '€', name: 'Euro', isBase: false, rate: 0.92 },
-  { code: 'THB', symbol: '฿', name: 'Thai Baht', isBase: false, rate: 35.5 },
+  {
+    code: 'USD',
+    symbol: '$',
+    name: 'US Dollar',
+    isBase: true,
+    rate: 1,
+  },
+  {
+    code: 'EUR',
+    symbol: '€',
+    name: 'Euro',
+    isBase: false,
+    rate: 0.92,
+  },
+  {
+    code: 'THB',
+    symbol: '฿',
+    name: 'Thai Baht',
+    isBase: false,
+    rate: 35.5,
+  },
 ]
 
 const STUB_WALLETS: Wallet[] = [
-  { id: 'w1', name: 'Cash', type: 'payment', currency: 'USD', balance: 500, color: '#22c55e', icon: '💵' },
-  { id: 'w2', name: 'Card', type: 'credit_card', currency: 'USD', balance: 2000, creditLimit: 5000, color: '#3b82f6', icon: '💳' },
+  {
+    id: 'w1',
+    name: 'Cash',
+    type: 'payment',
+    currency: 'USD',
+    balance: 500,
+    color: '#22c55e',
+    icon: '💵',
+  },
+  {
+    id: 'w2',
+    name: 'Card',
+    type: 'credit_card',
+    currency: 'USD',
+    balance: 2000,
+    creditLimit: 5000,
+    color: '#3b82f6',
+    icon: '💳',
+  },
 ]
 
 interface SubSectionProps {
@@ -20,7 +71,11 @@ interface SubSectionProps {
   children: React.ReactNode
 }
 
-function SubSection({ id, title, children }: SubSectionProps) {
+function SubSection({
+  id,
+  title,
+  children,
+}: SubSectionProps) {
   return (
     <section id={id} className="scroll-mt-8">
       <h3 className="mb-4 text-base font-semibold text-white/70">{title}</h3>
@@ -64,7 +119,10 @@ export function UIComponentsSection() {
           <div><Button variant="ghost">Ghost</Button><VariantLabel label="ghost (default)" /></div>
           <div><Button variant="danger">Danger</Button><VariantLabel label="danger" /></div>
           <div><Button variant="accent" disabled>Disabled</Button><VariantLabel label="disabled" /></div>
-          <div className="w-full max-w-xs"><Button variant="accent" fullWidth>Full Width</Button><VariantLabel label="fullWidth" /></div>
+          <div className="w-full max-w-xs">
+            <Button variant="accent" fullWidth>Full Width</Button>
+            <VariantLabel label="fullWidth" />
+          </div>
         </div>
       </SubSection>
 
@@ -143,7 +201,7 @@ export function UIComponentsSection() {
             currencies={STUB_CURRENCIES}
             selectedCode={selectedCurrency}
             onSelect={(code) => {
-              setSelectedCurrency(code); setCurrencyOpen(false) 
+              setSelectedCurrency(code); setCurrencyOpen(false)
             }}
             onClose={() => setCurrencyOpen(false)}
           />
@@ -158,7 +216,7 @@ export function UIComponentsSection() {
             isOpen={dateOpen}
             value={selectedDate}
             onChange={(d) => {
-              setSelectedDate(d); setDateOpen(false) 
+              setSelectedDate(d); setDateOpen(false)
             }}
             onClose={() => setDateOpen(false)}
           />
@@ -173,7 +231,7 @@ export function UIComponentsSection() {
             isOpen={repeatOpen}
             value={repeatConfig}
             onConfirm={(config) => {
-              setRepeatConfig(config); setRepeatOpen(false) 
+              setRepeatConfig(config); setRepeatOpen(false)
             }}
             onClose={() => setRepeatOpen(false)}
           />
@@ -189,7 +247,7 @@ export function UIComponentsSection() {
             wallets={STUB_WALLETS}
             selectedId={selectedWallet}
             onSelect={(id) => {
-              setSelectedWallet(id); setWalletOpen(false) 
+              setSelectedWallet(id); setWalletOpen(false)
             }}
             onClose={() => setWalletOpen(false)}
           />

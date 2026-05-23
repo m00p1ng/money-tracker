@@ -13,7 +13,15 @@ const containerVariants = {
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 300, damping: 25 } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring' as const,
+      stiffness: 300,
+      damping: 25,
+    },
+  },
 }
 
 type HomePageProps = {
@@ -26,7 +34,9 @@ export function HomePage({ onAddTransaction }: HomePageProps) {
       <motion.header variants={sectionVariants} className="flex items-start justify-between">
         <div>
           <p className="text-sm text-slate-400">{formatHeaderDate(new Date())}</p>
-          <h1 className="bg-gradient-to-r from-white to-white/75 bg-clip-text text-2xl font-semibold text-transparent">Overview</h1>
+          <h1 className="bg-gradient-to-r from-white to-white/75 bg-clip-text text-2xl font-semibold text-transparent">
+            Overview
+          </h1>
         </div>
         <button
           aria-label="Add transaction"

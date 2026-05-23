@@ -1,16 +1,52 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter, Route, Routes } from 'react-router'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  MemoryRouter,
+  Route,
+  Routes,
+} from 'react-router'
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
 import TransactionPage from '@/features/transaction/TransactionPage'
-import { useCategoryStore, useTransactionDraftStore, useTransactionStore, useWalletStore } from '@/stores'
+import {
+  useCategoryStore,
+  useTransactionDraftStore,
+  useTransactionStore,
+  useWalletStore,
+} from '@/stores'
 
 describe('TransactionPage edit mode', () => {
   beforeEach(() => {
     useTransactionDraftStore.getState().clear()
-    useWalletStore.setState({ items: [{ id: 'wallet-cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' }] })
-    useCategoryStore.setState({ items: [{ id: 'expense-food-and-drink-coffee', name: 'Coffee', type: 'expense', parentId: 'expense-food-and-drink', level: 2, icon: 'fa-utensils', color: '#65a30d', isDefault: true }] })
+    useWalletStore.setState({
+      items: [{
+        id: 'wallet-cash',
+        name: 'Cash',
+        type: 'payment',
+        currency: 'THB',
+        balance: 0,
+        color: '#10b981',
+        icon: 'fa-wallet',
+      }],
+    })
+    useCategoryStore.setState({
+      items: [{
+        id: 'expense-food-and-drink-coffee',
+        name: 'Coffee',
+        type: 'expense',
+        parentId: 'expense-food-and-drink',
+        level: 2,
+        icon: 'fa-utensils',
+        color: '#65a30d',
+        isDefault: true,
+      }],
+    })
     useTransactionStore.setState({
       items: [{
         id: 'tx-1',
@@ -140,8 +176,24 @@ describe('TransactionPage edit mode', () => {
     const user = userEvent.setup()
     useWalletStore.setState({
       items: [
-        { id: 'wallet-cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' },
-        { id: 'wallet-bank', name: 'Bank', type: 'payment', currency: 'THB', balance: 0, color: '#0ea5e9', icon: 'fa-building-columns' },
+        {
+          id: 'wallet-cash',
+          name: 'Cash',
+          type: 'payment',
+          currency: 'THB',
+          balance: 0,
+          color: '#10b981',
+          icon: 'fa-wallet',
+        },
+        {
+          id: 'wallet-bank',
+          name: 'Bank',
+          type: 'payment',
+          currency: 'THB',
+          balance: 0,
+          color: '#0ea5e9',
+          icon: 'fa-building-columns',
+        },
       ],
     })
 
@@ -150,7 +202,7 @@ describe('TransactionPage edit mode', () => {
         <Routes>
           <Route path="/transaction/new" element={<TransactionPage />} />
         </Routes>
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     await user.click(screen.getByRole('button', { name: /expense/i }))
@@ -164,12 +216,32 @@ describe('TransactionPage edit mode', () => {
 describe('TransactionPage type switching', () => {
   beforeEach(() => {
     useTransactionDraftStore.getState().clear()
-    useCategoryStore.setState({ items: [
-      { id: 'exp-food', name: 'Food', type: 'expense' as const, level: 1 as const, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
-    ] })
-    useWalletStore.setState({ items: [
-      { id: 'w1', name: 'Cash', type: 'payment' as const, currency: 'THB', color: '#38bdf8', icon: 'fa-wallet', balance: 0 },
-    ] })
+    useCategoryStore.setState({
+      items: [
+        {
+          id: 'exp-food',
+          name: 'Food',
+          type: 'expense' as const,
+          level: 1 as const,
+          icon: 'fa-utensils',
+          color: '#65a30d',
+          isDefault: true,
+        },
+      ],
+    })
+    useWalletStore.setState({
+      items: [
+        {
+          id: 'w1',
+          name: 'Cash',
+          type: 'payment' as const,
+          currency: 'THB',
+          color: '#38bdf8',
+          icon: 'fa-wallet',
+          balance: 0,
+        },
+      ],
+    })
   })
 
   it('clears items when type changes from expense to income', async () => {

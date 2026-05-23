@@ -109,6 +109,16 @@ interface IconProps {
   style?: React.CSSProperties
 }
 
-export function Icon({ name, className, style }: IconProps) {
-  return <FontAwesomeIcon icon={['fas', name.replace('fa-', '') as IconName]} className={className} style={style as never} />
+export function Icon({
+  name,
+  className,
+  style,
+}: IconProps) {
+  return (
+    <FontAwesomeIcon
+      icon={['fas', name.replace('fa-', '') as IconName]}
+      className={className}
+      style={style as never}
+    />
+  )
 }

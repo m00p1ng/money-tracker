@@ -1,3 +1,5 @@
+import cx from 'classnames'
+
 const NAV_GROUPS = [
   {
     label: 'Tokens',
@@ -53,10 +55,12 @@ export function DesignTopNav({ activeId }: DesignTopNavProps) {
             key={item.id}
             type="button"
             onClick={() => scrollTo(item.id)}
-            className={`flex-shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${activeId === item.id
-              ? 'bg-accent/20 text-accent-light'
-              : 'text-white/40 hover:text-white/70'
-            }`}
+            className={cx(
+              'flex-shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition-colors',
+              activeId === item.id
+                ? 'bg-accent/20 text-accent-light'
+                : 'text-white/40 hover:text-white/70',
+            )}
           >
             {item.label}
           </button>
@@ -73,7 +77,10 @@ interface DesignSidebarProps {
 
 export function DesignSidebar({ activeId }: DesignSidebarProps) {
   return (
-    <nav className="hidden w-52 flex-shrink-0 flex-col gap-1 overflow-y-auto border-r border-white/[0.08] bg-white/[0.02] px-2 py-4 md:flex">
+    <nav className={[
+      'hidden w-52 flex-shrink-0 flex-col gap-1 overflow-y-auto',
+      'border-r border-white/[0.08] bg-white/[0.02] px-2 py-4 md:flex',
+    ].join(' ')}>
       <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>
       {NAV_GROUPS.map((group) => (
         <div key={group.label}>
@@ -85,10 +92,12 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
               key={item.id}
               type="button"
               onClick={() => scrollTo(item.id)}
-              className={`w-full whitespace-nowrap rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors ${activeId === item.id
-                ? 'bg-accent/10 font-semibold text-accent-light'
-                : 'text-white/50 hover:text-white/80'
-              }`}
+              className={cx(
+                'w-full whitespace-nowrap rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors',
+                activeId === item.id
+                  ? 'bg-accent/10 font-semibold text-accent-light'
+                  : 'text-white/50 hover:text-white/80',
+              )}
             >
               {item.label}
             </button>

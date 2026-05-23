@@ -1,4 +1,8 @@
-import { describe, expect, it } from 'vitest'
+import {
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 import {
   materializeRepeatOccurrence,
@@ -51,13 +55,15 @@ describe('repeatSchedule', () => {
   })
 
   it('clamps custom yearly leap day advancement', () => {
-    expect(nextRepeatDate('2024-02-29', { preset: 'custom', customEvery: 1, customUnit: 'year' })).toBe('2025-02-28')
+    expect(nextRepeatDate('2024-02-29', {
+      preset: 'custom',
+      customEvery: 1,
+      customUnit: 'year',
+    })).toBe('2025-02-28')
   })
 
   it('projects 12 months of repeat occurrences and excludes materialized rows', () => {
-    const source = transaction({
-      repeat: { preset: 'monthly' },
-    })
+    const source = transaction({ repeat: { preset: 'monthly' } })
     const materialized = transaction({
       id: 'tx-rent-feb',
       date: '2026-02-28T08:45:00.000Z',
@@ -153,7 +159,11 @@ describe('repeatSchedule', () => {
     const neverRepeats = transaction({ id: 'tx-never', repeat: { preset: 'never' } })
     const invalidCustom = transaction({
       id: 'tx-invalid',
-      repeat: { preset: 'custom', customEvery: 0, customUnit: 'month' },
+      repeat: {
+        preset: 'custom',
+        customEvery: 0,
+        customUnit: 'month',
+      },
     })
 
     expect(projectRepeatOccurrences([neverRepeats, invalidCustom], new Date('2026-02-01T12:00:00.000Z'))).toEqual([])

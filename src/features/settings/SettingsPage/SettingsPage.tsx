@@ -33,7 +33,12 @@ interface SettingsPageProps {
   theme: string
 }
 
-export function SettingsPage({ walletCount, categoryCount, currencyCodes, theme }: SettingsPageProps) {
+export function SettingsPage({
+  walletCount,
+  categoryCount,
+  currencyCodes,
+  theme,
+}: SettingsPageProps) {
   const themeColor = THEME_COLORS[theme] ?? '#10b981'
 
   return (
@@ -43,9 +48,30 @@ export function SettingsPage({ walletCount, categoryCount, currencyCodes, theme 
       </header>
 
       <ListGroup label="Wallets & Data">
-        <ListRow icon="fa-wallet" iconBg="rgba(16,185,129,0.15)" iconColor="#34d399" label="Wallets" sub={`${walletCount} account${walletCount !== 1 ? 's' : ''}`} to="/settings/wallets" />
-        <ListRow icon="fa-tag" iconBg="rgba(168,85,247,0.15)" iconColor="#a855f7" label="Categories" sub={`${categoryCount} categories`} to="/settings/categories" />
-        <ListRow icon="fa-coins" iconBg="rgba(56,189,248,0.15)" iconColor="#38bdf8" label="Currencies" sub={currencyCodes || undefined} to="/settings/currencies" />
+        <ListRow
+          icon="fa-wallet"
+          iconBg="rgba(16,185,129,0.15)"
+          iconColor="#34d399"
+          label="Wallets"
+          sub={`${walletCount} account${walletCount !== 1 ? 's' : ''}`}
+          to="/settings/wallets"
+        />
+        <ListRow
+          icon="fa-tag"
+          iconBg="rgba(168,85,247,0.15)"
+          iconColor="#a855f7"
+          label="Categories"
+          sub={`${categoryCount} categories`}
+          to="/settings/categories"
+        />
+        <ListRow
+          icon="fa-coins"
+          iconBg="rgba(56,189,248,0.15)"
+          iconColor="#38bdf8"
+          label="Currencies"
+          sub={currencyCodes || undefined}
+          to="/settings/currencies"
+        />
       </ListGroup>
 
       <ListGroup label="Appearance">

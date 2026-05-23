@@ -33,7 +33,12 @@ interface CurrencyRowProps {
   baseCode: string
 }
 
-function CurrencyRow({ code, isBase, rate, baseCode }: CurrencyRowProps) {
+function CurrencyRow({
+  code,
+  isBase,
+  rate,
+  baseCode,
+}: CurrencyRowProps) {
   return (
     <Link
       to={`/settings/currencies/${code}`}
@@ -68,7 +73,11 @@ interface CurrenciesPageProps {
   onBack: () => void
 }
 
-export function CurrenciesPage({ currencies, baseCode, onBack }: CurrenciesPageProps) {
+export function CurrenciesPage({
+  currencies,
+  baseCode,
+  onBack,
+}: CurrenciesPageProps) {
   return (
     <div className="space-y-5">
       <PageHeader title="Currencies" onBack={onBack} />

@@ -3,11 +3,27 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 
 import { Icon } from '@/components'
-import { CurrencyPicker, DatePickerSheet, RepeatPicker, TypePickerDropdown, WalletPicker } from '@/components/ui'
+import {
+  CurrencyPicker,
+  DatePickerSheet,
+  RepeatPicker,
+  TypePickerDropdown,
+  WalletPicker,
+} from '@/components/ui'
 import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard/CalculatorKeyboard'
 import { CategoryItemsCardContainer } from '@/features/transaction/CategoryItemsCard/CategoryItemsCardContainer'
-import { createCalcState, pressCalcKey, formatDatetimeLocalDisplay } from '@/lib'
-import type { RepeatConfig, TransactionType, Wallet, Currency, TransactionItem } from '@/types/domain'
+import {
+  createCalcState,
+  pressCalcKey,
+  formatDatetimeLocalDisplay,
+} from '@/lib'
+import type {
+  RepeatConfig,
+  TransactionType,
+  Wallet,
+  Currency,
+  TransactionItem,
+} from '@/types/domain'
 
 type WalletPickerTarget = 'wallet' | 'toWallet'
 
@@ -154,7 +170,10 @@ export function TransactionPage({
           aria-label="Save"
           onClick={onSave}
           className="flex h-9 w-9 items-center justify-center rounded-xl text-white"
-          style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))', boxShadow: '0 2px 10px color-mix(in srgb, var(--accent) 40%, transparent)' }}
+          style={{
+            background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))',
+            boxShadow: '0 2px 10px color-mix(in srgb, var(--accent) 40%, transparent)',
+          }}
           type="button"
         >
           <Icon name="fa-check" />
@@ -165,11 +184,17 @@ export function TransactionPage({
         <div className="space-y-2">
           <button
             aria-label="From Wallet"
-            className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+            className={[
+              'flex w-full items-center gap-3 rounded-2xl',
+              'border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left',
+            ].join(' ')}
             onClick={() => setWalletPickerTarget('wallet')}
             type="button"
           >
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs" style={{ background: `${wallet?.color ?? '#38bdf8'}25`, color: wallet?.color ?? '#38bdf8' }}>
+            <div
+              className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs"
+              style={{ background: `${wallet?.color ?? '#38bdf8'}25`, color: wallet?.color ?? '#38bdf8' }}
+            >
               <Icon name={wallet?.icon ?? 'fa-wallet'} />
             </div>
             <div className="flex-1">
@@ -180,11 +205,17 @@ export function TransactionPage({
           </button>
           <button
             aria-label="To Wallet"
-            className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+            className={[
+              'flex w-full items-center gap-3 rounded-2xl',
+              'border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left',
+            ].join(' ')}
             onClick={() => setWalletPickerTarget('toWallet')}
             type="button"
           >
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs" style={{ background: `${toWallet?.color ?? '#a855f7'}25`, color: toWallet?.color ?? '#a855f7' }}>
+            <div
+              className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs"
+              style={{ background: `${toWallet?.color ?? '#a855f7'}25`, color: toWallet?.color ?? '#a855f7' }}
+            >
               <Icon name={toWallet?.icon ?? 'fa-wallet'} />
             </div>
             <div className="flex-1">
@@ -195,7 +226,10 @@ export function TransactionPage({
           </button>
           {currency !== wallet?.currency ? (
             <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
-              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400 text-xs">
+              <div className={[
+                'flex h-8 w-8 flex-shrink-0 items-center justify-center',
+                'rounded-xl bg-amber-400/15 text-amber-400 text-xs',
+              ].join(' ')}>
                 <Icon name="fa-arrow-right-arrow-left" />
               </div>
               <div className="flex-1">
@@ -213,7 +247,10 @@ export function TransactionPage({
           ) : null}
           {type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency ? (
             <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
-              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400 text-xs">
+              <div className={[
+                'flex h-8 w-8 flex-shrink-0 items-center justify-center',
+                'rounded-xl bg-amber-400/15 text-amber-400 text-xs',
+              ].join(' ')}>
                 <Icon name="fa-arrow-right-arrow-left" />
               </div>
               <div className="flex-1">
@@ -234,16 +271,24 @@ export function TransactionPage({
         <>
           <button
             aria-label="Wallet"
-            className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+            className={[
+              'flex w-full items-center gap-3 rounded-2xl',
+              'border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left',
+            ].join(' ')}
             onClick={() => setWalletPickerTarget('wallet')}
             type="button"
           >
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs" style={{ background: `${wallet?.color ?? '#38bdf8'}25`, color: wallet?.color ?? '#38bdf8' }}>
+            <div
+              className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs"
+              style={{ background: `${wallet?.color ?? '#38bdf8'}25`, color: wallet?.color ?? '#38bdf8' }}
+            >
               <Icon name={wallet?.icon ?? 'fa-wallet'} />
             </div>
             <div className="flex-1">
               <p className="text-[11px] text-white/35">Wallet</p>
-              <p className="text-sm font-medium">{wallet?.name ?? 'Cash'} · {wallet?.currency ?? ''} {wallet?.balance.toFixed(2) ?? '0.00'}</p>
+              <p className="text-sm font-medium">
+                {wallet?.name ?? 'Cash'} · {wallet?.currency ?? ''} {wallet?.balance.toFixed(2) ?? '0.00'}
+              </p>
             </div>
             <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
           </button>
@@ -257,7 +302,10 @@ export function TransactionPage({
           />
           {currency !== wallet?.currency ? (
             <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
-              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400 text-xs">
+              <div className={[
+                'flex h-8 w-8 flex-shrink-0 items-center justify-center',
+                'rounded-xl bg-amber-400/15 text-amber-400 text-xs',
+              ].join(' ')}>
                 <Icon name="fa-arrow-right-arrow-left" />
               </div>
               <div className="flex-1">
@@ -278,11 +326,17 @@ export function TransactionPage({
 
       <button
         aria-label="Date & Time"
-        className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+        className={[
+          'flex w-full items-center gap-3 rounded-2xl',
+          'border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left',
+        ].join(' ')}
         onClick={() => setDatePickerOpen(true)}
         type="button"
       >
-        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent text-xs">
+        <div className={[
+          'flex h-8 w-8 flex-shrink-0 items-center justify-center',
+          'rounded-xl bg-accent/15 text-accent text-xs',
+        ].join(' ')}>
           <Icon name="fa-calendar" />
         </div>
         <div className="min-w-0 flex-1">
@@ -290,7 +344,10 @@ export function TransactionPage({
           <p className="mt-0.5 text-sm font-medium">{formatDatetimeLocalDisplay(date)}</p>
         </div>
         {isPlanned && (
-          <div className="flex items-center gap-1.5 rounded-lg border border-amber-400/25 bg-amber-400/12 px-2.5 py-1 text-[11px] font-bold text-amber-400">
+          <div className={[
+            'flex items-center gap-1.5 rounded-lg border border-amber-400/25',
+            'bg-amber-400/12 px-2.5 py-1 text-[11px] font-bold text-amber-400',
+          ].join(' ')}>
             <Icon name="fa-clock" className="text-[10px]" />
             Planned
           </div>
@@ -300,17 +357,31 @@ export function TransactionPage({
       {isPlanned && (
         <button
           aria-label="Repeat"
-          className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
-          style={repeatConfig.preset !== 'never' ? { borderColor: 'color-mix(in srgb, var(--accent) 20%, transparent)' } : undefined}
+          className={[
+            'flex w-full items-center gap-3 rounded-2xl',
+            'border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left',
+          ].join(' ')}
+          style={repeatConfig.preset !== 'never'
+            ? { borderColor: 'color-mix(in srgb, var(--accent) 20%, transparent)' }
+            : undefined}
           onClick={() => setRepeatPickerOpen(true)}
           type="button"
         >
-          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs" style={{ background: 'color-mix(in srgb, var(--accent) 15%, transparent)', color: 'var(--accent-light)' }}>
+          <div
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs"
+            style={{
+              background: 'color-mix(in srgb, var(--accent) 15%, transparent)',
+              color: 'var(--accent-light)',
+            }}
+          >
             <Icon name="fa-rotate" />
           </div>
           <div className="flex-1">
             <p className="text-[11px] text-white/35">Repeat</p>
-            <p className="mt-0.5 text-sm font-semibold" style={repeatConfig.preset !== 'never' ? { color: 'var(--accent-light)' } : undefined}>
+            <p
+              className="mt-0.5 text-sm font-semibold"
+              style={repeatConfig.preset !== 'never' ? { color: 'var(--accent-light)' } : undefined}
+            >
               {formatRepeat(repeatConfig)}
             </p>
           </div>
@@ -319,7 +390,10 @@ export function TransactionPage({
       )}
 
       <div className="flex items-start gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
-        <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.07] text-slate-400 text-xs">
+        <div className={[
+          'mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center',
+          'rounded-xl bg-white/[0.07] text-slate-400 text-xs',
+        ].join(' ')}>
           <Icon name="fa-pen-to-square" />
         </div>
         <div className="min-w-0 flex-1">
@@ -327,7 +401,10 @@ export function TransactionPage({
           <textarea
             aria-label="Note"
             id="tx-note"
-            className="mt-0.5 min-h-16 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-white/30"
+            className={[
+              'mt-0.5 min-h-16 w-full resize-none bg-transparent',
+              'text-sm text-slate-100 outline-none placeholder:text-white/30',
+            ].join(' ')}
             value={note}
             onChange={(event) => onUpdateNote(event.target.value)}
             onFocus={onFocusNoteField}
@@ -351,7 +428,7 @@ export function TransactionPage({
         isOpen={isDatePickerOpen}
         value={new Date(date.replace('T', ' '))}
         onChange={(d) => {
-          onUpdateDate(d) 
+          onUpdateDate(d)
         }}
         onClose={() => setDatePickerOpen(false)}
       />
@@ -395,7 +472,11 @@ export function TransactionPage({
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+            transition={{
+              type: 'spring',
+              stiffness: 400,
+              damping: 35,
+            }}
             className="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2"
           >
             <CalculatorKeyboard onPress={handlePress} />

@@ -13,14 +13,30 @@ type TransactionRowProps = {
   amountColor: string
 }
 
-export function TransactionRow({ to, icon, iconBg, iconColor, primaryLabel, secondaryLabel, amount, amountColor }: TransactionRowProps) {
+export function TransactionRow({
+  to,
+  icon,
+  iconBg,
+  iconColor,
+  primaryLabel,
+  secondaryLabel,
+  amount,
+  amountColor,
+}: TransactionRowProps) {
   return (
     <Link
       to={to}
-      className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-3.5 backdrop-blur transition-[background,box-shadow] hover:bg-[rgba(108,71,255,0.08)] hover:shadow-[0_0_0_1px_rgba(108,71,255,0.15)]"
+      className={[
+        'flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04]',
+        'px-4 py-3.5 backdrop-blur transition-[background,box-shadow]',
+        'hover:bg-[rgba(108,71,255,0.08)] hover:shadow-[0_0_0_1px_rgba(108,71,255,0.15)]',
+      ].join(' ')}
       style={{ display: 'flex', transform: 'translateX(0)' }}
     >
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ backgroundColor: iconBg, color: iconColor }}>
+      <span
+        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
+        style={{ backgroundColor: iconBg, color: iconColor }}
+      >
         <Icon name={icon} />
       </span>
       <span className="min-w-0 flex-1">

@@ -1,6 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
 import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
 import { useCategoryStore } from '@/stores'
@@ -12,8 +18,25 @@ const items: TransactionItem[] = [
 ]
 
 const categories: Category[] = [
-  { id: 'expense-food-and-drink', name: 'Food & Drink', type: 'expense', level: 1, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
-  { id: 'expense-food-and-drink-coffee', name: 'Coffee', type: 'expense', parentId: 'expense-food-and-drink', level: 2, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
+  {
+    id: 'expense-food-and-drink',
+    name: 'Food & Drink',
+    type: 'expense',
+    level: 1,
+    icon: 'fa-utensils',
+    color: '#65a30d',
+    isDefault: true,
+  },
+  {
+    id: 'expense-food-and-drink-coffee',
+    name: 'Coffee',
+    type: 'expense',
+    parentId: 'expense-food-and-drink',
+    level: 2,
+    icon: 'fa-utensils',
+    color: '#65a30d',
+    isDefault: true,
+  },
 ]
 
 function stubFindCategory(id: string) {

@@ -1,7 +1,12 @@
 // Existing ui components
 export { Button } from './Button'
 export { Card } from './Card'
-export { Field, TextInput, SelectInput, TextAreaInput } from './Field'
+export {
+  Field,
+  TextInput,
+  SelectInput,
+  TextAreaInput,
+} from './Field'
 export { SegmentedControl } from './SegmentedControl'
 export { TypePickerDropdown } from './TypeDropdown'
 export { CurrencyPicker } from './picker/CurrencyPicker'

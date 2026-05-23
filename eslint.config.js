@@ -1,5 +1,6 @@
 import { defineConfig } from 'eslint/config'
 import js from '@eslint/js'
+import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
@@ -10,10 +11,18 @@ export default defineConfig([
   { ignores: ['dist'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  react.configs.flat.recommended,
+  react.configs.flat['jsx-runtime'],
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module' },
+    settings: {
+      react: {
+        version: '19',
+      },
+    },
     plugins: {
+      'react': react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       '@stylistic': stylistic,
@@ -22,14 +31,33 @@ export default defineConfig([
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      '@stylistic/semi': ['error', 'never'],
+      '@stylistic/array-bracket-newline': ['error', 'consistent'],
+      '@stylistic/array-bracket-spacing': ['error', 'never'],
+      '@stylistic/arrow-parens': ['error', 'always'],
+      '@stylistic/arrow-spacing': 'error',
       '@stylistic/brace-style': ['error', '1tbs', { allowSingleLine: false }],
-      curly: ['error', 'all'],
-      indent: ["error", 2],
-      quotes: ['error', 'single', {
-        avoidEscape: true,
-        allowTemplateLiterals: true,
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/comma-spacing': 'error',
+      '@stylistic/function-call-spacing': ["error", "never"],
+      '@stylistic/indent': ["error", 2],
+      '@stylistic/key-spacing': ['error', { beforeColon: false, afterColon: true }],
+      '@stylistic/max-len': ['warn', { 'code': 120, 'ignoreTemplateLiterals': true }],
+      '@stylistic/object-curly-newline': ['error', {
+        ObjectExpression: { consistent: true, minProperties: 3 },
+        ObjectPattern: { consistent: true, minProperties: 3 },
+        ImportDeclaration: { consistent: true, minProperties: 3 },
+        ExportDeclaration: { consistent: true, minProperties: 3 },
       }],
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: "always" }],
+      '@stylistic/no-trailing-spaces': 'error',
+      '@stylistic/semi': ['error', 'never'],
+      '@stylistic/space-before-blocks': ['error', 'always'],
+      '@stylistic/space-before-function-paren': ['error', { 'anonymous': 'never', 'named': 'never', 'asyncArrow': 'always' }],
+      '@stylistic/space-infix-ops': 'error',
+      curly: ['error', 'all'],
+      'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',
       'import/order': ['error', {
         pathGroups: [

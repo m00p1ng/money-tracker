@@ -1,4 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import cx from 'classnames'
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { Icon } from '@/components'
 
@@ -58,16 +63,22 @@ export function TypePickerDropdown({
 
       {!locked && open && (
         <div
-          className="absolute top-full left-1/2 z-50 mt-1 w-[160px] -translate-x-1/2 rounded-2xl border border-white/[0.1] bg-[var(--bg)] p-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
+          className={[
+            'absolute top-full left-1/2 z-50 mt-1 w-[160px] -translate-x-1/2',
+            'rounded-2xl border border-white/[0.1] bg-[var(--bg)] p-1.5',
+            'shadow-[0_8px_24px_rgba(0,0,0,0.5)]',
+          ].join(' ')}
         >
           {TYPES.map((t) => (
             <button
               key={t.value}
               type="button"
-              className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium ${value === t.value
-                ? 'bg-[var(--accent)]/[0.12] font-bold text-[var(--accent-light)]'
-                : 'text-white/70'
-              }`}
+              className={cx(
+                'flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium',
+                value === t.value
+                  ? 'bg-[var(--accent)]/[0.12] font-bold text-[var(--accent-light)]'
+                  : 'text-white/70',
+              )}
               onClick={() => {
                 onChange(t.value)
                 setOpen(false)

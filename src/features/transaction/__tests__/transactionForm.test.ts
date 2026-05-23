@@ -1,26 +1,56 @@
-import { describe, expect, it } from 'vitest'
+import {
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 import { buildTransaction, validateDraft } from '@/features/transaction/transactionForm'
 
 describe('transactionForm', () => {
   it('rejects drafts without category items', () => {
-    expect(validateDraft({ type: 'expense', walletId: 'wallet-cash', items: [] })).toEqual(['Add at least one category'])
+    expect(
+      validateDraft({
+        type: 'expense',
+        walletId: 'wallet-cash',
+        items: [],
+      }),
+    ).toEqual(['Add at least one category'])
   })
 
   it('rejects drafts without walletId', () => {
-    expect(validateDraft({ type: 'expense', items: [{ categoryId: 'expense-food', amount: 28 }] })).toContain('Select a wallet')
+    expect(
+      validateDraft({ type: 'expense', items: [{ categoryId: 'expense-food', amount: 28 }] }),
+    ).toContain('Select a wallet')
   })
 
   it('rejects drafts with zero amount', () => {
-    expect(validateDraft({ type: 'expense', walletId: 'wallet-cash', items: [{ categoryId: 'expense-food', amount: 0 }] })).toContain('Enter an amount for every category')
+    expect(
+      validateDraft({
+        type: 'expense',
+        walletId: 'wallet-cash',
+        items: [{ categoryId: 'expense-food', amount: 0 }],
+      }),
+    ).toContain('Enter an amount for every category')
   })
 
   it('accepts valid drafts', () => {
-    expect(validateDraft({ type: 'expense', walletId: 'wallet-cash', items: [{ categoryId: 'expense-food', amount: 28 }] })).toEqual([])
+    expect(
+      validateDraft({
+        type: 'expense',
+        walletId: 'wallet-cash',
+        items: [{ categoryId: 'expense-food', amount: 28 }],
+      }),
+    ).toEqual([])
   })
 
   it('accepts valid income drafts', () => {
-    expect(validateDraft({ type: 'income', walletId: 'wallet-cash', items: [{ categoryId: 'income-salary', amount: 500 }] })).toEqual([])
+    expect(
+      validateDraft({
+        type: 'income',
+        walletId: 'wallet-cash',
+        items: [{ categoryId: 'income-salary', amount: 500 }],
+      }),
+    ).toEqual([])
   })
 
   it('accepts legacy expense drafts without explicit type', () => {

@@ -24,8 +24,7 @@ export function useTodayTransactions() {
         amount: `${transaction.type === 'income' ? '+' : '-'}${formatAmount(item.amount, transaction.currency)}`,
         amountColor: transaction.type === 'income' ? 'text-income' : 'text-expense',
       }
-    }),
-  )
+    }))
 
   return { rows }
 }

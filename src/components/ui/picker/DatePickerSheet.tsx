@@ -55,14 +55,23 @@ export function DatePickerSheet({
             month_caption: 'flex justify-center items-center gap-2 py-1',
             caption_label: 'text-sm font-semibold text-white',
             nav: 'flex items-center gap-1',
-            button_next: 'h-7 w-7 flex items-center justify-center rounded-lg bg-white/[0.06] text-white/60 hover:bg-white/[0.1]',
-            button_previous: 'h-7 w-7 flex items-center justify-center rounded-lg bg-white/[0.06] text-white/60 hover:bg-white/[0.1]',
+            button_next: [
+              'h-7 w-7 flex items-center justify-center',
+              'rounded-lg bg-white/[0.06] text-white/60 hover:bg-white/[0.1]',
+            ].join(' '),
+            button_previous: [
+              'h-7 w-7 flex items-center justify-center',
+              'rounded-lg bg-white/[0.06] text-white/60 hover:bg-white/[0.1]',
+            ].join(' '),
             month_grid: 'w-full',
             weekdays: 'flex justify-around',
             weekday: 'text-[11px] font-semibold text-white/30 w-8 text-center',
             week: 'flex justify-around mt-1',
             day: 'text-center w-8',
-            day_button: 'h-8 w-8 rounded-lg text-sm font-medium text-white/70 hover:bg-white/[0.07] flex items-center justify-center',
+            day_button: [
+              'h-8 w-8 rounded-lg text-sm font-medium text-white/70',
+              'hover:bg-white/[0.07] flex items-center justify-center',
+            ].join(' '),
             selected: 'bg-[var(--accent)] text-white hover:bg-[var(--accent)]',
             today: 'font-bold text-white',
             outside: 'text-white/20',
@@ -72,8 +81,20 @@ export function DatePickerSheet({
 
       {/* Time picker wheels */}
       <div className="mx-4 mt-3 grid grid-cols-2 gap-2.5">
-        <PickerColumn label="Hour" name="hour" options={HOUR_OPTIONS} value={pickerValue} onChange={(v) => setPickerValue(v as TimeValue)} />
-        <PickerColumn label="Minute" name="minute" options={MINUTE_OPTIONS} value={pickerValue} onChange={(v) => setPickerValue(v as TimeValue)} />
+        <PickerColumn
+          label="Hour"
+          name="hour"
+          options={HOUR_OPTIONS}
+          value={pickerValue}
+          onChange={(v) => setPickerValue(v as TimeValue)}
+        />
+        <PickerColumn
+          label="Minute"
+          name="minute"
+          options={MINUTE_OPTIONS}
+          value={pickerValue}
+          onChange={(v) => setPickerValue(v as TimeValue)}
+        />
       </div>
 
       {/* Confirm */}

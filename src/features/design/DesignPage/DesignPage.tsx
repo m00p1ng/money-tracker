@@ -9,7 +9,11 @@ type DesignPageProps = {
   onNavigateBack: () => void
 }
 
-export function DesignPage({ activeId, contentRef, onNavigateBack }: DesignPageProps) {
+export function DesignPage({
+  activeId,
+  contentRef,
+  onNavigateBack,
+}: DesignPageProps) {
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[var(--bg)] text-slate-50">
       <DesignTopNav activeId={activeId} />

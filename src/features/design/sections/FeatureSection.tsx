@@ -12,7 +12,11 @@ interface SubSectionProps {
   children: React.ReactNode
 }
 
-function SubSection({ id, title, children }: SubSectionProps) {
+function SubSection({
+  id,
+  title,
+  children,
+}: SubSectionProps) {
   return (
     <section id={id} className="scroll-mt-8">
       <h3 className="mb-3 text-base font-semibold text-white/70">{title}</h3>

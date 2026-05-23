@@ -86,9 +86,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
   },
   async update(transaction) {
     await db.transactions.put(transaction)
-    set({
-      items: sortNewestFirst(get().items.map((item) => (item.id === transaction.id ? transaction : item))),
-    })
+    set({ items: sortNewestFirst(get().items.map((item) => (item.id === transaction.id ? transaction : item))) })
   },
   async remove(id) {
     await db.transactions.delete(id)
@@ -165,7 +163,9 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
       return existing
     }
 
-    const source = get().items.find((transaction) => transaction.id === sourceId) ?? (await db.transactions.get(sourceId))
+    const source =
+      get().items.find((transaction) => transaction.id === sourceId)
+      ?? (await db.transactions.get(sourceId))
     if (!source) {
       throw new Error('Repeat source not found')
     }

@@ -6,9 +6,12 @@ import { vi } from 'vitest'
 vi.mock('framer-motion', () => {
   const passthrough =
     (tag: string) =>
-      React.forwardRef(({ children, ...props }: React.HTMLAttributes<HTMLElement> & Record<string, unknown>, ref: React.Ref<HTMLElement>) =>
-        React.createElement(tag, { ...props, ref }, children),
-      )
+      // eslint-disable-next-line react/display-name
+      React.forwardRef((
+        { children, ...props }: React.HTMLAttributes<HTMLElement> & Record<string, unknown>,
+        ref: React.Ref<HTMLElement>,
+      ) =>
+        React.createElement(tag, { ...props, ref }, children))
   return {
     motion: new Proxy(
       {},

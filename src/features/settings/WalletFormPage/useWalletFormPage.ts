@@ -1,4 +1,8 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router'
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
 import { useCurrencyStore, useWalletStore } from '@/stores'
@@ -18,7 +22,7 @@ export function useWalletFormPage() {
 
   async function onSubmit(form: Wallet, setError: (err: string | null) => void) {
     if (!form.name.trim()) {
-      setError('Name is required'); return 
+      setError('Name is required'); return
     }
     if (form.type === 'credit_card' && form.creditLimit !== undefined && form.creditLimit <= 0) {
       setError('Credit limit must be greater than 0'); return

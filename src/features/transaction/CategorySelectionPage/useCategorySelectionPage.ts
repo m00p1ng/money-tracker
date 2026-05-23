@@ -54,8 +54,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     if (draft && (changingIndex !== null || isAddCategory)) {
       if (changingIndex !== null) {
         const newItems = draft.items.map((item, i) =>
-          i === changingIndex ? { ...item, categoryId: category.id } : item,
-        )
+          i === changingIndex ? { ...item, categoryId: category.id } : item)
         updateDraft({ items: newItems })
       } else {
         updateDraft({ items: [...draft.items, { categoryId: category.id, amount: 0 }] })

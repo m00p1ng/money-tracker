@@ -1,13 +1,43 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter, Route, Routes } from 'react-router'
-import { beforeEach, describe, expect, it } from 'vitest'
+import {
+  MemoryRouter,
+  Route,
+  Routes,
+} from 'react-router'
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 import TransactionPage from '@/features/transaction/TransactionPage'
-import { useCategoryStore, useTransactionDraftStore, useWalletStore } from '@/stores'
+import {
+  useCategoryStore,
+  useTransactionDraftStore,
+  useWalletStore,
+} from '@/stores'
 
-const WALLET = { id: 'wallet-cash', name: 'Cash', type: 'payment' as const, currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' }
-const CATEGORY = { id: 'cat-coffee', name: 'Coffee', type: 'expense' as const, parentId: 'cat-food', level: 2 as const, icon: 'fa-utensils', color: '#65a30d', isDefault: true }
+const WALLET = {
+  id: 'wallet-cash',
+  name: 'Cash',
+  type: 'payment' as const,
+  currency: 'THB',
+  balance: 0,
+  color: '#10b981',
+  icon: 'fa-wallet',
+}
+const CATEGORY = {
+  id: 'cat-coffee',
+  name: 'Coffee',
+  type: 'expense' as const,
+  parentId: 'cat-food',
+  level: 2 as const,
+  icon: 'fa-utensils',
+  color: '#65a30d',
+  isDefault: true,
+}
 
 function renderNewTransaction(search = '') {
   return render(
