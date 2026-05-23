@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { useCategoryStore } from '../../../stores/categoryStore'
+import { useTransactionDraftStore } from '../../../stores/transactionDraftStore'
 import { useWalletStore } from '../../../stores/walletStore'
 import { TransactionPage } from '../TransactionPage'
 
@@ -20,6 +21,7 @@ function renderNewTransaction(search = '') {
 }
 
 beforeEach(() => {
+  useTransactionDraftStore.getState().clear()
   useWalletStore.setState({ items: [WALLET] })
   useCategoryStore.setState({ items: [CATEGORY] })
 })

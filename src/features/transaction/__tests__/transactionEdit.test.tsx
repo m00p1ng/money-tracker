@@ -3,12 +3,14 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useCategoryStore } from '../../../stores/categoryStore'
+import { useTransactionDraftStore } from '../../../stores/transactionDraftStore'
 import { useTransactionStore } from '../../../stores/transactionStore'
 import { useWalletStore } from '../../../stores/walletStore'
 import { TransactionPage } from '../TransactionPage'
 
 describe('TransactionPage edit mode', () => {
   beforeEach(() => {
+    useTransactionDraftStore.getState().clear()
     useWalletStore.setState({ items: [{ id: 'wallet-cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' }] })
     useCategoryStore.setState({ items: [{ id: 'expense-food-and-drink-coffee', name: 'Coffee', type: 'expense', parentId: 'expense-food-and-drink', level: 2, icon: 'fa-utensils', color: '#65a30d', isDefault: true }] })
     useTransactionStore.setState({

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { SegmentedControl } from '../../components/ui/SegmentedControl'
@@ -8,12 +8,12 @@ import { createId } from '../../lib/id'
 import { formatDatetimeLocalDisplay, toDatetimeLocalValue } from '../../lib/date'
 import { useCategoryStore } from '../../stores/categoryStore'
 import { useCurrencyStore } from '../../stores/currencyStore'
+import { useTransactionDraftStore } from '../../stores/transactionDraftStore'
 import { useTransactionStore } from '../../stores/transactionStore'
 import { useWalletStore } from '../../stores/walletStore'
-import type { RepeatConfig, TransactionItem, TransactionType } from '../../types/domain'
+import type { RepeatConfig, TransactionType } from '../../types/domain'
 import { CalculatorKeyboard } from './CalculatorKeyboard'
 import { CategoryItemsCard } from './CategoryItemsCard'
-import { CategoryPicker } from './CategoryPicker'
 import { CurrencyPicker } from './CurrencyPicker'
 import { DatePickerSheet } from './DatePickerSheet'
 import { RepeatPicker } from './RepeatPicker'
@@ -59,32 +59,60 @@ export function TransactionPage() {
   const [searchParams] = useSearchParams()
   const seedCategoryId = !isEditMode && !isRepeatMaterialization ? searchParams.get('categoryId') ?? undefined : undefined
   const seedType = !isEditMode && !isRepeatMaterialization ? (searchParams.get('type') ?? 'expense') as TransactionType : undefined
-  const [type, setType] = useState<TransactionType>(initial?.type ?? seedType ?? 'expense')
-  const [walletId, setWalletId] = useState(initial?.walletId ?? wallets[0]?.id ?? 'wallet-cash')
-  const [toWalletId, setToWalletId] = useState<string | undefined>(initial?.toWalletId ?? wallets.find((wallet) => wallet.id !== walletId)?.id)
-  const [items, setItems] = useState<TransactionItem[]>(
-    initial?.items ?? (seedCategoryId ? [{ categoryId: seedCategoryId, amount: 0 }] : []),
-  )
-  const [focusedIndex, setFocusedIndex] = useState<number | null>(seedCategoryId ? 0 : null)
-  const [date, setDate] = useState(initial ? toDatetimeLocalValue(new Date(initial.date)) : toDatetimeLocalValue(new Date()))
-  const [note, setNote] = useState(initial?.note ?? '')
+
+  const draftStore = useTransactionDraftStore()
+  const updateDraft = draftStore.update
+  const clearDraft = draftStore.clear
+
+  // Compute initial values (used only when draft is null)
+  const initialType = (seedType ?? initial?.type ?? 'expense') as TransactionType
+  const initialWalletId = initial?.walletId ?? wallets[0]?.id ?? 'wallet-cash'
+
+  // Initialize draft lazily: if null, set it synchronously via getState to avoid render-phase side effects
+  const draft = draftStore.draft ?? (() => {
+    const newDraft = {
+      id: existing?.id,
+      type: initialType,
+      walletId: initialWalletId,
+      toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
+      items: initial?.items ?? (seedCategoryId ? [{ categoryId: seedCategoryId, amount: 0 }] : []),
+      focusedIndex: seedCategoryId ? 0 : null,
+      date: initial ? toDatetimeLocalValue(new Date(initial.date)) : toDatetimeLocalValue(new Date()),
+      note: initial?.note ?? '',
+      currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
+      exchangeRate: String(initial?.exchangeRate ?? ''),
+      toExchangeRate: String(initial?.toExchangeRate ?? ''),
+      repeatConfig: initial?.repeat ?? { preset: 'never' },
+      transferAmount: initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0,
+    }
+    useTransactionDraftStore.getState().init(newDraft)
+    return newDraft
+  })()
+
   const [calc, setCalc] = useState(createCalcState())
-  const [isPickerOpen, setPickerOpen] = useState(false)
-  const [changingCategoryIndex, setChangingCategoryIndex] = useState<number | null>(null)
   const [walletPickerTarget, setWalletPickerTarget] = useState<WalletPickerTarget | null>(null)
   const [isRepeatPickerOpen, setRepeatPickerOpen] = useState(false)
   const [isCurrencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [isDatePickerOpen, setDatePickerOpen] = useState(false)
-  const [currency, setCurrency] = useState(initial?.currency ?? wallets.find((w) => w.id === walletId)?.currency ?? 'THB')
-  const [exchangeRate, setExchangeRate] = useState(String(initial?.exchangeRate ?? ''))
-  const [toExchangeRate, setToExchangeRate] = useState(String(initial?.toExchangeRate ?? ''))
-  const [repeatConfig, setRepeatConfig] = useState<RepeatConfig>(initial?.repeat ?? { preset: 'never' })
-  const [transferAmount, setTransferAmount] = useState(initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0)
+
+  const type = draft.type
+  const walletId = draft.walletId
+  const toWalletId = draft.toWalletId
+  const items = draft.items
+  const focusedIndex = draft.focusedIndex
+  const date = draft.date
+  const note = draft.note
+  const currency = draft.currency
+  const exchangeRate = draft.exchangeRate
+  const toExchangeRate = draft.toExchangeRate
+  const repeatConfig = draft.repeatConfig
+  const transferAmount = draft.transferAmount
+
   const wallet = wallets.find((item) => item.id === walletId)
   const toWallet = wallets.find((item) => item.id === toWalletId)
   const selectedCurrency = currencies.find((item) => item.code === currency)
   const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
-  const firstLeaf = useMemo(() => categories.find((category) => category.type === type && category.parentId), [categories, type])
+  const firstLeaf = categories.find((category) => category.type === type && category.parentId)
   const isPlanned = new Date(date) > new Date()
 
   function addCategory(categoryId?: string) {
@@ -92,34 +120,39 @@ export function TransactionPage() {
     if (!selectedId) {
       return
     }
-    setItems((current) => [...current, { categoryId: selectedId, amount: 0 }])
-    setFocusedIndex(items.length)
+    const newItems = [...items, { categoryId: selectedId, amount: 0 }]
+    updateDraft({ items: newItems, focusedIndex: newItems.length - 1 })
     setCalc(createCalcState())
   }
 
   function press(key: string) {
-    if (focusedIndex === null) return
+    if (focusedIndex === null) {
+      return
+    }
     if (key === 'THB') {
       setCurrencyPickerOpen(true)
       return
     }
     const next = pressCalcKey(calc, key)
     setCalc(next)
-    setItems((current) => current.map((item, index) => (index === focusedIndex ? { ...item, amount: next.result } : item)))
+    updateDraft({ items: items.map((item, index) => (index === focusedIndex ? { ...item, amount: next.result } : item)) })
   }
 
   function handleFocusItem(index: number) {
-    setFocusedIndex(index)
+    updateDraft({ focusedIndex: index })
     setCalc(createCalcState(items[index]?.amount ?? 0))
   }
 
   function handleRemoveItem(index: number) {
-    setItems((current) => current.filter((_, itemIndex) => itemIndex !== index))
+    updateDraft({ items: items.filter((_, i) => i !== index) })
   }
 
   function handleChangeCategory(index: number) {
-    setChangingCategoryIndex(index)
-    setPickerOpen(true)
+    navigate(`/transaction/category?changingIndex=${index}&type=${type}`)
+  }
+
+  function handleAddCategory() {
+    navigate(`/transaction/category?addCategory=true&type=${type}`)
   }
 
   async function save() {
@@ -163,6 +196,7 @@ export function TransactionPage() {
     } else {
       await add(transaction)
     }
+    clearDraft()
     navigate('/')
   }
 
@@ -174,6 +208,7 @@ export function TransactionPage() {
       return
     }
     await remove(existing.id)
+    clearDraft()
     navigate('/')
   }
 
@@ -182,7 +217,9 @@ export function TransactionPage() {
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"
-          onClick={() => navigate('/')}
+          onClick={() => {
+            clearDraft(); navigate('/') 
+          }}
           className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
           type="button"
         >
@@ -190,7 +227,7 @@ export function TransactionPage() {
         </button>
         <SegmentedControl
           value={type}
-          onChange={setType}
+          onChange={(v) => updateDraft({ type: v as TransactionType })}
           segments={[
             { label: 'Expense', value: 'expense' },
             { label: 'Income', value: 'income' },
@@ -253,7 +290,7 @@ export function TransactionPage() {
                   inputMode="decimal"
                   placeholder={defaultRate || 'Enter rate…'}
                   value={exchangeRate}
-                  onChange={(event) => setExchangeRate(event.target.value)}
+                  onChange={(event) => updateDraft({ exchangeRate: event.target.value })}
                 />
               </div>
             </div>
@@ -271,7 +308,7 @@ export function TransactionPage() {
                   inputMode="decimal"
                   placeholder={defaultRate || 'Enter rate…'}
                   value={toExchangeRate}
-                  onChange={(event) => setToExchangeRate(event.target.value)}
+                  onChange={(event) => updateDraft({ toExchangeRate: event.target.value })}
                 />
               </div>
             </div>
@@ -294,7 +331,14 @@ export function TransactionPage() {
             </div>
             <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
           </button>
-          <CategoryItemsCard items={items} focusedIndex={focusedIndex} onFocus={handleFocusItem} onAdd={() => { setChangingCategoryIndex(null); setPickerOpen(true) }} onRemove={handleRemoveItem} onChangeCategory={handleChangeCategory} />
+          <CategoryItemsCard
+            items={items}
+            focusedIndex={focusedIndex}
+            onFocus={handleFocusItem}
+            onAdd={handleAddCategory}
+            onRemove={handleRemoveItem}
+            onChangeCategory={handleChangeCategory}
+          />
           {currency !== wallet?.currency ? (
             <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
               <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400 text-xs">
@@ -308,7 +352,7 @@ export function TransactionPage() {
                   inputMode="decimal"
                   placeholder={defaultRate || 'Enter rate…'}
                   value={exchangeRate}
-                  onChange={(event) => setExchangeRate(event.target.value)}
+                  onChange={(event) => updateDraft({ exchangeRate: event.target.value })}
                 />
               </div>
             </div>
@@ -365,13 +409,13 @@ export function TransactionPage() {
         <div className="min-w-0 flex-1">
           <label className="text-[11px] text-white/35" htmlFor="tx-note">Note</label>
           <textarea
-          aria-label="Note"
-          id="tx-note"
-          className="mt-0.5 min-h-16 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-white/30"
-          value={note}
-          onChange={(event) => setNote(event.target.value)}
-          onFocus={() => setFocusedIndex(null)}
-          placeholder="Add note…"
+            aria-label="Note"
+            id="tx-note"
+            className="mt-0.5 min-h-16 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-white/30"
+            value={note}
+            onChange={(event) => updateDraft({ note: event.target.value })}
+            onFocus={() => updateDraft({ focusedIndex: null })}
+            placeholder="Add note…"
           />
         </div>
       </div>
@@ -390,7 +434,7 @@ export function TransactionPage() {
       {isDatePickerOpen ? (
         <DatePickerSheet
           value={new Date(date.replace('T', ' '))}
-          onChange={(d) => setDate(toDatetimeLocalValue(d))}
+          onChange={(d) => updateDraft({ date: toDatetimeLocalValue(d) })}
           onClose={() => setDatePickerOpen(false)}
         />
       ) : null}
@@ -399,11 +443,11 @@ export function TransactionPage() {
         <WalletPicker
           wallets={wallets}
           selectedId={walletPickerTarget === 'toWallet' ? (toWalletId ?? '') : walletId}
-          onSelect={(id) => {
+          onSelect={(selectedId) => {
             if (walletPickerTarget === 'toWallet') {
-              setToWalletId(id)
+              updateDraft({ toWalletId: selectedId })
             } else {
-              setWalletId(id)
+              updateDraft({ walletId: selectedId })
             }
           }}
           onClose={() => setWalletPickerTarget(null)}
@@ -414,7 +458,7 @@ export function TransactionPage() {
         <CurrencyPicker
           currencies={currencies}
           selectedCode={currency}
-          onSelect={setCurrency}
+          onSelect={(code) => updateDraft({ currency: code })}
           onClose={() => setCurrencyPickerOpen(false)}
         />
       ) : null}
@@ -423,31 +467,10 @@ export function TransactionPage() {
         <RepeatPicker
           value={repeatConfig}
           onConfirm={(config) => {
-            setRepeatConfig(config)
+            updateDraft({ repeatConfig: config })
             setRepeatPickerOpen(false)
           }}
           onClose={() => setRepeatPickerOpen(false)}
-        />
-      ) : null}
-
-      {isPickerOpen ? (
-        <CategoryPicker
-          categories={categories}
-          type={type}
-          onClose={() => setPickerOpen(false)}
-          onSelect={(category) => {
-            if (changingCategoryIndex !== null) {
-              setItems((current) =>
-                current.map((item, i) =>
-                  i === changingCategoryIndex ? { ...item, categoryId: category.id } : item,
-                ),
-              )
-              setChangingCategoryIndex(null)
-            } else {
-              addCategory(category.id)
-            }
-            setPickerOpen(false)
-          }}
         />
       ) : null}
 

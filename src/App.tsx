@@ -45,8 +45,12 @@ export function RoutedApp() {
   }
 
   const showBottomNav = bottomNavRoutes.some((route) => {
-    if (route === '/') return location.pathname === '/'
-    if (route === '/settings') return location.pathname === '/settings' || location.pathname.startsWith('/settings/')
+    if (route === '/') {
+      return location.pathname === '/'
+    }
+    if (route === '/settings') {
+      return location.pathname === '/settings' || location.pathname.startsWith('/settings/')
+    }
     return location.pathname === route
   })
 

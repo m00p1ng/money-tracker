@@ -26,7 +26,7 @@ export function CategoryItemsCard({
     <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.04]">
       {/* Header — label only, no add button */}
       <div className="flex items-center border-b border-white/[0.05] px-4 py-2.5">
-        <span className="text-[11px] uppercase tracking-[1px] text-white/35">Categories</span>
+        <span className="text-[11px] uppercase tracking-[1px] text-white/35">Items</span>
       </div>
 
       {items.map((item, index) => {
@@ -61,8 +61,8 @@ export function CategoryItemsCard({
             >
               {formatAmount(item.amount)}
             </button>
-            {/* Remove: only for index > 0 */}
-            {index > 0 && (
+            {/* Remove: only when more than one item */}
+            {items.length > 1 && (
               <button
                 aria-label="Remove category"
                 className="mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-red-500/10 text-[10px] text-red-400"
@@ -83,7 +83,7 @@ export function CategoryItemsCard({
         type="button"
         className="flex w-full items-center justify-center gap-2 border-t border-dashed border-white/[0.08] py-3 text-[12px] font-semibold text-accent-light"
       >
-        <Icon name="fa-plus" className="text-[10px]" /> Add Category
+        <Icon name="fa-plus" className="text-[10px]" /> Add Item
       </button>
 
       {/* Total */}

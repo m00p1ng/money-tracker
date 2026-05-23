@@ -22,9 +22,20 @@ const keyIcons: Record<string, IconDefinition> = {
   '⌫': faDeleteLeft,
 }
 
-export function CalculatorKeyboard({ onPress }: { onPress: (key: string) => void }) {
+export function CalculatorKeyboard({ onPress, onDismiss }: { onPress: (key: string) => void; onDismiss?: () => void }) {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
+    <div className="border-t border-white/10 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
+      {onDismiss && (
+        <div className="mx-auto mb-2 flex max-w-[430px] justify-end">
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.05] px-3 py-1 text-[11px] font-medium text-white/40"
+          >
+            Done
+          </button>
+        </div>
+      )}
       <div className="mx-auto grid max-w-[430px] grid-cols-5 gap-2">
         {keys.map((key) => {
           const isOperator = ['+', '-', '×', '÷'].includes(key)

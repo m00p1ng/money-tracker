@@ -23,7 +23,9 @@ export function CategoryPicker({
   const parent = parentId ? categories.find((category) => category.id === parentId) : undefined
 
   function goBack() {
-    if (!parent) { onClose(); return }
+    if (!parent) {
+      onClose(); return 
+    }
     setParentId(parent.parentId)
   }
 

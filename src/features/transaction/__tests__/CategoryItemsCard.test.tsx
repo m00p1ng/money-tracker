@@ -20,10 +20,11 @@ beforeEach(() => {
 })
 
 describe('CategoryItemsCard', () => {
-  it('does not show remove button for first item', () => {
+  it('does not show remove button when only one item', () => {
+    const oneItem: TransactionItem[] = [{ categoryId: 'expense-food-and-drink-coffee', amount: 50 }]
     render(
       <CategoryItemsCard
-        items={items}
+        items={oneItem}
         focusedIndex={0}
         onFocus={vi.fn()}
         onAdd={vi.fn()}
@@ -32,10 +33,10 @@ describe('CategoryItemsCard', () => {
       />,
     )
     const removeButtons = screen.queryAllByRole('button', { name: 'Remove category' })
-    expect(removeButtons).toHaveLength(1)
+    expect(removeButtons).toHaveLength(0)
   })
 
-  it('shows remove button for all items except first', () => {
+  it('shows remove button for all items when more than one item', () => {
     const threeItems: TransactionItem[] = [
       { categoryId: 'expense-food-and-drink-coffee', amount: 10 },
       { categoryId: 'expense-food-and-drink-coffee', amount: 20 },
@@ -51,7 +52,7 @@ describe('CategoryItemsCard', () => {
         onChangeCategory={vi.fn()}
       />,
     )
-    expect(screen.getAllByRole('button', { name: 'Remove category' })).toHaveLength(2)
+    expect(screen.getAllByRole('button', { name: 'Remove category' })).toHaveLength(3)
   })
 
   it('calls onChangeCategory with correct index when category name is tapped', async () => {
@@ -84,7 +85,7 @@ describe('CategoryItemsCard', () => {
     )
     expect(screen.getByRole('button', { name: /Add Category/i })).toBeInTheDocument()
     // Header should NOT contain an Add button — check that the header section has no add button
-    const header = screen.getByText('Categories').closest('div')
+    const header = screen.getByText('Items').closest('div')
     expect(header).not.toContainElement(screen.queryByRole('button', { name: /Add/i }))
   })
 
