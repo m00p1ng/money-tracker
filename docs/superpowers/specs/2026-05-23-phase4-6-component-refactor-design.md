@@ -144,12 +144,22 @@ Hooks do **not** return pre-shaped JSX props — they return raw data and handle
 - `Icon`
 
 **`src/features/design/`**
+- `DesignPage` — sidebar toggle local state → Container + hook
 - `DesignSidebar`, `sections/FeatureSection`, `sections/TokensSection`, `sections/UIComponentsSection`
 
-### 4-file components (design feature)
+---
 
-**`src/features/design/`**
-- `DesignPage` — sidebar toggle local state → Container + hook
+## Design Showcase Convention
+
+Components rendered on the design showcase page (`src/features/design/sections/`) must import the **named (dumb) export**, not the default Container:
+
+```ts
+// sections/UIComponentsSection.tsx
+import { Button } from '@/components/ui/Button'   // dumb component — correct
+// NOT: import Button from '@/components/ui/Button'  // container — wrong
+```
+
+This ensures the showcase renders pure presentational components with explicit, controlled props — no store or side-effect wiring.
 
 ---
 
