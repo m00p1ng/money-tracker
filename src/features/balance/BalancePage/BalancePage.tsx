@@ -5,9 +5,6 @@ import { Card } from '@/components/ui/Card'
 import { AnimatedBar, SectionDivider } from '@/components/ui'
 import { formatAmount } from '@/lib/format'
 import { hexToRgba } from '@/lib/color'
-import { useTransactionStore } from '@/stores/transactionStore'
-import { useWalletStore } from '@/stores/walletStore'
-import { assetsTotal, debtTotal, walletCurrentAmount } from '@/features/balance/balanceCalculations'
 import type { Wallet } from '@/types/domain'
 
 function WalletRow({ wallet, amount }: { wallet: Wallet; amount: number }) {
@@ -43,14 +40,16 @@ function WalletRow({ wallet, amount }: { wallet: Wallet; amount: number }) {
   )
 }
 
-export function BalancePage() {
-  const wallets = useWalletStore((state) => state.items)
-  const transactions = useTransactionStore((state) => state.items)
-  const paymentWallets = wallets.filter((wallet) => wallet.type === 'payment')
-  const creditCards = wallets.filter((wallet) => wallet.type === 'credit_card')
-  const assets = assetsTotal(wallets, transactions)
-  const debt = debtTotal(wallets, transactions)
+export type WalletWithAmount = { wallet: Wallet; amount: number }
 
+export type BalancePageProps = {
+  paymentWallets: WalletWithAmount[]
+  creditCards: WalletWithAmount[]
+  assets: number
+  debt: number
+}
+
+export function BalancePage({ paymentWallets, creditCards, assets, debt }: BalancePageProps) {
   return (
     <div className="space-y-5">
       <header>
@@ -86,8 +85,8 @@ export function BalancePage() {
       {paymentWallets.length > 0 && (
         <section>
           <SectionDivider label="Payment Accounts" />
-          {paymentWallets.map((wallet) => (
-            <WalletRow key={wallet.id} wallet={wallet} amount={walletCurrentAmount(wallet, transactions)} />
+          {paymentWallets.map(({ wallet, amount }) => (
+            <WalletRow key={wallet.id} wallet={wallet} amount={amount} />
           ))}
         </section>
       )}
@@ -95,8 +94,8 @@ export function BalancePage() {
       {creditCards.length > 0 && (
         <section>
           <SectionDivider label="Credit Cards" />
-          {creditCards.map((wallet) => (
-            <WalletRow key={wallet.id} wallet={wallet} amount={walletCurrentAmount(wallet, transactions)} />
+          {creditCards.map(({ wallet, amount }) => (
+            <WalletRow key={wallet.id} wallet={wallet} amount={amount} />
           ))}
         </section>
       )}

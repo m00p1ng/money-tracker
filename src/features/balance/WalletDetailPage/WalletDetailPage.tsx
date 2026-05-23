@@ -1,17 +1,14 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link } from 'react-router'
 import cx from 'classnames'
-import { useBackNavigate } from '@/context/navigationDirection'
 import { Icon } from '@/components/Icon'
 import { Card } from '@/components/ui/Card'
 import { AnimatedBar, BottomSheet, PageHeader, SectionDivider } from '@/components/ui'
 import { type DateRangePreset, getPresetRange } from '@/lib/dateRange'
 import { formatAmount } from '@/lib/format'
 import { hexToRgba } from '@/lib/color'
-import { useCategoryStore } from '@/stores/categoryStore'
-import { useTransactionStore } from '@/stores/transactionStore'
-import { useWalletStore } from '@/stores/walletStore'
-import { walletCurrentAmount, walletRunningRows } from '@/features/balance/balanceCalculations'
+import { walletRunningRows } from '@/features/balance/balanceCalculations'
+import type { Category, Transaction, Wallet } from '@/types/domain'
 
 const PRESETS: { label: string; value: DateRangePreset }[] = [
   { label: 'Last 7d', value: 'last-7d' },
@@ -30,27 +27,29 @@ function formatDateLabel(dateStr: string): string {
   return `${day} ${monthName} ${year}`
 }
 
-export function WalletDetailPage() {
-  const { id } = useParams()
-  const backNavigate = useBackNavigate()
-  const wallet = useWalletStore((state) => state.items.find((item) => item.id === id))
-  const transactions = useTransactionStore((state) => state.items)
-  const categories = useCategoryStore((state) => state.items)
+export type WalletDetailPageProps = {
+  wallet: Wallet | undefined
+  transactions: Transaction[]
+  categories: Category[]
+  currentAmount: number
+  onBack: () => void
+}
+
+export function WalletDetailPage({ wallet, transactions, categories, currentAmount, onBack }: WalletDetailPageProps) {
   const [preset, setPreset] = useState<DateRangePreset>('this-month')
   const [isPresetSheetOpen, setPresetSheetOpen] = useState(false)
-  const range = getPresetRange(preset)
 
   if (!wallet) {
     return (
       <section className="space-y-4">
         <h1 className="text-2xl font-semibold">Wallet not found</h1>
-        <button type="button" className="text-accent" onClick={() => backNavigate('/balance')}>Back to Balance</button>
+        <button type="button" className="text-accent" onClick={onBack}>Back to Balance</button>
       </section>
     )
   }
 
+  const range = getPresetRange(preset)
   const rows = walletRunningRows(wallet, transactions, range)
-  const currentAmount = walletCurrentAmount(wallet, transactions)
   const isCredit = wallet.type === 'credit_card'
 
   const totalExpenses = rows
@@ -61,9 +60,8 @@ export function WalletDetailPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title={wallet.name} onBack={() => backNavigate('/balance')} />
+      <PageHeader title={wallet.name} onBack={onBack} />
 
-      {/* Date range filter */}
       <div>
         <div className="mb-2 flex items-center gap-2">
           <Card className="flex-1 !p-2.5">
@@ -85,7 +83,6 @@ export function WalletDetailPage() {
         </div>
       </div>
 
-      {/* Credit card stats */}
       {isCredit && wallet.creditLimit ? (
         <>
           <div className="grid grid-cols-3 gap-2">
@@ -116,7 +113,6 @@ export function WalletDetailPage() {
           </div>
         </>
       ) : (
-        /* Payment account: balance vs expenses bar */
         <div className="space-y-3">
           <div>
             <div className="mb-1.5 flex items-center justify-between">
@@ -144,7 +140,6 @@ export function WalletDetailPage() {
         </div>
       )}
 
-      {/* Transaction list */}
       <section>
         <SectionDivider label="Transactions" />
         {rows.length === 0 && <Card className="text-sm text-slate-400">No transactions in this range.</Card>}
@@ -178,16 +173,13 @@ export function WalletDetailPage() {
         })}
       </section>
 
-      {/* Preset bottom sheet */}
       <BottomSheet isOpen={isPresetSheetOpen} onClose={() => setPresetSheetOpen(false)} title="Date Range">
         <div className="px-4 space-y-1">
           {PRESETS.map((p) => (
             <button
               key={p.value}
               type="button"
-              onClick={() => {
-                setPreset(p.value); setPresetSheetOpen(false) 
-              }}
+              onClick={() => { setPreset(p.value); setPresetSheetOpen(false) }}
               className={cx('flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors', preset === p.value
                 ? 'bg-accent/15 text-accent-light'
                 : 'text-white/70 hover:bg-white/[0.05]'
