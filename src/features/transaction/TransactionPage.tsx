@@ -1,12 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
+import { useBackNavigate } from '../../context/navigationDirection'
 import { Icon } from '../../components/Icon'
 import { SegmentedControl } from '../../components/ui/SegmentedControl'
 import { createCalcState, pressCalcKey } from '../../lib/calculator'
 import { createId } from '../../lib/id'
 import { formatDatetimeLocalDisplay, toDatetimeLocalValue } from '../../lib/date'
-import { useCategoryStore } from '../../stores/categoryStore'
 import { useCurrencyStore } from '../../stores/currencyStore'
 import { useTransactionDraftStore } from '../../stores/transactionDraftStore'
 import { useTransactionStore } from '../../stores/transactionStore'
@@ -44,6 +44,7 @@ function formatRepeat(config: RepeatConfig): string {
 
 export function TransactionPage() {
   const navigate = useNavigate()
+  const backNavigate = useBackNavigate()
   const { id, sourceId, date: repeatDate } = useParams()
   const existing = useTransactionStore((state) => (id ? state.findById(id) : undefined))
   const sourceRepeat = useTransactionStore((state) => (sourceId ? state.findById(sourceId) : undefined))
@@ -51,7 +52,6 @@ export function TransactionPage() {
   const update = useTransactionStore((state) => state.update)
   const remove = useTransactionStore((state) => state.remove)
   const wallets = useWalletStore((state) => state.items)
-  const categories = useCategoryStore((state) => state.items)
   const currencies = useCurrencyStore((state) => state.items)
   const isEditMode = Boolean(id && existing)
   const isRepeatMaterialization = Boolean(sourceId && repeatDate)
@@ -112,18 +112,7 @@ export function TransactionPage() {
   const toWallet = wallets.find((item) => item.id === toWalletId)
   const selectedCurrency = currencies.find((item) => item.code === currency)
   const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
-  const firstLeaf = categories.find((category) => category.type === type && category.parentId)
   const isPlanned = new Date(date) > new Date()
-
-  function addCategory(categoryId?: string) {
-    const selectedId = categoryId ?? firstLeaf?.id
-    if (!selectedId) {
-      return
-    }
-    const newItems = [...items, { categoryId: selectedId, amount: 0 }]
-    updateDraft({ items: newItems, focusedIndex: newItems.length - 1 })
-    setCalc(createCalcState())
-  }
 
   function press(key: string) {
     if (focusedIndex === null) {
@@ -217,9 +206,7 @@ export function TransactionPage() {
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"
-          onClick={() => {
-            clearDraft(); navigate('/') 
-          }}
+            onClick={() => { clearDraft(); backNavigate('/') }}
           className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
           type="button"
         >
