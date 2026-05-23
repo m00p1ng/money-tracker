@@ -7,7 +7,7 @@ import {
   it,
 } from 'vitest'
 
-import App, { RoutedApp } from '@/App'
+import { RoutedApp } from '@/App'
 import { useTransactionStore, useWalletStore } from '@/stores'
 
 describe('App routing', () => {
@@ -16,7 +16,11 @@ describe('App routing', () => {
     useTransactionStore.setState({ items: [] })
   })
   it('renders the home route with bottom navigation', () => {
-    render(<App />)
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <RoutedApp />
+      </MemoryRouter>,
+    )
     expect(screen.getByText('Overview')).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument()
   })

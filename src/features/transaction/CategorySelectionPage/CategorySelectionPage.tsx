@@ -78,7 +78,7 @@ export function CategorySelectionPage({
               type="button"
               className={[
                 'flex flex-col items-center gap-3 rounded-2xl',
-                'border border-white/[0.07] bg-white/[0.04] px-2 py-3.5',
+                'border border-white/[0.07] bg-white/4 px-2 py-3.5',
               ].join(' ')}
             >
               <span
