@@ -1,3 +1,4 @@
+import type React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library, type IconName } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -80,6 +81,6 @@ library.add(
   faXmark,
 )
 
-export function Icon({ name, className }: { name: string; className?: string }) {
-  return <FontAwesomeIcon icon={['fas', name.replace('fa-', '') as IconName]} className={className} />
+export function Icon({ name, className, style }: { name: string; className?: string; style?: React.CSSProperties }) {
+  return <FontAwesomeIcon icon={['fas', name.replace('fa-', '') as IconName]} className={className} style={style as never} />
 }
