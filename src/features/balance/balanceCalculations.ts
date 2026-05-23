@@ -11,17 +11,37 @@ export function transactionTotal(transaction: Transaction): number {
   return transaction.items.reduce((sum, item) => sum + item.amount, 0)
 }
 
-export function signedWalletAmount(wallet: Wallet, transaction: Transaction): number {
+export function amountInWalletCurrency(transaction: Transaction, wallet: Wallet): number {
   const total = transactionTotal(transaction)
-  if (wallet.type === 'credit_card') {
-    return transaction.type === 'expense' ? total : -total
+  if (transaction.currency === wallet.currency) {
+    return total
   }
-  return transaction.type === 'income' ? total : -total
+  if (transaction.type === 'transfer' && transaction.toWalletId === wallet.id) {
+    return total * (transaction.toExchangeRate ?? 1)
+  }
+  return total * (transaction.exchangeRate ?? 1)
+}
+
+export function signedWalletAmount(wallet: Wallet, transaction: Transaction): number {
+  const amount = amountInWalletCurrency(transaction, wallet)
+  if (transaction.type === 'transfer') {
+    if (transaction.walletId === wallet.id) {
+      return -amount
+    }
+    if (transaction.toWalletId === wallet.id) {
+      return amount
+    }
+    return 0
+  }
+  if (wallet.type === 'credit_card') {
+    return transaction.type === 'expense' ? amount : -amount
+  }
+  return transaction.type === 'income' ? amount : -amount
 }
 
 export function walletTransactions(walletId: string, transactions: Transaction[], range?: DateRange): Transaction[] {
   return transactions
-    .filter((transaction) => transaction.walletId === walletId)
+    .filter((transaction) => transaction.walletId === walletId || transaction.toWalletId === walletId)
     .filter((transaction) => (range ? isWithinDateRange(transaction.date, range) : true))
     .sort((a, b) => a.date.localeCompare(b.date))
 }

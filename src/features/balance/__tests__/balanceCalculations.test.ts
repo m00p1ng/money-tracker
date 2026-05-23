@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Transaction, Wallet } from '../../../types/domain'
-import { assetsTotal, debtTotal, walletCurrentAmount, walletRunningRows, walletTransactions } from '../balanceCalculations'
+import { amountInWalletCurrency, assetsTotal, debtTotal, walletCurrentAmount, walletRunningRows, walletTransactions } from '../balanceCalculations'
 
 const wallets: Wallet[] = [
   { id: 'cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 1000, color: '#10b981', icon: 'fa-wallet' },
@@ -19,7 +19,65 @@ describe('balance calculations', () => {
     expect(walletCurrentAmount(wallets[0], transactions)).toBe(1400)
   })
 
+  it('converts foreign currency expenses into wallet currency', () => {
+    const transaction: Transaction = {
+      id: 'usd-expense',
+      type: 'expense',
+      walletId: 'cash',
+      currency: 'USD',
+      exchangeRate: 36.1234,
+      items: [{ categoryId: 'travel', amount: 10 }],
+      date: '2026-05-05T08:00:00.000Z',
+      createdAt: '2026-05-05T08:00:00.000Z',
+    }
+
+    expect(amountInWalletCurrency(transaction, wallets[0])).toBe(361.234)
+    expect(walletCurrentAmount(wallets[0], [transaction])).toBeCloseTo(638.766)
+  })
+
+  it('applies same-currency transfer amounts to source and destination wallets', () => {
+    const savingsWallet: Wallet = { id: 'savings', name: 'Savings', type: 'payment', currency: 'THB', balance: 200, color: '#0ea5e9', icon: 'fa-piggy-bank' }
+    const unrelatedWallet: Wallet = { id: 'usd-cash', name: 'USD Cash', type: 'payment', currency: 'USD', balance: 100, color: '#22c55e', icon: 'fa-dollar-sign' }
+    const transaction: Transaction = {
+      id: 'cash-to-savings',
+      type: 'transfer',
+      walletId: 'cash',
+      toWalletId: 'savings',
+      currency: 'THB',
+      items: [{ categoryId: 'transfer', amount: 300 }],
+      date: '2026-05-05T08:00:00.000Z',
+      createdAt: '2026-05-05T08:00:00.000Z',
+    }
+
+    expect(walletCurrentAmount(wallets[0], [transaction])).toBe(700)
+    expect(walletCurrentAmount(savingsWallet, [transaction])).toBe(500)
+    expect(walletCurrentAmount(unrelatedWallet, [transaction])).toBe(100)
+  })
+
+  it('uses toExchangeRate for transfer destination wallet conversion', () => {
+    const usdWallet: Wallet = { id: 'usd-cash', name: 'USD Cash', type: 'payment', currency: 'USD', balance: 100, color: '#22c55e', icon: 'fa-dollar-sign' }
+    const transaction: Transaction = {
+      id: 'cash-to-usd',
+      type: 'transfer',
+      walletId: 'cash',
+      toWalletId: 'usd-cash',
+      currency: 'THB',
+      exchangeRate: 1,
+      toExchangeRate: 0.0275,
+      items: [{ categoryId: 'transfer', amount: 1000 }],
+      date: '2026-05-05T08:00:00.000Z',
+      createdAt: '2026-05-05T08:00:00.000Z',
+    }
+
+    expect(amountInWalletCurrency(transaction, usdWallet)).toBe(27.5)
+    expect(walletCurrentAmount(usdWallet, [transaction])).toBe(127.5)
+  })
+
   it('calculates credit card current debt as positive owed amount', () => {
+    expect(walletCurrentAmount(wallets[1], transactions)).toBe(500)
+  })
+
+  it('keeps credit card expense and payment debt behavior', () => {
     expect(walletCurrentAmount(wallets[1], transactions)).toBe(500)
   })
 
@@ -30,6 +88,21 @@ describe('balance calculations', () => {
 
   it('filters transactions by wallet and date range', () => {
     expect(walletTransactions('cash', transactions, { start: '2026-05-02', end: '2026-05-31' }).map((tx) => tx.id)).toEqual(['income'])
+  })
+
+  it('includes transfers where the wallet is the destination', () => {
+    const transfer: Transaction = {
+      id: 'cash-to-savings',
+      type: 'transfer',
+      walletId: 'cash',
+      toWalletId: 'savings',
+      currency: 'THB',
+      items: [{ categoryId: 'transfer', amount: 300 }],
+      date: '2026-05-05T08:00:00.000Z',
+      createdAt: '2026-05-05T08:00:00.000Z',
+    }
+
+    expect(walletTransactions('savings', [transfer]).map((tx) => tx.id)).toEqual(['cash-to-savings'])
   })
 
   it('returns newest-first running payment balances computed oldest-to-newest', () => {
