@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router'
 import { Icon } from '@/components/Icon'
 import { formatHeaderDate } from '@/lib/date'
 import { SummaryCards } from '@/features/home/SummaryCards'
@@ -16,9 +15,11 @@ const sectionVariants = {
   visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 300, damping: 25 } },
 }
 
-export function HomePage() {
-  const navigate = useNavigate()
+type HomePageProps = {
+  onAddTransaction: () => void
+}
 
+export function HomePage({ onAddTransaction }: HomePageProps) {
   return (
     <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="visible">
       <motion.header variants={sectionVariants} className="flex items-start justify-between">
@@ -28,7 +29,7 @@ export function HomePage() {
         </div>
         <button
           aria-label="Add transaction"
-          onClick={() => navigate('/transaction/category')}
+          onClick={onAddTransaction}
           className="grid h-11 w-11 place-items-center rounded-xl text-white"
           style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))' }}
           type="button"

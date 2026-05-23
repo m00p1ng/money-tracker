@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import { Icon } from '@/components/Icon'
 import { formatAmount } from '@/lib/format'
-import { useTransactionStore } from '@/stores/transactionStore'
 
 const containerVariants = {
   hidden: {},
@@ -13,12 +12,12 @@ const cardVariants = {
   visible: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring' as const, stiffness: 350, damping: 20 } },
 }
 
-export function SummaryCards() {
-  const monthlyIncome = useTransactionStore((state) => state.monthlyIncome)
-  const monthlyExpense = useTransactionStore((state) => state.monthlyExpense)
-  const income = monthlyIncome()
-  const expense = monthlyExpense()
+type SummaryCardsProps = {
+  income: number
+  expense: number
+}
 
+export function SummaryCards({ income, expense }: SummaryCardsProps) {
   return (
     <div>
       <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[2px] text-white/30">This Month</h2>
