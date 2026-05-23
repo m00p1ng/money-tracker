@@ -40,7 +40,11 @@ export function DatePickerSheet({
         <DayPicker
           mode="single"
           selected={selectedDay}
-          onSelect={(day) => { if (day) setSelectedDay(day) }}
+          onSelect={(day) => {
+            if (day) {
+              setSelectedDay(day)
+            } 
+          }}
           classNames={{
             root: 'rdp-custom',
             months: 'flex flex-col',

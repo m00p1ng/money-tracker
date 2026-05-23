@@ -38,7 +38,9 @@ export function useFormCrud<T extends { id: string }>({
   }
 
   async function onDelete() {
-    if (!existing) return
+    if (!existing) {
+      return
+    }
     try {
       await remove(existing.id)
       navigate(navigateTo)

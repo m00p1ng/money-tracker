@@ -184,7 +184,9 @@ export function WalletDetailPage() {
             <button
               key={p.value}
               type="button"
-              onClick={() => { setPreset(p.value); setPresetSheetOpen(false) }}
+              onClick={() => {
+                setPreset(p.value); setPresetSheetOpen(false) 
+              }}
               className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${preset === p.value
                 ? 'bg-emerald-500/15 text-emerald-300'
                 : 'text-white/70 hover:bg-white/[0.05]'

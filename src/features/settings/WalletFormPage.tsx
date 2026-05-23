@@ -37,8 +37,12 @@ export function WalletFormPage() {
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault()
-    if (!form.name.trim()) { setError('Name is required'); return }
-    if (form.type === 'credit_card' && form.creditLimit !== undefined && form.creditLimit <= 0) { setError('Credit limit must be greater than 0'); return }
+    if (!form.name.trim()) {
+      setError('Name is required'); return 
+    }
+    if (form.type === 'credit_card' && form.creditLimit !== undefined && form.creditLimit <= 0) {
+      setError('Credit limit must be greater than 0'); return 
+    }
     try {
       await (wallet ? update(form) : add(form))
       navigate('/settings/wallets')
@@ -48,7 +52,9 @@ export function WalletFormPage() {
   }
 
   async function onDelete() {
-    if (!wallet) return
+    if (!wallet) {
+      return
+    }
     try {
       await remove(wallet.id)
       navigate('/settings/wallets')

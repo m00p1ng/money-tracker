@@ -22,7 +22,9 @@ export function WalletPicker({
           <button
             key={wallet.id}
             className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-3 ${selectedId === wallet.id ? 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]' : ''}`}
-            onClick={() => { onSelect(wallet.id); onClose() }}
+            onClick={() => {
+              onSelect(wallet.id); onClose() 
+            }}
             type="button"
           >
             <div
