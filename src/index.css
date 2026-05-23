@@ -41,3 +41,11 @@ input,
 textarea {
   font: inherit;
 }
+
+*, *::before, *::after {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease;
+}
