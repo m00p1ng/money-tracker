@@ -10,13 +10,23 @@ const items: TransactionItem[] = [
   { categoryId: 'expense-food-and-drink-coffee', amount: 30 },
 ]
 
+import type { Category } from '@/types/domain'
+
+const categories: Category[] = [
+  { id: 'expense-food-and-drink', name: 'Food & Drink', type: 'expense', level: 1, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
+  { id: 'expense-food-and-drink-coffee', name: 'Coffee', type: 'expense', parentId: 'expense-food-and-drink', level: 2, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
+]
+
+function stubFindCategory(id: string) {
+  return categories.find((c) => c.id === id)
+}
+
+function stubParentOf(category: typeof categories[0]) {
+  return categories.find((c) => c.id === category.parentId)
+}
+
 beforeEach(() => {
-  useCategoryStore.setState({
-    items: [
-      { id: 'expense-food-and-drink', name: 'Food & Drink', type: 'expense', level: 1, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
-      { id: 'expense-food-and-drink-coffee', name: 'Coffee', type: 'expense', parentId: 'expense-food-and-drink', level: 2, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
-    ],
-  })
+  useCategoryStore.setState({ items: categories })
 })
 
 describe('CategoryItemsCard', () => {
@@ -30,6 +40,8 @@ describe('CategoryItemsCard', () => {
         onAdd={vi.fn()}
         onRemove={vi.fn()}
         onChangeCategory={vi.fn()}
+        findCategory={stubFindCategory}
+        parentOf={stubParentOf}
       />,
     )
     const removeButtons = screen.queryAllByRole('button', { name: 'Remove category' })
@@ -50,6 +62,8 @@ describe('CategoryItemsCard', () => {
         onAdd={vi.fn()}
         onRemove={vi.fn()}
         onChangeCategory={vi.fn()}
+        findCategory={stubFindCategory}
+        parentOf={stubParentOf}
       />,
     )
     expect(screen.getAllByRole('button', { name: 'Remove category' })).toHaveLength(3)
@@ -65,6 +79,8 @@ describe('CategoryItemsCard', () => {
         onAdd={vi.fn()}
         onRemove={vi.fn()}
         onChangeCategory={onChangeCategory}
+        findCategory={stubFindCategory}
+        parentOf={stubParentOf}
       />,
     )
     const changeBtns = screen.getAllByRole('button', { name: 'Change category' })
@@ -81,6 +97,8 @@ describe('CategoryItemsCard', () => {
         onAdd={vi.fn()}
         onRemove={vi.fn()}
         onChangeCategory={vi.fn()}
+        findCategory={stubFindCategory}
+        parentOf={stubParentOf}
       />,
     )
     expect(screen.getByRole('button', { name: /Add Category/i })).toBeInTheDocument()
@@ -99,6 +117,8 @@ describe('CategoryItemsCard', () => {
         onAdd={onAdd}
         onRemove={vi.fn()}
         onChangeCategory={vi.fn()}
+        findCategory={stubFindCategory}
+        parentOf={stubParentOf}
       />,
     )
     await userEvent.click(screen.getByRole('button', { name: /Add Category/i }))

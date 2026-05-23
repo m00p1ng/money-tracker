@@ -15,7 +15,7 @@ import WalletFormPage from '@/features/settings/WalletFormPage'
 import SettingsPage from '@/features/settings/SettingsPage'
 import CategorySelectionPage from '@/features/transaction/CategorySelectionPage'
 import TransactionPage from '@/features/transaction/TransactionPage'
-import { DesignPage } from '@/features/design/DesignPage'
+import DesignPage from '@/features/design/DesignPage'
 import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
 
 const TAB_ROUTES = new Set(['/', '/balance', '/settings'])

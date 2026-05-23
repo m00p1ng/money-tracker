@@ -1,5 +1,3 @@
-// src/features/design/DesignSidebar.tsx
-
 const NAV_GROUPS = [
   {
     label: 'Tokens',

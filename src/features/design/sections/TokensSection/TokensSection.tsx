@@ -1,4 +1,3 @@
-// src/features/design/sections/TokensSection.tsx
 import { useMemo } from 'react'
 
 const COLOR_TOKENS = [
@@ -66,7 +65,6 @@ function SectionHeading({ id, title, description }: { id: string; title: string;
 export function TokensSection() {
   return (
     <div className="space-y-12">
-      {/* Colors */}
       <section>
         <SectionHeading id="colors" title="Colors" description="CSS custom property tokens resolved at runtime" />
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
@@ -76,7 +74,6 @@ export function TokensSection() {
         </div>
       </section>
 
-      {/* Typography */}
       <section>
         <SectionHeading id="typography" title="Typography" description="Font: Inter — text size scale used in the app" />
         <div className="space-y-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
@@ -89,17 +86,13 @@ export function TokensSection() {
         </div>
       </section>
 
-      {/* Spacing */}
       <section>
         <SectionHeading id="spacing" title="Spacing" description="Tailwind spacing values used across the app" />
         <div className="space-y-2 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
           {SPACING_SCALE.map(({ label, size }) => (
             <div key={label} className="flex items-center gap-4">
               <span className="w-24 flex-shrink-0 text-[10px] text-white/30">{label}</span>
-              <div
-                className="rounded bg-accent/40"
-                style={{ width: size, height: 16 }}
-              />
+              <div className="rounded bg-accent/40" style={{ width: size, height: 16 }} />
             </div>
           ))}
         </div>

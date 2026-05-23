@@ -1,4 +1,3 @@
-// src/features/design/sections/UIComponentsSection.tsx
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -56,39 +55,19 @@ export function UIComponentsSection() {
     <div className="space-y-10">
       <h2 className="text-lg font-bold">UI Components</h2>
 
-      {/* Button */}
       <SubSection id="button" title="Button">
         <div className="flex flex-wrap items-start gap-6">
-          <div>
-            <Button variant="accent">Accent</Button>
-            <VariantLabel label="accent" />
-          </div>
-          <div>
-            <Button variant="ghost">Ghost</Button>
-            <VariantLabel label="ghost (default)" />
-          </div>
-          <div>
-            <Button variant="danger">Danger</Button>
-            <VariantLabel label="danger" />
-          </div>
-          <div>
-            <Button variant="accent" disabled>Disabled</Button>
-            <VariantLabel label="disabled" />
-          </div>
-          <div className="w-full max-w-xs">
-            <Button variant="accent" fullWidth>Full Width</Button>
-            <VariantLabel label="fullWidth" />
-          </div>
+          <div><Button variant="accent">Accent</Button><VariantLabel label="accent" /></div>
+          <div><Button variant="ghost">Ghost</Button><VariantLabel label="ghost (default)" /></div>
+          <div><Button variant="danger">Danger</Button><VariantLabel label="danger" /></div>
+          <div><Button variant="accent" disabled>Disabled</Button><VariantLabel label="disabled" /></div>
+          <div className="w-full max-w-xs"><Button variant="accent" fullWidth>Full Width</Button><VariantLabel label="fullWidth" /></div>
         </div>
       </SubSection>
 
-      {/* Card */}
       <SubSection id="card" title="Card">
         <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <Card>Empty card</Card>
-            <VariantLabel label="default (empty)" />
-          </div>
+          <div><Card>Empty card</Card><VariantLabel label="default (empty)" /></div>
           <div>
             <Card>
               <p className="text-sm font-semibold">Card title</p>
@@ -100,13 +79,10 @@ export function UIComponentsSection() {
         </div>
       </SubSection>
 
-      {/* Field */}
       <SubSection id="field" title="Field">
         <div className="grid gap-6 sm:grid-cols-2">
           <div>
-            <Field label="Text input">
-              <TextInput placeholder="Enter value…" />
-            </Field>
+            <Field label="Text input"><TextInput placeholder="Enter value…" /></Field>
             <VariantLabel label="TextInput" />
           </div>
           <div>
@@ -127,7 +103,6 @@ export function UIComponentsSection() {
         </div>
       </SubSection>
 
-      {/* SegmentedControl */}
       <SubSection id="segmented-control" title="SegmentedControl">
         <div className="max-w-xs space-y-4">
           <div>
@@ -149,7 +124,6 @@ export function UIComponentsSection() {
         </div>
       </SubSection>
 
-      {/* TypePickerDropdown */}
       <SubSection id="type-picker" title="TypePickerDropdown">
         <div className="max-w-xs rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
           <TypePickerDropdown value={pickerType} onChange={setPickerType} />
@@ -157,75 +131,55 @@ export function UIComponentsSection() {
         </div>
       </SubSection>
 
-      {/* CurrencyPicker */}
       <SubSection id="currency-picker" title="CurrencyPicker">
         <div className="space-y-3">
-          <Button variant="ghost" onClick={() => setCurrencyOpen(true)}>
-            Open CurrencyPicker
-          </Button>
+          <Button variant="ghost" onClick={() => setCurrencyOpen(true)}>Open CurrencyPicker</Button>
           <VariantLabel label={`selected: ${selectedCurrency}`} />
           <CurrencyPicker
             isOpen={currencyOpen}
             currencies={STUB_CURRENCIES}
             selectedCode={selectedCurrency}
-            onSelect={(code) => {
-              setSelectedCurrency(code); setCurrencyOpen(false)
-            }}
+            onSelect={(code) => { setSelectedCurrency(code); setCurrencyOpen(false) }}
             onClose={() => setCurrencyOpen(false)}
           />
         </div>
       </SubSection>
 
-      {/* DatePickerSheet */}
       <SubSection id="date-picker" title="DatePickerSheet">
         <div className="space-y-3">
-          <Button variant="ghost" onClick={() => setDateOpen(true)}>
-            Open DatePickerSheet
-          </Button>
+          <Button variant="ghost" onClick={() => setDateOpen(true)}>Open DatePickerSheet</Button>
           <VariantLabel label={`selected: ${selectedDate.toLocaleDateString()}`} />
           <DatePickerSheet
             isOpen={dateOpen}
             value={selectedDate}
-            onChange={(d) => {
-              setSelectedDate(d); setDateOpen(false)
-            }}
+            onChange={(d) => { setSelectedDate(d); setDateOpen(false) }}
             onClose={() => setDateOpen(false)}
           />
         </div>
       </SubSection>
 
-      {/* RepeatPicker */}
       <SubSection id="repeat-picker" title="RepeatPicker">
         <div className="space-y-3">
-          <Button variant="ghost" onClick={() => setRepeatOpen(true)}>
-            Open RepeatPicker
-          </Button>
+          <Button variant="ghost" onClick={() => setRepeatOpen(true)}>Open RepeatPicker</Button>
           <VariantLabel label={`preset: ${repeatConfig.preset}`} />
           <RepeatPicker
             isOpen={repeatOpen}
             value={repeatConfig}
-            onConfirm={(config) => {
-              setRepeatConfig(config); setRepeatOpen(false)
-            }}
+            onConfirm={(config) => { setRepeatConfig(config); setRepeatOpen(false) }}
             onClose={() => setRepeatOpen(false)}
           />
         </div>
       </SubSection>
 
-      {/* WalletPicker */}
       <SubSection id="wallet-picker" title="WalletPicker">
         <div className="space-y-3">
-          <Button variant="ghost" onClick={() => setWalletOpen(true)}>
-            Open WalletPicker
-          </Button>
+          <Button variant="ghost" onClick={() => setWalletOpen(true)}>Open WalletPicker</Button>
           <VariantLabel label={`selected: ${STUB_WALLETS.find((w) => w.id === selectedWallet)?.name ?? 'none'}`} />
           <WalletPicker
             isOpen={walletOpen}
             wallets={STUB_WALLETS}
             selectedId={selectedWallet}
-            onSelect={(id) => {
-              setSelectedWallet(id); setWalletOpen(false)
-            }}
+            onSelect={(id) => { setSelectedWallet(id); setWalletOpen(false) }}
             onClose={() => setWalletOpen(false)}
           />
         </div>

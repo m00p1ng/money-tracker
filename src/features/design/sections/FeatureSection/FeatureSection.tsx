@@ -1,4 +1,3 @@
-// src/features/design/sections/FeatureSection.tsx
 import { SummaryCards } from '@/features/home/SummaryCards'
 import { TodayTransactions } from '@/features/home/TodayTransactions'
 import { UpcomingTransactions } from '@/features/home/UpcomingTransactions'
@@ -24,11 +23,11 @@ export function FeatureSection() {
       </p>
 
       <SubSection id="summary-cards" title="SummaryCards">
-        <SummaryCards />
+        <SummaryCards income={0} expense={0} />
       </SubSection>
 
       <SubSection id="calculator-keyboard" title="CalculatorKeyboard">
-        <CalculatorKeyboard onPress={() => { }} onDismiss={() => { }} />
+        <CalculatorKeyboard onPress={() => {}} onDismiss={() => {}} />
       </SubSection>
 
       <SubSection id="category-items-card" title="CategoryItemsCard">
@@ -38,19 +37,21 @@ export function FeatureSection() {
             { categoryId: 'stub-2', amount: 250 },
           ]}
           focusedIndex={0}
-          onFocus={() => { }}
-          onAdd={() => { }}
-          onRemove={() => { }}
-          onChangeCategory={() => { }}
+          onFocus={() => {}}
+          onAdd={() => {}}
+          onRemove={() => {}}
+          onChangeCategory={() => {}}
+          findCategory={() => undefined}
+          parentOf={() => undefined}
         />
       </SubSection>
 
       <SubSection id="today-transactions" title="TodayTransactions">
-        <TodayTransactions />
+        <TodayTransactions rows={[]} />
       </SubSection>
 
       <SubSection id="upcoming-transactions" title="UpcomingTransactions">
-        <UpcomingTransactions />
+        <UpcomingTransactions rows={[]} />
       </SubSection>
     </div>
   )
