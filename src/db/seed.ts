@@ -1,5 +1,5 @@
-import type { Category, Currency, Settings, Wallet } from '@/types/domain'
 import { db } from '@/db/schema'
+import type { Category, Currency, Settings, Wallet } from '@/types/domain'
 
 const expenseRoots = [
   ['Food & Drink', 'fa-utensils', '#65a30d', ['Restaurant', 'Groceries', 'Coffee']],

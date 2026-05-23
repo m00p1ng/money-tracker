@@ -1,4 +1,5 @@
 import Dexie, { type Table } from 'dexie'
+
 import type { Category, Currency, Settings, Transaction, Wallet } from '@/types/domain'
 
 export class MoneyTrackerDb extends Dexie {

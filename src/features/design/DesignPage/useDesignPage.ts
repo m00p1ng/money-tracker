@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { DesignPage } from './DesignPage'
 
 const SECTION_IDS = [
   'colors', 'typography', 'spacing',
@@ -19,7 +18,9 @@ export function useDesignPage() {
     const observers: IntersectionObserver[] = []
     for (const id of SECTION_IDS) {
       const el = document.getElementById(id)
-      if (!el) continue
+      if (!el) {
+        continue
+      }
       const obs = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {

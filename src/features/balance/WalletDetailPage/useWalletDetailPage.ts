@@ -1,9 +1,11 @@
 import { useParams } from 'react-router'
+
 import { useBackNavigate } from '@/context/navigationDirection'
+import { walletCurrentAmount } from '@/features/balance/balanceCalculations'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useTransactionStore } from '@/stores/transactionStore'
 import { useWalletStore } from '@/stores/walletStore'
-import { walletCurrentAmount } from '@/features/balance/balanceCalculations'
+
 import type { WalletDetailPageProps } from './WalletDetailPage'
 
 export function useWalletDetailPage(): WalletDetailPageProps {

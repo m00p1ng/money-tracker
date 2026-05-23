@@ -1,5 +1,5 @@
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react'
 import cx from 'classnames'
+import type { ButtonHTMLAttributes, PropsWithChildren } from 'react'
 
 type ButtonProps = PropsWithChildren<
   ButtonHTMLAttributes<HTMLButtonElement> & {

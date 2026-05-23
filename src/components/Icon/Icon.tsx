@@ -1,5 +1,3 @@
-import type React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library, type IconName } from '@fortawesome/fontawesome-svg-core'
 import {
   faArrowDown,
@@ -51,6 +49,8 @@ import {
   faWallet,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import type React from 'react'
 
 library.add(
   faArrowDown,

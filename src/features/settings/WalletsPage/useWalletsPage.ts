@@ -1,5 +1,5 @@
-import { useWalletStore } from '@/stores/walletStore'
 import { useBackNavigate } from '@/context/navigationDirection'
+import { useWalletStore } from '@/stores/walletStore'
 
 export function useWalletsPage() {
   const wallets = useWalletStore((state) => state.items)

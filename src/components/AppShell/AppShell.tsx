@@ -1,5 +1,6 @@
-import type { PropsWithChildren } from 'react'
 import cx from 'classnames'
+import type { PropsWithChildren } from 'react'
+
 import BottomNavContainer from '@/components/BottomNav'
 
 type AppShellProps = PropsWithChildren<{

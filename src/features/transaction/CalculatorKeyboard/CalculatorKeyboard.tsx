@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import cx from 'classnames'
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import {
   faDeleteLeft,
   faDivide,
@@ -9,7 +8,8 @@ import {
   faPlus,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import cx from 'classnames'
 
 const keys = ['+', '1', '2', '3', 'THB', '-', '4', '5', '6', '±', '×', '7', '8', '9', '=', '÷', '.', '0', '⌫']
 

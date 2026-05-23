@@ -1,6 +1,7 @@
-import { AddRow, ListGroup, PageHeader } from '@/components/ui'
-import { Icon } from '@/components/Icon'
 import { Link } from 'react-router'
+
+import { Icon } from '@/components/Icon'
+import { AddRow, ListGroup, PageHeader } from '@/components/ui'
 import type { Currency } from '@/types/domain'
 
 const FLAG_MAP: Record<string, string> = {

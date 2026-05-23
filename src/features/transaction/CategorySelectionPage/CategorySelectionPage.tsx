@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
+
 import { Icon } from '@/components/Icon'
 import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
 import type { Category } from '@/types/domain'

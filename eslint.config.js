@@ -4,7 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import stylistic from '@stylistic/eslint-plugin'
-
+import importPlugin from 'eslint-plugin-import-x'
 
 export default defineConfig([
   { ignores: ['dist'] },
@@ -16,7 +16,8 @@ export default defineConfig([
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      '@stylistic': stylistic
+      '@stylistic': stylistic,
+      import: importPlugin,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -28,6 +29,27 @@ export default defineConfig([
       quotes: ['error', 'single', {
         avoidEscape: true,
         allowTemplateLiterals: true,
+      }],
+      'import/order': ['error', {
+        pathGroups: [
+          {
+            pattern: '@/**',
+            group: 'parent',
+            position: 'before',
+          },
+        ],
+        groups: [
+          'builtin',
+          'external',
+          'parent',
+          'sibling',
+          'index',
+        ],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
       }],
     },
   },

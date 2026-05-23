@@ -1,5 +1,5 @@
-import { useUpcomingTransactions } from './useUpcomingTransactions'
 import { UpcomingTransactions } from './UpcomingTransactions'
+import { useUpcomingTransactions } from './useUpcomingTransactions'
 
 export function UpcomingTransactionsContainer() {
   const props = useUpcomingTransactions()

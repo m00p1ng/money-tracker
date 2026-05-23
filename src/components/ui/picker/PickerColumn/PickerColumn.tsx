@@ -1,5 +1,5 @@
-import Picker from 'react-mobile-picker'
 import cx from 'classnames'
+import Picker from 'react-mobile-picker'
 
 type PickerColumnProps = {
   label: string

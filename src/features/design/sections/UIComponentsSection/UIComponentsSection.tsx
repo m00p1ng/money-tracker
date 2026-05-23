@@ -1,13 +1,14 @@
 import { useState } from 'react'
+
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Field, TextInput, SelectInput } from '@/components/ui/Field'
-import { SegmentedControl } from '@/components/ui/SegmentedControl'
-import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
 import { CurrencyPicker } from '@/components/ui/picker/CurrencyPicker'
 import { DatePickerSheet } from '@/components/ui/picker/DatePickerSheet'
 import { RepeatPicker } from '@/components/ui/picker/RepeatPicker'
+import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
 import { WalletPicker } from '@/components/ui/picker/WalletPicker'
+import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import type { Currency, Wallet, RepeatConfig } from '@/types/domain'
 
 const STUB_CURRENCIES: Currency[] = [
@@ -139,7 +140,9 @@ export function UIComponentsSection() {
             isOpen={currencyOpen}
             currencies={STUB_CURRENCIES}
             selectedCode={selectedCurrency}
-            onSelect={(code) => { setSelectedCurrency(code); setCurrencyOpen(false) }}
+            onSelect={(code) => {
+              setSelectedCurrency(code); setCurrencyOpen(false) 
+            }}
             onClose={() => setCurrencyOpen(false)}
           />
         </div>
@@ -152,7 +155,9 @@ export function UIComponentsSection() {
           <DatePickerSheet
             isOpen={dateOpen}
             value={selectedDate}
-            onChange={(d) => { setSelectedDate(d); setDateOpen(false) }}
+            onChange={(d) => {
+              setSelectedDate(d); setDateOpen(false) 
+            }}
             onClose={() => setDateOpen(false)}
           />
         </div>
@@ -165,7 +170,9 @@ export function UIComponentsSection() {
           <RepeatPicker
             isOpen={repeatOpen}
             value={repeatConfig}
-            onConfirm={(config) => { setRepeatConfig(config); setRepeatOpen(false) }}
+            onConfirm={(config) => {
+              setRepeatConfig(config); setRepeatOpen(false) 
+            }}
             onClose={() => setRepeatOpen(false)}
           />
         </div>
@@ -179,7 +186,9 @@ export function UIComponentsSection() {
             isOpen={walletOpen}
             wallets={STUB_WALLETS}
             selectedId={selectedWallet}
-            onSelect={(id) => { setSelectedWallet(id); setWalletOpen(false) }}
+            onSelect={(id) => {
+              setSelectedWallet(id); setWalletOpen(false) 
+            }}
             onClose={() => setWalletOpen(false)}
           />
         </div>

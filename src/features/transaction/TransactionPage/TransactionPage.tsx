@@ -1,25 +1,34 @@
+import cx from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
-import cx from 'classnames'
+
 import { Icon } from '@/components/Icon'
-import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
-import { createCalcState, pressCalcKey } from '@/lib/calculator'
-import { formatDatetimeLocalDisplay, toDatetimeLocalValue } from '@/lib/date'
-import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard/CalculatorKeyboard'
-import { CategoryItemsCardContainer } from '@/features/transaction/CategoryItemsCard/CategoryItemsCardContainer'
 import { CurrencyPicker } from '@/components/ui/picker/CurrencyPicker'
 import { DatePickerSheet } from '@/components/ui/picker/DatePickerSheet'
 import { RepeatPicker } from '@/components/ui/picker/RepeatPicker'
+import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
 import { WalletPicker } from '@/components/ui/picker/WalletPicker'
+import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard/CalculatorKeyboard'
+import { CategoryItemsCardContainer } from '@/features/transaction/CategoryItemsCard/CategoryItemsCardContainer'
+import { createCalcState, pressCalcKey } from '@/lib/calculator'
+import { formatDatetimeLocalDisplay } from '@/lib/date'
 import type { RepeatConfig, TransactionType, Wallet, Currency, TransactionItem } from '@/types/domain'
 
 type WalletPickerTarget = 'wallet' | 'toWallet'
 
 function formatRepeat(config: RepeatConfig): string {
-  if (config.preset === 'daily') return 'Daily'
-  if (config.preset === '2weeks') return 'Every 2 Weeks'
-  if (config.preset === 'monthly') return 'Monthly'
-  if (config.preset === 'yearly') return 'Yearly'
+  if (config.preset === 'daily') {
+    return 'Daily'
+  }
+  if (config.preset === '2weeks') {
+    return 'Every 2 Weeks'
+  }
+  if (config.preset === 'monthly') {
+    return 'Monthly'
+  }
+  if (config.preset === 'yearly') {
+    return 'Yearly'
+  }
   if (config.preset === 'custom' && config.customEvery && config.customUnit) {
     const unit = config.customEvery === 1 ? config.customUnit : `${config.customUnit}s`
     return `Every ${config.customEvery} ${unit}`
@@ -113,7 +122,9 @@ export function TransactionPage({
   const toWallet = wallets.find((item) => item.id === toWalletId)
 
   function handlePress(key: string) {
-    if (focusedIndex === null) return
+    if (focusedIndex === null) {
+      return
+    }
     if (key === 'THB') {
       setCurrencyPickerOpen(true)
       onOpenCurrencyPicker()
@@ -344,7 +355,9 @@ export function TransactionPage({
       <DatePickerSheet
         isOpen={isDatePickerOpen}
         value={new Date(date.replace('T', ' '))}
-        onChange={(d) => { onUpdateDate(d); }}
+        onChange={(d) => {
+          onUpdateDate(d) 
+        }}
         onClose={() => setDatePickerOpen(false)}
       />
 

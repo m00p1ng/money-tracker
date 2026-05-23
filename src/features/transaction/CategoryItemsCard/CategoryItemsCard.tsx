@@ -1,5 +1,6 @@
-import { Icon } from '@/components/Icon'
 import cx from 'classnames'
+
+import { Icon } from '@/components/Icon'
 import { formatAmount } from '@/lib/format'
 import type { TransactionItem } from '@/types/domain'
 import type { Category } from '@/types/domain'

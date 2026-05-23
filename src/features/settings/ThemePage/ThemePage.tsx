@@ -1,7 +1,8 @@
-import { Icon } from '@/components/Icon'
 import cx from 'classnames'
-import { themes } from '@/lib/theme'
+
+import { Icon } from '@/components/Icon'
 import { formatAmount } from '@/lib/format'
+import { themes } from '@/lib/theme'
 import type { ThemePreset, Wallet } from '@/types/domain'
 
 const names: Record<ThemePreset, string> = {

@@ -1,4 +1,5 @@
 import cx from 'classnames'
+
 import { Icon } from '@/components/Icon'
 import { BottomSheet } from '@/components/shared/BottomSheet'
 import type { Currency } from '@/types/domain'
@@ -29,7 +30,9 @@ export function CurrencyPicker({
           <button
             key={c.code}
             className={cx('flex w-full items-center gap-3 rounded-xl px-3.5 py-3', { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': selectedCode === c.code })}
-            onClick={() => { onSelect(c.code); onClose() }}
+            onClick={() => {
+              onSelect(c.code); onClose() 
+            }}
             type="button"
           >
             <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[9px] bg-white/[0.06] text-xl">

@@ -1,5 +1,5 @@
-import { useBalancePage } from './useBalancePage'
 import { BalancePage } from './BalancePage'
+import { useBalancePage } from './useBalancePage'
 
 export function BalancePageContainer() {
   const props = useBalancePage()

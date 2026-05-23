@@ -1,16 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useCategoryStore } from '@/stores/categoryStore'
-import type { TransactionItem } from '@/types/domain'
+
 import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
+import { useCategoryStore } from '@/stores/categoryStore'
+import type { Category, TransactionItem } from '@/types/domain'
 
 const items: TransactionItem[] = [
   { categoryId: 'expense-food-and-drink-coffee', amount: 50 },
   { categoryId: 'expense-food-and-drink-coffee', amount: 30 },
 ]
-
-import type { Category } from '@/types/domain'
 
 const categories: Category[] = [
   { id: 'expense-food-and-drink', name: 'Food & Drink', type: 'expense', level: 1, icon: 'fa-utensils', color: '#65a30d', isDefault: true },

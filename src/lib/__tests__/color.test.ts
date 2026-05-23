@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+
 import { hexToRgba } from '@/lib/color'
 
 describe('hexToRgba', () => {

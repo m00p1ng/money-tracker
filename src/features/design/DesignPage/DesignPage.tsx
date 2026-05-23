@@ -1,7 +1,7 @@
 import { DesignSidebar, DesignTopNav } from '@/features/design/DesignSidebar'
+import { FeatureSection } from '@/features/design/sections/FeatureSection'
 import { TokensSection } from '@/features/design/sections/TokensSection'
 import { UIComponentsSection } from '@/features/design/sections/UIComponentsSection'
-import { FeatureSection } from '@/features/design/sections/FeatureSection'
 
 type DesignPageProps = {
   activeId: string

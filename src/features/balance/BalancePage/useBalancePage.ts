@@ -1,6 +1,7 @@
+import { assetsTotal, debtTotal, walletCurrentAmount } from '@/features/balance/balanceCalculations'
 import { useTransactionStore } from '@/stores/transactionStore'
 import { useWalletStore } from '@/stores/walletStore'
-import { assetsTotal, debtTotal, walletCurrentAmount } from '@/features/balance/balanceCalculations'
+
 import type { BalancePageProps } from './BalancePage'
 
 export function useBalancePage(): BalancePageProps {

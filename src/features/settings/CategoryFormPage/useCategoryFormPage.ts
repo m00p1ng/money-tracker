@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router'
+
 import { useBackNavigate } from '@/context/navigationDirection'
 import { useCategoryStore } from '@/stores/categoryStore'
 import type { Category } from '@/types/domain'
@@ -34,7 +35,9 @@ export function useCategoryFormPage() {
   }
 
   async function onDelete(setError: (err: string | null) => void) {
-    if (!existing) return
+    if (!existing) {
+      return
+    }
     try {
       await remove(existing.id)
       navigate('/settings/categories')

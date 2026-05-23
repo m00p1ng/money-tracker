@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+
 import { db } from '@/db/schema'
 import { applyTheme } from '@/lib/theme'
 import type { Settings } from '@/types/domain'

@@ -1,13 +1,15 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router'
+
 import { useBackNavigate } from '@/context/navigationDirection'
+import { buildTransaction, validateDraft, validateExchangeRate } from '@/features/transaction/transactionForm'
 import { toDatetimeLocalValue } from '@/lib/date'
 import { createId } from '@/lib/id'
 import { useCurrencyStore } from '@/stores/currencyStore'
 import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
 import { useTransactionStore } from '@/stores/transactionStore'
 import { useWalletStore } from '@/stores/walletStore'
-import { buildTransaction, validateDraft, validateExchangeRate } from '@/features/transaction/transactionForm'
 import type { RepeatConfig, TransactionType } from '@/types/domain'
+
 import type { TransactionPageProps } from './TransactionPage'
 
 export function useTransactionPage(): TransactionPageProps {
@@ -79,11 +81,15 @@ export function useTransactionPage(): TransactionPageProps {
     const errors = validateDraft({ type, walletId, toWalletId, items, transferAmount })
     if (currency !== wallet?.currency) {
       const rateError = validateExchangeRate(exchangeRate || defaultRate)
-      if (rateError) errors.push(rateError)
+      if (rateError) {
+        errors.push(rateError)
+      }
     }
     if (type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency) {
       const rateError = validateExchangeRate(toExchangeRate || defaultRate)
-      if (rateError) errors.push(rateError)
+      if (rateError) {
+        errors.push(rateError)
+      }
     }
     if (errors.length > 0) {
       alert(errors[0])
@@ -117,8 +123,12 @@ export function useTransactionPage(): TransactionPageProps {
   }
 
   async function onDelete() {
-    if (!existing) return
-    if (!window.confirm('Delete this transaction?')) return
+    if (!existing) {
+      return
+    }
+    if (!window.confirm('Delete this transaction?')) {
+      return
+    }
     await remove(existing.id)
     clearDraft()
     navigate('/')
@@ -159,7 +169,9 @@ export function useTransactionPage(): TransactionPageProps {
     onPressCalcKey: (_key: string, result: number) => updateDraft({ items: items.map((item, index) => (index === focusedIndex ? { ...item, amount: result } : item)) }),
     onOpenCurrencyPicker: () => { /* handled in dumb component */ },
     onSave,
-    onBack: () => { clearDraft(); backNavigate('/') },
+    onBack: () => {
+      clearDraft(); backNavigate('/') 
+    },
     onDelete,
   }
 }

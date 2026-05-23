@@ -1,5 +1,6 @@
-import { Link } from 'react-router'
 import cx from 'classnames'
+import { Link } from 'react-router'
+
 import { Icon } from '@/components/Icon'
 
 const navItems = [

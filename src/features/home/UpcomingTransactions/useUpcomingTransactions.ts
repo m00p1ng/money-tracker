@@ -1,7 +1,8 @@
+import { formatAmount } from '@/lib/format'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useTransactionStore } from '@/stores/transactionStore'
 import { useWalletStore } from '@/stores/walletStore'
-import { formatAmount } from '@/lib/format'
+
 import type { UpcomingTransactionRowData } from './UpcomingTransactions'
 
 function badgeFor(day: string): string {
@@ -9,9 +10,15 @@ function badgeFor(day: string): string {
   const tomorrowDate = new Date()
   tomorrowDate.setDate(tomorrowDate.getDate() + 1)
   const tomorrow = tomorrowDate.toISOString().slice(0, 10)
-  if (day < today) return 'Overdue'
-  if (day === today) return 'Today'
-  if (day === tomorrow) return 'Tomorrow'
+  if (day < today) {
+    return 'Overdue'
+  }
+  if (day === today) {
+    return 'Today'
+  }
+  if (day === tomorrow) {
+    return 'Tomorrow'
+  }
   return day
 }
 

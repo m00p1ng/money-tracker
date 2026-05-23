@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import type { Transaction, Wallet } from '@/types/domain'
+
 import { amountInWalletCurrency, assetsTotal, debtTotal, walletCurrentAmount, walletRunningRows, walletTransactions } from '@/features/balance/balanceCalculations'
+import type { Transaction, Wallet } from '@/types/domain'
 
 const wallets: Wallet[] = [
   { id: 'cash', name: 'Cash', type: 'payment', currency: 'THB', balance: 1000, color: '#10b981', icon: 'fa-wallet' },

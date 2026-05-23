@@ -1,5 +1,5 @@
-import { WalletsPage } from './WalletsPage'
 import { useWalletsPage } from './useWalletsPage'
+import { WalletsPage } from './WalletsPage'
 
 export function WalletsPageContainer() {
   const props = useWalletsPage()

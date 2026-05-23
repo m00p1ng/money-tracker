@@ -1,6 +1,7 @@
+import { formatAmount } from '@/lib/format'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useTransactionStore } from '@/stores/transactionStore'
-import { formatAmount } from '@/lib/format'
+
 import type { TodayTransactionRowData } from './TodayTransactions'
 
 export function useTodayTransactions() {

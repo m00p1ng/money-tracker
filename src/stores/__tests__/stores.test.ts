@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
+
 import { db } from '@/db/schema'
 import { seedDatabase } from '@/db/seed'
 import { bootstrapStores } from '@/stores/bootstrap'

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { createCalcState, pressCalcKey } from '@/lib/calculator'
 
 describe('calculator', () => {

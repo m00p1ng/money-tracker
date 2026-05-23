@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from 'react'
-import cx from 'classnames'
+
 import { useDesignSystemTrigger } from '@/hooks/useDesignSystemTrigger'
+
 import { AppShell } from './AppShell'
 
 export function AppShellContainer({ children, showBottomNav = true }: PropsWithChildren<{ showBottomNav?: boolean }>) {

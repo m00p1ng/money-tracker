@@ -1,5 +1,5 @@
-import { WalletFormPage } from './WalletFormPage'
 import { useWalletFormPage } from './useWalletFormPage'
+import { WalletFormPage } from './WalletFormPage'
 
 export function WalletFormPageContainer() {
   const props = useWalletFormPage()

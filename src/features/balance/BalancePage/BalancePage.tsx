@@ -1,10 +1,11 @@
-import { Link } from 'react-router'
 import cx from 'classnames'
+import { Link } from 'react-router'
+
 import { Icon } from '@/components/Icon'
-import { Card } from '@/components/ui/Card'
 import { AnimatedBar, SectionDivider } from '@/components/ui'
-import { formatAmount } from '@/lib/format'
+import { Card } from '@/components/ui/Card'
 import { hexToRgba } from '@/lib/color'
+import { formatAmount } from '@/lib/format'
 import type { Wallet } from '@/types/domain'
 
 function WalletRow({ wallet, amount }: { wallet: Wallet; amount: number }) {

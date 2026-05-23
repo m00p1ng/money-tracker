@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+
 import { Icon } from '@/components/Icon'
 
 type TransactionRowProps = {

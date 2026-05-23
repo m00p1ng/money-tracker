@@ -1,6 +1,7 @@
-import { useCategoryItemsCard } from './useCategoryItemsCard'
-import { CategoryItemsCard } from './CategoryItemsCard'
 import type { TransactionItem } from '@/types/domain'
+
+import { CategoryItemsCard } from './CategoryItemsCard'
+import { useCategoryItemsCard } from './useCategoryItemsCard'
 
 interface CategoryItemsCardContainerProps {
   items: TransactionItem[]

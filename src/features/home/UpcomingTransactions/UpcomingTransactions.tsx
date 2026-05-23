@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+
 import { SectionLabel, TransactionRow } from '@/components/ui'
 
 const listVariants = {
@@ -25,7 +26,9 @@ type UpcomingTransactionsProps = {
 }
 
 export function UpcomingTransactions({ rows }: UpcomingTransactionsProps) {
-  if (rows.length === 0) return null
+  if (rows.length === 0) {
+    return null
+  }
 
   return (
     <section>

@@ -1,6 +1,6 @@
+import { useBackNavigate } from '@/context/navigationDirection'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useWalletStore } from '@/stores/walletStore'
-import { useBackNavigate } from '@/context/navigationDirection'
 import type { ThemePreset } from '@/types/domain'
 
 export function useThemePage() {

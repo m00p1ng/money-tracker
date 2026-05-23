@@ -1,5 +1,5 @@
-import { useDesignPage } from './useDesignPage'
 import { DesignPage } from './DesignPage'
+import { useDesignPage } from './useDesignPage'
 
 export function DesignPageContainer() {
   const props = useDesignPage()

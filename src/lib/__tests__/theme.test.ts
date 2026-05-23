@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { applyTheme, themes } from '@/lib/theme'
 
 describe('theme utilities', () => {
