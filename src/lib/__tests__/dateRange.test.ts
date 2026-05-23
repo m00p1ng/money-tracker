@@ -22,6 +22,13 @@ describe('dateRange helpers', () => {
     expect(dateOnly('2026-05-03T23:45:00.000Z')).toBe('2026-05-03')
   })
 
+  it('builds last 90 days range including today', () => {
+    expect(getPresetRange('last-90d', now)).toEqual({
+      start: '2026-02-23',
+      end: '2026-05-23',
+    })
+  })
+
   it('checks inclusive date range membership', () => {
     const range = { start: '2026-05-01', end: '2026-05-31' }
     expect(isWithinDateRange('2026-05-01T00:00:00.000Z', range)).toBe(true)

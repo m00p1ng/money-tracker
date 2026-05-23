@@ -3,7 +3,7 @@ export type DateRange = {
   end: string
 }
 
-export type DateRangePreset = 'last-7d' | 'last-30d' | 'this-month' | 'last-month' | 'this-year' | 'last-year'
+export type DateRangePreset = 'last-7d' | 'last-30d' | 'last-90d' | 'this-month' | 'last-month' | 'this-year' | 'last-year'
 
 function toDateOnly(date: Date): string {
   const year = date.getUTCFullYear()
@@ -31,6 +31,9 @@ export function getPresetRange(preset: DateRangePreset, now = new Date()): DateR
   }
   if (preset === 'last-30d') {
     return { start: toDateOnly(addDays(now, -29)), end: toDateOnly(now) }
+  }
+  if (preset === 'last-90d') {
+    return { start: toDateOnly(addDays(now, -89)), end: toDateOnly(now) }
   }
   if (preset === 'this-month') {
     return { start: toDateOnly(new Date(Date.UTC(year, month, 1))), end: toDateOnly(new Date(Date.UTC(year, month + 1, 0))) }
