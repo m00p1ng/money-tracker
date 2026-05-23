@@ -37,9 +37,9 @@ export function DesignPage() {
   }, [])
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[var(--bg)] text-slate-50">
+    <div className="flex h-screen flex-col overflow-hidden bg-[var(--bg)] text-slate-50 md:flex-row">
       <DesignSidebar activeId={activeId} />
-      <div ref={contentRef} className="flex-1 overflow-y-auto px-6 py-8">
+      <div ref={contentRef} className="flex-1 overflow-y-auto px-4 py-6 md:px-6 md:py-8">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-xl font-bold">Design System</h1>
           <button
