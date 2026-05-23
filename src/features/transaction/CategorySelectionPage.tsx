@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useNavigate, useSearchParams } from 'react-router'
+import { useBackNavigate } from '../../context/navigationDirection'
 import { Icon } from '../../components/Icon'
 import { useCategoryStore } from '../../stores/categoryStore'
 import { useTransactionDraftStore } from '../../stores/transactionDraftStore'
-import type { Category, TransactionType } from '../../types/domain'
+import type { Category } from '../../types/domain'
 
 const gridVariants = {
   hidden: {},
@@ -18,6 +19,7 @@ const cellVariants = {
 
 export function CategorySelectionPage() {
   const navigate = useNavigate()
+  const backNavigate = useBackNavigate()
   const [searchParams] = useSearchParams()
   const categories = useCategoryStore((state) => state.items)
   const updateDraft = useTransactionDraftStore((state) => state.update)
@@ -47,7 +49,7 @@ export function CategorySelectionPage() {
     if (parentId) {
       setParentId(parent?.parentId)
     } else {
-      navigate(-1)
+      backNavigate(-1)
     }
   }
 
@@ -69,7 +71,7 @@ export function CategorySelectionPage() {
         // addCategory
         updateDraft({ items: [...draft.items, { categoryId: category.id, amount: 0 }] })
       }
-      navigate(-1)
+      backNavigate(-1)
       return
     }
 
