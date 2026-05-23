@@ -45,6 +45,27 @@ describe('transactionForm', () => {
     expect(transaction.items[0].amount).toBe(28)
   })
 
+  it('does not copy stale transfer-only fields onto expense or income transactions', () => {
+    for (const type of ['expense', 'income'] as const) {
+      const transaction = buildTransaction({
+        type,
+        walletId: 'wallet-cash',
+        toWalletId: 'wallet-usd',
+        currency: 'THB',
+        exchangeRate: 36.1234,
+        toExchangeRate: 1,
+        items: [{ categoryId: type === 'expense' ? 'expense-food' : 'income-salary', amount: 28 }],
+        date: '2026-05-22T10:30',
+        now: '2026-05-22T10:31:00.000Z',
+        createId: () => `tx-${type}`,
+      })
+
+      expect(transaction).not.toHaveProperty('toWalletId')
+      expect(transaction).not.toHaveProperty('exchangeRate')
+      expect(transaction).not.toHaveProperty('toExchangeRate')
+    }
+  })
+
   it('uses provided id when given', () => {
     const transaction = buildTransaction({
       id: 'tx-provided',

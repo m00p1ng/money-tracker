@@ -25,6 +25,8 @@ describe('transaction status helpers', () => {
     expect(validateExchangeRate('0')).toBe('Enter a positive exchange rate')
     expect(validateExchangeRate('-1')).toBe('Enter a positive exchange rate')
     expect(validateExchangeRate('abc')).toBe('Enter a valid exchange rate')
+    expect(validateExchangeRate('1e-5')).toBe('Enter a valid exchange rate')
+    expect(validateExchangeRate('0x10')).toBe('Enter a valid exchange rate')
   })
 
   it('validates transfer draft requirements', () => {
@@ -44,6 +46,26 @@ describe('transaction status helpers', () => {
         walletId: 'wallet-thb',
         toWalletId: 'wallet-usd',
         transferAmount: 0,
+        items: [],
+      }),
+    ).toContain('Enter a transfer amount')
+
+    expect(
+      validateDraft({
+        type: 'transfer',
+        walletId: 'wallet-thb',
+        toWalletId: 'wallet-usd',
+        transferAmount: Number.NaN,
+        items: [],
+      }),
+    ).toContain('Enter a transfer amount')
+
+    expect(
+      validateDraft({
+        type: 'transfer',
+        walletId: 'wallet-thb',
+        toWalletId: 'wallet-usd',
+        transferAmount: Number.POSITIVE_INFINITY,
         items: [],
       }),
     ).toContain('Enter a transfer amount')

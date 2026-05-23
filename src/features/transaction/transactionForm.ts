@@ -20,7 +20,7 @@ export function validateDraft(draft: TransactionDraft): string[] {
     } else if (draft.walletId === draft.toWalletId) {
       errors.push('Choose a different destination wallet')
     }
-    if (!draft.transferAmount || draft.transferAmount <= 0) {
+    if (!Number.isFinite(draft.transferAmount) || (draft.transferAmount ?? 0) <= 0) {
       errors.push('Enter a transfer amount')
     }
     return errors
@@ -49,7 +49,12 @@ export function validateExchangeRate(value: string | undefined): string | undefi
     return 'Enter a positive exchange rate'
   }
 
-  const decimalPlaces = trimmed.includes('.') ? trimmed.split('.')[1]?.length ?? 0 : 0
+  const decimalMatch = /^(\d+)(?:\.(\d+))?$/.exec(trimmed)
+  if (!decimalMatch) {
+    return 'Enter a valid exchange rate'
+  }
+
+  const decimalPlaces = decimalMatch[2]?.length ?? 0
   if (decimalPlaces > 4) {
     return 'Enter an exchange rate with up to 4 decimals'
   }
@@ -96,6 +101,13 @@ export function buildTransaction(input: {
   const items = input.type === 'transfer'
     ? [{ categoryId: 'transfer', amount: input.transferAmount ?? 0 }]
     : input.items
+  const transferFields = input.type === 'transfer'
+    ? {
+        toWalletId: input.toWalletId,
+        exchangeRate: input.exchangeRate,
+        toExchangeRate: input.toExchangeRate,
+      }
+    : {}
 
   return {
     id: input.id ?? input.createId(),
@@ -106,9 +118,7 @@ export function buildTransaction(input: {
     date: new Date(input.date).toISOString(),
     note: input.note?.trim() || undefined,
     createdAt: input.now,
-    toWalletId: input.toWalletId,
-    exchangeRate: input.exchangeRate,
-    toExchangeRate: input.toExchangeRate,
+    ...transferFields,
     status,
     repeat: status === 'paid' ? undefined : input.repeat,
   }
