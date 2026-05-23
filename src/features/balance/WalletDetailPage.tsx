@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
 import { Link, useParams } from 'react-router'
 import { useBackNavigate } from '../../context/navigationDirection'
 import { Icon } from '../../components/Icon'
 import { Card } from '../../components/ui/Card'
+import { AnimatedBar, BottomSheet, PageHeader, SectionDivider } from '../../components/ui'
 import { type DateRangePreset, getPresetRange } from '../../lib/dateRange'
 import { formatAmount } from '../../lib/format'
+import { hexToRgba } from '../../lib/color'
 import { useCategoryStore } from '../../stores/categoryStore'
 import { useTransactionStore } from '../../stores/transactionStore'
 import { useWalletStore } from '../../stores/walletStore'
@@ -20,13 +21,6 @@ const PRESETS: { label: string; value: DateRangePreset }[] = [
   { label: 'This Year', value: 'this-year' },
   { label: 'Last Year', value: 'last-year' },
 ]
-
-function hexToRgba(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return `rgba(${r},${g},${b},${alpha})`
-}
 
 function formatDateLabel(dateStr: string): string {
   const [year, month, day] = dateStr.split('-').map(Number)
@@ -62,23 +56,11 @@ export function WalletDetailPage() {
     .filter((row) => row.amount < 0)
     .reduce((sum, row) => sum + Math.abs(row.amount), 0)
 
-  const expenseRatio = currentAmount > 0 ? Math.min((totalExpenses / currentAmount) * 100, 100) : totalExpenses > 0 ? 100 : 0
   const creditUsedRatio = isCredit && wallet.creditLimit ? Math.min((currentAmount / wallet.creditLimit) * 100, 100) : 0
 
   return (
     <div className="space-y-4">
-      <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
-        <button
-          aria-label="Back"
-          onClick={() => backNavigate('/balance')}
-          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
-          type="button"
-        >
-          <Icon name="fa-chevron-left" />
-        </button>
-        <h1 className="text-center text-base font-bold">{wallet.name}</h1>
-        <div />
-      </header>
+      <PageHeader title={wallet.name} onBack={() => backNavigate('/balance')} />
 
       {/* Date range filter */}
       <div>
@@ -143,16 +125,7 @@ export function WalletDetailPage() {
               </span>
               <span className="text-xs font-semibold text-emerald-400">{formatAmount(currentAmount, wallet.currency)}</span>
             </div>
-            <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]">
-              <motion.div
-                className="flex h-full items-center rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-300 px-4 text-base font-bold text-emerald-950"
-                initial={{ width: 0 }}
-                animate={{ width: '100%' }}
-                transition={{ type: 'spring', stiffness: 80, damping: 20, delay: 0.1 }}
-              >
-                {formatAmount(currentAmount, wallet.currency)}
-              </motion.div>
-            </div>
+            <AnimatedBar value={currentAmount} maxValue={currentAmount} colorFrom="#10b981" colorTo="#6ee7b7" textColor="#052e16" currency={wallet.currency} delay={0.1} />
           </div>
           <div>
             <div className="mb-1.5 flex items-center justify-between">
@@ -162,29 +135,17 @@ export function WalletDetailPage() {
               </span>
               <span className="text-xs font-semibold text-amber-400">{formatAmount(totalExpenses, wallet.currency)}</span>
             </div>
-            <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]">
-              {totalExpenses > 0 && (
-                <motion.div
-                  className="flex h-full items-center rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 text-base font-bold text-amber-950"
-                  style={{ minWidth: '5rem' }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${expenseRatio}%` }}
-                  transition={{ type: 'spring', stiffness: 80, damping: 20, delay: 0.2 }}
-                >
-                  {formatAmount(totalExpenses, wallet.currency)}
-                </motion.div>
-              )}
-            </div>
+            {totalExpenses > 0 && (
+              <AnimatedBar value={totalExpenses} maxValue={currentAmount} colorFrom="#f59e0b" colorTo="#fde047" textColor="#451a03" currency={wallet.currency} delay={0.2} />
+            )}
+            {totalExpenses === 0 && <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]" />}
           </div>
         </div>
       )}
 
       {/* Transaction list */}
       <section>
-        <div className="mb-2.5 flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-widest text-white/30">Transactions</span>
-          <div className="h-px flex-1 bg-white/[0.06]" />
-        </div>
+        <SectionDivider label="Transactions" />
         {rows.length === 0 && <Card className="text-sm text-slate-400">No transactions in this range.</Card>}
         {rows.map((row) => {
           const category = categories.find((item) => item.id === row.transaction.items[0]?.categoryId)
@@ -217,52 +178,24 @@ export function WalletDetailPage() {
       </section>
 
       {/* Preset bottom sheet */}
-      <AnimatePresence>
-        {isPresetSheetOpen && (
-          <>
-            <motion.div
-              key="backdrop"
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setPresetSheetOpen(false)}
-            />
-            <motion.div
-              key="sheet"
-              className="fixed inset-x-0 bottom-0 z-50 rounded-t-3xl border-t border-white/[0.08] bg-[var(--bg)] pb-8"
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={{ type: 'spring', stiffness: 400, damping: 38 }}
+      <BottomSheet isOpen={isPresetSheetOpen} onClose={() => setPresetSheetOpen(false)} title="Date Range">
+        <div className="px-4 space-y-1">
+          {PRESETS.map((p) => (
+            <button
+              key={p.value}
+              type="button"
+              onClick={() => { setPreset(p.value); setPresetSheetOpen(false) }}
+              className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${preset === p.value
+                ? 'bg-emerald-500/15 text-emerald-300'
+                : 'text-white/70 hover:bg-white/[0.05]'
+              }`}
             >
-              <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-white/15" />
-              <h3 className="px-5 pb-2.5 pt-3.5 text-center text-[15px] font-bold">Date Range</h3>
-              <div className="mx-5 mb-2 h-px bg-white/[0.06]" />
-              <div className="px-4 space-y-1">
-                {PRESETS.map((p) => (
-                  <button
-                    key={p.value}
-                    type="button"
-                    onClick={() => {
-                      setPreset(p.value)
-                      setPresetSheetOpen(false)
-                    }}
-                    className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${preset === p.value
-                      ? 'bg-emerald-500/15 text-emerald-300'
-                      : 'text-white/70 hover:bg-white/[0.05]'
-                    }`}
-                  >
-                    {p.label}
-                    {preset === p.value && <Icon name="fa-circle-check" className="text-emerald-400" />}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              {p.label}
+              {preset === p.value && <Icon name="fa-circle-check" className="text-emerald-400" />}
+            </button>
+          ))}
+        </div>
+      </BottomSheet>
     </div>
   )
 }
