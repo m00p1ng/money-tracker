@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { createCalcState, pressCalcKey } from '@/lib/calculator'
+import { createCalcState, pressCalcKey } from '@/lib'
+
 
 describe('calculator', () => {
   it('appends digits and decimal points', () => {

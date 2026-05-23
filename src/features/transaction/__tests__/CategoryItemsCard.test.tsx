@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
-import { useCategoryStore } from '@/stores/categoryStore'
+import { useCategoryStore } from '@/stores'
 import type { Category, TransactionItem } from '@/types/domain'
 
 const items: TransactionItem[] = [

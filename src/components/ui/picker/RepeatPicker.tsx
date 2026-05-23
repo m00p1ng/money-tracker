@@ -1,10 +1,8 @@
 import cx from 'classnames'
 import { useState } from 'react'
 
-import { Icon } from '@/components/Icon'
-import { BottomSheet } from '@/components/shared/BottomSheet'
-import { Button } from '@/components/ui/Button'
-import { PickerColumn } from '@/components/ui/picker/PickerColumn'
+import { Icon, BottomSheet, PickerColumn  } from '@/components'
+import { Button } from '@/components/ui'
 import type { RepeatConfig, RepeatPreset } from '@/types/domain'
 
 const PRESETS: { label: string; value: RepeatPreset }[] = [
@@ -21,17 +19,19 @@ const UNIT_OPTIONS = ['day', 'month', 'year']
 
 type PickerValue = { every: string; unit: string }
 
+interface RepeatPickerProps {
+  isOpen: boolean
+  value: RepeatConfig
+  onConfirm: (config: RepeatConfig) => void
+  onClose: () => void
+}
+
 export function RepeatPicker({
   isOpen,
   value,
   onConfirm,
   onClose,
-}: {
-  isOpen: boolean
-  value: RepeatConfig
-  onConfirm: (config: RepeatConfig) => void
-  onClose: () => void
-}) {
+}: RepeatPickerProps) {
   const [preset, setPreset] = useState<RepeatPreset>(value.preset)
   const [pickerValue, setPickerValue] = useState<PickerValue>({
     every: String(value.customEvery ?? 1),

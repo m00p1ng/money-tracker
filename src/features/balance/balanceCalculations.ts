@@ -1,4 +1,4 @@
-import { isWithinDateRange, type DateRange } from '@/lib/dateRange'
+import { isWithinDateRange, type DateRange } from '@/lib'
 import type { Transaction, Wallet } from '@/types/domain'
 
 export type RunningWalletRow = {

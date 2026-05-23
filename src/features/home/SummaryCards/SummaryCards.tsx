@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
-import { Icon } from '@/components/Icon'
-import { formatAmount } from '@/lib/format'
+import { Icon } from '@/components'
+import { formatAmount } from '@/lib'
 
 const containerVariants = {
   hidden: {},

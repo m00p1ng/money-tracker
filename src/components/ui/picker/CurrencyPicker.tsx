@@ -1,7 +1,6 @@
 import cx from 'classnames'
 
-import { Icon } from '@/components/Icon'
-import { BottomSheet } from '@/components/shared/BottomSheet'
+import { Icon, BottomSheet } from '@/components'
 import type { Currency } from '@/types/domain'
 
 function currencyFlag(code: string): string {
@@ -10,19 +9,21 @@ function currencyFlag(code: string): string {
     .join('')
 }
 
+interface CurrencyPickerProps {
+  isOpen: boolean
+  currencies: Currency[]
+  selectedCode: string
+  onSelect: (code: string) => void
+  onClose: () => void
+}
+
 export function CurrencyPicker({
   isOpen,
   currencies,
   selectedCode,
   onSelect,
   onClose,
-}: {
-  isOpen: boolean
-  currencies: Currency[]
-  selectedCode: string
-  onSelect: (code: string) => void
-  onClose: () => void
-}) {
+}: CurrencyPickerProps) {
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} title="Currency">
       <div className="max-h-72 space-y-1.5 overflow-y-auto px-4">

@@ -30,6 +30,7 @@ export default defineConfig([
         avoidEscape: true,
         allowTemplateLiterals: true,
       }],
+      'import/no-duplicates': 'error',
       'import/order': ['error', {
         pathGroups: [
           {

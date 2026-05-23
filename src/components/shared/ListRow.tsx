@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 
-import { Icon } from '@/components/Icon'
+import { Icon } from '@/components'
 
 type ListRowProps = {
   icon: string

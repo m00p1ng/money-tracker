@@ -1,4 +1,4 @@
-import { useTransactionStore } from '@/stores/transactionStore'
+import { useTransactionStore } from '@/stores'
 
 export function useSummaryCards() {
   const monthlyIncome = useTransactionStore((state) => state.monthlyIncome)

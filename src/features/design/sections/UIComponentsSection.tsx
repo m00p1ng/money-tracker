@@ -1,14 +1,6 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
-import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
-import { Field, TextInput, SelectInput } from '@/components/ui/Field'
-import { CurrencyPicker } from '@/components/ui/picker/CurrencyPicker'
-import { DatePickerSheet } from '@/components/ui/picker/DatePickerSheet'
-import { RepeatPicker } from '@/components/ui/picker/RepeatPicker'
-import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
-import { WalletPicker } from '@/components/ui/picker/WalletPicker'
-import { SegmentedControl } from '@/components/ui/SegmentedControl'
+import { Button, Card, Field, TextInput, SelectInput, CurrencyPicker, DatePickerSheet, RepeatPicker, TypePickerDropdown, WalletPicker, SegmentedControl } from '@/components/ui'
 import type { Currency, Wallet, RepeatConfig } from '@/types/domain'
 
 const STUB_CURRENCIES: Currency[] = [
@@ -22,7 +14,13 @@ const STUB_WALLETS: Wallet[] = [
   { id: 'w2', name: 'Card', type: 'credit_card', currency: 'USD', balance: 2000, creditLimit: 5000, color: '#3b82f6', icon: '💳' },
 ]
 
-function SubSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
+interface SubSectionProps {
+  id: string
+  title: string
+  children: React.ReactNode
+}
+
+function SubSection({ id, title, children }: SubSectionProps) {
   return (
     <section id={id} className="scroll-mt-8">
       <h3 className="mb-4 text-base font-semibold text-white/70">{title}</h3>
@@ -31,7 +29,11 @@ function SubSection({ id, title, children }: { id: string; title: string; childr
   )
 }
 
-function VariantLabel({ label }: { label: string }) {
+interface VariantLabelProps {
+  label: string
+}
+
+function VariantLabel({ label }: VariantLabelProps) {
   return <p className="mt-2 text-center text-[10px] text-white/30">{label}</p>
 }
 

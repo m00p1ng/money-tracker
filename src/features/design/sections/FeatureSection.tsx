@@ -1,10 +1,18 @@
+import type React from 'react'
+
 import { SummaryCards } from '@/features/home/SummaryCards'
 import { TodayTransactions } from '@/features/home/TodayTransactions'
 import { UpcomingTransactions } from '@/features/home/UpcomingTransactions'
 import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard'
 import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
 
-function SubSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
+interface SubSectionProps {
+  id: string
+  title: string
+  children: React.ReactNode
+}
+
+function SubSection({ id, title, children }: SubSectionProps) {
   return (
     <section id={id} className="scroll-mt-8">
       <h3 className="mb-3 text-base font-semibold text-white/70">{title}</h3>

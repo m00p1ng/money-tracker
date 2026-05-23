@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 
-import { formatAmount } from '@/lib/format'
+import { formatAmount } from '@/lib'
+
 
 type AnimatedBarProps = {
   value: number

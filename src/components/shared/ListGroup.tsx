@@ -1,4 +1,9 @@
-export function ListGroup({ label, children }: { label: string; children: React.ReactNode }) {
+interface ListGroupProps {
+  label: string
+  children: React.ReactNode
+}
+
+export function ListGroup({ label, children }: ListGroupProps) {
   return (
     <div>
       <p className="mb-2 pl-1 text-[11px] uppercase tracking-[1.5px] text-white/30">{label}</p>

@@ -6,7 +6,7 @@ import {
   projectRepeatOccurrences,
   type VirtualRepeatOccurrence,
 } from '@/features/transaction/repeatSchedule'
-import { isTodayInLocalTime } from '@/lib/date'
+import { isTodayInLocalTime } from '@/lib'
 import type { Transaction } from '@/types/domain'
 
 function total(transaction: Transaction): number {

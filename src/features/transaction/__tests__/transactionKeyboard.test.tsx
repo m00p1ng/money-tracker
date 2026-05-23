@@ -4,9 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import TransactionPage from '@/features/transaction/TransactionPage'
-import { useCategoryStore } from '@/stores/categoryStore'
-import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
-import { useWalletStore } from '@/stores/walletStore'
+import { useCategoryStore, useTransactionDraftStore, useWalletStore } from '@/stores'
 
 const WALLET = { id: 'wallet-cash', name: 'Cash', type: 'payment' as const, currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' }
 const CATEGORY = { id: 'cat-coffee', name: 'Coffee', type: 'expense' as const, parentId: 'cat-food', level: 2 as const, icon: 'fa-utensils', color: '#65a30d', isDefault: true }

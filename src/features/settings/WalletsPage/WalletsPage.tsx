@@ -1,5 +1,10 @@
-import { AddRow, ListGroup, ListRow, PageHeader } from '@/components/ui'
-import { hexToRgba } from '@/lib/color'
+import {
+  AddRow,
+  ListGroup,
+  ListRow,
+  PageHeader,
+} from '@/components'
+import { hexToRgba } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 interface WalletsPageProps {

@@ -1,5 +1,5 @@
 import { useBackNavigate } from '@/context/navigationDirection'
-import { useCategoryStore } from '@/stores/categoryStore'
+import { useCategoryStore } from '@/stores'
 
 export function useCategoriesPage() {
   const categories = useCategoryStore((state) => state.items)

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { useCategoryStore } from '@/stores/categoryStore'
+import { useCategoryStore } from '@/stores'
 import type { Category } from '@/types/domain'
 
 export function useCategoryFormPage() {

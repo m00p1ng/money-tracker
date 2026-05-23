@@ -1,7 +1,4 @@
-import { useCategoryStore } from '@/stores/categoryStore'
-import { useCurrencyStore } from '@/stores/currencyStore'
-import { useSettingsStore } from '@/stores/settingsStore'
-import { useWalletStore } from '@/stores/walletStore'
+import { useCategoryStore, useCurrencyStore, useSettingsStore, useWalletStore } from '@/stores'
 
 export function useSettingsPage() {
   const settings = useSettingsStore((state) => state.settings)

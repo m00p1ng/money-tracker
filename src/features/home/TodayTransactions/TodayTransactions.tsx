@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
-import { SectionLabel, TransactionRow } from '@/components/ui'
-import { formatShortDate } from '@/lib/date'
+import { SectionLabel, TransactionRow } from '@/components'
+import { formatShortDate } from '@/lib'
 
 const listVariants = {
   hidden: {},

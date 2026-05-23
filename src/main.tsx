@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 
 import './index.css'
 import App from '@/App'
-import { bootstrapStores } from '@/stores/bootstrap'
+import { bootstrapStores } from '@/stores'
 
 async function start() {
   await bootstrapStores()

@@ -1,7 +1,8 @@
 import cx from 'classnames'
 import { Link } from 'react-router'
 
-import { Icon } from '@/components/Icon'
+import { Icon } from '@/components'
+
 
 const navItems = [
   { label: 'Home', to: '/', icon: 'fa-home', enabled: true },

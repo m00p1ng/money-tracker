@@ -2,7 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
+import { TypePickerDropdown } from '@/components/ui'
+
 
 describe('TypePickerDropdown', () => {
   it('renders current type label', () => {

@@ -4,8 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import CategorySelectionPage from '@/features/transaction/CategorySelectionPage'
-import { useCategoryStore } from '@/stores/categoryStore'
-import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
+import { useCategoryStore, useTransactionDraftStore } from '@/stores'
 
 const categories = [
   { id: 'exp-food', name: 'Food & Drink', type: 'expense' as const, level: 1 as const, icon: 'fa-utensils', color: '#65a30d', isDefault: true },

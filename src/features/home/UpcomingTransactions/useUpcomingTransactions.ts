@@ -1,7 +1,5 @@
-import { formatAmount } from '@/lib/format'
-import { useCategoryStore } from '@/stores/categoryStore'
-import { useTransactionStore } from '@/stores/transactionStore'
-import { useWalletStore } from '@/stores/walletStore'
+import { formatAmount } from '@/lib'
+import { useCategoryStore, useTransactionStore, useWalletStore } from '@/stores'
 
 import type { UpcomingTransactionRowData } from './UpcomingTransactions'
 

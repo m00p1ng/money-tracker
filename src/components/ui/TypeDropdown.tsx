@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { Icon } from '@/components/Icon'
+import { Icon } from '@/components'
+
 
 type TransactionType = 'expense' | 'income' | 'transfer'
 
@@ -10,15 +11,17 @@ const TYPES: { label: string; value: TransactionType }[] = [
   { label: 'Transfer', value: 'transfer' },
 ]
 
+interface TypeDropdownProps {
+  value: TransactionType
+  onChange: (type: TransactionType) => void
+  locked?: boolean
+}
+
 export function TypePickerDropdown({
   value,
   onChange,
   locked = false,
-}: {
-  value: TransactionType
-  onChange: (type: TransactionType) => void
-  locked?: boolean
-}) {
+}: TypeDropdownProps) {
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -61,10 +64,9 @@ export function TypePickerDropdown({
             <button
               key={t.value}
               type="button"
-              className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium ${
-                value === t.value
-                  ? 'bg-[var(--accent)]/[0.12] font-bold text-[var(--accent-light)]'
-                  : 'text-white/70'
+              className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium ${value === t.value
+                ? 'bg-[var(--accent)]/[0.12] font-bold text-[var(--accent-light)]'
+                : 'text-white/70'
               }`}
               onClick={() => {
                 onChange(t.value)

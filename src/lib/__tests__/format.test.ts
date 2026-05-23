@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatAmount } from '@/lib/format'
+import { formatAmount } from '@/lib'
+
 
 describe('formatAmount', () => {
   it('formats THB with two decimals', () => {

@@ -1,8 +1,15 @@
 import cx from 'classnames'
 
-import { Icon } from '@/components/Icon'
-import { BottomSheet } from '@/components/shared/BottomSheet'
+import { Icon, BottomSheet } from '@/components'
 import type { Wallet } from '@/types/domain'
+
+interface WalletPickerProps {
+  isOpen: boolean
+  wallets: Wallet[]
+  selectedId: string
+  onSelect: (walletId: string) => void
+  onClose: () => void
+}
 
 export function WalletPicker({
   isOpen,
@@ -10,13 +17,7 @@ export function WalletPicker({
   selectedId,
   onSelect,
   onClose,
-}: {
-  isOpen: boolean
-  wallets: Wallet[]
-  selectedId: string
-  onSelect: (walletId: string) => void
-  onClose: () => void
-}) {
+}: WalletPickerProps) {
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} title="Wallet">
       <div className="space-y-1.5 px-4">

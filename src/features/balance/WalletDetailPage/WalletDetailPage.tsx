@@ -2,13 +2,9 @@ import cx from 'classnames'
 import { useState } from 'react'
 import { Link } from 'react-router'
 
-import { Icon } from '@/components/Icon'
-import { AnimatedBar, BottomSheet, PageHeader, SectionDivider } from '@/components/ui'
-import { Card } from '@/components/ui/Card'
+import { Icon, AnimatedBar, BottomSheet, PageHeader, SectionDivider, Card } from '@/components'
 import { walletRunningRows } from '@/features/balance/balanceCalculations'
-import { hexToRgba } from '@/lib/color'
-import { type DateRangePreset, getPresetRange } from '@/lib/dateRange'
-import { formatAmount } from '@/lib/format'
+import { hexToRgba, type DateRangePreset, getPresetRange, formatAmount } from '@/lib'
 import type { Category, Transaction, Wallet } from '@/types/domain'
 
 const PRESETS: { label: string; value: DateRangePreset }[] = [
@@ -181,7 +177,7 @@ export function WalletDetailPage({ wallet, transactions, categories, currentAmou
               key={p.value}
               type="button"
               onClick={() => {
-                setPreset(p.value); setPresetSheetOpen(false) 
+                setPreset(p.value); setPresetSheetOpen(false)
               }}
               className={cx('flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors', preset === p.value
                 ? 'bg-accent/15 text-accent-light'

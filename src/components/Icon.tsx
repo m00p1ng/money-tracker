@@ -103,6 +103,12 @@ library.add(
   faXmark,
 )
 
-export function Icon({ name, className, style }: { name: string; className?: string; style?: React.CSSProperties }) {
+interface IconProps {
+  name: string
+  className?: string
+  style?: React.CSSProperties
+}
+
+export function Icon({ name, className, style }: IconProps) {
   return <FontAwesomeIcon icon={['fas', name.replace('fa-', '') as IconName]} className={className} style={style as never} />
 }

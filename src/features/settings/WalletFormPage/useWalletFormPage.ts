@@ -1,8 +1,7 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { useCurrencyStore } from '@/stores/currencyStore'
-import { useWalletStore } from '@/stores/walletStore'
+import { useCurrencyStore, useWalletStore } from '@/stores'
 import type { Wallet, WalletType } from '@/types/domain'
 
 export function useWalletFormPage() {

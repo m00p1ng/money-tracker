@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
-import { hexToRgba } from '@/lib/color'
+import { hexToRgba } from '@/lib'
+
 
 describe('hexToRgba', () => {
   it('converts a hex color to rgba', () => {

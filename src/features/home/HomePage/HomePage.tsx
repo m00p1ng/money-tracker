@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 
-import { Icon } from '@/components/Icon'
+import { Icon } from '@/components'
 import SummaryCards from '@/features/home/SummaryCards'
 import TodayTransactions from '@/features/home/TodayTransactions'
 import UpcomingTransactions from '@/features/home/UpcomingTransactions'
-import { formatHeaderDate } from '@/lib/date'
+import { formatHeaderDate } from '@/lib'
 
 const containerVariants = {
   hidden: {},

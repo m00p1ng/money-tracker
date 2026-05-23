@@ -4,7 +4,11 @@ import { describe, it, expect } from 'vitest'
 
 import { NavigationDirectionProvider, useNavigationDirection, useBackNavigate } from '@/context/navigationDirection'
 
-function wrapper({ children }: { children: React.ReactNode }) {
+interface WrapperProps {
+  children: React.ReactNode
+}
+
+function wrapper({ children }: WrapperProps) {
   return (
     <MemoryRouter>
       <NavigationDirectionProvider>{children}</NavigationDirectionProvider>

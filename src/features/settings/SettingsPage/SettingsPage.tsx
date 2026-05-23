@@ -1,5 +1,8 @@
-import { Icon } from '@/components/Icon'
-import { ListGroup, ListRow } from '@/components/ui'
+import {
+  Icon,
+  ListGroup,
+  ListRow,
+} from '@/components'
 
 const THEME_LABELS: Record<string, string> = {
   forest: 'Forest Green',

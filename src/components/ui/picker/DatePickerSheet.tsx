@@ -2,26 +2,27 @@ import { useState } from 'react'
 import { DayPicker } from 'react-day-picker'
 
 import 'react-day-picker/dist/style.css'
-import { BottomSheet } from '@/components/shared/BottomSheet'
-import { Button } from '@/components/ui/Button'
-import { PickerColumn } from '@/components/ui/picker/PickerColumn'
+import { BottomSheet, PickerColumn  } from '@/components'
+import { Button } from '@/components/ui'
 
 type TimeValue = { hour: string; minute: string }
 
 const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
 const MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
 
+interface DatePickerSheetProps {
+  isOpen: boolean
+  value: Date
+  onChange: (date: Date) => void
+  onClose: () => void
+}
+
 export function DatePickerSheet({
   isOpen,
   value,
   onChange,
   onClose,
-}: {
-  isOpen: boolean
-  value: Date
-  onChange: (date: Date) => void
-  onClose: () => void
-}) {
+}: DatePickerSheetProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(value)
   const [pickerValue, setPickerValue] = useState<TimeValue>({
     hour: String(value.getHours()).padStart(2, '0'),
@@ -45,7 +46,7 @@ export function DatePickerSheet({
           onSelect={(day) => {
             if (day) {
               setSelectedDay(day)
-            } 
+            }
           }}
           classNames={{
             root: 'rdp-custom',

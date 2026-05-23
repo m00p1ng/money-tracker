@@ -13,7 +13,11 @@ const NavigationDirectionContext = createContext<NavigationDirectionContextValue
   setDirection: () => {},
 })
 
-export function NavigationDirectionProvider({ children }: { children: React.ReactNode }) {
+interface NavigationDirectionProviderProps {
+  children: React.ReactNode
+}
+
+export function NavigationDirectionProvider({ children }: NavigationDirectionProviderProps) {
   const [direction, setDirection] = useState<Direction>('forward')
   return (
     <NavigationDirectionContext.Provider value={{ direction, setDirection }}>

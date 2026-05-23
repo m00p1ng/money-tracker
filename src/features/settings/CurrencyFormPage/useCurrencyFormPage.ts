@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { useCurrencyStore } from '@/stores/currencyStore'
+import { useCurrencyStore } from '@/stores'
 import type { Currency } from '@/types/domain'
 
 export function useCurrencyFormPage() {

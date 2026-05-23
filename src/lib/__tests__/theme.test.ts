@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { applyTheme, themes } from '@/lib/theme'
+import { applyTheme, themes } from '@/lib'
+
 
 describe('theme utilities', () => {
   it('each theme defines income, expense, and danger tokens', () => {

@@ -2,15 +2,17 @@ import cx from 'classnames'
 
 export type Segment<T extends string> = { label: string; value: T }
 
+interface SegmentedControlProps<T extends string> {
+  value: T
+  segments: Segment<T>[]
+  onChange: (value: T) => void
+}
+
 export function SegmentedControl<T extends string>({
   value,
   segments,
   onChange,
-}: {
-  value: T
-  segments: Segment<T>[]
-  onChange: (value: T) => void
-}) {
+}: SegmentedControlProps<T>) {
   return (
     <div className="grid rounded-xl bg-white/[0.06] p-0.5" style={{ gridTemplateColumns: `repeat(${segments.length}, minmax(0, 1fr))` }}>
       {segments.map((segment) => (

@@ -1,9 +1,13 @@
 import { FormEvent, useState } from 'react'
 
-import { FormErrorMessage, PageHeader } from '@/components/ui'
-import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
-import { Field, TextInput } from '@/components/ui/Field'
+import {
+  FormErrorMessage,
+  PageHeader,
+  Button,
+  Card,
+  Field,
+  TextInput,
+} from '@/components'
 import type { Currency } from '@/types/domain'
 
 interface CurrencyFormPageProps {

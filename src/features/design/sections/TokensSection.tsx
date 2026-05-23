@@ -35,7 +35,12 @@ const SPACING_SCALE = [
   { label: 'p-12 (48px)', size: 48 },
 ]
 
-function ColorSwatch({ name, variable }: { name: string; variable: string }) {
+interface ColorSwatchProps {
+  name: string
+  variable: string
+}
+
+function ColorSwatch({ name, variable }: ColorSwatchProps) {
   const resolved = useMemo(
     () => getComputedStyle(document.documentElement).getPropertyValue(variable).trim(),
     [variable],
@@ -53,7 +58,13 @@ function ColorSwatch({ name, variable }: { name: string; variable: string }) {
   )
 }
 
-function SectionHeading({ id, title, description }: { id: string; title: string; description: string }) {
+interface SectionHeadingProps {
+  id: string
+  title: string
+  description: string
+}
+
+function SectionHeading({ id, title, description }: SectionHeadingProps) {
   return (
     <div id={id} className="mb-4 scroll-mt-8">
       <h2 className="text-lg font-bold">{title}</h2>

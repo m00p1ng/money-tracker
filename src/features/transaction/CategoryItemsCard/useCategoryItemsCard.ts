@@ -1,4 +1,5 @@
-import { useCategoryStore } from '@/stores/categoryStore'
+
+import { useCategoryStore } from '@/stores'
 
 import type { CategoryItemsCardProps } from './CategoryItemsCard'
 

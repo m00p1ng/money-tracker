@@ -1,4 +1,8 @@
-export function FormErrorMessage({ error }: { error: string | null }) {
+interface FormErrorMessageProps {
+  error: string | null
+}
+
+export function FormErrorMessage({ error }: FormErrorMessageProps) {
   if (!error) {
     return null
   }

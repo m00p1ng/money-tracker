@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-import { SectionLabel, TransactionRow } from '@/components/ui'
+import { SectionLabel, TransactionRow } from '@/components'
 
 const listVariants = {
   hidden: {},

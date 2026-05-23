@@ -40,7 +40,11 @@ function scrollTo(id: string) {
 }
 
 /** Horizontal pill bar — shown on small screens only */
-export function DesignTopNav({ activeId }: { activeId: string }) {
+interface DesignTopNavProps {
+  activeId: string
+}
+
+export function DesignTopNav({ activeId }: DesignTopNavProps) {
   return (
     <div className="flex overflow-x-auto border-b border-white/[0.08] bg-white/[0.02] px-3 py-2 md:hidden">
       <div className="flex gap-1.5">
@@ -63,7 +67,11 @@ export function DesignTopNav({ activeId }: { activeId: string }) {
 }
 
 /** Vertical sidebar — shown on md+ screens only */
-export function DesignSidebar({ activeId }: { activeId: string }) {
+interface DesignSidebarProps {
+  activeId: string
+}
+
+export function DesignSidebar({ activeId }: DesignSidebarProps) {
   return (
     <nav className="hidden w-52 flex-shrink-0 flex-col gap-1 overflow-y-auto border-r border-white/[0.08] bg-white/[0.02] px-2 py-4 md:flex">
       <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>

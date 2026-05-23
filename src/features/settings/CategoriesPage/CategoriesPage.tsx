@@ -1,7 +1,6 @@
 import { Link } from 'react-router'
 
-import { PageHeader } from '@/components/ui'
-import { Card } from '@/components/ui/Card'
+import { PageHeader, Card } from '@/components'
 import type { Category } from '@/types/domain'
 
 interface CategoriesPageProps {

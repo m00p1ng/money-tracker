@@ -5,7 +5,11 @@ import { describe, it, expect, vi } from 'vitest'
 
 import { useFormCrud } from '@/hooks/shared/useFormCrud'
 
-const wrapper = ({ children }: { children: React.ReactNode }) =>
+interface WrapperProps {
+  children: React.ReactNode
+}
+
+const wrapper = ({ children }: WrapperProps) =>
   React.createElement(MemoryRouter, null, children)
 
 type Item = { id: string; name: string }

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatHeaderDate, formatShortDate, isTodayInLocalTime, monthRangeLabel, toDatetimeLocalValue } from '@/lib/date'
+import { formatHeaderDate, formatShortDate, isTodayInLocalTime, monthRangeLabel, toDatetimeLocalValue } from '@/lib'
+
 
 describe('date utilities', () => {
   it('formats the header date', () => {

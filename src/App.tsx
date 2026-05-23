@@ -2,7 +2,7 @@ import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import { useLayoutEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router'
 
-import AppShell from '@/components/AppShell'
+import { AppShell } from '@/components'
 import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
 import BalancePage from '@/features/balance/BalancePage'
 import WalletDetailPage from '@/features/balance/WalletDetailPage'

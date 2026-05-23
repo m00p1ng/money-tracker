@@ -1,5 +1,5 @@
 import { useBackNavigate } from '@/context/navigationDirection'
-import { useCurrencyStore } from '@/stores/currencyStore'
+import { useCurrencyStore } from '@/stores'
 
 export function useCurrenciesPage() {
   const currencies = useCurrencyStore((state) => state.items)

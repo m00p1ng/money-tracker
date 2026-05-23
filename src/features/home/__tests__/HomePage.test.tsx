@@ -3,9 +3,8 @@ import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import HomePage from '@/features/home/HomePage'
-import { formatShortDate } from '@/lib/date'
-import { useCategoryStore } from '@/stores/categoryStore'
-import { useTransactionStore } from '@/stores/transactionStore'
+import { formatShortDate } from '@/lib'
+import { useCategoryStore, useTransactionStore } from '@/stores'
 
 describe('HomePage', () => {
   beforeEach(() => {

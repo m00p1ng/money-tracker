@@ -4,10 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import TransactionPage from '@/features/transaction/TransactionPage'
-import { useCategoryStore } from '@/stores/categoryStore'
-import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
-import { useTransactionStore } from '@/stores/transactionStore'
-import { useWalletStore } from '@/stores/walletStore'
+import { useCategoryStore, useTransactionDraftStore, useTransactionStore, useWalletStore } from '@/stores'
 
 describe('TransactionPage edit mode', () => {
   beforeEach(() => {

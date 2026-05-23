@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
+import { useTransactionDraftStore } from '@/stores'
+
 
 beforeEach(() => {
   useTransactionDraftStore.getState().clear()

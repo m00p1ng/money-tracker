@@ -1,10 +1,15 @@
 import { FormEvent, useMemo, useState } from 'react'
 
-import { FormErrorMessage, PageHeader } from '@/components/ui'
-import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
-import { Field, SelectInput, TextInput } from '@/components/ui/Field'
-import { createId } from '@/lib/id'
+import {
+  FormErrorMessage,
+  PageHeader,
+  Button,
+  Card,
+  Field,
+  SelectInput,
+  TextInput,
+} from '@/components'
+import { createId } from '@/lib'
 import type { Currency, Wallet, WalletType } from '@/types/domain'
 
 interface WalletFormPageProps {

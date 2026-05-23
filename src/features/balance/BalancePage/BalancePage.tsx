@@ -1,14 +1,16 @@
 import cx from 'classnames'
 import { Link } from 'react-router'
 
-import { Icon } from '@/components/Icon'
-import { AnimatedBar, SectionDivider } from '@/components/ui'
-import { Card } from '@/components/ui/Card'
-import { hexToRgba } from '@/lib/color'
-import { formatAmount } from '@/lib/format'
+import { Icon, AnimatedBar, SectionDivider, Card } from '@/components'
+import { hexToRgba, formatAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
-function WalletRow({ wallet, amount }: { wallet: Wallet; amount: number }) {
+interface WalletRowProps {
+  wallet: Wallet
+  amount: number
+}
+
+function WalletRow({ wallet, amount }: WalletRowProps) {
   const isCredit = wallet.type === 'credit_card'
   return (
     <Link to={`/balance/wallet/${wallet.id}`}>

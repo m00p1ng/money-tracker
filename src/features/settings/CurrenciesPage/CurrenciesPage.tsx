@@ -1,16 +1,39 @@
 import { Link } from 'react-router'
 
-import { Icon } from '@/components/Icon'
-import { AddRow, ListGroup, PageHeader } from '@/components/ui'
+import {
+  Icon,
+  AddRow,
+  ListGroup,
+  PageHeader,
+} from '@/components'
 import type { Currency } from '@/types/domain'
 
 const FLAG_MAP: Record<string, string> = {
-  THB: '🇹🇭', USD: '🇺🇸', EUR: '🇪🇺', JPY: '🇯🇵', GBP: '🇬🇧',
-  CNY: '🇨🇳', KRW: '🇰🇷', SGD: '🇸🇬', HKD: '🇭🇰', AUD: '🇦🇺',
-  CAD: '🇨🇦', CHF: '🇨🇭', MYR: '🇲🇾', IDR: '🇮🇩', VND: '🇻🇳',
+  THB: '🇹🇭',
+  USD: '🇺🇸',
+  EUR: '🇪🇺',
+  JPY: '🇯🇵',
+  GBP: '🇬🇧',
+  CNY: '🇨🇳',
+  KRW: '🇰🇷',
+  SGD: '🇸🇬',
+  HKD: '🇭🇰',
+  AUD: '🇦🇺',
+  CAD: '🇨🇦',
+  CHF: '🇨🇭',
+  MYR: '🇲🇾',
+  IDR: '🇮🇩',
+  VND: '🇻🇳',
 }
 
-function CurrencyRow({ code, isBase, rate, baseCode }: { code: string; isBase: boolean; rate: number; baseCode: string }) {
+interface CurrencyRowProps {
+  code: string
+  isBase: boolean
+  rate: number
+  baseCode: string
+}
+
+function CurrencyRow({ code, isBase, rate, baseCode }: CurrencyRowProps) {
   return (
     <Link
       to={`/settings/currencies/${code}`}

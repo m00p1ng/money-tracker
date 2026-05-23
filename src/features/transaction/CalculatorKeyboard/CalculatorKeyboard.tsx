@@ -23,7 +23,12 @@ const keyIcons: Record<string, IconDefinition> = {
   '⌫': faDeleteLeft,
 }
 
-export function CalculatorKeyboard({ onPress, onDismiss }: { onPress: (key: string) => void; onDismiss?: () => void }) {
+interface CalculatorKeyboardProps {
+  onPress: (key: string) => void
+  onDismiss?: () => void
+}
+
+export function CalculatorKeyboard({ onPress, onDismiss }: CalculatorKeyboardProps) {
   return (
     <div className="border-t border-white/10 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
       {onDismiss && (
