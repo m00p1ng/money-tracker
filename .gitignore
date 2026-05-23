@@ -28,6 +28,7 @@ my-app*
 template/src/__tests__/__snapshots__/
 /.changelog
 
+.worktrees/
 .superpowers/brainstorm
 docs/superpowers/plans/
 .playwright-mcp
