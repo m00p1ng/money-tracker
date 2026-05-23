@@ -6,7 +6,7 @@ import { useCategoryStore } from '@/stores/categoryStore'
 import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
 import { useTransactionStore } from '@/stores/transactionStore'
 import { useWalletStore } from '@/stores/walletStore'
-import { TransactionPage } from '@/features/transaction/TransactionPage'
+import TransactionPage from '@/features/transaction/TransactionPage'
 
 describe('TransactionPage edit mode', () => {
   beforeEach(() => {

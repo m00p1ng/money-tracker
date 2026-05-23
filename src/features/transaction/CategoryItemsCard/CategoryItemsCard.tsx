@@ -1,8 +1,19 @@
 import { Icon } from '@/components/Icon'
 import cx from 'classnames'
 import { formatAmount } from '@/lib/format'
-import { useCategoryStore } from '@/stores/categoryStore'
 import type { TransactionItem } from '@/types/domain'
+import type { Category } from '@/types/domain'
+
+export interface CategoryItemsCardProps {
+  items: TransactionItem[]
+  focusedIndex: number | null
+  onFocus: (index: number) => void
+  onAdd: () => void
+  onRemove: (index: number) => void
+  onChangeCategory: (index: number) => void
+  findCategory: (id: string) => Category | undefined
+  parentOf: (category: Category) => Category | undefined
+}
 
 export function CategoryItemsCard({
   items,
@@ -11,16 +22,9 @@ export function CategoryItemsCard({
   onAdd,
   onRemove,
   onChangeCategory,
-}: {
-  items: TransactionItem[]
-  focusedIndex: number | null
-  onFocus: (index: number) => void
-  onAdd: () => void
-  onRemove: (index: number) => void
-  onChangeCategory: (index: number) => void
-}) {
-  const findCategory = useCategoryStore((state) => state.findById)
-  const parentOf = useCategoryStore((state) => state.parentOf)
+  findCategory,
+  parentOf,
+}: CategoryItemsCardProps) {
   const total = items.reduce((sum, item) => sum + item.amount, 0)
 
   return (

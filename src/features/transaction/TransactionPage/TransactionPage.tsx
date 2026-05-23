@@ -1,41 +1,25 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import cx from 'classnames'
-import { useNavigate, useParams, useSearchParams } from 'react-router'
-import { useBackNavigate } from '@/context/navigationDirection'
 import { Icon } from '@/components/Icon'
 import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
 import { createCalcState, pressCalcKey } from '@/lib/calculator'
-import { createId } from '@/lib/id'
 import { formatDatetimeLocalDisplay, toDatetimeLocalValue } from '@/lib/date'
-import { useCurrencyStore } from '@/stores/currencyStore'
-import { useTransactionDraftStore } from '@/stores/transactionDraftStore'
-import { useTransactionStore } from '@/stores/transactionStore'
-import { useWalletStore } from '@/stores/walletStore'
-import type { RepeatConfig, TransactionType } from '@/types/domain'
-import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard'
-import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
+import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard/CalculatorKeyboard'
+import { CategoryItemsCardContainer } from '@/features/transaction/CategoryItemsCard/CategoryItemsCardContainer'
 import { CurrencyPicker } from '@/components/ui/picker/CurrencyPicker'
 import { DatePickerSheet } from '@/components/ui/picker/DatePickerSheet'
 import { RepeatPicker } from '@/components/ui/picker/RepeatPicker'
 import { WalletPicker } from '@/components/ui/picker/WalletPicker'
-import { buildTransaction, validateDraft, validateExchangeRate } from '@/features/transaction/transactionForm'
+import type { RepeatConfig, TransactionType, Wallet, Currency, TransactionItem } from '@/types/domain'
 
 type WalletPickerTarget = 'wallet' | 'toWallet'
 
 function formatRepeat(config: RepeatConfig): string {
-  if (config.preset === 'daily') {
-    return 'Daily'
-  }
-  if (config.preset === '2weeks') {
-    return 'Every 2 Weeks'
-  }
-  if (config.preset === 'monthly') {
-    return 'Monthly'
-  }
-  if (config.preset === 'yearly') {
-    return 'Yearly'
-  }
+  if (config.preset === 'daily') return 'Daily'
+  if (config.preset === '2weeks') return 'Every 2 Weeks'
+  if (config.preset === 'monthly') return 'Monthly'
+  if (config.preset === 'yearly') return 'Yearly'
   if (config.preset === 'custom' && config.customEvery && config.customUnit) {
     const unit = config.customEvery === 1 ? config.customUnit : `${config.customUnit}s`
     return `Every ${config.customEvery} ${unit}`
@@ -43,163 +27,106 @@ function formatRepeat(config: RepeatConfig): string {
   return 'Never'
 }
 
-export function TransactionPage() {
-  const navigate = useNavigate()
-  const backNavigate = useBackNavigate()
-  const { id, sourceId, date: repeatDate } = useParams()
-  const existing = useTransactionStore((state) => (id ? state.findById(id) : undefined))
-  const sourceRepeat = useTransactionStore((state) => (sourceId ? state.findById(sourceId) : undefined))
-  const add = useTransactionStore((state) => state.add)
-  const update = useTransactionStore((state) => state.update)
-  const remove = useTransactionStore((state) => state.remove)
-  const wallets = useWalletStore((state) => state.items)
-  const currencies = useCurrencyStore((state) => state.items)
-  const isEditMode = Boolean(id && existing)
-  const isRepeatMaterialization = Boolean(sourceId && repeatDate)
-  const initial = isRepeatMaterialization ? sourceRepeat : existing
-  const [searchParams] = useSearchParams()
-  const seedCategoryId = !isEditMode && !isRepeatMaterialization ? searchParams.get('categoryId') ?? undefined : undefined
-  const seedType = !isEditMode && !isRepeatMaterialization ? (searchParams.get('type') ?? 'expense') as TransactionType : undefined
+export interface TransactionPageProps {
+  type: TransactionType
+  walletId: string
+  toWalletId: string | undefined
+  items: TransactionItem[]
+  focusedIndex: number | null
+  date: string
+  note: string
+  currency: string
+  exchangeRate: string
+  toExchangeRate: string
+  repeatConfig: RepeatConfig
+  transferAmount: number
+  wallets: Wallet[]
+  currencies: Currency[]
+  isEditMode: boolean
+  isPlanned: boolean
+  defaultRate: string
+  onChangeType: (v: TransactionType) => void
+  onUpdateExchangeRate: (value: string) => void
+  onUpdateToExchangeRate: (value: string) => void
+  onUpdateDate: (d: Date) => void
+  onUpdateNote: (value: string) => void
+  onFocusNoteField: () => void
+  onUpdateRepeatConfig: (config: RepeatConfig) => void
+  onUpdateWallet: (id: string) => void
+  onUpdateToWallet: (id: string) => void
+  onUpdateCurrency: (code: string) => void
+  onFocusItem: (index: number) => void
+  onRemoveItem: (index: number) => void
+  onChangeCategory: (index: number) => void
+  onAddCategory: () => void
+  onPressCalcKey: (key: string, currentCalcResult: number) => void
+  onOpenCurrencyPicker: () => void
+  onSave: () => Promise<void>
+  onBack: () => void
+  onDelete: () => Promise<void>
+}
 
-  const draftStore = useTransactionDraftStore()
-  const updateDraft = draftStore.update
-  const clearDraft = draftStore.clear
-
-  // Compute initial values (used only when draft is null)
-  const initialType = (seedType ?? initial?.type ?? 'expense') as TransactionType
-  const initialWalletId = initial?.walletId ?? wallets[0]?.id ?? 'wallet-cash'
-
-  // Initialize draft lazily: if null, set it synchronously via getState to avoid render-phase side effects
-  const draft = draftStore.draft ?? (() => {
-    const newDraft = {
-      id: existing?.id,
-      type: initialType,
-      walletId: initialWalletId,
-      toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
-      items: initial?.items ?? (seedCategoryId ? [{ categoryId: seedCategoryId, amount: 0 }] : []),
-      focusedIndex: seedCategoryId ? 0 : null,
-      date: initial ? toDatetimeLocalValue(new Date(initial.date)) : toDatetimeLocalValue(new Date()),
-      note: initial?.note ?? '',
-      currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
-      exchangeRate: String(initial?.exchangeRate ?? ''),
-      toExchangeRate: String(initial?.toExchangeRate ?? ''),
-      repeatConfig: initial?.repeat ?? { preset: 'never' },
-      transferAmount: initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0,
-    }
-    useTransactionDraftStore.getState().init(newDraft)
-    return newDraft
-  })()
-
+export function TransactionPage({
+  type,
+  walletId,
+  toWalletId,
+  items,
+  focusedIndex,
+  date,
+  note,
+  currency,
+  exchangeRate,
+  toExchangeRate,
+  repeatConfig,
+  wallets,
+  currencies,
+  isEditMode,
+  isPlanned,
+  defaultRate,
+  onChangeType,
+  onUpdateExchangeRate,
+  onUpdateToExchangeRate,
+  onUpdateDate,
+  onUpdateNote,
+  onFocusNoteField,
+  onUpdateRepeatConfig,
+  onUpdateWallet,
+  onUpdateToWallet,
+  onUpdateCurrency,
+  onFocusItem,
+  onRemoveItem,
+  onChangeCategory,
+  onAddCategory,
+  onPressCalcKey,
+  onOpenCurrencyPicker,
+  onSave,
+  onBack,
+  onDelete,
+}: TransactionPageProps) {
   const [calc, setCalc] = useState(createCalcState())
   const [walletPickerTarget, setWalletPickerTarget] = useState<WalletPickerTarget | null>(null)
   const [isRepeatPickerOpen, setRepeatPickerOpen] = useState(false)
   const [isCurrencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [isDatePickerOpen, setDatePickerOpen] = useState(false)
 
-  const type = draft.type
-  const walletId = draft.walletId
-  const toWalletId = draft.toWalletId
-  const items = draft.items
-  const focusedIndex = draft.focusedIndex
-  const date = draft.date
-  const note = draft.note
-  const currency = draft.currency
-  const exchangeRate = draft.exchangeRate
-  const toExchangeRate = draft.toExchangeRate
-  const repeatConfig = draft.repeatConfig
-  const transferAmount = draft.transferAmount
-
   const wallet = wallets.find((item) => item.id === walletId)
   const toWallet = wallets.find((item) => item.id === toWalletId)
-  const selectedCurrency = currencies.find((item) => item.code === currency)
-  const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
-  const isPlanned = new Date(date) > new Date()
 
-  function press(key: string) {
-    if (focusedIndex === null) {
-      return
-    }
+  function handlePress(key: string) {
+    if (focusedIndex === null) return
     if (key === 'THB') {
       setCurrencyPickerOpen(true)
+      onOpenCurrencyPicker()
       return
     }
     const next = pressCalcKey(calc, key)
     setCalc(next)
-    updateDraft({ items: items.map((item, index) => (index === focusedIndex ? { ...item, amount: next.result } : item)) })
+    onPressCalcKey(key, next.result)
   }
 
   function handleFocusItem(index: number) {
-    updateDraft({ focusedIndex: index })
+    onFocusItem(index)
     setCalc(createCalcState(items[index]?.amount ?? 0))
-  }
-
-  function handleRemoveItem(index: number) {
-    updateDraft({ items: items.filter((_, i) => i !== index) })
-  }
-
-  function handleChangeCategory(index: number) {
-    navigate(`/transaction/category?changingIndex=${index}&type=${type}`)
-  }
-
-  function handleAddCategory() {
-    navigate(`/transaction/category?addCategory=true&type=${type}`)
-  }
-
-  async function save() {
-    const errors = validateDraft({ type, walletId, toWalletId, items, transferAmount })
-    if (currency !== wallet?.currency) {
-      const rateError = validateExchangeRate(exchangeRate || defaultRate)
-      if (rateError) {
-        errors.push(rateError)
-      }
-    }
-    if (type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency) {
-      const rateError = validateExchangeRate(toExchangeRate || defaultRate)
-      if (rateError) {
-        errors.push(rateError)
-      }
-    }
-    if (errors.length > 0) {
-      alert(errors[0])
-      return
-    }
-    const markedPaid = isRepeatMaterialization ? true : !isPlanned
-    const transaction = buildTransaction({
-      id: existing?.id,
-      type,
-      walletId,
-      toWalletId,
-      currency,
-      items,
-      transferAmount,
-      exchangeRate: currency !== wallet?.currency ? Number(exchangeRate || defaultRate) : undefined,
-      toExchangeRate: type === 'transfer' ? Number(toExchangeRate || defaultRate) : undefined,
-      date: isRepeatMaterialization && repeatDate ? `${repeatDate}T00:00` : date,
-      markedPaid,
-      repeat: repeatConfig.preset === 'never' ? undefined : repeatConfig,
-      note,
-      now: existing?.createdAt ?? new Date().toISOString(),
-      createId,
-    })
-    if (isEditMode) {
-      await update(transaction)
-    } else {
-      await add(transaction)
-    }
-    clearDraft()
-    navigate('/')
-  }
-
-  async function deleteTransaction() {
-    if (!existing) {
-      return
-    }
-    if (!window.confirm('Delete this transaction?')) {
-      return
-    }
-    await remove(existing.id)
-    clearDraft()
-    navigate('/')
   }
 
   return (
@@ -207,9 +134,7 @@ export function TransactionPage() {
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"
-          onClick={() => {
-            clearDraft(); backNavigate('/') 
-          }}
+          onClick={onBack}
           className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
           type="button"
         >
@@ -217,11 +142,11 @@ export function TransactionPage() {
         </button>
         <TypePickerDropdown
           value={type}
-          onChange={(v) => updateDraft({ type: v as TransactionType, items: [], focusedIndex: null })}
+          onChange={(v) => onChangeType(v as TransactionType)}
         />
         <button
           aria-label="Save"
-          onClick={save}
+          onClick={onSave}
           className="flex h-9 w-9 items-center justify-center rounded-xl text-white"
           style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))', boxShadow: '0 2px 10px color-mix(in srgb, var(--accent) 40%, transparent)' }}
           type="button"
@@ -275,7 +200,7 @@ export function TransactionPage() {
                   inputMode="decimal"
                   placeholder={defaultRate || 'Enter rate…'}
                   value={exchangeRate}
-                  onChange={(event) => updateDraft({ exchangeRate: event.target.value })}
+                  onChange={(event) => onUpdateExchangeRate(event.target.value)}
                 />
               </div>
             </div>
@@ -293,7 +218,7 @@ export function TransactionPage() {
                   inputMode="decimal"
                   placeholder={defaultRate || 'Enter rate…'}
                   value={toExchangeRate}
-                  onChange={(event) => updateDraft({ toExchangeRate: event.target.value })}
+                  onChange={(event) => onUpdateToExchangeRate(event.target.value)}
                 />
               </div>
             </div>
@@ -316,13 +241,13 @@ export function TransactionPage() {
             </div>
             <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
           </button>
-          <CategoryItemsCard
+          <CategoryItemsCardContainer
             items={items}
             focusedIndex={focusedIndex}
             onFocus={handleFocusItem}
-            onAdd={handleAddCategory}
-            onRemove={handleRemoveItem}
-            onChangeCategory={handleChangeCategory}
+            onAdd={onAddCategory}
+            onRemove={onRemoveItem}
+            onChangeCategory={onChangeCategory}
           />
           {currency !== wallet?.currency ? (
             <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
@@ -337,7 +262,7 @@ export function TransactionPage() {
                   inputMode="decimal"
                   placeholder={defaultRate || 'Enter rate…'}
                   value={exchangeRate}
-                  onChange={(event) => updateDraft({ exchangeRate: event.target.value })}
+                  onChange={(event) => onUpdateExchangeRate(event.target.value)}
                 />
               </div>
             </div>
@@ -398,8 +323,8 @@ export function TransactionPage() {
             id="tx-note"
             className="mt-0.5 min-h-16 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-white/30"
             value={note}
-            onChange={(event) => updateDraft({ note: event.target.value })}
-            onFocus={() => updateDraft({ focusedIndex: null })}
+            onChange={(event) => onUpdateNote(event.target.value)}
+            onFocus={onFocusNoteField}
             placeholder="Add note…"
           />
         </div>
@@ -409,7 +334,7 @@ export function TransactionPage() {
         <button
           aria-label="Delete transaction"
           className="w-full rounded-xl bg-danger/15 py-3 text-sm font-medium text-danger"
-          onClick={deleteTransaction}
+          onClick={onDelete}
           type="button"
         >
           Delete
@@ -419,7 +344,7 @@ export function TransactionPage() {
       <DatePickerSheet
         isOpen={isDatePickerOpen}
         value={new Date(date.replace('T', ' '))}
-        onChange={(d) => updateDraft({ date: toDatetimeLocalValue(d) })}
+        onChange={(d) => { onUpdateDate(d); }}
         onClose={() => setDatePickerOpen(false)}
       />
 
@@ -429,9 +354,9 @@ export function TransactionPage() {
         selectedId={walletPickerTarget === 'toWallet' ? (toWalletId ?? '') : walletId}
         onSelect={(selectedId) => {
           if (walletPickerTarget === 'toWallet') {
-            updateDraft({ toWalletId: selectedId })
+            onUpdateToWallet(selectedId)
           } else {
-            updateDraft({ walletId: selectedId })
+            onUpdateWallet(selectedId)
           }
         }}
         onClose={() => setWalletPickerTarget(null)}
@@ -441,7 +366,7 @@ export function TransactionPage() {
         isOpen={isCurrencyPickerOpen}
         currencies={currencies}
         selectedCode={currency}
-        onSelect={(code) => updateDraft({ currency: code })}
+        onSelect={(code) => onUpdateCurrency(code)}
         onClose={() => setCurrencyPickerOpen(false)}
       />
 
@@ -449,7 +374,7 @@ export function TransactionPage() {
         isOpen={isRepeatPickerOpen}
         value={repeatConfig}
         onConfirm={(config) => {
-          updateDraft({ repeatConfig: config })
+          onUpdateRepeatConfig(config)
           setRepeatPickerOpen(false)
         }}
         onClose={() => setRepeatPickerOpen(false)}
@@ -463,9 +388,9 @@ export function TransactionPage() {
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', stiffness: 400, damping: 35 }}
-            className="fixed inset-x-0 bottom-0 z-30"
+            className="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2"
           >
-            <CalculatorKeyboard onPress={press} />
+            <CalculatorKeyboard onPress={handlePress} />
           </motion.div>
         )}
       </AnimatePresence>
