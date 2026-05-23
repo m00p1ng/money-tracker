@@ -153,7 +153,7 @@ export function RoutedApp() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/money-tracker">
       <NavigationDirectionProvider>
         <Routes>
           <Route path="/design" element={<DesignPage />} />
