@@ -1,7 +1,7 @@
 // src/features/design/DesignPage.tsx
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { DesignSidebar } from './DesignSidebar'
+import { DesignSidebar, DesignTopNav } from './DesignSidebar'
 import { TokensSection } from './sections/TokensSection'
 import { UIComponentsSection } from './sections/UIComponentsSection'
 import { FeatureSection } from './sections/FeatureSection'
@@ -37,24 +37,29 @@ export function DesignPage() {
   }, [])
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[var(--bg)] text-slate-50 md:flex-row">
-      <DesignSidebar activeId={activeId} />
-      <div ref={contentRef} className="flex-1 overflow-y-auto px-4 py-6 md:px-6 md:py-8">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-xl font-bold">Design System</h1>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-white/50 hover:text-white/80"
-          >
-            ← Back
-          </button>
+    <div className="flex h-screen flex-col overflow-hidden bg-[var(--bg)] text-slate-50">
+      {/* Mobile: horizontal pill nav at top */}
+      <DesignTopNav activeId={activeId} />
+      {/* Desktop: sidebar + content side by side */}
+      <div className="flex min-h-0 flex-1">
+        <DesignSidebar activeId={activeId} />
+        <div ref={contentRef} className="flex-1 overflow-y-auto px-4 py-6 md:px-6 md:py-8">
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="text-xl font-bold">Design System</h1>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-white/50 hover:text-white/80"
+            >
+              ← Back
+            </button>
+          </div>
+          <TokensSection />
+          <hr className="my-8 border-white/[0.08]" />
+          <UIComponentsSection />
+          <hr className="my-8 border-white/[0.08]" />
+          <FeatureSection />
         </div>
-        <TokensSection />
-        <hr className="my-8 border-white/[0.08]" />
-        <UIComponentsSection />
-        <hr className="my-8 border-white/[0.08]" />
-        <FeatureSection />
       </div>
     </div>
   )

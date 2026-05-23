@@ -1,5 +1,4 @@
 // src/features/design/DesignSidebar.tsx
-import { useState } from 'react'
 
 const NAV_GROUPS = [
   {
@@ -39,8 +38,8 @@ function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-/** Horizontal pill bar for small screens */
-function TopNav({ activeId }: { activeId: string }) {
+/** Horizontal pill bar — shown on small screens only */
+export function DesignTopNav({ activeId }: { activeId: string }) {
   return (
     <div className="flex overflow-x-auto border-b border-white/[0.08] bg-white/[0.02] px-3 py-2 md:hidden">
       <div className="flex gap-1.5">
@@ -63,8 +62,8 @@ function TopNav({ activeId }: { activeId: string }) {
   )
 }
 
-/** Vertical sidebar for md+ screens */
-function SidebarNav({ activeId }: { activeId: string }) {
+/** Vertical sidebar — shown on md+ screens only */
+export function DesignSidebar({ activeId }: { activeId: string }) {
   return (
     <nav className="hidden w-44 flex-shrink-0 flex-col gap-1 overflow-y-auto border-r border-white/[0.08] bg-white/[0.02] px-2 py-4 md:flex">
       <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>
@@ -90,14 +89,5 @@ function SidebarNav({ activeId }: { activeId: string }) {
         </div>
       ))}
     </nav>
-  )
-}
-
-export function DesignSidebar({ activeId }: { activeId: string }) {
-  return (
-    <>
-      <TopNav activeId={activeId} />
-      <SidebarNav activeId={activeId} />
-    </>
   )
 }
