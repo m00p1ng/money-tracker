@@ -84,8 +84,8 @@ export function SettingsPage({
           to="/settings/theme"
           trailing={
             <div className="flex items-center gap-2 text-white/25">
-              <span className="text-base" style={{ color: themeColor }}>●</span>
-              <Icon name="fa-chevron-right" className="text-[11px]" />
+              <span className="text-lg" style={{ color: themeColor }}>●</span>
+              <Icon name="fa-chevron-right" className="text-base" />
             </div>
           }
         />
@@ -100,8 +100,8 @@ export function SettingsPage({
           to="/settings"
           trailing={
             <div className="flex items-center gap-2 text-white/25">
-              <span className="text-[13px] font-medium text-white/45">English</span>
-              <Icon name="fa-chevron-right" className="text-[11px]" />
+              <span className="text-[15px] font-medium text-white/45">English</span>
+              <Icon name="fa-chevron-right" className="text-base" />
             </div>
           }
         />
@@ -113,8 +113,8 @@ export function SettingsPage({
           to="/settings"
           trailing={
             <div className="flex items-center gap-2 text-white/25">
-              <span className="text-[13px] font-medium text-white/45">DD MMM YYYY</span>
-              <Icon name="fa-chevron-right" className="text-[11px]" />
+              <span className="text-[15px] font-medium text-white/45">DD MMM YYYY</span>
+              <Icon name="fa-chevron-right" className="text-base" />
             </div>
           }
         />

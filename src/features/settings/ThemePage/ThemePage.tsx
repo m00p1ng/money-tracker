@@ -1,7 +1,7 @@
 import cx from 'classnames'
 
 import { Icon } from '@/components'
-import { formatAmount, themes } from '@/lib'
+import { themes } from '@/lib'
 import type { ThemePreset, Wallet } from '@/types/domain'
 
 const names: Record<ThemePreset, string> = {
@@ -24,13 +24,9 @@ interface ThemePageProps {
 
 export function ThemePage({
   selected,
-  firstWallet,
   onBack,
   onSelectTheme,
 }: ThemePageProps) {
-  const previewAccent = themes[selected].accent
-  const previewAccentLight = themes[selected].accentLight
-
   return (
     <div className="space-y-5">
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
@@ -47,9 +43,9 @@ export function ThemePage({
       </header>
 
       <div>
-        <p className="mb-2 pl-1 text-[11px] uppercase tracking-[1.5px] text-white/30">Choose a preset</p>
-        <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/[0.04]">
-          <div className="grid grid-cols-4 gap-2 p-3.5">
+        <p className="mb-2 pl-1 text-sm uppercase tracking-[1.5px] text-white/30">Choose a preset</p>
+        <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+          <div className="grid grid-cols-3 gap-2 p-3.5">
             {(Object.keys(themes) as ThemePreset[]).map((theme) => (
               <button
                 key={theme}
@@ -61,10 +57,10 @@ export function ThemePage({
                 onClick={() => onSelectTheme(theme)}
               >
                 <span
-                  className="mx-auto mb-1.5 block h-9 w-9 rounded-full"
+                  className="mx-auto mb-1.5 block h-15 w-15 rounded-full"
                   style={{ background: `linear-gradient(135deg,${themes[theme].accentBtn1},${themes[theme].accent})` }}
                 />
-                <span className={cx('text-[10px] font-semibold', selected === theme ? 'text-accent' : 'text-white/50')}>
+                <span className={cx('text-sm font-semibold', selected === theme ? 'text-accent' : 'text-white/50')}>
                   {names[theme]}
                 </span>
               </button>
@@ -72,38 +68,6 @@ export function ThemePage({
           </div>
         </div>
       </div>
-
-      {firstWallet && (
-        <div>
-          <p className="mb-2 pl-1 text-[11px] uppercase tracking-[1.5px] text-white/30">Preview</p>
-          <div
-            className="flex items-center gap-3 rounded-2xl border p-4"
-            style={{ background: 'rgba(5,15,9,0.9)', borderColor: `${previewAccent}33` }}
-          >
-            <div
-              className={[
-                'flex h-[42px] w-[42px] flex-shrink-0 items-center',
-                'justify-center rounded-[13px] text-lg text-white',
-              ].join(' ')}
-              style={{
-                background: `linear-gradient(135deg,${themes[selected].accentBtn1},${previewAccent})`,
-                boxShadow: `0 4px 14px ${previewAccent}66`,
-              }}
-            >
-              <Icon name={firstWallet.icon} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold">{firstWallet.name}</p>
-              <p className="mt-0.5 text-xs text-white/35">
-                {firstWallet.type === 'credit_card' ? 'Credit Card' : 'Payment Account'} · {firstWallet.currency}
-              </p>
-            </div>
-            <span className="text-base font-bold" style={{ color: previewAccentLight }}>
-              {formatAmount(firstWallet.balance, firstWallet.currency)}
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

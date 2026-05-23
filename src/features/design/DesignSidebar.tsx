@@ -51,11 +51,15 @@ export function DesignTopNav({ activeId }: DesignTopNavProps) {
   const activeRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
-    activeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+    activeRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    })
   }, [activeId])
 
   return (
-    <div className="flex overflow-x-auto border-b border-white/[0.08] bg-white/[0.02] px-3 py-2 md:hidden">
+    <div className="flex overflow-x-auto border-b border-white/8 bg-white/2 px-3 py-2 md:hidden">
       <div className="flex gap-1.5">
         {ALL_ITEMS.map((item) => (
           <button
@@ -64,7 +68,7 @@ export function DesignTopNav({ activeId }: DesignTopNavProps) {
             type="button"
             onClick={() => scrollTo(item.id)}
             className={cx(
-              'flex-shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition-colors',
+              'shrink-0 rounded-full px-3 py-1 text-sm font-medium transition-colors',
               activeId === item.id
                 ? 'bg-accent/20 text-accent-light'
                 : 'text-white/40 hover:text-white/70',
@@ -86,8 +90,8 @@ interface DesignSidebarProps {
 export function DesignSidebar({ activeId }: DesignSidebarProps) {
   return (
     <nav className={[
-      'hidden w-52 flex-shrink-0 flex-col gap-1 overflow-y-auto',
-      'border-r border-white/[0.08] bg-white/[0.02] px-2 py-4 md:flex',
+      'hidden w-52 shrink-0 flex-col gap-1 overflow-y-auto',
+      'border-r border-white/8 bg-white/2 px-2 py-4 md:flex',
     ].join(' ')}>
       <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>
       {NAV_GROUPS.map((group) => (

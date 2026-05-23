@@ -200,7 +200,9 @@ export function useTransactionPage(): TransactionPageProps {
     onRemoveItem: (index: number) => updateDraft({ items: items.filter((_, i) => i !== index) }),
     onChangeCategory: (index: number) => navigate(`/transaction/category?changingIndex=${index}&type=${type}`),
     onAddCategory: () => navigate(`/transaction/category?addCategory=true&type=${type}`),
-    onPressCalcKey: (_key: string, result: number) => updateDraft({ items: items.map((item, index) => (index === focusedIndex ? { ...item, amount: result } : item)) }),
+    onPressCalcKey: (_key: string, result: number) => updateDraft({
+      items: items.map((item, index) => (index === focusedIndex ? { ...item, amount: result } : item)),
+    }),
     onOpenCurrencyPicker: () => { /* handled in dumb component */ },
     onSave,
     onBack: () => {

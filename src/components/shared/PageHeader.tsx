@@ -21,7 +21,7 @@ export function PageHeader({
       >
         <Icon name="fa-chevron-left" />
       </button>
-      <h1 className="text-center text-base font-bold">{title}</h1>
+      <h1 className="text-center text-lg font-bold">{title}</h1>
       {rightSlot ?? <div />}
     </header>
   )

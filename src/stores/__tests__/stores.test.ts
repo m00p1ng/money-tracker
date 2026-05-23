@@ -424,7 +424,8 @@ describe('stores', () => {
         isDefault: false,
       },
     ])
-    useCategoryStore.setState({ items: [...useCategoryStore.getState().items, (await db.categories.get('expense-custom'))!] })
+    const customCategory = (await db.categories.get('expense-custom'))!
+    useCategoryStore.setState({ items: [...useCategoryStore.getState().items, customCategory] })
 
     await expect(useCategoryStore.getState().remove('expense-custom')).rejects.toThrow('Category has child categories')
     expect(await db.categories.get('expense-custom')).toBeDefined()
