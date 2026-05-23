@@ -113,4 +113,20 @@ describe('CategorySelectionPage with draft store', () => {
     expect(draft?.items).toHaveLength(2)
     expect(draft?.items[1].categoryId).toBe('exp-food-coffee')
   })
+
+  it('does not show type dropdown when changingIndex is set', async () => {
+    renderPage('?changingIndex=0&type=expense')
+    // The chevron-down button should not be present when locked
+    const trigger = screen.getByRole('button', { name: /expense/i })
+    await userEvent.click(trigger)
+    // Dropdown items should NOT appear
+    expect(screen.queryByRole('button', { name: 'Income' })).not.toBeInTheDocument()
+  })
+
+  it('does not show type dropdown when addCategory is true', async () => {
+    renderPage('?addCategory=true&type=expense')
+    const trigger = screen.getByRole('button', { name: /expense/i })
+    await userEvent.click(trigger)
+    expect(screen.queryByRole('button', { name: 'Income' })).not.toBeInTheDocument()
+  })
 })

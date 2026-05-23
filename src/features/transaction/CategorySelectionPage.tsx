@@ -33,6 +33,7 @@ export function CategorySelectionPage() {
 
   const [type, setType] = useState<'expense' | 'income'>(seedType)
   const [parentId, setParentId] = useState<string | undefined>()
+  const isLocked = isAddCategory || changingIndex !== null
 
   const visible = categories.filter((c) => c.type === type && c.parentId === parentId)
   const parent = parentId ? categories.find((c) => c.id === parentId) : undefined
@@ -88,7 +89,7 @@ export function CategorySelectionPage() {
         >
           <Icon name="fa-chevron-left" />
         </button>
-        <TypePickerDropdown value={type} onChange={handleTypeChange} />
+        <TypePickerDropdown value={type} onChange={handleTypeChange} locked={isLocked} />
         <div />
       </header>
 
