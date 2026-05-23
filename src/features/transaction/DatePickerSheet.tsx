@@ -7,11 +7,7 @@ import 'react-day-picker/dist/style.css'
 type TimeValue = { hour: string; minute: string }
 
 const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
-const MINUTE_OPTIONS = ['00', '15', '30', '45']
-
-function roundMinuteTo15(minute: number): string {
-  return String(Math.round(minute / 15) * 15 % 60).padStart(2, '0')
-}
+const MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
 
 export function DatePickerSheet({
   isOpen,
@@ -27,7 +23,7 @@ export function DatePickerSheet({
   const [selectedDay, setSelectedDay] = useState<Date>(value)
   const [pickerValue, setPickerValue] = useState<TimeValue>({
     hour: String(value.getHours()).padStart(2, '0'),
-    minute: roundMinuteTo15(value.getMinutes()),
+    minute: String(value.getMinutes()).padStart(2, '0'),
   })
 
   function handleConfirm() {
