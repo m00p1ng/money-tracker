@@ -10,6 +10,9 @@ export type ThemeTokens = {
   accentBtn1: string
   accentBtn2: string
   navBorder: string
+  income: string
+  expense: string
+  danger: string
 }
 
 export const themes: Record<ThemePreset, ThemeTokens> = {
@@ -23,6 +26,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn1: '#059669',
     accentBtn2: '#10b981',
     navBorder: '#10b98130',
+    income: '#4ade80',
+    expense: '#f87171',
+    danger: '#ef4444',
   },
   midnight: {
     accent: '#6c47ff',
@@ -34,6 +40,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn1: '#5537d7',
     accentBtn2: '#6c47ff',
     navBorder: '#6c47ff30',
+    income: '#86efac',
+    expense: '#fca5a5',
+    danger: '#f87171',
   },
   ocean: {
     accent: '#0369a1',
@@ -45,6 +54,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn1: '#075985',
     accentBtn2: '#0284c7',
     navBorder: '#0369a130',
+    income: '#4ade80',
+    expense: '#f87171',
+    danger: '#ef4444',
   },
   sunset: {
     accent: '#be123c',
@@ -56,6 +68,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn1: '#9f1239',
     accentBtn2: '#e11d48',
     navBorder: '#be123c30',
+    income: '#4ade80',
+    expense: '#fca5a5',
+    danger: '#f87171',
   },
   amber: {
     accent: '#b45309',
@@ -67,6 +82,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn1: '#92400e',
     accentBtn2: '#d97706',
     navBorder: '#b4530930',
+    income: '#4ade80',
+    expense: '#fca5a5',
+    danger: '#ef4444',
   },
   arctic: {
     accent: '#334155',
@@ -78,6 +96,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn1: '#334155',
     accentBtn2: '#475569',
     navBorder: '#94a3b830',
+    income: '#86efac',
+    expense: '#fca5a5',
+    danger: '#f87171',
   },
   sakura: {
     accent: '#9d174d',
@@ -89,6 +110,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn1: '#831843',
     accentBtn2: '#be185d',
     navBorder: '#9d174d30',
+    income: '#86efac',
+    expense: '#fca5a5',
+    danger: '#f87171',
   },
   void: {
     accent: '#111827',
@@ -100,6 +124,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn1: '#111827',
     accentBtn2: '#1f2937',
     navBorder: '#6b728030',
+    income: '#6ee7b7',
+    expense: '#fca5a5',
+    danger: '#f87171',
   },
 }
 
@@ -115,4 +142,7 @@ export function applyTheme(preset: ThemePreset): void {
   root.style.setProperty('--accent-btn-1', theme.accentBtn1)
   root.style.setProperty('--accent-btn-2', theme.accentBtn2)
   root.style.setProperty('--nav-border', theme.navBorder)
+  root.style.setProperty('--income', theme.income)
+  root.style.setProperty('--expense', theme.expense)
+  root.style.setProperty('--danger', theme.danger)
 }

@@ -2,6 +2,23 @@ import { describe, expect, it } from 'vitest'
 import { applyTheme, themes } from '../theme'
 
 describe('theme utilities', () => {
+  it('each theme defines income, expense, and danger tokens', () => {
+    const themeKeys = Object.keys(themes) as (keyof typeof themes)[]
+    for (const key of themeKeys) {
+      expect(themes[key].income).toMatch(/^#[0-9a-f]{6}$/i)
+      expect(themes[key].expense).toMatch(/^#[0-9a-f]{6}$/i)
+      expect(themes[key].danger).toMatch(/^#[0-9a-f]{6}$/i)
+    }
+  })
+
+  it('applies income, expense, and danger CSS variables', () => {
+    applyTheme('forest')
+    expect(document.documentElement.style.getPropertyValue('--income')).toBe('#4ade80')
+    expect(document.documentElement.style.getPropertyValue('--expense')).toBe('#f87171')
+    expect(document.documentElement.style.getPropertyValue('--danger')).toBe('#ef4444')
+  })
+
+
   it('defines eight presets', () => {
     expect(Object.keys(themes)).toEqual([
       'forest',
