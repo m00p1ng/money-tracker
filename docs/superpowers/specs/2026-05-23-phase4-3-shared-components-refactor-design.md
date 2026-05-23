@@ -1,4 +1,4 @@
-# Phase 4.3 — Shared Components Refactor Design Spec
+# Shared Components Refactor — Design Spec
 
 **Date:** 2026-05-23  
 **Status:** Approved
@@ -7,7 +7,7 @@
 
 ## Goal
 
-Extract duplicated UI patterns, logic, and utilities spread across feature files into shared components, hooks, and utilities. Feature files continue importing from `@/components/ui/`, `@/lib/`, and `@/hooks/` — the internal `components/shared/` and `hooks/shared/` folders are implementation details.
+Extract duplicated UI patterns, logic, and utilities spread across feature files into shared components, hooks, and utilities. Feature files continue importing from `@/components/ui/`, `@/lib/`, and `@/hooks/` — the `src/shared/` folder is an internal implementation detail.
 
 ---
 
@@ -15,8 +15,8 @@ Extract duplicated UI patterns, logic, and utilities spread across feature files
 
 ```
 src/
-  components/
-    shared/
+  shared/
+    components/
       PageHeader.tsx
       BottomSheet.tsx
       ListGroup.tsx
@@ -28,23 +28,26 @@ src/
       AnimatedBar.tsx
       TransactionRow.tsx
       PickerColumn.tsx
+    hooks/
+      useFormCrud.ts
+    lib/
+      color.ts
+  components/
     ui/
-      index.ts              ← re-exports from src/components/shared/ + existing ui files
+      index.ts              ← re-exports from src/shared/components/ + existing ui files
       Button.tsx            (existing, add fullWidth prop)
       Card.tsx              (existing, unchanged)
       Field.tsx             (existing, unchanged)
       SegmentedControl.tsx  (existing, unchanged)
       TypePickerDropdown.tsx (existing, unchanged)
   hooks/
-    shared/
-      useFormCrud.ts
-    index.ts                ← re-exports from src/hooks/shared/
+    index.ts                ← re-exports from src/shared/hooks/
   lib/
-    color.ts                (new: hexToRgba utility)
+    color.ts                ← re-exports from src/shared/lib/color.ts
     (all other existing lib files unchanged)
 ```
 
-**Import rule:** Feature files never import from `components/shared/` or `hooks/shared/` directly. All imports use `@/components/ui/`, `@/lib/`, or `@/hooks/`.
+**Import rule:** Feature files never import from `src/shared/` directly. All imports use `@/components/ui/`, `@/lib/`, or `@/hooks/`.
 
 ---
 
@@ -165,7 +168,7 @@ Renders the react-mobile-picker column with label, container styles, and item re
 ### `useFormCrud<T>`
 
 ```ts
-useFormCrud<T extends { id: string }>(options: {
+useFormCrud<T>(options: {
   existing: T | undefined
   add: (data: T) => void
   update: (data: T) => void
@@ -186,7 +189,7 @@ Encapsulates: validate → try `existing ? update() : add()` → navigate on suc
 
 ## Utility
 
-### `src/lib/color.ts`
+### `src/shared/lib/color.ts`
 
 Exports `hexToRgba(hex: string, alpha: number): string`. Identical implementation currently duplicated in `BalancePage` and `WalletDetailPage`.
 
@@ -202,11 +205,12 @@ Add `fullWidth?: boolean` prop to the existing `Button` component. When true, ad
 
 | File | Change |
 |------|--------|
-| `src/components/shared/*.tsx` (11 files) | New |
+| `src/shared/components/*.tsx` (11 files) | New |
+| `src/shared/hooks/useFormCrud.ts` | New |
+| `src/shared/lib/color.ts` | New |
 | `src/components/ui/index.ts` | New (barrel re-exports) |
-| `src/hooks/shared/useFormCrud.ts` | New |
 | `src/hooks/index.ts` | New (barrel re-exports) |
-| `src/lib/color.ts` | New |
+| `src/lib/color.ts` | New (re-export) |
 | `src/components/ui/Button.tsx` | Extend (fullWidth prop) |
 | `src/features/settings/*.tsx` (5 files) | Consume shared components |
 | `src/features/transaction/*.tsx` (5 files) | Consume shared components |
