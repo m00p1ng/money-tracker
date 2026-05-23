@@ -22,10 +22,12 @@ export function NavigationDirectionProvider({ children }: { children: React.Reac
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useNavigationDirection() {
   return useContext(NavigationDirectionContext)
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useBackNavigate() {
   const navigate = useNavigate()
   const { setDirection } = useNavigationDirection()

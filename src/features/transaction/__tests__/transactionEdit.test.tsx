@@ -128,7 +128,7 @@ describe('TransactionPage edit mode', () => {
       </MemoryRouter>,
     )
 
-    const deleteButton = screen.getByRole('button', { name: 'Delete transaction' })
+    const deleteButton = await screen.findByRole('button', { name: 'Delete transaction' })
     await userEvent.click(deleteButton)
 
     expect(confirmSpy).toHaveBeenCalledWith('Delete this transaction?')

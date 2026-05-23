@@ -58,7 +58,6 @@ export function BalancePage() {
   return (
     <div className="space-y-5">
       <header>
-        <p className="text-sm text-slate-400">Accounts</p>
         <h1 className="text-2xl font-semibold">Balance</h1>
       </header>
 

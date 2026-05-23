@@ -206,7 +206,9 @@ export function TransactionPage() {
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"
-            onClick={() => { clearDraft(); backNavigate('/') }}
+          onClick={() => {
+            clearDraft(); backNavigate('/') 
+          }}
           className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
           type="button"
         >

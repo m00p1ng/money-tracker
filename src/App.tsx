@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router'
 import { AppShell } from './components/AppShell'
@@ -37,19 +37,31 @@ function makePageVariants(direction: 'forward' | 'back'): Variants {
 
 const bottomNavRoutes = ['/', '/balance', '/settings']
 
+function useRouteVariants(pathname: string, direction: 'forward' | 'back'): Variants {
+  const [state, setState] = useState({
+    prevPath: pathname,
+    variants: tabVariants as Variants,
+  })
+
+  if (state.prevPath !== pathname) {
+    const isCurrentTab = TAB_ROUTES.has(pathname)
+    const isPrevTab = TAB_ROUTES.has(state.prevPath)
+    const variants = isCurrentTab && isPrevTab ? tabVariants : makePageVariants(direction)
+    setState({ prevPath: pathname, variants })
+    return variants
+  }
+
+  return state.variants
+}
+
 export function RoutedApp() {
   const location = useLocation()
   const { direction, setDirection } = useNavigationDirection()
-  const prevPathRef = useRef(location.pathname)
-  const variantsRef = useRef<Variants>(tabVariants)
+  const variants = useRouteVariants(location.pathname, direction)
 
-  if (prevPathRef.current !== location.pathname) {
-    const isCurrentTab = TAB_ROUTES.has(location.pathname)
-    const isPrevTab = TAB_ROUTES.has(prevPathRef.current)
-    variantsRef.current = isCurrentTab && isPrevTab ? tabVariants : makePageVariants(direction)
-    prevPathRef.current = location.pathname
+  useLayoutEffect(() => {
     setDirection('forward')
-  }
+  }, [location.pathname, setDirection])
 
   const showBottomNav = bottomNavRoutes.some((route) => {
     if (route === '/') {
@@ -66,7 +78,7 @@ export function RoutedApp() {
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={location.pathname}
-          variants={variantsRef.current}
+          variants={variants}
           initial="initial"
           animate="animate"
           exit="exit"

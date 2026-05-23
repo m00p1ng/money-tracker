@@ -84,7 +84,6 @@ export function SettingsPage() {
   return (
     <div className="space-y-5">
       <header>
-        <p className="text-sm text-slate-400">Preferences</p>
         <h1 className="text-2xl font-semibold">Settings</h1>
       </header>
 
