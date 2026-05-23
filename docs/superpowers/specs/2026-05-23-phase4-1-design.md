@@ -160,6 +160,46 @@ This gives each date cell the same fixed width as the weekday header cells (`wee
 
 ---
 
+## Standardized Page Headers
+
+All pages adopt the 3-column grid header pattern already used by `CategorySelectionPage` and `TransactionPage`. `CategorySelectionPage` and `TransactionPage` require no changes.
+
+### Header structure
+
+```tsx
+<header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
+  <button
+    aria-label="Back"
+    onClick={() => backNavigate(...)}
+    className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
+    type="button"
+  >
+    <Icon name="fa-chevron-left" />
+  </button>
+  <h1 className="text-center text-base font-bold">{title}</h1>
+  <div />
+</header>
+```
+
+Pages with no right-side action use `<div />` as the third column placeholder.
+
+### Pages to update
+
+| Page | Old pattern | New centered title |
+|---|---|---|
+| `WalletsPage` | text-link back + large left h1 | "Wallets" |
+| `WalletFormPage` | text-link back + large left h1 | "New Wallet" / "Edit Wallet" |
+| `CategoriesPage` | text-link back + large left h1 | "Categories" |
+| `CategoryFormPage` | text-link back + large left h1 | "New Category" / "Edit Category" |
+| `CurrenciesPage` | text-link back + large left h1 | "Currencies" |
+| `CurrencyFormPage` | text-link back + large left h1 | "New Currency" / "Edit Currency" |
+| `ThemePage` | text-link back + large left h1 | "Theme" |
+| `WalletDetailPage` | flex layout, `text-lg` title | wallet name |
+
+`WalletFormPage` and `CategoryFormPage` derive the title from existing logic (new vs edit mode).
+
+---
+
 ## File Changes Summary
 
 | File | Change |
@@ -172,6 +212,14 @@ This gives each date cell the same fixed width as the weekday header cells (`wee
 | `src/features/transaction/CurrencyPicker.tsx` | Add `isOpen` prop, fix exit animation, bg `var(--bg)` |
 | `src/features/transaction/DatePickerSheet.tsx` | Add `isOpen` prop, fix exit animation, bg `var(--bg)`, wheel time picker, calendar day width fix |
 | `src/features/transaction/CategoryPicker.tsx` | Add `isOpen` prop, fix exit animation, bg `var(--bg)` |
+| `src/features/settings/WalletsPage.tsx` | Standardized 3-col grid header |
+| `src/features/settings/WalletFormPage.tsx` | Standardized 3-col grid header |
+| `src/features/settings/CategoriesPage.tsx` | Standardized 3-col grid header |
+| `src/features/settings/CategoryFormPage.tsx` | Standardized 3-col grid header |
+| `src/features/settings/CurrenciesPage.tsx` | Standardized 3-col grid header |
+| `src/features/settings/CurrencyFormPage.tsx` | Standardized 3-col grid header |
+| `src/features/settings/ThemePage.tsx` | Standardized 3-col grid header |
+| `src/features/balance/WalletDetailPage.tsx` | Standardized 3-col grid header |
 
 ---
 
@@ -183,6 +231,7 @@ This gives each date cell the same fixed width as the weekday header cells (`wee
 - Picker exit animation: visual only — no unit tests needed
 - `DatePickerSheet` time wheels: initial values match input date; confirm builds correct date with selected hour/minute
 - Calendar alignment: visual only
+- Header standardization: visual only — all pages show centered title and icon back button
 
 ---
 
@@ -196,3 +245,4 @@ This gives each date cell the same fixed width as the weekday header cells (`wee
 - Picker backgrounds match app background theme color
 - `DatePickerSheet` shows two scroll wheels for hour and minute instead of dropdowns
 - Calendar day columns align with weekday headers
+- All pages show icon-only square back button and centered title in 3-column header
