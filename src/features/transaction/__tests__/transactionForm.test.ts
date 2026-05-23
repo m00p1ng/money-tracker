@@ -18,6 +18,10 @@ describe('transactionForm', () => {
     expect(validateDraft({ type: 'expense', walletId: 'wallet-cash', items: [{ categoryId: 'expense-food', amount: 28 }] })).toEqual([])
   })
 
+  it('accepts valid income drafts', () => {
+    expect(validateDraft({ type: 'income', walletId: 'wallet-cash', items: [{ categoryId: 'income-salary', amount: 500 }] })).toEqual([])
+  })
+
   it('accepts legacy expense drafts without explicit type', () => {
     expect(validateDraft({ walletId: 'wallet-cash', items: [{ categoryId: 'expense-food', amount: 28 }] })).toEqual([])
   })
@@ -93,6 +97,7 @@ describe('transactionForm', () => {
       createId: () => 'tx-generated',
     })
     expect(transaction.id).toBe('tx-generated')
+    expect(transaction.status).toBe('paid')
   })
 
   it('trims note and falls back to undefined when empty', () => {
@@ -150,5 +155,24 @@ describe('transactionForm', () => {
       repeat: { preset: 'monthly' },
       items: [{ categoryId: 'transfer', amount: 25 }],
     })
+  })
+
+  it('drops repeat from paid transfers', () => {
+    const transaction = buildTransaction({
+      type: 'transfer',
+      walletId: 'wallet-thb',
+      toWalletId: 'wallet-usd',
+      currency: 'USD',
+      transferAmount: 25,
+      items: [],
+      date: '2026-05-24T10:00',
+      markedPaid: true,
+      repeat: { preset: 'monthly' },
+      now: '2026-05-23T10:00:00.000Z',
+      createId: () => 'tx-paid-transfer',
+    })
+
+    expect(transaction.status).toBe('paid')
+    expect(transaction.repeat).toBeUndefined()
   })
 })

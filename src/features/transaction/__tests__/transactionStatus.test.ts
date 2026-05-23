@@ -8,6 +8,10 @@ describe('transaction status helpers', () => {
     expect(deriveTransactionStatus({ date: '2026-05-24T10:00', markedPaid: true, now })).toBe('paid')
   })
 
+  it('defaults to paid when markedPaid is omitted', () => {
+    expect(deriveTransactionStatus({ date: '2026-05-24T10:00', now })).toBe('paid')
+  })
+
   it('derives planned for unpaid future transactions', () => {
     expect(deriveTransactionStatus({ date: '2026-05-24T10:00', markedPaid: false, now })).toBe('planned')
   })
@@ -30,6 +34,15 @@ describe('transaction status helpers', () => {
   })
 
   it('validates transfer draft requirements', () => {
+    expect(
+      validateDraft({
+        type: 'transfer',
+        walletId: 'wallet-thb',
+        transferAmount: 25,
+        items: [],
+      }),
+    ).toContain('Select a destination wallet')
+
     expect(
       validateDraft({
         type: 'transfer',
