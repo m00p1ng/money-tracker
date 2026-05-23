@@ -7,6 +7,20 @@ import { useCurrencyStore } from '../currencyStore'
 import { useSettingsStore } from '../settingsStore'
 import { useTransactionStore } from '../transactionStore'
 import { useWalletStore } from '../walletStore'
+import type { Transaction } from '../../types/domain'
+
+function transaction(overrides: Partial<Transaction> = {}): Transaction {
+  return {
+    id: 'tx-1',
+    type: 'expense',
+    walletId: 'wallet-cash',
+    currency: 'THB',
+    items: [{ categoryId: 'expense-food-and-drink-coffee', amount: 100 }],
+    date: '2026-02-01',
+    createdAt: '2026-01-01T00:00:00.000Z',
+    ...overrides,
+  }
+}
 
 describe('stores', () => {
   beforeEach(async () => {
@@ -47,6 +61,108 @@ describe('stores', () => {
     expect(useTransactionStore.getState().monthlyExpense()).toBe(28)
     expect(useTransactionStore.getState().monthlyIncome()).toBe(0)
     expect(useTransactionStore.getState().todayTransactions()).toHaveLength(1)
+  })
+
+  it('materializes repeat occurrences once and writes through to Dexie', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useTransactionStore.getState().add(
+      transaction({
+        id: 'tx-rent',
+        date: '2026-01-31T08:45:00.000Z',
+        status: 'planned',
+        repeat: { preset: 'monthly' },
+      }),
+    )
+
+    const materialized = await useTransactionStore
+      .getState()
+      .materializeRepeatOccurrence('tx-rent', '2026-02-28', () => 'tx-rent-feb', '2026-02-28T09:00:00.000Z')
+
+    expect(materialized).toMatchObject({
+      id: 'tx-rent-feb',
+      status: 'paid',
+      repeatSourceId: 'tx-rent',
+      repeatOccurrenceDate: '2026-02-28',
+      createdAt: '2026-02-28T09:00:00.000Z',
+    })
+    expect(await db.transactions.get('tx-rent-feb')).toMatchObject({
+      id: 'tx-rent-feb',
+      repeatSourceId: 'tx-rent',
+      repeatOccurrenceDate: '2026-02-28',
+    })
+    expect(useTransactionStore.getState().findById('tx-rent-feb')).toMatchObject({ id: 'tx-rent-feb' })
+
+    const deduped = await useTransactionStore
+      .getState()
+      .materializeRepeatOccurrence('tx-rent', '2026-02-28', () => 'tx-duplicate', '2026-02-28T10:00:00.000Z')
+
+    expect(deduped.id).toBe('tx-rent-feb')
+    expect(await db.transactions.count()).toBe(2)
+    expect(useTransactionStore.getState().findById('tx-duplicate')).toBeUndefined()
+  })
+
+  it('exposes upcoming transactions with overdue first, planned cutoff, and virtual repeats', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useTransactionStore.getState().add(
+      transaction({
+        id: 'planned-today',
+        date: '2026-02-10',
+        status: 'planned',
+      }),
+    )
+    await useTransactionStore.getState().add(
+      transaction({
+        id: 'planned-tomorrow',
+        date: '2026-02-11',
+        status: 'planned',
+      }),
+    )
+    await useTransactionStore.getState().add(
+      transaction({
+        id: 'planned-too-late',
+        date: '2026-02-12',
+        status: 'planned',
+      }),
+    )
+    await useTransactionStore.getState().add(
+      transaction({
+        id: 'overdue-newer',
+        date: '2026-02-09',
+        status: 'overdue',
+      }),
+    )
+    await useTransactionStore.getState().add(
+      transaction({
+        id: 'overdue-older',
+        date: '2026-02-01',
+        status: 'overdue',
+      }),
+    )
+    await useTransactionStore.getState().add(
+      transaction({
+        id: 'repeat-source',
+        date: '2026-02-10',
+        status: 'planned',
+        repeat: { preset: 'daily' },
+      }),
+    )
+
+    const upcoming = useTransactionStore.getState().upcomingTransactions(new Date('2026-02-10T12:00:00.000Z'))
+
+    expect(upcoming.map((row) => row.id).slice(0, 2)).toEqual(['overdue-older', 'overdue-newer'])
+    expect(upcoming).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: 'real', id: 'planned-today', date: '2026-02-10' }),
+        expect.objectContaining({ kind: 'real', id: 'planned-tomorrow', date: '2026-02-11' }),
+        expect.objectContaining({ kind: 'virtual-repeat', id: 'repeat:repeat-source:2026-02-11', date: '2026-02-11' }),
+      ]),
+    )
+    expect(upcoming.find((row) => row.id === 'planned-too-late')).toBeUndefined()
+    expect(upcoming.every((row) => /^\d{4}-\d{2}-\d{2}$/.test(row.date))).toBe(true)
   })
 
   it('writes wallets through to Dexie and blocks deleting wallets with transactions', async () => {
