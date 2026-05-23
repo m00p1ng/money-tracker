@@ -35,6 +35,10 @@ describe('App routing', () => {
   })
 
   it('renders the Balance tab account groups', () => {
+    useWalletStore.setState({ items: [
+      { id: 'w1', name: 'Cash', type: 'payment' as const, currency: 'THB', balance: 0, color: '#10b981', icon: 'fa-wallet' },
+      { id: 'cc1', name: 'Visa', type: 'credit_card' as const, currency: 'THB', balance: 0, color: '#f59e0b', icon: 'fa-credit-card' },
+    ] })
     render(
       <MemoryRouter initialEntries={['/balance']}>
         <RoutedApp />
