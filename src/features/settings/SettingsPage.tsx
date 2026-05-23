@@ -1,51 +1,9 @@
-import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
+import { ListGroup, ListRow } from '../../components/ui'
 import { useCategoryStore } from '../../stores/categoryStore'
 import { useCurrencyStore } from '../../stores/currencyStore'
 import { useSettingsStore } from '../../stores/settingsStore'
 import { useWalletStore } from '../../stores/walletStore'
-
-type SettingRowProps = {
-  icon: string
-  iconBg: string
-  iconColor: string
-  label: string
-  sub?: string
-  value?: string
-  to: string
-}
-
-function SettingRow({ icon, iconBg, iconColor, label, sub, value, to }: SettingRowProps) {
-  return (
-    <Link to={to} className="flex items-center gap-3.5 border-b border-white/5 px-4 py-3.5 last:border-b-0 active:bg-white/[0.03]">
-      <div
-        className="flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-[10px] text-sm"
-        style={{ background: iconBg, color: iconColor }}
-      >
-        <Icon name={icon} />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium">{label}</p>
-        {sub && <p className="mt-0.5 text-xs text-white/35">{sub}</p>}
-      </div>
-      <div className="flex flex-shrink-0 items-center gap-2 text-white/25">
-        {value && <span className="text-[13px] font-medium text-white/45">{value}</span>}
-        <Icon name="fa-chevron-right" className="text-[11px]" />
-      </div>
-    </Link>
-  )
-}
-
-function SettingsGroup({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <p className="mb-2 pl-1 text-[11px] uppercase tracking-[1.5px] text-white/30">{label}</p>
-      <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/[0.04]">
-        {children}
-      </div>
-    </div>
-  )
-}
 
 const THEME_LABELS: Record<string, string> = {
   forest: 'Forest Green',
@@ -87,67 +45,57 @@ export function SettingsPage() {
         <h1 className="text-2xl font-semibold">Settings</h1>
       </header>
 
-      <SettingsGroup label="Wallets & Data">
-        <SettingRow
-          icon="fa-wallet"
+      <ListGroup label="Wallets & Data">
+        <ListRow icon="fa-wallet" iconBg="rgba(16,185,129,0.15)" iconColor="#34d399" label="Wallets" sub={`${walletCount} account${walletCount !== 1 ? 's' : ''}`} to="/settings/wallets" />
+        <ListRow icon="fa-tag" iconBg="rgba(168,85,247,0.15)" iconColor="#a855f7" label="Categories" sub={`${categoryCount} categories`} to="/settings/categories" />
+        <ListRow icon="fa-coins" iconBg="rgba(56,189,248,0.15)" iconColor="#38bdf8" label="Currencies" sub={currencyCodes || undefined} to="/settings/currencies" />
+      </ListGroup>
+
+      <ListGroup label="Appearance">
+        <ListRow
+          icon="fa-palette"
           iconBg="rgba(16,185,129,0.15)"
           iconColor="#34d399"
-          label="Wallets"
-          sub={`${walletCount} account${walletCount !== 1 ? 's' : ''}`}
-          to="/settings/wallets"
+          label="Theme"
+          sub={THEME_LABELS[theme]}
+          to="/settings/theme"
+          trailing={
+            <div className="flex items-center gap-2 text-white/25">
+              <span className="text-base" style={{ color: themeColor }}>●</span>
+              <Icon name="fa-chevron-right" className="text-[11px]" />
+            </div>
+          }
         />
-        <SettingRow
-          icon="fa-tag"
-          iconBg="rgba(168,85,247,0.15)"
-          iconColor="#a855f7"
-          label="Categories"
-          sub={`${categoryCount} categories`}
-          to="/settings/categories"
-        />
-        <SettingRow
-          icon="fa-coins"
-          iconBg="rgba(56,189,248,0.15)"
-          iconColor="#38bdf8"
-          label="Currencies"
-          sub={currencyCodes || undefined}
-          to="/settings/currencies"
-        />
-      </SettingsGroup>
+      </ListGroup>
 
-      <SettingsGroup label="Appearance">
-        <Link to="/settings/theme" className="flex items-center gap-3.5 px-4 py-3.5 active:bg-white/[0.03]">
-          <div className="flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-[10px] text-sm" style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399' }}>
-            <Icon name="fa-palette" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium">Theme</p>
-            <p className="mt-0.5 text-xs text-white/35">{THEME_LABELS[theme]}</p>
-          </div>
-          <div className="flex flex-shrink-0 items-center gap-2 text-white/25">
-            <span className="text-base" style={{ color: themeColor }}>●</span>
-            <Icon name="fa-chevron-right" className="text-[11px]" />
-          </div>
-        </Link>
-      </SettingsGroup>
-
-      <SettingsGroup label="General">
-        <SettingRow
+      <ListGroup label="General">
+        <ListRow
           icon="fa-earth-asia"
           iconBg="rgba(245,158,11,0.15)"
           iconColor="#f59e0b"
           label="Language"
-          value="English"
           to="/settings"
+          trailing={
+            <div className="flex items-center gap-2 text-white/25">
+              <span className="text-[13px] font-medium text-white/45">English</span>
+              <Icon name="fa-chevron-right" className="text-[11px]" />
+            </div>
+          }
         />
-        <SettingRow
+        <ListRow
           icon="fa-calendar-days"
           iconBg="rgba(255,255,255,0.07)"
           iconColor="#aaa"
           label="Date Format"
-          value="DD MMM YYYY"
           to="/settings"
+          trailing={
+            <div className="flex items-center gap-2 text-white/25">
+              <span className="text-[13px] font-medium text-white/45">DD MMM YYYY</span>
+              <Icon name="fa-chevron-right" className="text-[11px]" />
+            </div>
+          }
         />
-      </SettingsGroup>
+      </ListGroup>
     </div>
   )
 }

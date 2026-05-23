@@ -1,10 +1,10 @@
 import { FormEvent, useMemo, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
 import { useBackNavigate } from '../../context/navigationDirection'
-import { Icon } from '../../components/Icon'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Field, SelectInput, TextInput } from '../../components/ui/Field'
+import { FormErrorMessage, PageHeader } from '../../components/ui'
 import { createId } from '../../lib/id'
 import { useCurrencyStore } from '../../stores/currencyStore'
 import { useWalletStore } from '../../stores/walletStore'
@@ -23,7 +23,7 @@ export function WalletFormPage() {
   const update = useWalletStore((state) => state.update)
   const remove = useWalletStore((state) => state.remove)
   const initialType = (searchParams.get('type') as WalletType) || wallet?.type || 'payment'
-  const [error, setError] = useState('')
+  const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState<Wallet>(() => wallet ?? {
     id: createId(),
     name: '',
@@ -37,55 +37,36 @@ export function WalletFormPage() {
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault()
-    if (!form.name.trim()) {
-      setError('Name is required')
-      return
-    }
-    if (form.type === 'credit_card' && form.creditLimit !== undefined && form.creditLimit <= 0) {
-      setError('Credit limit must be greater than 0')
-      return
-    }
+    if (!form.name.trim()) { setError('Name is required'); return }
+    if (form.type === 'credit_card' && form.creditLimit !== undefined && form.creditLimit <= 0) { setError('Credit limit must be greater than 0'); return }
     try {
       await (wallet ? update(form) : add(form))
       navigate('/settings/wallets')
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unable to save wallet')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to save wallet')
     }
   }
 
   async function onDelete() {
-    if (!wallet) {
-      return
-    }
+    if (!wallet) return
     try {
       await remove(wallet.id)
       navigate('/settings/wallets')
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unable to delete wallet')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to delete wallet')
     }
   }
 
   return (
     <form className="space-y-5" onSubmit={onSubmit}>
-      <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
-        <button
-          aria-label="Back"
-          onClick={() => backNavigate('/settings/wallets')}
-          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
-          type="button"
-        >
-          <Icon name="fa-chevron-left" />
-        </button>
-        <h1 className="text-center text-base font-bold">{title}</h1>
-        <div />
-      </header>
+      <PageHeader title={title} onBack={() => backNavigate('/settings/wallets')} />
       <Card className="space-y-4">
-        <Field label="Name"><TextInput value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></Field>
-        <Field label="Type"><SelectInput value={form.type} onChange={(event) => setForm({ ...form, type: event.target.value as WalletType })}><option value="payment">Payment</option><option value="credit_card">Credit Card</option></SelectInput></Field>
-        <Field label="Currency"><SelectInput value={form.currency} onChange={(event) => setForm({ ...form, currency: event.target.value })}>{currencies.map((currency) => <option key={currency.code} value={currency.code}>{currency.code}</option>)}</SelectInput></Field>
-        <Field label="Starting Balance"><TextInput type="number" value={form.balance} onChange={(event) => setForm({ ...form, balance: Number(event.target.value) })} /></Field>
-        {form.type === 'credit_card' ? <Field label="Credit Limit"><TextInput type="number" value={form.creditLimit ?? ''} onChange={(event) => setForm({ ...form, creditLimit: Number(event.target.value) || undefined })} /></Field> : null}
-        {error ? <p className="text-sm text-red-300">{error}</p> : null}
+        <Field label="Name"><TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></Field>
+        <Field label="Type"><SelectInput value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as WalletType })}><option value="payment">Payment</option><option value="credit_card">Credit Card</option></SelectInput></Field>
+        <Field label="Currency"><SelectInput value={form.currency} onChange={(e) => setForm({ ...form, currency: e.target.value })}>{currencies.map((c) => <option key={c.code} value={c.code}>{c.code}</option>)}</SelectInput></Field>
+        <Field label="Starting Balance"><TextInput type="number" value={form.balance} onChange={(e) => setForm({ ...form, balance: Number(e.target.value) })} /></Field>
+        {form.type === 'credit_card' ? <Field label="Credit Limit"><TextInput type="number" value={form.creditLimit ?? ''} onChange={(e) => setForm({ ...form, creditLimit: Number(e.target.value) || undefined })} /></Field> : null}
+        <FormErrorMessage error={error} />
       </Card>
       <Button type="submit" variant="accent">Save</Button>
       {wallet ? <Button type="button" variant="danger" onClick={onDelete}>Delete</Button> : null}

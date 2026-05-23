@@ -1,19 +1,13 @@
-import { motion } from 'framer-motion'
 import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { Card } from '../../components/ui/Card'
+import { AnimatedBar, SectionDivider } from '../../components/ui'
 import { formatAmount } from '../../lib/format'
+import { hexToRgba } from '../../lib/color'
 import { useTransactionStore } from '../../stores/transactionStore'
 import { useWalletStore } from '../../stores/walletStore'
 import { assetsTotal, debtTotal, walletCurrentAmount } from './balanceCalculations'
 import type { Wallet } from '../../types/domain'
-
-function hexToRgba(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return `rgba(${r},${g},${b},${alpha})`
-}
 
 function WalletRow({ wallet, amount }: { wallet: Wallet; amount: number }) {
   const isCredit = wallet.type === 'credit_card'
@@ -55,7 +49,6 @@ export function BalancePage() {
   const creditCards = wallets.filter((wallet) => wallet.type === 'credit_card')
   const assets = assetsTotal(wallets, transactions)
   const debt = debtTotal(wallets, transactions)
-  const debtWidth = assets > 0 ? Math.min((debt / assets) * 100, 100) : debt > 0 ? 100 : 0
 
   return (
     <div className="space-y-5">
@@ -72,16 +65,7 @@ export function BalancePage() {
             </span>
             <span className="text-xs font-semibold text-emerald-400">{formatAmount(assets)}</span>
           </div>
-          <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]">
-            <motion.div
-              className="flex h-full items-center rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-300 px-4 text-base font-bold text-emerald-950"
-              initial={{ width: 0 }}
-              animate={{ width: '100%' }}
-              transition={{ type: 'spring', stiffness: 80, damping: 20, delay: 0.1 }}
-            >
-              {formatAmount(assets)}
-            </motion.div>
-          </div>
+          <AnimatedBar value={assets} maxValue={assets} colorFrom="#10b981" colorTo="#6ee7b7" textColor="#052e16" currency="" delay={0.1} />
         </div>
         <div>
           <div className="mb-1.5 flex items-center justify-between">
@@ -91,28 +75,16 @@ export function BalancePage() {
             </span>
             <span className="text-xs font-semibold text-amber-400">{formatAmount(debt)}</span>
           </div>
-          <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]">
-            {debt > 0 && (
-              <motion.div
-                className="flex h-full items-center rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 text-base font-bold text-amber-950"
-                style={{ minWidth: '5rem' }}
-                initial={{ width: 0 }}
-                animate={{ width: `${debtWidth}%` }}
-                transition={{ type: 'spring', stiffness: 80, damping: 20, delay: 0.2 }}
-              >
-                {formatAmount(debt)}
-              </motion.div>
-            )}
-          </div>
+          {debt > 0 && (
+            <AnimatedBar value={debt} maxValue={assets} colorFrom="#f59e0b" colorTo="#fde047" textColor="#451a03" currency="" delay={0.2} />
+          )}
+          {debt === 0 && <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]" />}
         </div>
       </div>
 
       {paymentWallets.length > 0 && (
         <section>
-          <div className="mb-2.5 flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-widest text-white/30">Payment Accounts</span>
-            <div className="h-px flex-1 bg-white/[0.06]" />
-          </div>
+          <SectionDivider label="Payment Accounts" />
           {paymentWallets.map((wallet) => (
             <WalletRow key={wallet.id} wallet={wallet} amount={walletCurrentAmount(wallet, transactions)} />
           ))}
@@ -121,10 +93,7 @@ export function BalancePage() {
 
       {creditCards.length > 0 && (
         <section>
-          <div className="mb-2.5 flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-widest text-white/30">Credit Cards</span>
-            <div className="h-px flex-1 bg-white/[0.06]" />
-          </div>
+          <SectionDivider label="Credit Cards" />
           {creditCards.map((wallet) => (
             <WalletRow key={wallet.id} wallet={wallet} amount={walletCurrentAmount(wallet, transactions)} />
           ))}

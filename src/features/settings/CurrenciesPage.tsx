@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
+import { AddRow, ListGroup, PageHeader } from '../../components/ui'
 import { useCurrencyStore } from '../../stores/currencyStore'
 import { useBackNavigate } from '../../context/navigationDirection'
 
@@ -45,34 +46,14 @@ export function CurrenciesPage() {
 
   return (
     <div className="space-y-5">
-      <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
-        <button
-          aria-label="Back"
-          onClick={() => backNavigate('/settings')}
-          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
-          type="button"
-        >
-          <Icon name="fa-chevron-left" />
-        </button>
-        <h1 className="text-center text-base font-bold">Currencies</h1>
-        <div />
-      </header>
+      <PageHeader title="Currencies" onBack={() => backNavigate('/settings')} />
 
-      <div>
-        <p className="mb-2 pl-1 text-[11px] uppercase tracking-[1.5px] text-white/30">Currencies &amp; Rates</p>
-        <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/[0.04]">
-          {currencies.map((c) => (
-            <CurrencyRow key={c.code} code={c.code} isBase={c.isBase} rate={c.rate} baseCode={baseCode} />
-          ))}
-          <Link
-            to="/settings/currencies/new"
-            className="flex items-center justify-center gap-1.5 px-4 py-[13px] text-[13px] font-semibold text-accent"
-          >
-            <Icon name="fa-plus" />
-            Add Currency
-          </Link>
-        </div>
-      </div>
+      <ListGroup label="Currencies & Rates">
+        {currencies.map((c) => (
+          <CurrencyRow key={c.code} code={c.code} isBase={c.isBase} rate={c.rate} baseCode={baseCode} />
+        ))}
+        <AddRow label="Add Currency" to="/settings/currencies/new" />
+      </ListGroup>
     </div>
   )
 }

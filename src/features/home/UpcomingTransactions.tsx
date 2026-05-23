@@ -1,10 +1,9 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router'
-import { Icon } from '../../components/Icon'
 import { formatAmount } from '../../lib/format'
 import { useCategoryStore } from '../../stores/categoryStore'
 import { useTransactionStore } from '../../stores/transactionStore'
 import { useWalletStore } from '../../stores/walletStore'
+import { SectionLabel, TransactionRow } from '../../components/ui'
 
 const listVariants = {
   hidden: {},
@@ -21,15 +20,9 @@ function badgeFor(day: string): string {
   const tomorrowDate = new Date()
   tomorrowDate.setDate(tomorrowDate.getDate() + 1)
   const tomorrow = tomorrowDate.toISOString().slice(0, 10)
-  if (day < today) {
-    return 'Overdue'
-  }
-  if (day === today) {
-    return 'Today'
-  }
-  if (day === tomorrow) {
-    return 'Tomorrow'
-  }
+  if (day < today) return 'Overdue'
+  if (day === today) return 'Today'
+  if (day === tomorrow) return 'Tomorrow'
   return day
 }
 
@@ -39,13 +32,13 @@ export function UpcomingTransactions() {
   const findWallet = useWalletStore((state) => state.findById)
   const rows = upcomingTransactions()
 
-  if (rows.length === 0) {
-    return null
-  }
+  if (rows.length === 0) return null
 
   return (
     <section>
-      <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[2px] text-white/30">Upcoming</h2>
+      <div className="mb-3">
+        <SectionLabel>Upcoming</SectionLabel>
+      </div>
       <motion.div className="space-y-2" variants={listVariants} initial="hidden" animate="visible">
         {rows.map((row) => {
           const transaction = row.kind === 'real' ? row.transaction : row.occurrence.transaction
@@ -63,22 +56,16 @@ export function UpcomingTransactions() {
               : `/transaction/repeat/${row.occurrence.sourceId}/${row.occurrence.occurrenceDate}`
           return (
             <motion.div key={row.id} variants={rowVariants}>
-              <Link
+              <TransactionRow
                 to={to}
-                className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-3.5 transition-[background,box-shadow] hover:bg-[rgba(108,71,255,0.08)] hover:shadow-[0_0_0_1px_rgba(108,71,255,0.15)]"
-              >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-400/15 text-amber-300">
-                  <Icon name={transaction.type === 'transfer' ? 'fa-right-left' : category?.icon ?? 'fa-clock'} />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate font-medium">{label}</span>
-                  <span className="block truncate text-sm text-slate-500">
-                    {badgeFor(row.date)}
-                    {row.kind === 'virtual-repeat' ? ' · Repeat' : ''}
-                  </span>
-                </span>
-                <span className="font-semibold text-amber-200">{formatAmount(firstItem?.amount ?? 0, transaction.currency)}</span>
-              </Link>
+                icon={transaction.type === 'transfer' ? 'fa-right-left' : category?.icon ?? 'fa-clock'}
+                iconBg="rgba(251,191,36,0.15)"
+                iconColor="#fcd34d"
+                primaryLabel={label}
+                secondaryLabel={`${badgeFor(row.date)}${row.kind === 'virtual-repeat' ? ' · Repeat' : ''}`}
+                amount={formatAmount(firstItem?.amount ?? 0, transaction.currency)}
+                amountColor="text-amber-200"
+              />
             </motion.div>
           )
         })}
