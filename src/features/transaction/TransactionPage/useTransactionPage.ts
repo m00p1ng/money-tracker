@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from 'react'
 import {
   useNavigate,
   useParams,
@@ -54,25 +55,31 @@ export function useTransactionPage(): TransactionPageProps {
   const initialType = (seedType ?? initial?.type ?? 'expense') as TransactionType
   const initialWalletId = initial?.walletId ?? wallets[0]?.id ?? 'wallet-cash'
 
-  const draft = draftStore.draft ?? (() => {
-    const newDraft = {
-      id: existing?.id,
-      type: initialType,
-      walletId: initialWalletId,
-      toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
-      items: initial?.items ?? (seedCategoryId ? [{ categoryId: seedCategoryId, amount: 0 }] : []),
-      focusedIndex: seedCategoryId ? 0 : null,
-      date: initial ? toDatetimeLocalValue(new Date(initial.date)) : toDatetimeLocalValue(new Date()),
-      note: initial?.note ?? '',
-      currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
-      exchangeRate: String(initial?.exchangeRate ?? ''),
-      toExchangeRate: String(initial?.toExchangeRate ?? ''),
-      repeatConfig: initial?.repeat ?? { preset: 'never' },
-      transferAmount: initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0,
+  const initialDraft = useMemo(() => ({
+    id: existing?.id,
+    type: initialType,
+    walletId: initialWalletId,
+    toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
+    items: initial?.items ?? (seedCategoryId ? [{ categoryId: seedCategoryId, amount: 0 }] : []),
+    focusedIndex: seedCategoryId ? 0 : null,
+    date: initial ? toDatetimeLocalValue(new Date(initial.date)) : toDatetimeLocalValue(new Date()),
+    note: initial?.note ?? '',
+    currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
+    exchangeRate: String(initial?.exchangeRate ?? ''),
+    toExchangeRate: String(initial?.toExchangeRate ?? ''),
+    repeatConfig: initial?.repeat ?? { preset: 'never' },
+    transferAmount: initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0,
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [])
+
+  useEffect(() => {
+    if (!draftStore.draft) {
+      useTransactionDraftStore.getState().init(initialDraft)
     }
-    useTransactionDraftStore.getState().init(newDraft)
-    return newDraft
-  })()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const draft = draftStore.draft ?? initialDraft
 
   const {
     type,
@@ -200,5 +207,6 @@ export function useTransactionPage(): TransactionPageProps {
       clearDraft(); backNavigate('/')
     },
     onDelete,
+    onDismissKeyboard: () => updateDraft({ focusedIndex: null }),
   }
 }

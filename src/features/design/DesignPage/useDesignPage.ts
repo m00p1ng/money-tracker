@@ -56,6 +56,12 @@ export function useDesignPage() {
   return {
     activeId,
     contentRef,
-    onNavigateBack: () => navigate(-1),
+    onNavigateBack: () => {
+      if (window.history.length > 1) {
+        navigate(-1)
+      } else {
+        navigate('/', { replace: true })
+      }
+    },
   }
 }

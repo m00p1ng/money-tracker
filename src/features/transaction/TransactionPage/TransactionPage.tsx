@@ -84,6 +84,7 @@ export interface TransactionPageProps {
   onSave: () => Promise<void>
   onBack: () => void
   onDelete: () => Promise<void>
+  onDismissKeyboard: () => void
 }
 
 export function TransactionPage({
@@ -122,6 +123,7 @@ export function TransactionPage({
   onSave,
   onBack,
   onDelete,
+  onDismissKeyboard,
 }: TransactionPageProps) {
   const [calc, setCalc] = useState(createCalcState())
   const [walletPickerTarget, setWalletPickerTarget] = useState<WalletPickerTarget | null>(null)
@@ -152,7 +154,10 @@ export function TransactionPage({
   }
 
   return (
-    <div className={cx('space-y-2', focusedIndex !== null ? 'pb-64' : 'pb-6')}>
+    <div
+      className={cx('space-y-2', focusedIndex !== null ? 'pb-64' : 'pb-6')}
+      onClick={focusedIndex !== null ? onDismissKeyboard : undefined}
+    >
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"
@@ -478,6 +483,7 @@ export function TransactionPage({
               damping: 35,
             }}
             className="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2"
+            onClick={(e) => e.stopPropagation()}
           >
             <CalculatorKeyboard onPress={handlePress} />
           </motion.div>
