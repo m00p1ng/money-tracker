@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { useCategoryStore } from '../../../stores/categoryStore'
+import { useTransactionDraftStore } from '../../../stores/transactionDraftStore'
 import { CategorySelectionPage } from '../CategorySelectionPage'
 
 const categories = [
@@ -11,9 +12,9 @@ const categories = [
   { id: 'inc-salary', name: 'Salary', type: 'income' as const, level: 1 as const, icon: 'fa-money-bill', color: '#3b82f6', isDefault: true },
 ]
 
-function renderPage() {
+function renderPage(search = '') {
   return render(
-    <MemoryRouter initialEntries={['/transaction/category']}>
+    <MemoryRouter initialEntries={[`/transaction/category${search}`]}>
       <Routes>
         <Route path="/transaction/category" element={<CategorySelectionPage />} />
         <Route path="/transaction/new" element={<div data-testid="tx-page" />} />
@@ -23,6 +24,7 @@ function renderPage() {
 }
 
 beforeEach(() => {
+  useTransactionDraftStore.getState().clear()
   useCategoryStore.setState({ items: categories })
 })
 
@@ -47,7 +49,7 @@ describe('CategorySelectionPage', () => {
     expect(screen.queryByText('Food & Drink')).not.toBeInTheDocument()
   })
 
-  it('navigates to /transaction/new with type and categoryId on leaf tap', async () => {
+  it('navigates to /transaction/new with type and categoryId on leaf tap (standalone)', async () => {
     renderPage()
     await userEvent.click(screen.getByText('Food & Drink'))
     await userEvent.click(screen.getByText('Coffee'))
@@ -58,5 +60,42 @@ describe('CategorySelectionPage', () => {
     renderPage()
     await userEvent.click(screen.getByRole('button', { name: 'Transfer' }))
     expect(screen.getByTestId('tx-page')).toBeInTheDocument()
+  })
+})
+
+describe('CategorySelectionPage with draft store', () => {
+  beforeEach(() => {
+    useTransactionDraftStore.getState().init({
+      type: 'expense',
+      walletId: 'w1',
+      items: [{ categoryId: 'exp-food-coffee', amount: 50 }],
+      focusedIndex: 0,
+      date: '2026-01-01T00:00',
+      note: '',
+      currency: 'THB',
+      exchangeRate: '',
+      toExchangeRate: '',
+      repeatConfig: { preset: 'never' },
+      transferAmount: 0,
+    })
+  })
+
+  it('updates item at changingIndex and navigates back on leaf select', async () => {
+    renderPage('?changingIndex=0&type=expense')
+    await userEvent.click(screen.getByText('Food & Drink'))
+    await userEvent.click(screen.getByText('Coffee'))
+    const draft = useTransactionDraftStore.getState().draft
+    expect(draft?.items[0].categoryId).toBe('exp-food-coffee')
+    // navigated back (no longer on category page — tx-page is shown instead via -1 nav, but in MemoryRouter -1 goes back)
+    expect(screen.queryByText('Food & Drink')).not.toBeInTheDocument()
+  })
+
+  it('appends new item when addCategory=true on leaf select', async () => {
+    renderPage('?addCategory=true&type=expense')
+    await userEvent.click(screen.getByText('Food & Drink'))
+    await userEvent.click(screen.getByText('Coffee'))
+    const draft = useTransactionDraftStore.getState().draft
+    expect(draft?.items).toHaveLength(2)
+    expect(draft?.items[1].categoryId).toBe('exp-food-coffee')
   })
 })

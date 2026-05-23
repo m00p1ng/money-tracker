@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { useCategoryStore } from '../../stores/categoryStore'
+import { useTransactionDraftStore } from '../../stores/transactionDraftStore'
 import type { Category, TransactionType } from '../../types/domain'
 
 const gridVariants = {
@@ -17,8 +18,17 @@ const cellVariants = {
 
 export function CategorySelectionPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const categories = useCategoryStore((state) => state.items)
-  const [type, setType] = useState<'expense' | 'income'>('expense')
+  const updateDraft = useTransactionDraftStore((state) => state.update)
+  const draft = useTransactionDraftStore((state) => state.draft)
+
+  const changingIndexParam = searchParams.get('changingIndex')
+  const changingIndex = changingIndexParam !== null ? Number(changingIndexParam) : null
+  const isAddCategory = searchParams.get('addCategory') === 'true'
+  const seedType = (searchParams.get('type') ?? 'expense') as 'expense' | 'income'
+
+  const [type, setType] = useState<'expense' | 'income'>(seedType)
   const [parentId, setParentId] = useState<string | undefined>()
 
   const visible = categories.filter((c) => c.type === type && c.parentId === parentId)
@@ -45,9 +55,26 @@ export function CategorySelectionPage() {
     const hasChildren = categories.some((c) => c.parentId === category.id)
     if (hasChildren) {
       setParentId(category.id)
-    } else {
-      navigate(`/transaction/new?type=${type}&categoryId=${category.id}`)
+      return
     }
+
+    // We came from TransactionPage with a draft — update draft and go back
+    if (draft && (changingIndex !== null || isAddCategory)) {
+      if (changingIndex !== null) {
+        const newItems = draft.items.map((item, i) =>
+          i === changingIndex ? { ...item, categoryId: category.id } : item,
+        )
+        updateDraft({ items: newItems })
+      } else {
+        // addCategory
+        updateDraft({ items: [...draft.items, { categoryId: category.id, amount: 0 }] })
+      }
+      navigate(-1)
+      return
+    }
+
+    // Standalone flow (launched from HomePage without a draft)
+    navigate(`/transaction/new?type=${type}&categoryId=${category.id}`)
   }
 
   return (
