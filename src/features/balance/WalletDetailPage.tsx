@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
+import { useBackNavigate } from '../../context/navigationDirection'
 import { Icon } from '../../components/Icon'
 import { Card } from '../../components/ui/Card'
 import { type DateRangePreset, getPresetRange } from '../../lib/dateRange'
@@ -27,6 +28,7 @@ function hexToRgba(hex: string, alpha: number): string {
 
 export function WalletDetailPage() {
   const { id } = useParams()
+  const backNavigate = useBackNavigate()
   const wallet = useWalletStore((state) => state.items.find((item) => item.id === id))
   const transactions = useTransactionStore((state) => state.items)
   const categories = useCategoryStore((state) => state.items)
@@ -37,7 +39,7 @@ export function WalletDetailPage() {
     return (
       <section className="space-y-4">
         <h1 className="text-2xl font-semibold">Wallet not found</h1>
-        <Link className="text-accent" to="/balance">Back to Balance</Link>
+        <button type="button" className="text-accent" onClick={() => backNavigate('/balance')}>Back to Balance</button>
       </section>
     )
   }
