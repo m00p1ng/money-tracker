@@ -1,5 +1,6 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams, useSearchParams } from 'react-router'
 import { Icon } from '../../components/Icon'
 import { SegmentedControl } from '../../components/ui/SegmentedControl'
 import { createCalcState, pressCalcKey } from '../../lib/calculator'
@@ -55,15 +56,21 @@ export function TransactionPage() {
   const isEditMode = Boolean(id && existing)
   const isRepeatMaterialization = Boolean(sourceId && repeatDate)
   const initial = isRepeatMaterialization ? sourceRepeat : existing
-  const [type, setType] = useState<TransactionType>(initial?.type ?? 'expense')
+  const [searchParams] = useSearchParams()
+  const seedCategoryId = !isEditMode && !isRepeatMaterialization ? searchParams.get('categoryId') ?? undefined : undefined
+  const seedType = !isEditMode && !isRepeatMaterialization ? (searchParams.get('type') ?? 'expense') as TransactionType : undefined
+  const [type, setType] = useState<TransactionType>(initial?.type ?? seedType ?? 'expense')
   const [walletId, setWalletId] = useState(initial?.walletId ?? wallets[0]?.id ?? 'wallet-cash')
   const [toWalletId, setToWalletId] = useState<string | undefined>(initial?.toWalletId ?? wallets.find((wallet) => wallet.id !== walletId)?.id)
-  const [items, setItems] = useState<TransactionItem[]>(initial?.items ?? [])
-  const [focusedIndex, setFocusedIndex] = useState(0)
+  const [items, setItems] = useState<TransactionItem[]>(
+    initial?.items ?? (seedCategoryId ? [{ categoryId: seedCategoryId, amount: 0 }] : []),
+  )
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(seedCategoryId ? 0 : null)
   const [date, setDate] = useState(initial ? toDatetimeLocalValue(new Date(initial.date)) : toDatetimeLocalValue(new Date()))
   const [note, setNote] = useState(initial?.note ?? '')
   const [calc, setCalc] = useState(createCalcState())
   const [isPickerOpen, setPickerOpen] = useState(false)
+  const [changingCategoryIndex, setChangingCategoryIndex] = useState<number | null>(null)
   const [walletPickerTarget, setWalletPickerTarget] = useState<WalletPickerTarget | null>(null)
   const [isRepeatPickerOpen, setRepeatPickerOpen] = useState(false)
   const [isCurrencyPickerOpen, setCurrencyPickerOpen] = useState(false)
@@ -91,6 +98,7 @@ export function TransactionPage() {
   }
 
   function press(key: string) {
+    if (focusedIndex === null) return
     if (key === 'THB') {
       setCurrencyPickerOpen(true)
       return
@@ -107,6 +115,11 @@ export function TransactionPage() {
 
   function handleRemoveItem(index: number) {
     setItems((current) => current.filter((_, itemIndex) => itemIndex !== index))
+  }
+
+  function handleChangeCategory(index: number) {
+    setChangingCategoryIndex(index)
+    setPickerOpen(true)
   }
 
   async function save() {
@@ -165,7 +178,7 @@ export function TransactionPage() {
   }
 
   return (
-    <div className="space-y-2 pb-64">
+    <div className={`space-y-2 ${focusedIndex !== null ? 'pb-64' : 'pb-6'}`}>
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"
@@ -281,7 +294,7 @@ export function TransactionPage() {
             </div>
             <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
           </button>
-          <CategoryItemsCard items={items} focusedIndex={focusedIndex} onFocus={handleFocusItem} onAdd={() => setPickerOpen(true)} onRemove={handleRemoveItem} />
+          <CategoryItemsCard items={items} focusedIndex={focusedIndex} onFocus={handleFocusItem} onAdd={() => { setChangingCategoryIndex(null); setPickerOpen(true) }} onRemove={handleRemoveItem} onChangeCategory={handleChangeCategory} />
           {currency !== wallet?.currency ? (
             <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
               <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400 text-xs">
@@ -352,11 +365,13 @@ export function TransactionPage() {
         <div className="min-w-0 flex-1">
           <label className="text-[11px] text-white/35" htmlFor="tx-note">Note</label>
           <textarea
-            id="tx-note"
-            className="mt-0.5 min-h-16 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-white/30"
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-            placeholder="Add note…"
+          aria-label="Note"
+          id="tx-note"
+          className="mt-0.5 min-h-16 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-white/30"
+          value={note}
+          onChange={(event) => setNote(event.target.value)}
+          onFocus={() => setFocusedIndex(null)}
+          placeholder="Add note…"
           />
         </div>
       </div>
@@ -421,13 +436,35 @@ export function TransactionPage() {
           type={type}
           onClose={() => setPickerOpen(false)}
           onSelect={(category) => {
-            addCategory(category.id)
+            if (changingCategoryIndex !== null) {
+              setItems((current) =>
+                current.map((item, i) =>
+                  i === changingCategoryIndex ? { ...item, categoryId: category.id } : item,
+                ),
+              )
+              setChangingCategoryIndex(null)
+            } else {
+              addCategory(category.id)
+            }
             setPickerOpen(false)
           }}
         />
       ) : null}
 
-      <CalculatorKeyboard onPress={press} />
+      <AnimatePresence>
+        {focusedIndex !== null && (
+          <motion.div
+            key="keyboard"
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+            className="fixed inset-x-0 bottom-0 z-30"
+          >
+            <CalculatorKeyboard onPress={press} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
