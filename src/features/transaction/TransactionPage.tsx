@@ -216,7 +216,7 @@ export function TransactionPage() {
         </button>
         <TypePickerDropdown
           value={type}
-          onChange={(v) => updateDraft({ type: v as TransactionType })}
+          onChange={(v) => updateDraft({ type: v as TransactionType, items: [], focusedIndex: null })}
         />
         <button
           aria-label="Save"

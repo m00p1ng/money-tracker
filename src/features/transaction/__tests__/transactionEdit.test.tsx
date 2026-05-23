@@ -162,3 +162,35 @@ describe('TransactionPage edit mode', () => {
     expect(screen.queryByText('Categories')).not.toBeInTheDocument()
   })
 })
+
+describe('TransactionPage type switching', () => {
+  beforeEach(() => {
+    useTransactionDraftStore.getState().clear()
+    useCategoryStore.setState({ items: [
+      { id: 'exp-food', name: 'Food', type: 'expense' as const, level: 1 as const, icon: 'fa-utensils', color: '#65a30d', isDefault: true },
+    ] })
+    useWalletStore.setState({ items: [
+      { id: 'w1', name: 'Cash', type: 'payment' as const, currency: 'THB', color: '#38bdf8', icon: 'fa-wallet', balance: 0 },
+    ] })
+  })
+
+  it('clears items when type changes from expense to income', async () => {
+    // Navigate in with a categoryId to seed an item
+    render(
+      <MemoryRouter initialEntries={['/transaction/new?type=expense&categoryId=exp-food']}>
+        <Routes>
+          <Route path="/transaction/new" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    // Verify item seeded
+    expect(useTransactionDraftStore.getState().draft?.items).toHaveLength(1)
+
+    // Open type picker and switch to income
+    const typeTrigger = screen.getByRole('button', { name: /expense/i })
+    await userEvent.click(typeTrigger)
+    await userEvent.click(screen.getByRole('button', { name: 'Income' }))
+
+    expect(useTransactionDraftStore.getState().draft?.items).toHaveLength(0)
+  })
+})
