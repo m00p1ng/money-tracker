@@ -13,7 +13,7 @@ const categories: Category[] = [
 describe('CategoryPicker', () => {
   it('navigates root to leaf and selects the leaf', async () => {
     const onSelect = vi.fn()
-    render(<CategoryPicker categories={categories} type="expense" onClose={vi.fn()} onSelect={onSelect} />)
+    render(<CategoryPicker isOpen={true} categories={categories} type="expense" onClose={vi.fn()} onSelect={onSelect} />)
     await userEvent.click(screen.getByText('Food & Drink'))
     expect(screen.getByText('Coffee')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Coffee'))
@@ -21,7 +21,7 @@ describe('CategoryPicker', () => {
   })
 
   it('returns to parent when back is clicked', async () => {
-    render(<CategoryPicker categories={categories} type="expense" onClose={vi.fn()} onSelect={vi.fn()} />)
+    render(<CategoryPicker isOpen={true} categories={categories} type="expense" onClose={vi.fn()} onSelect={vi.fn()} />)
     await userEvent.click(screen.getByText('Food & Drink'))
     expect(screen.getByText('Coffee')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Back' }))
@@ -30,19 +30,19 @@ describe('CategoryPicker', () => {
 
   it('calls onClose when back is clicked at root level', async () => {
     const onClose = vi.fn()
-    render(<CategoryPicker categories={categories} type="expense" onClose={onClose} onSelect={vi.fn()} />)
+    render(<CategoryPicker isOpen={true} categories={categories} type="expense" onClose={onClose} onSelect={vi.fn()} />)
     await userEvent.click(screen.getByRole('button', { name: 'Back' }))
     expect(onClose).toHaveBeenCalled()
   })
 
   it('only shows categories matching the specified type', () => {
-    render(<CategoryPicker categories={categories} type="expense" onClose={vi.fn()} onSelect={vi.fn()} />)
+    render(<CategoryPicker isOpen={true} categories={categories} type="expense" onClose={vi.fn()} onSelect={vi.fn()} />)
     expect(screen.getByText('Food & Drink')).toBeInTheDocument()
     expect(screen.queryByText('Salary')).not.toBeInTheDocument()
   })
 
   it('shows "All" in header at root level and parent name when navigating into a category', async () => {
-    render(<CategoryPicker categories={categories} type="expense" onClose={vi.fn()} onSelect={vi.fn()} />)
+    render(<CategoryPicker isOpen={true} categories={categories} type="expense" onClose={vi.fn()} onSelect={vi.fn()} />)
     expect(screen.getByRole('heading', { name: 'All' })).toBeInTheDocument()
     await userEvent.click(screen.getByText('Food & Drink'))
     expect(screen.getByRole('heading', { name: 'Food & Drink' })).toBeInTheDocument()
