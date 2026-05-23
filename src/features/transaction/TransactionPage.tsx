@@ -78,11 +78,15 @@ export function TransactionPage() {
     const errors = validateDraft({ type, walletId, toWalletId, items, transferAmount })
     if (currency !== wallet?.currency) {
       const rateError = validateExchangeRate(exchangeRate || defaultRate)
-      if (rateError) errors.push(rateError)
+      if (rateError) {
+        errors.push(rateError)
+      }
     }
     if (type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency) {
       const rateError = validateExchangeRate(toExchangeRate || defaultRate)
-      if (rateError) errors.push(rateError)
+      if (rateError) {
+        errors.push(rateError)
+      }
     }
     if (errors.length > 0) {
       alert(errors[0])

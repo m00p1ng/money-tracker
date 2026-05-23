@@ -20,10 +20,14 @@ type ValidCustomRepeat = RepeatConfig & {
 }
 
 function localDateString(value: string): string {
-  if (!value.includes('T')) return value.slice(0, 10)
+  if (!value.includes('T')) {
+    return value.slice(0, 10)
+  }
 
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return value.slice(0, 10)
+  if (Number.isNaN(date.getTime())) {
+    return value.slice(0, 10)
+  }
 
   return formatDateParts({
     year: date.getFullYear(),
@@ -41,13 +45,19 @@ function todayString(now: Date): string {
 
 function parseDateParts(value: string): DateParts | undefined {
   const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value)
-  if (!match) return undefined
+  if (!match) {
+    return undefined
+  }
 
   const year = Number(match[1])
   const month = Number(match[2])
   const day = Number(match[3])
-  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return undefined
-  if (month < 1 || month > 12 || day < 1) return undefined
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+    return undefined
+  }
+  if (month < 1 || month > 12 || day < 1) {
+    return undefined
+  }
 
   return { year, month, day }
 }
@@ -62,7 +72,9 @@ function formatDateParts({ year, month, day }: DateParts): string {
 
 function addDays(value: string, days: number): string {
   const parts = parseDateParts(value)
-  if (!parts) return value
+  if (!parts) {
+    return value
+  }
 
   const date = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + days))
   return formatDateParts({
@@ -74,7 +86,9 @@ function addDays(value: string, days: number): string {
 
 function addMonths(value: string, months: number): string {
   const parts = parseDateParts(value)
-  if (!parts) return value
+  if (!parts) {
+    return value
+  }
 
   const target = new Date(Date.UTC(parts.year, parts.month - 1 + months, 1))
   const year = target.getUTCFullYear()
@@ -95,15 +109,31 @@ function isValidCustomRepeat(repeat: RepeatConfig): repeat is ValidCustomRepeat 
 }
 
 export function nextRepeatDate(day: string, repeat: RepeatConfig): string {
-  if (repeat.preset === 'daily') return addDays(day, 1)
-  if (repeat.preset === '2weeks') return addDays(day, 14)
-  if (repeat.preset === 'monthly') return addMonths(day, 1)
-  if (repeat.preset === 'yearly') return addMonths(day, 12)
-  if (!isValidCustomRepeat(repeat)) return day
+  if (repeat.preset === 'daily') {
+    return addDays(day, 1)
+  }
+  if (repeat.preset === '2weeks') {
+    return addDays(day, 14)
+  }
+  if (repeat.preset === 'monthly') {
+    return addMonths(day, 1)
+  }
+  if (repeat.preset === 'yearly') {
+    return addMonths(day, 12)
+  }
+  if (!isValidCustomRepeat(repeat)) {
+    return day
+  }
 
-  if (repeat.customUnit === 'day') return addDays(day, repeat.customEvery)
-  if (repeat.customUnit === 'month') return addMonths(day, repeat.customEvery)
-  if (repeat.customUnit === 'year') return addMonths(day, repeat.customEvery * 12)
+  if (repeat.customUnit === 'day') {
+    return addDays(day, repeat.customEvery)
+  }
+  if (repeat.customUnit === 'month') {
+    return addMonths(day, repeat.customEvery)
+  }
+  if (repeat.customUnit === 'year') {
+    return addMonths(day, repeat.customEvery * 12)
+  }
   return day
 }
 
@@ -119,8 +149,12 @@ export function hasMaterializedOccurrence(
 }
 
 function shouldProjectRepeat(repeat: RepeatConfig | undefined): repeat is RepeatConfig {
-  if (!repeat || repeat.preset === 'never') return false
-  if (repeat.preset === 'custom') return isValidCustomRepeat(repeat)
+  if (!repeat || repeat.preset === 'never') {
+    return false
+  }
+  if (repeat.preset === 'custom') {
+    return isValidCustomRepeat(repeat)
+  }
   return true
 }
 
@@ -134,18 +168,28 @@ export function projectRepeatOccurrences(transactions: Transaction[], now = new 
   const occurrences: VirtualRepeatOccurrence[] = []
 
   for (const source of transactions) {
-    if (source.status !== 'planned' && source.status !== 'overdue') continue
-    if (!shouldProjectRepeat(source.repeat)) continue
+    if (source.status !== 'planned' && source.status !== 'overdue') {
+      continue
+    }
+    if (!shouldProjectRepeat(source.repeat)) {
+      continue
+    }
 
     let occurrenceDate = localDateString(source.date)
 
     while (occurrenceDate <= windowEnd) {
       const nextDate = nextRepeatDate(occurrenceDate, source.repeat)
-      if (nextDate <= occurrenceDate) break
+      if (nextDate <= occurrenceDate) {
+        break
+      }
       occurrenceDate = nextDate
 
-      if (occurrenceDate < windowStart || occurrenceDate > windowEnd) continue
-      if (hasMaterializedOccurrence(transactions, source.id, occurrenceDate)) continue
+      if (occurrenceDate < windowStart || occurrenceDate > windowEnd) {
+        continue
+      }
+      if (hasMaterializedOccurrence(transactions, source.id, occurrenceDate)) {
+        continue
+      }
 
       occurrences.push({
         id: `repeat:${source.id}:${occurrenceDate}`,
@@ -165,10 +209,14 @@ export function projectRepeatOccurrences(transactions: Transaction[], now = new 
 
 function replaceDate(sourceDate: string, occurrenceDate: string): string {
   const occurrenceParts = parseDateParts(occurrenceDate)
-  if (!occurrenceParts || !sourceDate.includes('T')) return occurrenceDate
+  if (!occurrenceParts || !sourceDate.includes('T')) {
+    return occurrenceDate
+  }
 
   const source = new Date(sourceDate)
-  if (Number.isNaN(source.getTime())) return occurrenceDate
+  if (Number.isNaN(source.getTime())) {
+    return occurrenceDate
+  }
 
   return new Date(
     occurrenceParts.year,

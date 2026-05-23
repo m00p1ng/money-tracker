@@ -14,7 +14,11 @@ export function SegmentedControl<T extends string>({
       {segments.map((segment) => (
         <button
           key={segment.value}
-          className={`rounded-[9px] px-3.5 py-1.5 text-xs font-semibold ${segment.value === value ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_2px_10px_rgba(16,185,129,0.4)]' : 'text-white/40'}`}
+          className={`rounded-[9px] px-3.5 py-1.5 text-xs font-semibold ${segment.value === value ? 'text-white' : 'text-white/40'}`}
+          style={segment.value === value ? {
+            background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))',
+            boxShadow: '0 2px 10px color-mix(in srgb, var(--accent) 40%, transparent)',
+          } : undefined}
           onClick={() => onChange(segment.value)}
           type="button"
         >

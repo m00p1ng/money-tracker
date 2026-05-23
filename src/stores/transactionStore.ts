@@ -18,10 +18,14 @@ function isCurrentMonth(isoDate: string, now = new Date()): boolean {
 }
 
 function localDateString(value: string): string {
-  if (!value.includes('T')) return value.slice(0, 10)
+  if (!value.includes('T')) {
+    return value.slice(0, 10)
+  }
 
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return value.slice(0, 10)
+  if (Number.isNaN(date.getTime())) {
+    return value.slice(0, 10)
+  }
 
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -131,8 +135,12 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     return [...realRows, ...repeatRows].sort((a, b) => {
       const aOverdue = a.kind === 'real' && a.transaction.status === 'overdue'
       const bOverdue = b.kind === 'real' && b.transaction.status === 'overdue'
-      if (aOverdue && !bOverdue) return -1
-      if (!aOverdue && bOverdue) return 1
+      if (aOverdue && !bOverdue) {
+        return -1
+      }
+      if (!aOverdue && bOverdue) {
+        return 1
+      }
       return a.date.localeCompare(b.date)
     })
   },
@@ -157,7 +165,9 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     }
 
     const source = get().items.find((transaction) => transaction.id === sourceId) ?? (await db.transactions.get(sourceId))
-    if (!source) throw new Error('Repeat source not found')
+    if (!source) {
+      throw new Error('Repeat source not found')
+    }
 
     const transaction = buildRepeatOccurrence(source, occurrenceDate, createId, now)
     await db.transactions.put(transaction)

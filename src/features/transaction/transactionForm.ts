@@ -103,10 +103,10 @@ export function buildTransaction(input: {
     : input.items
   const transferFields = input.type === 'transfer'
     ? {
-        toWalletId: input.toWalletId,
-        exchangeRate: input.exchangeRate,
-        toExchangeRate: input.toExchangeRate,
-      }
+      toWalletId: input.toWalletId,
+      exchangeRate: input.exchangeRate,
+      toExchangeRate: input.toExchangeRate,
+    }
     : {}
 
   return {

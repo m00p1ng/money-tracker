@@ -28,7 +28,7 @@ export function ThemePage() {
   return (
     <div className="space-y-5">
       <header>
-        <Link className="text-sm text-accent" to="/settings">Back</Link>
+        <Link className="inline-flex items-center gap-1.5 text-sm text-accent" to="/settings"><Icon name="fa-chevron-left" className="text-[11px]" />Back</Link>
         <h1 className="mt-3 text-2xl font-semibold">Theme</h1>
       </header>
 
