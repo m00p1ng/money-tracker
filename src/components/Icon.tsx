@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library, type IconName } from '@fortawesome/fontawesome-svg-core'
 import {
   faArrowDown,
+  faArrowRightArrowLeft,
   faArrowTrendUp,
   faArrowUp,
   faBagShopping,
@@ -15,6 +16,7 @@ import {
   faCheck,
   faChevronLeft,
   faChevronRight,
+  faCircleCheck,
   faCirclePlus,
   faCoins,
   faCreditCard,
@@ -31,8 +33,10 @@ import {
   faMoneyBillWave,
   faPalette,
   faPencil,
+  faPenToSquare,
   faPlane,
   faPlus,
+  faRotate,
   faRotateLeft,
   faSpa,
   faTag,
@@ -43,6 +47,7 @@ import {
 
 library.add(
   faArrowDown,
+  faArrowRightArrowLeft,
   faArrowTrendUp,
   faArrowUp,
   faBagShopping,
@@ -55,6 +60,7 @@ library.add(
   faCheck,
   faChevronLeft,
   faChevronRight,
+  faCircleCheck,
   faCirclePlus,
   faCoins,
   faCreditCard,
@@ -71,8 +77,10 @@ library.add(
   faMoneyBillWave,
   faPalette,
   faPencil,
+  faPenToSquare,
   faPlane,
   faPlus,
+  faRotate,
   faRotateLeft,
   faSpa,
   faTag,

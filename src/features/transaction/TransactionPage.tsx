@@ -9,11 +9,36 @@ import { useCategoryStore } from '../../stores/categoryStore'
 import { useCurrencyStore } from '../../stores/currencyStore'
 import { useTransactionStore } from '../../stores/transactionStore'
 import { useWalletStore } from '../../stores/walletStore'
-import type { RepeatPreset, TransactionItem, TransactionType } from '../../types/domain'
+import type { RepeatConfig, TransactionItem, TransactionType } from '../../types/domain'
 import { CalculatorKeyboard } from './CalculatorKeyboard'
 import { CategoryItemsCard } from './CategoryItemsCard'
 import { CategoryPicker } from './CategoryPicker'
+import { CurrencyPicker } from './CurrencyPicker'
+import { RepeatPicker } from './RepeatPicker'
+import { WalletPicker } from './WalletPicker'
 import { buildTransaction, validateDraft, validateExchangeRate } from './transactionForm'
+
+type WalletPickerTarget = 'wallet' | 'toWallet'
+
+function formatRepeat(config: RepeatConfig): string {
+  if (config.preset === 'daily') {
+    return 'Daily'
+  }
+  if (config.preset === '2weeks') {
+    return 'Every 2 Weeks'
+  }
+  if (config.preset === 'monthly') {
+    return 'Monthly'
+  }
+  if (config.preset === 'yearly') {
+    return 'Yearly'
+  }
+  if (config.preset === 'custom' && config.customEvery && config.customUnit) {
+    const unit = config.customEvery === 1 ? config.customUnit : `${config.customUnit}s`
+    return `Every ${config.customEvery} ${unit}`
+  }
+  return 'Never'
+}
 
 export function TransactionPage() {
   const navigate = useNavigate()
@@ -30,7 +55,7 @@ export function TransactionPage() {
   const isRepeatMaterialization = Boolean(sourceId && repeatDate)
   const initial = isRepeatMaterialization ? sourceRepeat : existing
   const [type, setType] = useState<TransactionType>(initial?.type ?? 'expense')
-  const [walletId, setWalletId] = useState(initial?.walletId ?? 'wallet-cash')
+  const [walletId, setWalletId] = useState(initial?.walletId ?? wallets[0]?.id ?? 'wallet-cash')
   const [toWalletId, setToWalletId] = useState<string | undefined>(initial?.toWalletId ?? wallets.find((wallet) => wallet.id !== walletId)?.id)
   const [items, setItems] = useState<TransactionItem[]>(initial?.items ?? [])
   const [focusedIndex, setFocusedIndex] = useState(0)
@@ -38,16 +63,20 @@ export function TransactionPage() {
   const [note, setNote] = useState(initial?.note ?? '')
   const [calc, setCalc] = useState(createCalcState())
   const [isPickerOpen, setPickerOpen] = useState(false)
+  const [walletPickerTarget, setWalletPickerTarget] = useState<WalletPickerTarget | null>(null)
+  const [isRepeatPickerOpen, setRepeatPickerOpen] = useState(false)
+  const [isCurrencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [currency, setCurrency] = useState(initial?.currency ?? wallets.find((w) => w.id === walletId)?.currency ?? 'THB')
   const [exchangeRate, setExchangeRate] = useState(String(initial?.exchangeRate ?? ''))
   const [toExchangeRate, setToExchangeRate] = useState(String(initial?.toExchangeRate ?? ''))
-  const [markedPaid, setMarkedPaid] = useState(initial?.status !== 'planned' && initial?.status !== 'overdue')
-  const [repeatPreset, setRepeatPreset] = useState<RepeatPreset>(initial?.repeat?.preset ?? 'never')
+  const [repeatConfig, setRepeatConfig] = useState<RepeatConfig>(initial?.repeat ?? { preset: 'never' })
   const [transferAmount, setTransferAmount] = useState(initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0)
   const wallet = wallets.find((item) => item.id === walletId)
+  const toWallet = wallets.find((item) => item.id === toWalletId)
   const selectedCurrency = currencies.find((item) => item.code === currency)
   const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
   const firstLeaf = useMemo(() => categories.find((category) => category.type === type && category.parentId), [categories, type])
+  const isPlanned = new Date(date) > new Date()
 
   function addCategory(categoryId?: string) {
     const selectedId = categoryId ?? firstLeaf?.id
@@ -60,6 +89,10 @@ export function TransactionPage() {
   }
 
   function press(key: string) {
+    if (key === 'THB') {
+      setCurrencyPickerOpen(true)
+      return
+    }
     const next = pressCalcKey(calc, key)
     setCalc(next)
     setItems((current) => current.map((item, index) => (index === focusedIndex ? { ...item, amount: next.result } : item)))
@@ -92,6 +125,7 @@ export function TransactionPage() {
       alert(errors[0])
       return
     }
+    const markedPaid = isRepeatMaterialization ? true : !isPlanned
     const transaction = buildTransaction({
       id: existing?.id,
       type,
@@ -103,8 +137,8 @@ export function TransactionPage() {
       exchangeRate: currency !== wallet?.currency ? Number(exchangeRate || defaultRate) : undefined,
       toExchangeRate: type === 'transfer' ? Number(toExchangeRate || defaultRate) : undefined,
       date: isRepeatMaterialization && repeatDate ? `${repeatDate}T00:00` : date,
-      markedPaid: isRepeatMaterialization ? true : markedPaid,
-      repeat: repeatPreset === 'never' ? undefined : { preset: repeatPreset },
+      markedPaid,
+      repeat: repeatConfig.preset === 'never' ? undefined : repeatConfig,
       note,
       now: existing?.createdAt ?? new Date().toISOString(),
       createId,
@@ -129,7 +163,7 @@ export function TransactionPage() {
   }
 
   return (
-    <div className="space-y-3 pb-64">
+    <div className="space-y-2 pb-64">
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"
@@ -159,57 +193,113 @@ export function TransactionPage() {
         </button>
       </header>
 
-      <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
-        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-sky-400/15 text-sky-400 text-xs">
-          <Icon name="fa-wallet" />
-        </div>
-        <div>
-          <p className="text-[11px] text-white/35">Wallet</p>
-          <p className="text-sm font-medium">{wallet?.name ?? 'Cash'} · ฿{wallet?.balance.toFixed(2) ?? '0.00'}</p>
-        </div>
-      </div>
-
       {type === 'transfer' ? (
-        <div className="space-y-3">
-          <div className="rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
-            <p className="text-[11px] text-white/35">From Wallet</p>
-            <select aria-label="From Wallet" value={walletId} onChange={(event) => setWalletId(event.target.value)} className="mt-1 w-full bg-transparent text-sm">
-              {wallets.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-            </select>
-          </div>
-          <div className="rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
-            <p className="text-[11px] text-white/35">To Wallet</p>
-            <select aria-label="To Wallet" value={toWalletId} onChange={(event) => setToWalletId(event.target.value)} className="mt-1 w-full bg-transparent text-sm">
-              {wallets.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-            </select>
-          </div>
+        <div className="space-y-2">
+          <button
+            aria-label="From Wallet"
+            className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+            onClick={() => setWalletPickerTarget('wallet')}
+            type="button"
+          >
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs" style={{ background: `${wallet?.color ?? '#38bdf8'}25`, color: wallet?.color ?? '#38bdf8' }}>
+              <Icon name={wallet?.icon ?? 'fa-wallet'} />
+            </div>
+            <div className="flex-1">
+              <p className="text-[11px] text-white/35">From Wallet</p>
+              <p className="text-sm font-medium">{wallet?.name ?? 'Cash'}</p>
+            </div>
+            <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
+          </button>
+          <button
+            aria-label="To Wallet"
+            className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+            onClick={() => setWalletPickerTarget('toWallet')}
+            type="button"
+          >
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs" style={{ background: `${toWallet?.color ?? '#a855f7'}25`, color: toWallet?.color ?? '#a855f7' }}>
+              <Icon name={toWallet?.icon ?? 'fa-wallet'} />
+            </div>
+            <div className="flex-1">
+              <p className="text-[11px] text-white/35">To Wallet</p>
+              <p className="text-sm font-medium">{toWallet?.name ?? 'Select wallet'}</p>
+            </div>
+            <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
+          </button>
+          {currency !== wallet?.currency ? (
+            <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400 text-xs">
+                <Icon name="fa-arrow-right-arrow-left" />
+              </div>
+              <div className="flex-1">
+                <p className="text-[11px] text-white/35">Exchange Rate</p>
+                <input
+                  aria-label="Exchange Rate"
+                  className="mt-0.5 w-full bg-transparent text-sm font-medium outline-none placeholder:text-white/30"
+                  inputMode="decimal"
+                  placeholder={defaultRate || 'Enter rate…'}
+                  value={exchangeRate}
+                  onChange={(event) => setExchangeRate(event.target.value)}
+                />
+              </div>
+            </div>
+          ) : null}
+          {type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency ? (
+            <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400 text-xs">
+                <Icon name="fa-arrow-right-arrow-left" />
+              </div>
+              <div className="flex-1">
+                <p className="text-[11px] text-white/35">Destination Exchange Rate</p>
+                <input
+                  aria-label="Destination Exchange Rate"
+                  className="mt-0.5 w-full bg-transparent text-sm font-medium outline-none placeholder:text-white/30"
+                  inputMode="decimal"
+                  placeholder={defaultRate || 'Enter rate…'}
+                  value={toExchangeRate}
+                  onChange={(event) => setToExchangeRate(event.target.value)}
+                />
+              </div>
+            </div>
+          ) : null}
         </div>
       ) : (
-        <CategoryItemsCard items={items} focusedIndex={focusedIndex} onFocus={handleFocusItem} onAdd={() => setPickerOpen(true)} onRemove={handleRemoveItem} />
+        <>
+          <button
+            aria-label="Wallet"
+            className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+            onClick={() => setWalletPickerTarget('wallet')}
+            type="button"
+          >
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs" style={{ background: `${wallet?.color ?? '#38bdf8'}25`, color: wallet?.color ?? '#38bdf8' }}>
+              <Icon name={wallet?.icon ?? 'fa-wallet'} />
+            </div>
+            <div className="flex-1">
+              <p className="text-[11px] text-white/35">Wallet</p>
+              <p className="text-sm font-medium">{wallet?.name ?? 'Cash'} · {wallet?.currency ?? ''} {wallet?.balance.toFixed(2) ?? '0.00'}</p>
+            </div>
+            <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
+          </button>
+          <CategoryItemsCard items={items} focusedIndex={focusedIndex} onFocus={handleFocusItem} onAdd={() => setPickerOpen(true)} onRemove={handleRemoveItem} />
+          {currency !== wallet?.currency ? (
+            <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400 text-xs">
+                <Icon name="fa-arrow-right-arrow-left" />
+              </div>
+              <div className="flex-1">
+                <p className="text-[11px] text-white/35">Exchange Rate</p>
+                <input
+                  aria-label="Exchange Rate"
+                  className="mt-0.5 w-full bg-transparent text-sm font-medium outline-none placeholder:text-white/30"
+                  inputMode="decimal"
+                  placeholder={defaultRate || 'Enter rate…'}
+                  value={exchangeRate}
+                  onChange={(event) => setExchangeRate(event.target.value)}
+                />
+              </div>
+            </div>
+          ) : null}
+        </>
       )}
-
-      <select aria-label="Currency" value={currency} onChange={(event) => setCurrency(event.target.value)} className="w-full rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-sm">
-        {currencies.map((item) => <option key={item.code} value={item.code}>{item.code}</option>)}
-      </select>
-      {currency !== wallet?.currency ? (
-        <input aria-label="Exchange Rate" value={exchangeRate} onChange={(event) => setExchangeRate(event.target.value)} className="w-full rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-sm" inputMode="decimal" />
-      ) : null}
-      {type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency ? (
-        <input aria-label="Destination Exchange Rate" value={toExchangeRate} onChange={(event) => setToExchangeRate(event.target.value)} className="w-full rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-sm" inputMode="decimal" />
-      ) : null}
-      <label className="flex items-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-sm">
-        <input type="checkbox" checked={markedPaid} onChange={(event) => setMarkedPaid(event.target.checked)} />
-        Paid
-      </label>
-      {!markedPaid ? (
-        <select aria-label="Repeat" value={repeatPreset} onChange={(event) => setRepeatPreset(event.target.value as RepeatPreset)} className="w-full rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-sm">
-          <option value="never">Never</option>
-          <option value="daily">Daily</option>
-          <option value="2weeks">Every 2 Weeks</option>
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
-        </select>
-      ) : null}
 
       <label htmlFor="tx-date" className="flex cursor-pointer items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
         <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-400/15 text-emerald-400 text-xs">
@@ -227,11 +317,38 @@ export function TransactionPage() {
             onChange={(event) => setDate(event.target.value)}
           />
         </div>
+        {isPlanned && (
+          <div className="flex items-center gap-1.5 rounded-lg border border-amber-400/25 bg-amber-400/12 px-2.5 py-1 text-[11px] font-bold text-amber-400">
+            <Icon name="fa-clock" className="text-[10px]" />
+            Planned
+          </div>
+        )}
       </label>
+
+      {isPlanned && (
+        <button
+          aria-label="Repeat"
+          className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left"
+          style={repeatConfig.preset !== 'never' ? { borderColor: 'color-mix(in srgb, var(--accent) 20%, transparent)' } : undefined}
+          onClick={() => setRepeatPickerOpen(true)}
+          type="button"
+        >
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs" style={{ background: 'color-mix(in srgb, var(--accent) 15%, transparent)', color: 'var(--accent-light)' }}>
+            <Icon name="fa-rotate" />
+          </div>
+          <div className="flex-1">
+            <p className="text-[11px] text-white/35">Repeat</p>
+            <p className="mt-0.5 text-sm font-semibold" style={repeatConfig.preset !== 'never' ? { color: 'var(--accent-light)' } : undefined}>
+              {formatRepeat(repeatConfig)}
+            </p>
+          </div>
+          <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
+        </button>
+      )}
 
       <div className="flex items-start gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
         <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.07] text-slate-400 text-xs">
-          <Icon name="fa-pencil" />
+          <Icon name="fa-pen-to-square" />
         </div>
         <div className="min-w-0 flex-1">
           <label className="text-[11px] text-white/35" htmlFor="tx-note">Note</label>
@@ -256,6 +373,41 @@ export function TransactionPage() {
         </button>
       ) : null}
 
+      {walletPickerTarget !== null ? (
+        <WalletPicker
+          wallets={wallets}
+          selectedId={walletPickerTarget === 'toWallet' ? (toWalletId ?? '') : walletId}
+          onSelect={(id) => {
+            if (walletPickerTarget === 'toWallet') {
+              setToWalletId(id)
+            } else {
+              setWalletId(id)
+            }
+          }}
+          onClose={() => setWalletPickerTarget(null)}
+        />
+      ) : null}
+
+      {isCurrencyPickerOpen ? (
+        <CurrencyPicker
+          currencies={currencies}
+          selectedCode={currency}
+          onSelect={setCurrency}
+          onClose={() => setCurrencyPickerOpen(false)}
+        />
+      ) : null}
+
+      {isRepeatPickerOpen ? (
+        <RepeatPicker
+          value={repeatConfig}
+          onConfirm={(config) => {
+            setRepeatConfig(config)
+            setRepeatPickerOpen(false)
+          }}
+          onClose={() => setRepeatPickerOpen(false)}
+        />
+      ) : null}
+
       {isPickerOpen ? (
         <CategoryPicker
           categories={categories}
@@ -267,6 +419,7 @@ export function TransactionPage() {
           }}
         />
       ) : null}
+
       <CalculatorKeyboard onPress={press} />
     </div>
   )
