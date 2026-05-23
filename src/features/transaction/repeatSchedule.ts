@@ -134,6 +134,7 @@ export function projectRepeatOccurrences(transactions: Transaction[], now = new 
   const occurrences: VirtualRepeatOccurrence[] = []
 
   for (const source of transactions) {
+    if (source.status !== 'planned' && source.status !== 'overdue') continue
     if (!shouldProjectRepeat(source.repeat)) continue
 
     let occurrenceDate = localDateString(source.date)

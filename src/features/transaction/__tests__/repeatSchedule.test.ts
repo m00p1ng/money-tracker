@@ -157,4 +157,13 @@ describe('repeatSchedule', () => {
 
     expect(projectRepeatOccurrences([neverRepeats, invalidCustom], new Date('2026-02-01T12:00:00.000Z'))).toEqual([])
   })
+
+  it('does not project paid transactions with stale repeat configs', () => {
+    const paidSource = transaction({
+      status: 'paid',
+      repeat: { preset: 'monthly' },
+    })
+
+    expect(projectRepeatOccurrences([paidSource], new Date('2026-02-01T12:00:00.000Z'))).toEqual([])
+  })
 })
