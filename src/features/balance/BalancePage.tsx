@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import cx from 'classnames'
 import { Icon } from '@/components/Icon'
 import { Card } from '@/components/ui/Card'
 import { AnimatedBar, SectionDivider } from '@/components/ui'
@@ -31,7 +32,7 @@ function WalletRow({ wallet, amount }: { wallet: Wallet; amount: number }) {
           </p>
         </div>
         <div className="flex-shrink-0 text-right">
-          <p className={`text-sm font-bold ${isCredit ? 'text-expense' : 'text-income'}`}>
+          <p className={cx('text-sm font-bold', isCredit ? 'text-expense' : 'text-income')}>
             {formatAmount(amount, wallet.currency)}
           </p>
           <p className="mt-0.5 text-xs text-white/30">{wallet.currency}</p>

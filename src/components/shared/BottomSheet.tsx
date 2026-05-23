@@ -23,7 +23,7 @@ export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetPro
           />
           <motion.div
             key="sheet"
-            className="fixed inset-x-0 bottom-0 z-50 rounded-t-3xl border-t border-white/[0.08] bg-[var(--bg)] pb-8"
+            className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[430px] rounded-t-3xl border-t border-white/[0.08] bg-[var(--bg)] pb-8"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}

@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from 'react'
+import cx from 'classnames'
 
 type ButtonProps = PropsWithChildren<
   ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -17,7 +18,7 @@ export function Button({ children, className = '', variant = 'ghost', fullWidth 
 
   return (
     <button
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 font-medium transition active:scale-[0.98] disabled:opacity-40 ${fullWidth ? 'w-full' : ''} ${variantClass} ${className}`}
+      className={cx('inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 font-medium transition active:scale-[0.98] disabled:opacity-40', { 'w-full': fullWidth }, variantClass, className)}
       {...props}
     >
       {children}

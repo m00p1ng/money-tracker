@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
+import cx from 'classnames'
 import { useBackNavigate } from '@/context/navigationDirection'
 import { Icon } from '@/components/Icon'
 import { Card } from '@/components/ui/Card'
@@ -164,10 +165,10 @@ export function WalletDetailPage() {
                   <p className="mt-0.5 text-xs text-white/30">{new Date(row.transaction.date).toLocaleDateString()}</p>
                 </div>
                 <div className="flex-shrink-0 text-right">
-                  <p className={`text-sm font-bold ${row.amount >= 0 ? 'text-income' : 'text-expense'}`}>
+                  <p className={cx('text-sm font-bold', row.amount >= 0 ? 'text-income' : 'text-expense')}>
                     {row.amount >= 0 ? '+' : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
                   </p>
-                  <p className={`mt-0.5 text-xs ${isCredit ? 'text-expense/70' : 'text-white/28'}`}>
+                  <p className={cx('mt-0.5 text-xs', isCredit ? 'text-expense/70' : 'text-white/28')}>
                     {isCredit ? `${formatAmount(row.runningAmount, wallet.currency)} debt` : formatAmount(row.runningAmount, wallet.currency)}
                   </p>
                 </div>
@@ -187,10 +188,10 @@ export function WalletDetailPage() {
               onClick={() => {
                 setPreset(p.value); setPresetSheetOpen(false) 
               }}
-              className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${preset === p.value
+              className={cx('flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors', preset === p.value
                 ? 'bg-accent/15 text-accent-light'
                 : 'text-white/70 hover:bg-white/[0.05]'
-              }`}
+              )}
             >
               {p.label}
               {preset === p.value && <Icon name="fa-circle-check" className="text-accent" />}

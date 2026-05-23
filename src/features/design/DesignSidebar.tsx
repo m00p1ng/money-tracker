@@ -17,13 +17,16 @@ const NAV_GROUPS = [
       { id: 'field', label: 'Field' },
       { id: 'segmented-control', label: 'SegmentedControl' },
       { id: 'type-picker', label: 'TypePickerDropdown' },
+      { id: 'currency-picker', label: 'CurrencyPicker' },
+      { id: 'date-picker', label: 'DatePickerSheet' },
+      { id: 'repeat-picker', label: 'RepeatPicker' },
+      { id: 'wallet-picker', label: 'WalletPicker' },
     ],
   },
   {
     label: 'Feature',
     items: [
       { id: 'summary-cards', label: 'SummaryCards' },
-      { id: 'amount-display', label: 'AmountDisplay' },
       { id: 'calculator-keyboard', label: 'CalculatorKeyboard' },
       { id: 'category-items-card', label: 'CategoryItemsCard' },
       { id: 'today-transactions', label: 'TodayTransactions' },
@@ -48,10 +51,9 @@ export function DesignTopNav({ activeId }: { activeId: string }) {
             key={item.id}
             type="button"
             onClick={() => scrollTo(item.id)}
-            className={`flex-shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
-              activeId === item.id
-                ? 'bg-accent/20 text-accent-light'
-                : 'text-white/40 hover:text-white/70'
+            className={`flex-shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${activeId === item.id
+              ? 'bg-accent/20 text-accent-light'
+              : 'text-white/40 hover:text-white/70'
             }`}
           >
             {item.label}
@@ -65,7 +67,7 @@ export function DesignTopNav({ activeId }: { activeId: string }) {
 /** Vertical sidebar — shown on md+ screens only */
 export function DesignSidebar({ activeId }: { activeId: string }) {
   return (
-    <nav className="hidden w-44 flex-shrink-0 flex-col gap-1 overflow-y-auto border-r border-white/[0.08] bg-white/[0.02] px-2 py-4 md:flex">
+    <nav className="hidden w-52 flex-shrink-0 flex-col gap-1 overflow-y-auto border-r border-white/[0.08] bg-white/[0.02] px-2 py-4 md:flex">
       <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>
       {NAV_GROUPS.map((group) => (
         <div key={group.label}>
@@ -77,10 +79,9 @@ export function DesignSidebar({ activeId }: { activeId: string }) {
               key={item.id}
               type="button"
               onClick={() => scrollTo(item.id)}
-              className={`w-full rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors ${
-                activeId === item.id
-                  ? 'bg-accent/10 font-semibold text-accent-light'
-                  : 'text-white/50 hover:text-white/80'
+              className={`w-full whitespace-nowrap rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors ${activeId === item.id
+                ? 'bg-accent/10 font-semibold text-accent-light'
+                : 'text-white/50 hover:text-white/80'
               }`}
             >
               {item.label}

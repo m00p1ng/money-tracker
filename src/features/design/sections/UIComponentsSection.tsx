@@ -5,6 +5,22 @@ import { Card } from '@/components/ui/Card'
 import { Field, TextInput, SelectInput } from '@/components/ui/Field'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { TypePickerDropdown } from '@/components/ui/picker/TypePickerDropdown'
+import { CurrencyPicker } from '@/components/ui/picker/CurrencyPicker'
+import { DatePickerSheet } from '@/components/ui/picker/DatePickerSheet'
+import { RepeatPicker } from '@/components/ui/picker/RepeatPicker'
+import { WalletPicker } from '@/components/ui/picker/WalletPicker'
+import type { Currency, Wallet, RepeatConfig } from '@/types/domain'
+
+const STUB_CURRENCIES: Currency[] = [
+  { code: 'USD', symbol: '$', name: 'US Dollar', isBase: true, rate: 1 },
+  { code: 'EUR', symbol: '€', name: 'Euro', isBase: false, rate: 0.92 },
+  { code: 'THB', symbol: '฿', name: 'Thai Baht', isBase: false, rate: 35.5 },
+]
+
+const STUB_WALLETS: Wallet[] = [
+  { id: 'w1', name: 'Cash', type: 'payment', currency: 'USD', balance: 500, color: '#22c55e', icon: '💵' },
+  { id: 'w2', name: 'Card', type: 'credit_card', currency: 'USD', balance: 2000, creditLimit: 5000, color: '#3b82f6', icon: '💳' },
+]
 
 function SubSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
@@ -23,6 +39,18 @@ export function UIComponentsSection() {
   const [seg2, setSeg2] = useState<'a' | 'b'>('a')
   const [seg3, setSeg3] = useState<'a' | 'b' | 'c'>('a')
   const [pickerType, setPickerType] = useState<'expense' | 'income' | 'transfer'>('expense')
+
+  const [currencyOpen, setCurrencyOpen] = useState(false)
+  const [selectedCurrency, setSelectedCurrency] = useState('USD')
+
+  const [dateOpen, setDateOpen] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(new Date())
+
+  const [repeatOpen, setRepeatOpen] = useState(false)
+  const [repeatConfig, setRepeatConfig] = useState<RepeatConfig>({ preset: 'never' })
+
+  const [walletOpen, setWalletOpen] = useState(false)
+  const [selectedWallet, setSelectedWallet] = useState('w1')
 
   return (
     <div className="space-y-10">
@@ -126,6 +154,80 @@ export function UIComponentsSection() {
         <div className="max-w-xs rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
           <TypePickerDropdown value={pickerType} onChange={setPickerType} />
           <VariantLabel label={`current: ${pickerType}`} />
+        </div>
+      </SubSection>
+
+      {/* CurrencyPicker */}
+      <SubSection id="currency-picker" title="CurrencyPicker">
+        <div className="space-y-3">
+          <Button variant="ghost" onClick={() => setCurrencyOpen(true)}>
+            Open CurrencyPicker
+          </Button>
+          <VariantLabel label={`selected: ${selectedCurrency}`} />
+          <CurrencyPicker
+            isOpen={currencyOpen}
+            currencies={STUB_CURRENCIES}
+            selectedCode={selectedCurrency}
+            onSelect={(code) => {
+              setSelectedCurrency(code); setCurrencyOpen(false)
+            }}
+            onClose={() => setCurrencyOpen(false)}
+          />
+        </div>
+      </SubSection>
+
+      {/* DatePickerSheet */}
+      <SubSection id="date-picker" title="DatePickerSheet">
+        <div className="space-y-3">
+          <Button variant="ghost" onClick={() => setDateOpen(true)}>
+            Open DatePickerSheet
+          </Button>
+          <VariantLabel label={`selected: ${selectedDate.toLocaleDateString()}`} />
+          <DatePickerSheet
+            isOpen={dateOpen}
+            value={selectedDate}
+            onChange={(d) => {
+              setSelectedDate(d); setDateOpen(false)
+            }}
+            onClose={() => setDateOpen(false)}
+          />
+        </div>
+      </SubSection>
+
+      {/* RepeatPicker */}
+      <SubSection id="repeat-picker" title="RepeatPicker">
+        <div className="space-y-3">
+          <Button variant="ghost" onClick={() => setRepeatOpen(true)}>
+            Open RepeatPicker
+          </Button>
+          <VariantLabel label={`preset: ${repeatConfig.preset}`} />
+          <RepeatPicker
+            isOpen={repeatOpen}
+            value={repeatConfig}
+            onConfirm={(config) => {
+              setRepeatConfig(config); setRepeatOpen(false)
+            }}
+            onClose={() => setRepeatOpen(false)}
+          />
+        </div>
+      </SubSection>
+
+      {/* WalletPicker */}
+      <SubSection id="wallet-picker" title="WalletPicker">
+        <div className="space-y-3">
+          <Button variant="ghost" onClick={() => setWalletOpen(true)}>
+            Open WalletPicker
+          </Button>
+          <VariantLabel label={`selected: ${STUB_WALLETS.find((w) => w.id === selectedWallet)?.name ?? 'none'}`} />
+          <WalletPicker
+            isOpen={walletOpen}
+            wallets={STUB_WALLETS}
+            selectedId={selectedWallet}
+            onSelect={(id) => {
+              setSelectedWallet(id); setWalletOpen(false)
+            }}
+            onClose={() => setWalletOpen(false)}
+          />
         </div>
       </SubSection>
     </div>

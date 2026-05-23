@@ -2,7 +2,6 @@
 import { SummaryCards } from '@/features/home/SummaryCards'
 import { TodayTransactions } from '@/features/home/TodayTransactions'
 import { UpcomingTransactions } from '@/features/home/UpcomingTransactions'
-import { AmountDisplay } from '@/features/transaction/AmountDisplay'
 import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard'
 import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
 
@@ -28,21 +27,8 @@ export function FeatureSection() {
         <SummaryCards />
       </SubSection>
 
-      <SubSection id="amount-display" title="AmountDisplay">
-        <div className="space-y-4">
-          <div>
-            <AmountDisplay amount={12345.67} expression="123 + 45.67" type="income" />
-            <p className="mt-1 text-center text-[10px] text-white/30">type: income</p>
-          </div>
-          <div>
-            <AmountDisplay amount={980} expression="980" type="expense" />
-            <p className="mt-1 text-center text-[10px] text-white/30">type: expense</p>
-          </div>
-        </div>
-      </SubSection>
-
       <SubSection id="calculator-keyboard" title="CalculatorKeyboard">
-        <CalculatorKeyboard onPress={() => {}} onDismiss={() => {}} />
+        <CalculatorKeyboard onPress={() => { }} onDismiss={() => { }} />
       </SubSection>
 
       <SubSection id="category-items-card" title="CategoryItemsCard">
@@ -52,10 +38,10 @@ export function FeatureSection() {
             { categoryId: 'stub-2', amount: 250 },
           ]}
           focusedIndex={0}
-          onFocus={() => {}}
-          onAdd={() => {}}
-          onRemove={() => {}}
-          onChangeCategory={() => {}}
+          onFocus={() => { }}
+          onAdd={() => { }}
+          onRemove={() => { }}
+          onChangeCategory={() => { }}
         />
       </SubSection>
 

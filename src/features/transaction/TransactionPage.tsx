@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
+import cx from 'classnames'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
 import { useBackNavigate } from '@/context/navigationDirection'
 import { Icon } from '@/components/Icon'
@@ -202,7 +203,7 @@ export function TransactionPage() {
   }
 
   return (
-    <div className={`space-y-2 ${focusedIndex !== null ? 'pb-64' : 'pb-6'}`}>
+    <div className={cx('space-y-2', focusedIndex !== null ? 'pb-64' : 'pb-6')}>
       <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
         <button
           aria-label="Back"

@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import cx from 'classnames'
 import {
   faDeleteLeft,
   faDivide,
@@ -45,7 +46,12 @@ export function CalculatorKeyboard({ onPress, onDismiss }: { onPress: (key: stri
           return (
             <button
               key={key}
-              className={`h-12 rounded-lg text-lg font-semibold ${isDelete ? 'col-span-2 border border-danger/20 bg-danger/10 text-danger' : isOperator ? 'border border-[var(--accent)]/25 bg-[var(--accent)]/15 text-accent-light' : isAccent ? 'border border-[var(--accent)]/30 bg-[var(--accent)]/25 text-white disabled:opacity-50' : 'border border-white/[0.06] bg-white/[0.07] text-slate-100'}`}
+              className={cx('h-12 rounded-lg text-lg font-semibold', {
+                'col-span-2 border border-danger/20 bg-danger/10 text-danger': isDelete,
+                'border border-[var(--accent)]/25 bg-[var(--accent)]/15 text-accent-light': !isDelete && isOperator,
+                'border border-[var(--accent)]/30 bg-[var(--accent)]/25 text-white disabled:opacity-50': !isDelete && !isOperator && isAccent,
+                'border border-white/[0.06] bg-white/[0.07] text-slate-100': !isDelete && !isOperator && !isAccent,
+              })}
               disabled={false}
               onClick={() => onPress(key)}
               type="button"

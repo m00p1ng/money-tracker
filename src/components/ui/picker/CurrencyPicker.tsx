@@ -1,3 +1,4 @@
+import cx from 'classnames'
 import { Icon } from '@/components/Icon'
 import { BottomSheet } from '..'
 import type { Currency } from '@/types/domain'
@@ -27,7 +28,7 @@ export function CurrencyPicker({
         {currencies.map((c) => (
           <button
             key={c.code}
-            className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-3 ${selectedCode === c.code ? 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]' : ''}`}
+            className={cx('flex w-full items-center gap-3 rounded-xl px-3.5 py-3', { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': selectedCode === c.code })}
             onClick={() => {
               onSelect(c.code); onClose() 
             }}
