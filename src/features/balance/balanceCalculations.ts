@@ -25,13 +25,13 @@ export function amountInWalletCurrency(transaction: Transaction, wallet: Wallet)
 export function signedWalletAmount(wallet: Wallet, transaction: Transaction): number {
   const amount = amountInWalletCurrency(transaction, wallet)
   if (transaction.type === 'transfer') {
+    let signedAmount = 0
     if (transaction.walletId === wallet.id) {
-      return -amount
+      signedAmount = -amount
+    } else if (transaction.toWalletId === wallet.id) {
+      signedAmount = amount
     }
-    if (transaction.toWalletId === wallet.id) {
-      return amount
-    }
-    return 0
+    return wallet.type === 'credit_card' ? -signedAmount : signedAmount
   }
   if (wallet.type === 'credit_card') {
     return transaction.type === 'expense' ? amount : -amount
@@ -41,7 +41,7 @@ export function signedWalletAmount(wallet: Wallet, transaction: Transaction): nu
 
 export function walletTransactions(walletId: string, transactions: Transaction[], range?: DateRange): Transaction[] {
   return transactions
-    .filter((transaction) => transaction.walletId === walletId || transaction.toWalletId === walletId)
+    .filter((transaction) => transaction.walletId === walletId || (transaction.type === 'transfer' && transaction.toWalletId === walletId))
     .filter((transaction) => (range ? isWithinDateRange(transaction.date, range) : true))
     .sort((a, b) => a.date.localeCompare(b.date))
 }
@@ -60,11 +60,12 @@ export function debtTotal(wallets: Wallet[], transactions: Transaction[]): numbe
 
 export function walletRunningRows(wallet: Wallet, transactions: Transaction[], range: DateRange): RunningWalletRow[] {
   let runningAmount = wallet.balance
-  return walletTransactions(wallet.id, transactions, range)
+  return walletTransactions(wallet.id, transactions)
     .map((transaction) => {
       const amount = signedWalletAmount(wallet, transaction)
       runningAmount += amount
       return { transaction, amount, runningAmount }
     })
+    .filter((row) => isWithinDateRange(row.transaction.date, range))
     .reverse()
 }

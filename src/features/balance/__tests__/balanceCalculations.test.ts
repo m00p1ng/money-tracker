@@ -73,6 +73,40 @@ describe('balance calculations', () => {
     expect(walletCurrentAmount(usdWallet, [transaction])).toBe(127.5)
   })
 
+  it('reduces credit card debt when cash transfers to a card', () => {
+    const cardWithDebt: Wallet = { ...wallets[1], balance: 500 }
+    const transaction: Transaction = {
+      id: 'cash-to-card',
+      type: 'transfer',
+      walletId: 'cash',
+      toWalletId: 'card',
+      currency: 'THB',
+      items: [{ categoryId: 'transfer', amount: 200 }],
+      date: '2026-05-05T08:00:00.000Z',
+      createdAt: '2026-05-05T08:00:00.000Z',
+    }
+
+    expect(walletCurrentAmount(wallets[0], [transaction])).toBe(800)
+    expect(walletCurrentAmount(cardWithDebt, [transaction])).toBe(300)
+  })
+
+  it('increases credit card debt when transferring a cash advance to payment wallet', () => {
+    const cardWithDebt: Wallet = { ...wallets[1], balance: 500 }
+    const transaction: Transaction = {
+      id: 'card-to-cash',
+      type: 'transfer',
+      walletId: 'card',
+      toWalletId: 'cash',
+      currency: 'THB',
+      items: [{ categoryId: 'transfer', amount: 200 }],
+      date: '2026-05-05T08:00:00.000Z',
+      createdAt: '2026-05-05T08:00:00.000Z',
+    }
+
+    expect(walletCurrentAmount(cardWithDebt, [transaction])).toBe(700)
+    expect(walletCurrentAmount(wallets[0], [transaction])).toBe(1200)
+  })
+
   it('calculates credit card current debt as positive owed amount', () => {
     expect(walletCurrentAmount(wallets[1], transactions)).toBe(500)
   })
@@ -105,10 +139,34 @@ describe('balance calculations', () => {
     expect(walletTransactions('savings', [transfer]).map((tx) => tx.id)).toEqual(['cash-to-savings'])
   })
 
+  it('does not include non-transfer transactions with stale destination wallet ids', () => {
+    const transaction: Transaction = {
+      id: 'stale-destination',
+      type: 'expense',
+      walletId: 'cash',
+      toWalletId: 'savings',
+      currency: 'THB',
+      items: [{ categoryId: 'food', amount: 100 }],
+      date: '2026-05-05T08:00:00.000Z',
+      createdAt: '2026-05-05T08:00:00.000Z',
+    }
+
+    expect(walletTransactions('savings', [transaction])).toEqual([])
+  })
+
   it('returns newest-first running payment balances computed oldest-to-newest', () => {
     expect(walletRunningRows(wallets[0], transactions, { start: '2026-05-01', end: '2026-05-31' }).map((row) => [row.transaction.id, row.runningAmount])).toEqual([
       ['income', 1400],
       ['old-expense', 900],
     ])
+  })
+
+  it('includes prior out-of-range transactions when computing in-range running balances', () => {
+    const history: Transaction[] = [
+      { id: 'prior-expense', type: 'expense', walletId: 'cash', currency: 'THB', items: [{ categoryId: 'food', amount: 100 }], date: '2026-04-30T08:00:00.000Z', createdAt: '2026-04-30T08:00:00.000Z' },
+      { id: 'range-income', type: 'income', walletId: 'cash', currency: 'THB', items: [{ categoryId: 'salary', amount: 50 }], date: '2026-05-02T08:00:00.000Z', createdAt: '2026-05-02T08:00:00.000Z' },
+    ]
+
+    expect(walletRunningRows(wallets[0], history, { start: '2026-05-01', end: '2026-05-31' }).map((row) => [row.transaction.id, row.runningAmount])).toEqual([['range-income', 950]])
   })
 })
