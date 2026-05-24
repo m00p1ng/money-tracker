@@ -20,7 +20,7 @@ export function NoteField({
         <Icon name="fa-pen-to-square" />
       </div>
       <div className="min-w-0 flex-1">
-        <label className="text-[11px] text-white/35" htmlFor="tx-note">Note</label>
+        <label className="text-xs text-white/35" htmlFor="tx-note">Note</label>
         <textarea
           aria-label="Note"
           id="tx-note"

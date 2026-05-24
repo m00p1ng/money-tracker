@@ -35,7 +35,7 @@ interface CalculatorKeyboardProps {
 
 export function CalculatorKeyboard({ onPress, onDismiss }: CalculatorKeyboardProps) {
   return (
-    <div className="border-t border-white/10 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
+    <div className="border-t border-white/10 bg-(--bg) px-4 py-3">
       {onDismiss && (
         <div className="mx-auto mb-2 flex max-w-107.5 justify-end">
           <button

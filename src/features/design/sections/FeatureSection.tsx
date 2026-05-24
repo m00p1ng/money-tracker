@@ -7,9 +7,9 @@ import { SummaryCards } from '@/features/home/SummaryCards'
 import { TodayTransactions } from '@/features/home/TodayTransactions'
 import { UpcomingTransactions } from '@/features/home/UpcomingTransactions'
 import { CurrencyRow } from '@/features/settings/CurrenciesPage/CurrencyRow/CurrencyRow'
-import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard'
-import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
+import { CalculatorKeyboard } from '@/features/transaction/TransactionPage/components/CalculatorKeyboard'
 import { CalculatorKeyboardSheet } from '@/features/transaction/TransactionPage/components/CalculatorKeyboardSheet'
+import { CategoryItemsCard } from '@/features/transaction/TransactionPage/components/CategoryItemsCard'
 import { DateTimeRow } from '@/features/transaction/TransactionPage/components/DateTimeRow'
 import { ExchangeRateRow } from '@/features/transaction/TransactionPage/components/ExchangeRateRow'
 import { NoteField } from '@/features/transaction/TransactionPage/components/NoteField'
@@ -116,8 +116,11 @@ const STUB_CURRENCY_EUR: Currency = {
 const STUB_REPEAT_NEVER: RepeatConfig = { preset: 'never' }
 const STUB_REPEAT_DAILY: RepeatConfig = { preset: 'daily' }
 
+const STUB_DATE_PAST = new Date(Date.now() - 86400000).toISOString()
+const STUB_DATE_FUTURE = new Date(Date.now() + 86400000).toISOString()
+
 function VariantLabel({ label }: { label: string }) {
-  return <p className="mt-2 text-center text-[10px] text-white/30">{label}</p>
+  return <p className="mt-2 text-center text-xs text-white/30">{label}</p>
 }
 
 export function FeatureSection() {
@@ -172,14 +175,14 @@ export function FeatureSection() {
             }}
             wallet={STUB_WALLET_PAYMENT}
             categories={[STUB_CATEGORY]}
-            onToggleCleared={() => {}}
+            onToggleCleared={() => { }}
           />
         </SubSection>
       </PageGroup>
 
       <PageGroup label="Transaction">
         <SubSection id="calculator-keyboard" title="CalculatorKeyboard">
-          <CalculatorKeyboard onPress={() => {}} onDismiss={() => {}} />
+          <CalculatorKeyboard onPress={() => { }} onDismiss={() => { }} />
         </SubSection>
 
         <SubSection id="category-items-card" title="CategoryItemsCard">
@@ -189,12 +192,11 @@ export function FeatureSection() {
               { categoryId: 'stub-2', amount: 250 },
             ]}
             focusedIndex={0}
-            onFocus={() => {}}
-            onAdd={() => {}}
-            onRemove={() => {}}
-            onChangeCategory={() => {}}
+            onFocus={() => { }}
+            onAdd={() => { }}
+            onRemove={() => { }}
+            onChangeCategory={() => { }}
             findCategory={() => undefined}
-            parentOf={() => undefined}
           />
         </SubSection>
       </PageGroup>
@@ -205,8 +207,8 @@ export function FeatureSection() {
             <TransactionHeader
               type={txType}
               onChangeType={setTxType}
-              onBack={() => {}}
-              onSave={async () => {}}
+              onBack={() => { }}
+              onSave={async () => { }}
             />
           </div>
           <VariantLabel label={`current type: ${txType}`} />
@@ -216,17 +218,17 @@ export function FeatureSection() {
           <div className="space-y-2">
             <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
               <DateTimeRow
-                date={new Date(Date.now() - 86400000).toISOString()}
+                date={STUB_DATE_PAST}
                 isPlanned={false}
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </div>
             <VariantLabel label="past date (normal)" />
             <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
               <DateTimeRow
-                date={new Date(Date.now() + 86400000).toISOString()}
+                date={STUB_DATE_FUTURE}
                 isPlanned={true}
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </div>
             <VariantLabel label="future date (planned badge)" />
@@ -242,7 +244,7 @@ export function FeatureSection() {
                 wallet={STUB_WALLET_PAYMENT}
                 fallbackName="Select wallet"
                 fallbackColor="#6c47ff"
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </div>
             <VariantLabel label="without balance" />
@@ -254,7 +256,7 @@ export function FeatureSection() {
                 fallbackName="Select wallet"
                 fallbackColor="#6c47ff"
                 showBalance
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </div>
             <VariantLabel label="with balance" />
@@ -266,7 +268,7 @@ export function FeatureSection() {
             <NoteField
               note={note}
               onUpdateNote={setNote}
-              onFocusNoteField={() => {}}
+              onFocusNoteField={() => { }}
             />
           </div>
         </SubSection>
@@ -285,7 +287,7 @@ export function FeatureSection() {
         <SubSection id="reconciliation-row" title="ReconciliationRow">
           <div className="space-y-2">
             <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
-              <ReconciliationRow cleared={false} onToggle={() => {}} />
+              <ReconciliationRow cleared={false} onToggle={() => { }} />
             </div>
             <VariantLabel label="not cleared" />
             <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
@@ -298,11 +300,11 @@ export function FeatureSection() {
         <SubSection id="repeat-row" title="RepeatRow">
           <div className="space-y-2">
             <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
-              <RepeatRow repeatConfig={STUB_REPEAT_NEVER} onClick={() => {}} />
+              <RepeatRow repeatConfig={STUB_REPEAT_NEVER} onClick={() => { }} />
             </div>
             <VariantLabel label="never" />
             <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
-              <RepeatRow repeatConfig={STUB_REPEAT_DAILY} onClick={() => {}} />
+              <RepeatRow repeatConfig={STUB_REPEAT_DAILY} onClick={() => { }} />
             </div>
             <VariantLabel label="daily" />
           </div>
@@ -313,14 +315,23 @@ export function FeatureSection() {
             <Button variant="ghost" onClick={() => setCalcSheetOpen(true)}>Open CalculatorKeyboardSheet</Button>
             <CalculatorKeyboardSheet
               isOpen={calcSheetOpen}
-              onPress={(key) => { if (key === 'confirm') setCalcSheetOpen(false) }}
+              onPress={(key) => {
+                if (key === 'confirm') {
+                  setCalcSheetOpen(false)
+                }
+              }}
             />
           </div>
         </SubSection>
 
         <SubSection id="transaction-sheets" title="TransactionSheets">
           <div className="space-y-3">
-            <Button variant="ghost" onClick={() => setTxSheetsDateOpen(true)}>Open DatePicker via TransactionSheets</Button>
+            <Button
+              variant="ghost"
+              onClick={() => setTxSheetsDateOpen(true)}
+            >
+              Open DatePicker via TransactionSheets
+            </Button>
             <TransactionSheets
               date={txSheetsDate}
               walletPickerTarget={null}
@@ -333,15 +344,17 @@ export function FeatureSection() {
               toWalletId={undefined}
               currency={txSheetsCurrency}
               repeatConfig={txSheetsRepeat}
-              onUpdateDate={(d) => { setTxSheetsDate(d.toISOString()); setTxSheetsDateOpen(false) }}
+              onUpdateDate={(d) => {
+                setTxSheetsDate(d.toISOString()); setTxSheetsDateOpen(false)
+              }}
               onUpdateWallet={setTxSheetsWallet}
-              onUpdateToWallet={() => {}}
+              onUpdateToWallet={() => { }}
               onUpdateCurrency={setTxSheetsCurrency}
               onUpdateRepeatConfig={setTxSheetsRepeat}
-              onCloseWalletPicker={() => {}}
-              onCloseCurrencyPicker={() => {}}
+              onCloseWalletPicker={() => { }}
+              onCloseCurrencyPicker={() => { }}
               onCloseDatePicker={() => setTxSheetsDateOpen(false)}
-              onCloseRepeatPicker={() => {}}
+              onCloseRepeatPicker={() => { }}
             />
             <VariantLabel label="date picker sheet" />
           </div>

@@ -29,15 +29,15 @@ export function DateTimeRow({
         <Icon name="fa-calendar" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[11px] text-white/35">Date & Time</p>
+        <p className="text-xs text-white/35">Date & Time</p>
         <p className="mt-0.5 text-sm font-medium">{formatDatetimeLocalDisplay(date)}</p>
       </div>
       {isPlanned && (
         <div className={[
           'flex items-center gap-1.5 rounded-lg border border-amber-400/25',
-          'bg-amber-400/12 px-2.5 py-1 text-[11px] font-bold text-amber-400',
+          'bg-amber-400/12 px-2.5 py-1 text-sm font-bold text-amber-400',
         ].join(' ')}>
-          <Icon name="fa-clock" className="text-[10px]" />
+          <Icon name="fa-clock" className="text-xs" />
           Planned
         </div>
       )}

@@ -94,7 +94,7 @@ interface VariantLabelProps {
 }
 
 function VariantLabel({ label }: VariantLabelProps) {
-  return <p className="mt-2 text-center text-[10px] text-white/30">{label}</p>
+  return <p className="mt-2 text-center text-xs text-white/30">{label}</p>
 }
 
 export function UIComponentsSection() {
@@ -284,7 +284,7 @@ export function UIComponentsSection() {
             onClose={() => setDateRangeOpen(false)}
           />
         </div>
-        </SubSection>
+      </SubSection>
 
       <SubSection id="switch" title="Switch">
         <div className="space-y-4 max-w-sm">
@@ -326,7 +326,7 @@ export function UIComponentsSection() {
               submitLabel="Save"
               showDelete
               deleteLabel="Delete"
-              onDelete={() => {}}
+              onDelete={() => { }}
             />
             <VariantLabel label="with delete" />
           </div>

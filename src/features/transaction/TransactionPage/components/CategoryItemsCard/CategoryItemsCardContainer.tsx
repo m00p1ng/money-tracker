@@ -1,7 +1,7 @@
+import { useCategoryStore } from '@/stores'
 import type { TransactionItem } from '@/types/domain'
 
 import { CategoryItemsCard } from './CategoryItemsCard'
-import { useCategoryItemsCard } from './useCategoryItemsCard'
 
 interface CategoryItemsCardContainerProps {
   items: TransactionItem[]
@@ -13,6 +13,7 @@ interface CategoryItemsCardContainerProps {
 }
 
 export function CategoryItemsCardContainer(props: CategoryItemsCardContainerProps) {
-  const cardProps = useCategoryItemsCard(props)
-  return <CategoryItemsCard {...cardProps} />
+  const findCategory = useCategoryStore((state) => state.findById)
+
+  return <CategoryItemsCard {...props} findCategory={findCategory} />
 }

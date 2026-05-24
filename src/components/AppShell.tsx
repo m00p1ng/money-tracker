@@ -8,10 +8,7 @@ type AppShellProps = PropsWithChildren<{
   showBottomNav?: boolean
 }>
 
-export function AppShell({
-  children,
-  showBottomNav = true,
-}: AppShellProps) {
+export function AppShell({ children, showBottomNav = true }: AppShellProps) {
   return (
     <div className="min-h-screen text-slate-50">
       <main
@@ -19,7 +16,9 @@ export function AppShell({
           'mx-auto min-h-screen w-full max-w-107.5 px-4 pt-6',
           showBottomNav ? 'pb-28' : 'pb-6',
         )}
-      >{children}</main>
+      >
+        {children}
+      </main>
       {showBottomNav ? <BottomNav /> : null}
     </div>
   )

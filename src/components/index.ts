@@ -1,5 +1,5 @@
 export { Icon } from './Icon'
-export { AppShellContainer as AppShell } from './AppShell/AppShellContainer'
+export { AppShell } from './AppShell'
 export { BottomNavContainer as BottomNav } from './BottomNav/BottomNavContainer'
 
 export * from './ui'

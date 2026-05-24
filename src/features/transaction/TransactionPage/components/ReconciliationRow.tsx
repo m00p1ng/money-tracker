@@ -27,13 +27,15 @@ export function ReconciliationRow({
           background: cleared
             ? 'color-mix(in srgb, var(--accent) 15%, transparent)'
             : 'rgba(255,255,255,0.04)',
-          color: cleared ? 'var(--accent-light)' : 'rgba(255,255,255,0.35)',
+          color: cleared
+            ? 'var(--accent-light)'
+            : 'rgba(255,255,255,0.35)',
         }}
       >
         <Icon name={cleared ? 'fa-circle-check' : 'fa-circle'} />
       </div>
       <div className="flex-1">
-        <p className="text-[11px] text-white/35">Reconciliation</p>
+        <p className="text-xs text-white/35">Reconciliation</p>
         <p
           className="mt-0.5 text-sm font-semibold"
           style={cleared ? { color: 'var(--accent-light)' } : undefined}

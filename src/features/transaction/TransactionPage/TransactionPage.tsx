@@ -1,7 +1,6 @@
 import cx from 'classnames'
 import { useState } from 'react'
 
-import { CategoryItemsCardContainer } from '@/features/transaction/CategoryItemsCard/CategoryItemsCardContainer'
 import { createCalcState, pressCalcKey } from '@/lib'
 import type {
   Currency,
@@ -23,6 +22,7 @@ import {
   WalletSelectorRow,
   type WalletPickerTarget,
 } from './components'
+import { CategoryItemsCard } from './components'
 
 export interface TransactionPageProps {
   type: TransactionType
@@ -200,7 +200,7 @@ export function TransactionPage({
             onClick={() => setWalletPickerTarget('wallet')}
           />
 
-          <CategoryItemsCardContainer
+          <CategoryItemsCard
             items={items}
             focusedIndex={focusedIndex}
             onFocus={handleFocusItem}

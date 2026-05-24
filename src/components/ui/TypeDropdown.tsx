@@ -84,7 +84,7 @@ export function TypePickerDropdown({
               transition={{ duration: 0.15, ease: 'easeOut' }}
               className={[
                 'absolute top-full left-1/2 z-50 mt-1 -translate-x-1/2',
-                'rounded-2xl border border-white/[0.1] bg-[var(--bg)] p-1.5',
+                'rounded-2xl border border-white/10 bg-(--bg) p-1.5',
                 'shadow-[0_8px_24px_rgba(0,0,0,0.5)]',
               ].join(' ')}
             >
@@ -95,7 +95,7 @@ export function TypePickerDropdown({
                   className={cx(
                     'flex w-full items-center justify-between rounded-xl px-8 py-2.5 text-sm font-medium',
                     value === t.value
-                      ? 'bg-[var(--accent)]/[0.12] font-bold text-[var(--accent-light)]'
+                      ? 'bg-(--accent)/12 font-bold text-(--accent-light)'
                       : 'text-white/70',
                   )}
                   onClick={() => {

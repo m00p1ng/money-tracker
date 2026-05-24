@@ -37,7 +37,7 @@ function SubSection({
 }
 
 function VariantLabel({ label }: { label: string }) {
-  return <p className="mt-2 text-center text-[10px] text-white/30">{label}</p>
+  return <p className="mt-2 text-center text-xs text-white/30">{label}</p>
 }
 
 const HOUR_OPTIONS = ['06', '07', '08', '09', '10', '11', '12']
@@ -50,9 +50,15 @@ export function SharedComponentsSection() {
   const [selectorValue, setSelectorValue] = useState<'usd' | 'eur' | 'thb'>('usd')
 
   const SELECTOR_OPTIONS: SelectorOption<'usd' | 'eur' | 'thb'>[] = [
-    { label: 'US Dollar', value: 'usd', description: 'USD' },
-    { label: 'Euro', value: 'eur', description: 'EUR' },
-    { label: 'Thai Baht', value: 'thb', description: 'THB' },
+    {
+      label: 'US Dollar', value: 'usd', description: 'USD',
+    },
+    {
+      label: 'Euro', value: 'eur', description: 'EUR',
+    },
+    {
+      label: 'Thai Baht', value: 'thb', description: 'THB',
+    },
   ]
 
   return (
@@ -219,7 +225,9 @@ export function SharedComponentsSection() {
             title="Select Currency"
             options={SELECTOR_OPTIONS}
             value={selectorValue}
-            onSelect={(value) => { setSelectorValue(value); setSelectorOpen(false) }}
+            onSelect={(value) => {
+              setSelectorValue(value); setSelectorOpen(false)
+            }}
             onClose={() => setSelectorOpen(false)}
           />
         </div>

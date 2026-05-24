@@ -1,5 +1,5 @@
 export { Field } from './Field'
 export { TextInput } from './TextInput'
 export { TextAreaInput } from './TextAreaInput'
-export { Switch } from './Switch'
+export { Switch } from './SwitchField'
 export { SelectInput, type SelectOption } from './SelectInput'

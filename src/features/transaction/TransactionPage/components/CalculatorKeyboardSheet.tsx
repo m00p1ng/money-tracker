@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard'
+import { CalculatorKeyboard } from '@/features/transaction/TransactionPage/components/CalculatorKeyboard'
 
 interface CalculatorKeyboardSheetProps {
   isOpen: boolean

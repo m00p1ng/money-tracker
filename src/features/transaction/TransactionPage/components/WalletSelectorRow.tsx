@@ -39,13 +39,13 @@ export function WalletSelectorRow({
         <Icon name={wallet?.icon ?? 'fa-wallet'} />
       </div>
       <div className="flex-1">
-        <p className="text-[11px] text-white/35">{label}</p>
+        <p className="text-xs text-white/35">{label}</p>
         <p className="text-sm font-medium">
           {wallet?.name ?? fallbackName}
           {showBalance ? ` · ${wallet?.currency ?? ''} ${wallet?.balance.toFixed(2) ?? '0.00'}` : ''}
         </p>
       </div>
-      <Icon name="fa-chevron-right" className="text-white/20 text-[11px]" />
+      <Icon name="fa-chevron-right" className="text-white/20 text-sm" />
     </button>
   )
 }

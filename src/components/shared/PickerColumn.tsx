@@ -19,7 +19,7 @@ export function PickerColumn({
   capitalize = false,
 }: PickerColumnProps) {
   return (
-    <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.04]">
+    <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-white/4">
       <p className="pt-2 text-center text-[10px] uppercase tracking-[1px] text-white/30">{label}</p>
       <Picker value={value} onChange={onChange} height={120} itemHeight={40} wheelMode="natural">
         <Picker.Column name={name}>

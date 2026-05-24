@@ -1,5 +1,6 @@
 import {
   AddRow,
+  Icon,
   ListGroup,
   ListRow,
   PageHeader,
@@ -35,7 +36,7 @@ export function WalletsPage({
             trailing={
               <div className="flex items-center gap-2 text-white/25">
                 <span className="text-xs text-white/40">{w.currency}</span>
-                <span className="text-[11px]">›</span>
+                <Icon name="fa-chevron-right" className="text-base" />
               </div>
             }
           />
@@ -56,7 +57,7 @@ export function WalletsPage({
             trailing={
               <div className="flex items-center gap-2 text-white/25">
                 <span className="text-xs text-white/40">{w.currency}</span>
-                <span className="text-[11px]">›</span>
+                <Icon name="fa-chevron-right" className="text-base" />
               </div>
             }
           />
