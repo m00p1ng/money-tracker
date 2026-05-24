@@ -363,7 +363,7 @@ export function TransactionPage({
         )}
       </button>
 
-      {!isPlanned && (
+      {!isPlanned && type !== 'transfer' && (
         <button
           type="button"
           className={[

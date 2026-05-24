@@ -84,6 +84,6 @@ export function walletRunningRows(wallet: Wallet, transactions: Transaction[], r
 
 export function walletClearedAmount(wallet: Wallet, transactions: Transaction[]): number {
   return walletTransactions(wallet.id, transactions)
-    .filter((t) => t.cleared)
+    .filter((t) => t.cleared && t.type !== 'transfer')
     .reduce((sum, t) => sum + signedWalletAmount(wallet, t), wallet.balance)
 }
