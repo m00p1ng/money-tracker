@@ -5,16 +5,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-bun dev          # start dev server
-bun build        # tsc + vite build
-bun lint         # eslint
-bun test         # vitest run (single pass)
-bun test:watch   # vitest watch
+npm run dev          # start dev server
+npm run build        # tsc + vite build
+npm run lint         # eslint
+npm run test         # vitest run (single pass)
+npm run test:watch   # vitest watch
 ```
 
 Run a single test file:
 ```bash
-bun test src/lib/__tests__/calculator.test.ts
+npm run test -- src/lib/__tests__/calculator.test.ts
 ```
 
 ## Architecture
@@ -52,6 +52,8 @@ ComponentName/
 ### Routing
 
 Three tab routes (`/`, `/balance`, `/settings`) use fade+slide tab transitions. All deeper routes use directional slide transitions based on `NavigationDirectionProvider`. The `/design` route is outside `AppShell` — it's a component design sandbox. When adding any visually renderable component under `src/components/`, add a demo in the appropriate `src/features/design/sections/` file. Use existing `SubSection` + `VariantLabel` helpers.
+
+Design sections: `UIComponentsSection` (form controls/primitives), `SharedComponentsSection` (shared/ components), `FeatureSection` (feature-level components), `TokensSection` (colors/typography tokens).
 
 ### Repeat transactions
 
