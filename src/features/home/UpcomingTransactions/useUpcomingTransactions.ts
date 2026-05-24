@@ -39,9 +39,13 @@ export function useUpcomingTransactions() {
       ? row.transaction
       : row.occurrence.transaction
     const firstItem = transaction.items[0]
-    const category = firstItem ? findCategory(firstItem.categoryId) : undefined
+    const category = firstItem
+      ? findCategory(firstItem.categoryId)
+      : undefined
     const fromWallet = findWallet(transaction.walletId)
-    const toWallet = transaction.toWalletId ? findWallet(transaction.toWalletId) : undefined
+    const toWallet = transaction.toWalletId
+      ? findWallet(transaction.toWalletId)
+      : undefined
     const label =
       transaction.type === 'transfer'
         ? `${fromWallet?.name ?? 'Wallet'} -> ${toWallet?.name ?? 'Wallet'}`
@@ -58,7 +62,9 @@ export function useUpcomingTransactions() {
         ? 'fa-right-left'
         : category?.icon ?? 'fa-clock',
       primaryLabel: label,
-      secondaryLabel: `${badgeFor(row.date)}${row.kind === 'virtual-repeat' ? ' · Repeat' : ''}`,
+      secondaryLabel: `${badgeFor(row.date)}${row.kind === 'virtual-repeat'
+        ? ' · Repeat'
+        : ''}`,
       amount: formatAmount(firstItem?.amount ?? 0, transaction.currency),
     }
   })

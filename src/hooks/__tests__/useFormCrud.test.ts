@@ -8,7 +8,7 @@ import {
   vi,
 } from 'vitest'
 
-import { useFormCrud } from '@/hooks/shared/useFormCrud'
+import { useFormCrud } from '@/hooks/useFormCrud'
 
 interface WrapperProps {
   children: React.ReactNode

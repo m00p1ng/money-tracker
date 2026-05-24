@@ -1,6 +1,8 @@
 import cx from 'classnames'
 import {
-  animate, motion, useMotionValue,
+  animate,
+  motion,
+  useMotionValue,
 } from 'framer-motion'
 import { useNavigate } from 'react-router'
 
@@ -68,14 +70,24 @@ export function SwipeableTransactionRow({
           type="button"
           onClick={handleActionClick}
           className="flex flex-col items-center gap-1 p-2"
-          aria-label={isCleared ? 'Mark as uncleared' : 'Mark as cleared'}
+          aria-label={isCleared
+            ? 'Mark as uncleared'
+            : 'Mark as cleared'}
         >
           <Icon
-            name={isCleared ? 'fa-circle-xmark' : 'fa-circle-check'}
-            className={cx('text-lg', isCleared ? 'text-white/40' : 'text-income')}
+            name={isCleared
+              ? 'fa-circle-xmark'
+              : 'fa-circle-check'}
+            className={cx('text-lg', isCleared
+              ? 'text-white/40'
+              : 'text-income')}
           />
-          <span className={cx('text-[10px] font-semibold', isCleared ? 'text-white/40' : 'text-income')}>
-            {isCleared ? 'Unclear' : 'Clear'}
+          <span className={cx('text-[10px] font-semibold', isCleared
+            ? 'text-white/40'
+            : 'text-income')}>
+            {isCleared
+              ? 'Unclear'
+              : 'Clear'}
           </span>
         </button>
       </div>
@@ -109,10 +121,16 @@ export function SwipeableTransactionRow({
             />
           )}
           <div className="shrink-0 text-right">
-            <p className={cx('text-sm font-bold', row.amount >= 0 ? 'text-income' : 'text-expense')}>
-              {row.amount >= 0 ? '+' : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
+            <p className={cx('text-sm font-bold', row.amount >= 0
+              ? 'text-income'
+              : 'text-expense')}>
+              {row.amount >= 0
+                ? '+'
+                : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
             </p>
-            <p className={cx('mt-0.5 text-xs', isCredit ? 'text-expense/70' : 'text-white/28')}>
+            <p className={cx('mt-0.5 text-xs', isCredit
+              ? 'text-expense/70'
+              : 'text-white/28')}>
               {isCredit
                 ? `${formatAmount(row.runningAmount, wallet.currency)} debt`
                 : formatAmount(row.runningAmount, wallet.currency)}

@@ -15,12 +15,14 @@ export function formatAmount(amount: number, currency = 'THB', locale?: string):
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(amount)
+
     return `${symbol}${formatted}`
   } catch {
     const formatted = new Intl.NumberFormat(locale, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(amount)
+
     return `${symbol}${formatted}`
   }
 }

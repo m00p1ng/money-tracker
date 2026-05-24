@@ -8,10 +8,7 @@ import {
 } from 'vitest'
 
 import { WalletFormPage } from '@/features/settings/WalletFormPage/WalletFormPage'
-import type {
-  Currency,
-  Wallet,
-} from '@/types/domain'
+import type { Currency, Wallet } from '@/types/domain'
 
 type SetFormError = (err: string | null) => void
 type SubmitWallet = (form: Wallet, setError: SetFormError) => Promise<void>
@@ -47,8 +44,8 @@ const existingWallet: Wallet = {
 }
 
 function renderPage(props: Partial<React.ComponentProps<typeof WalletFormPage>> = {}) {
-  const onSubmit = vi.fn<SubmitWallet>(async () => {})
-  const onDelete = vi.fn<DeleteWallet>(async () => {})
+  const onSubmit = vi.fn<SubmitWallet>(async () => { })
+  const onDelete = vi.fn<DeleteWallet>(async () => { })
   const onBack = vi.fn()
 
   render(

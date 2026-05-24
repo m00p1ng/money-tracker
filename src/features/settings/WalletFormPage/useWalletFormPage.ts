@@ -14,7 +14,9 @@ export function useWalletFormPage() {
   const navigate = useNavigate()
   const backNavigate = useBackNavigate()
   const currencies = useCurrencyStore((state) => state.items)
-  const wallet = useWalletStore((state) => (id ? state.findById(id) : undefined))
+  const wallet = useWalletStore((state) => (id
+    ? state.findById(id)
+    : undefined))
   const add = useWalletStore((state) => state.add)
   const update = useWalletStore((state) => state.update)
   const remove = useWalletStore((state) => state.remove)
@@ -22,16 +24,24 @@ export function useWalletFormPage() {
 
   async function onSubmit(form: Wallet, setError: (err: string | null) => void) {
     if (!form.name.trim()) {
-      setError('Name is required'); return
+      setError('Name is required')
+
+      return
     }
     if (form.type === 'credit_card' && form.creditLimit !== undefined && form.creditLimit <= 0) {
-      setError('Credit limit must be greater than 0'); return
+      setError('Credit limit must be greater than 0')
+
+      return
     }
     try {
-      await (wallet ? update(form) : add(form))
+      await (wallet
+        ? update(form)
+        : add(form))
       navigate('/settings/wallets')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to save wallet')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to save wallet')
     }
   }
 
@@ -43,7 +53,9 @@ export function useWalletFormPage() {
       await remove(wallet.id)
       navigate('/settings/wallets')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to delete wallet')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to delete wallet')
     }
   }
 

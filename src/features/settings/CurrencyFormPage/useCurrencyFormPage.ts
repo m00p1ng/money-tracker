@@ -8,7 +8,9 @@ export function useCurrencyFormPage() {
   const { code } = useParams()
   const navigate = useNavigate()
   const backNavigate = useBackNavigate()
-  const existing = useCurrencyStore((state) => (code ? state.findByCode(code) : undefined))
+  const existing = useCurrencyStore((state) => (code
+    ? state.findByCode(code)
+    : undefined))
   const add = useCurrencyStore((state) => state.add)
   const update = useCurrencyStore((state) => state.update)
   const remove = useCurrencyStore((state) => state.remove)
@@ -16,25 +18,37 @@ export function useCurrencyFormPage() {
 
   async function onSubmit(form: Currency, setError: (err: string | null) => void) {
     if (!form.code.trim()) {
-      setError('Code is required'); return
+      setError('Code is required')
+
+      return
     }
     if (!form.symbol.trim()) {
-      setError('Symbol is required'); return
+      setError('Symbol is required')
+
+      return
     }
     if (!form.name.trim()) {
-      setError('Name is required'); return
+      setError('Name is required')
+
+      return
     }
     if (form.rate <= 0) {
-      setError('Rate must be greater than 0'); return
+      setError('Rate must be greater than 0')
+
+      return
     }
     try {
-      await (existing ? update(form) : add(form))
+      await (existing
+        ? update(form)
+        : add(form))
       if (form.isBase) {
         await setBase(form.code.toUpperCase())
       }
       navigate('/settings/currencies')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to save currency')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to save currency')
     }
   }
 
@@ -46,7 +60,9 @@ export function useCurrencyFormPage() {
       await remove(existing.code)
       navigate('/settings/currencies')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to delete currency')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to delete currency')
     }
   }
 

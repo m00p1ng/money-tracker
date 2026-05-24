@@ -36,13 +36,19 @@ function useTransactionPageRouting() {
     sourceId,
     date: repeatDate,
   } = useParams()
-  const existing = useTransactionStore((state) => (id ? state.findById(id) : undefined))
-  const sourceRepeat = useTransactionStore((state) => (sourceId ? state.findById(sourceId) : undefined))
+  const existing = useTransactionStore((state) => (id
+    ? state.findById(id)
+    : undefined))
+  const sourceRepeat = useTransactionStore((state) => (sourceId
+    ? state.findById(sourceId)
+    : undefined))
   const [searchParams] = useSearchParams()
 
   const isEditMode = Boolean(id && existing)
   const isRepeatMaterialization = Boolean(sourceId && repeatDate)
-  const initial = isRepeatMaterialization ? sourceRepeat : existing
+  const initial = isRepeatMaterialization
+    ? sourceRepeat
+    : existing
   const seedCategoryId = !isEditMode && !isRepeatMaterialization
     ? searchParams.get('categoryId') ?? undefined
     : undefined
@@ -82,15 +88,23 @@ function useTransactionPageDraft(
     type: initialType,
     walletId: initialWalletId,
     toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
-    items: initial?.items ?? (seedCategoryId ? [{ categoryId: seedCategoryId, amount: 0 }] : []),
-    focusedIndex: seedCategoryId ? 0 : null,
-    date: initial ? toDatetimeLocalValue(new Date(initial.date)) : toDatetimeLocalValue(new Date()),
+    items: initial?.items ?? (seedCategoryId
+      ? [{ categoryId: seedCategoryId, amount: 0 }]
+      : []),
+    focusedIndex: seedCategoryId
+      ? 0
+      : null,
+    date: initial
+      ? toDatetimeLocalValue(new Date(initial.date))
+      : toDatetimeLocalValue(new Date()),
     note: initial?.note ?? '',
     currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
     exchangeRate: String(initial?.exchangeRate ?? ''),
     toExchangeRate: String(initial?.toExchangeRate ?? ''),
     repeatConfig: initial?.repeat ?? { preset: 'never' },
-    transferAmount: initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0,
+    transferAmount: initial?.type === 'transfer'
+      ? initial.items[0]?.amount ?? 0
+      : 0,
     cleared: existing?.cleared ?? false,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [])
@@ -179,9 +193,12 @@ function useTransactionSaveHandler({
     }
     if (errors.length > 0) {
       alert(errors[0])
+
       return
     }
-    const markedPaid = isRepeatMaterialization ? true : !isPlanned
+    const markedPaid = isRepeatMaterialization
+      ? true
+      : !isPlanned
     const transaction = buildTransaction({
       id: existing?.id,
       type,
@@ -190,11 +207,19 @@ function useTransactionSaveHandler({
       currency,
       items,
       transferAmount,
-      exchangeRate: currency !== wallet?.currency ? Number(exchangeRate || defaultRate) : undefined,
-      toExchangeRate: type === 'transfer' ? Number(toExchangeRate || defaultRate) : undefined,
-      date: isRepeatMaterialization && repeatDate ? `${repeatDate}T00:00` : date,
+      exchangeRate: currency !== wallet?.currency
+        ? Number(exchangeRate || defaultRate)
+        : undefined,
+      toExchangeRate: type === 'transfer'
+        ? Number(toExchangeRate || defaultRate)
+        : undefined,
+      date: isRepeatMaterialization && repeatDate
+        ? `${repeatDate}T00:00`
+        : date,
       markedPaid,
-      repeat: repeatConfig.preset === 'never' ? undefined : repeatConfig,
+      repeat: repeatConfig.preset === 'never'
+        ? undefined
+        : repeatConfig,
       note,
       cleared,
       now: existing?.createdAt ?? new Date().toISOString(),
@@ -275,10 +300,14 @@ export function useTransactionPage(): TransactionPageProps {
   } = draft
 
   const selectedCurrency = currencies.find((item) => item.code === currency)
-  const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
+  const defaultRate = selectedCurrency?.rate
+    ? String(selectedCurrency.rate)
+    : ''
   const isPlanned = new Date(date) > new Date()
   const wallet = wallets.find((item) => item.id === walletId)
-  const walletReconciliationEnabled = wallet ? isReconciliationEnabled(wallet) : false
+  const walletReconciliationEnabled = wallet
+    ? isReconciliationEnabled(wallet)
+    : false
 
   const onSave = useTransactionSaveHandler({
     draft,
@@ -338,7 +367,9 @@ export function useTransactionPage(): TransactionPageProps {
     onChangeCategory: (index: number) => navigate(`/transaction/category?changingIndex=${index}&type=${type}`),
     onAddCategory: () => navigate(`/transaction/category?addCategory=true&type=${type}`),
     onPressCalcKey: (_key: string, result: number) => updateDraft({
-      items: items.map((item, index) => (index === focusedIndex ? { ...item, amount: result } : item)),
+      items: items.map((item, index) => (index === focusedIndex
+        ? { ...item, amount: result }
+        : item)),
     }),
     onOpenCurrencyPicker: () => { /* handled in dumb component */ },
     onSave,

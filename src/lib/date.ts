@@ -25,6 +25,7 @@ export function formatShortDate(date: Date): string {
 
 export function isTodayInLocalTime(isoDate: string, now = new Date()): boolean {
   const date = new Date(isoDate)
+
   return (
     date.getFullYear() === now.getFullYear() &&
     date.getMonth() === now.getMonth() &&
@@ -35,11 +36,13 @@ export function isTodayInLocalTime(isoDate: string, now = new Date()): boolean {
 export function monthRangeLabel(date = new Date()): string {
   const start = new Date(date.getFullYear(), date.getMonth(), 1)
   const end = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+
   return `${rangeFormatter.format(start)} - ${rangeFormatter.format(end)}`
 }
 
 export function toDatetimeLocalValue(date: Date): string {
   const offsetMs = date.getTimezoneOffset() * 60_000
+
   return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16)
 }
 
@@ -52,5 +55,6 @@ const displayDateFormatter = new Intl.DateTimeFormat('en-GB', {
 export function formatDatetimeLocalDisplay(value: string): string {
   const [datePart, timePart] = value.split('T')
   const date = new Date(`${datePart}T00:00:00`)
+
   return `${displayDateFormatter.format(date)} · ${timePart}`
 }

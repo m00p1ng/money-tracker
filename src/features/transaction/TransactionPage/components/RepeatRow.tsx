@@ -19,9 +19,13 @@ function formatRepeat(config: RepeatConfig): string {
   }
 
   if (config.preset === 'custom' && config.customEvery && config.customUnit) {
-    const unit = config.customEvery === 1 ? config.customUnit : `${config.customUnit}s`
+    const unit = config.customEvery === 1
+      ? config.customUnit
+      : `${config.customUnit}s`
+
     return `Every ${config.customEvery} ${unit}`
   }
+
   return 'Never'
 }
 

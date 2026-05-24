@@ -19,6 +19,7 @@ export function amountInWalletCurrency(transaction: Transaction, wallet: Wallet)
   if (transaction.type === 'transfer' && transaction.toWalletId === wallet.id) {
     return total * (transaction.toExchangeRate ?? 1)
   }
+
   return total * (transaction.exchangeRate ?? 1)
 }
 
@@ -31,12 +32,20 @@ export function signedWalletAmount(wallet: Wallet, transaction: Transaction): nu
     } else if (transaction.toWalletId === wallet.id) {
       signedAmount = amount
     }
-    return wallet.type === 'credit_card' ? -signedAmount : signedAmount
+
+    return wallet.type === 'credit_card'
+      ? -signedAmount
+      : signedAmount
   }
   if (wallet.type === 'credit_card') {
-    return transaction.type === 'expense' ? amount : -amount
+    return transaction.type === 'expense'
+      ? amount
+      : -amount
   }
-  return transaction.type === 'income' ? amount : -amount
+
+  return transaction.type === 'income'
+    ? amount
+    : -amount
 }
 
 export function walletTransactions(walletId: string, transactions: Transaction[], range?: DateRange): Transaction[] {
@@ -45,7 +54,9 @@ export function walletTransactions(walletId: string, transactions: Transaction[]
       transaction.walletId === walletId
       || (transaction.type === 'transfer' && transaction.toWalletId === walletId)
     ))
-    .filter((transaction) => (range ? isWithinDateRange(transaction.date, range) : true))
+    .filter((transaction) => (range
+      ? isWithinDateRange(transaction.date, range)
+      : true))
     .sort((a, b) => a.date.localeCompare(b.date))
 }
 
@@ -68,10 +79,12 @@ export function debtTotal(wallets: Wallet[], transactions: Transaction[]): numbe
 
 export function walletRunningRows(wallet: Wallet, transactions: Transaction[], range: DateRange): RunningWalletRow[] {
   let runningAmount = wallet.balance
+
   return walletTransactions(wallet.id, transactions)
     .map((transaction) => {
       const amount = signedWalletAmount(wallet, transaction)
       runningAmount += amount
+
       return {
         transaction,
         amount,

@@ -1,7 +1,4 @@
-import {
-  useRef,
-  type MouseEvent,
-} from 'react'
+import { useRef, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 const DESIGN_TRIGGER_CLICKS = 3

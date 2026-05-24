@@ -42,7 +42,9 @@ export function WalletSelectorRow({
         <p className="text-xs text-white/35">{label}</p>
         <p className="text-sm font-medium">
           {wallet?.name ?? fallbackName}
-          {showBalance ? ` · ${wallet?.currency ?? ''} ${wallet?.balance.toFixed(2) ?? '0.00'}` : ''}
+          {showBalance
+            ? ` · ${wallet?.currency ?? ''} ${wallet?.balance.toFixed(2) ?? '0.00'}`
+            : ''}
         </p>
       </div>
       <Icon name="fa-chevron-right" className="text-white/20 text-sm" />

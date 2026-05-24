@@ -6,7 +6,6 @@ import {
 
 import { formatAmount } from '@/lib'
 
-
 describe('formatAmount', () => {
   it('formats THB with thousand separator and two decimals', () => {
     expect(formatAmount(1234567.89, 'THB', 'en-US')).toBe('฿1,234,567.89')

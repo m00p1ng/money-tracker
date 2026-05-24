@@ -18,6 +18,7 @@ export function useBalancePage(): BalancePageProps {
     .map((wallet) => ({ wallet, amount: walletCurrentAmount(wallet, transactions) }))
   const assets = assetsTotal(wallets, transactions)
   const debt = debtTotal(wallets, transactions)
+
   return {
     paymentWallets,
     creditCards,

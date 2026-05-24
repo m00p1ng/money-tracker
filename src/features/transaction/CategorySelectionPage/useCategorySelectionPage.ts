@@ -16,7 +16,9 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   const draft = useTransactionDraftStore((state) => state.draft)
 
   const changingIndexParam = searchParams.get('changingIndex')
-  const changingIndex = changingIndexParam !== null ? Number(changingIndexParam) : null
+  const changingIndex = changingIndexParam !== null
+    ? Number(changingIndexParam)
+    : null
   const isAddCategory = searchParams.get('addCategory') === 'true'
   const seedType = (searchParams.get('type') ?? 'expense') as 'expense' | 'income'
 
@@ -25,11 +27,14 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   const isLocked = isAddCategory || changingIndex !== null
 
   const visible = categories.filter((c) => c.type === type && c.parentId === parentId)
-  const parent = parentId ? categories.find((c) => c.id === parentId) : undefined
+  const parent = parentId
+    ? categories.find((c) => c.id === parentId)
+    : undefined
 
   function onTypeChange(newType: 'expense' | 'income' | 'transfer') {
     if (newType === 'transfer') {
       navigate('/transaction/new?type=transfer')
+
       return
     }
     setType(newType)
@@ -48,18 +53,22 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     const hasChildren = categories.some((c) => c.parentId === category.id)
     if (hasChildren) {
       setParentId(category.id)
+
       return
     }
 
     if (draft && (changingIndex !== null || isAddCategory)) {
       if (changingIndex !== null) {
         const newItems = draft.items.map((item, i) =>
-          i === changingIndex ? { ...item, categoryId: category.id } : item)
+          i === changingIndex
+            ? { ...item, categoryId: category.id }
+            : item)
         updateDraft({ items: newItems })
       } else {
         updateDraft({ items: [...draft.items, { categoryId: category.id, amount: 0 }] })
       }
       backNavigate(-1)
+
       return
     }
 

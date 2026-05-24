@@ -35,7 +35,9 @@ interface WalletFormPageProps {
 const DEFAULT_CURRENCY = 'THB'
 
 function walletTypeLabel(type: WalletType) {
-  return type === 'credit_card' ? 'Credit Card' : 'Payment Account'
+  return type === 'credit_card'
+    ? 'Credit Card'
+    : 'Payment Account'
 }
 
 function nextTypeIcon(type: WalletType, currentIcon: string) {
@@ -45,6 +47,7 @@ function nextTypeIcon(type: WalletType, currentIcon: string) {
   if (type === 'payment' && currentIcon === 'fa-credit-card') {
     return 'fa-wallet'
   }
+
   return currentIcon
 }
 
@@ -64,9 +67,13 @@ export function WalletFormPage({
     currency: currencies[0]?.code ?? DEFAULT_CURRENCY,
     balance: 0,
     color: '#10b981',
-    icon: initialType === 'credit_card' ? 'fa-credit-card' : 'fa-wallet',
+    icon: initialType === 'credit_card'
+      ? 'fa-credit-card'
+      : 'fa-wallet',
   })
-  const title = useMemo(() => (wallet ? 'Edit Wallet' : 'New Wallet'), [wallet])
+  const title = useMemo(() => (wallet
+    ? 'Edit Wallet'
+    : 'New Wallet'), [wallet])
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
@@ -144,15 +151,17 @@ export function WalletFormPage({
           />
         </Field>
 
-        {form.type === 'credit_card' ? (
-          <Field label="Credit Limit">
-            <TextInput
-              type="number"
-              value={form.creditLimit ?? ''}
-              onChange={(e) => setForm({ ...form, creditLimit: Number(e.target.value) || undefined })}
-            />
-          </Field>
-        ) : null}
+        {form.type === 'credit_card'
+          ? (
+            <Field label="Credit Limit">
+              <TextInput
+                type="number"
+                value={form.creditLimit ?? ''}
+                onChange={(e) => setForm({ ...form, creditLimit: Number(e.target.value) || undefined })}
+              />
+            </Field>
+          )
+          : null}
 
         <Switch
           checked={reconciliationEnabled}

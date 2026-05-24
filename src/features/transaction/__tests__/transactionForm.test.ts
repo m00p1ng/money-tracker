@@ -89,7 +89,10 @@ describe('transactionForm', () => {
         currency: 'THB',
         exchangeRate: 36.1234,
         toExchangeRate: 1,
-        items: [{ categoryId: type === 'expense' ? 'expense-food' : 'income-salary', amount: 28 }],
+        items: [{ categoryId: type === 'expense'
+          ? 'expense-food'
+          : 'income-salary',
+        amount: 28 }],
         date: '2026-05-22T10:30',
         now: '2026-05-22T10:31:00.000Z',
         createId: () => `tx-${type}`,

@@ -51,7 +51,9 @@ export function ThemePage({
                 type="button"
                 className={cx(
                   'rounded-xl border-2 py-2.5 px-2 text-center',
-                  selected === theme ? 'border-accent' : 'border-transparent',
+                  selected === theme
+                    ? 'border-accent'
+                    : 'border-transparent',
                 )}
                 onClick={() => onSelectTheme(theme)}
               >
@@ -59,7 +61,9 @@ export function ThemePage({
                   className="mx-auto mb-1.5 block h-15 w-15 rounded-full"
                   style={{ background: `linear-gradient(135deg,${themes[theme].accentBtn1},${themes[theme].accent})` }}
                 />
-                <span className={cx('text-sm font-semibold', selected === theme ? 'text-accent' : 'text-white/50')}>
+                <span className={cx('text-sm font-semibold', selected === theme
+                  ? 'text-accent'
+                  : 'text-white/50')}>
                   {names[theme]}
                 </span>
               </button>

@@ -35,6 +35,7 @@ export function CategoryItemsCard({
       {items.map((item, index) => {
         const category = findCategory(item.categoryId)
         const isFocused = focusedIndex === index
+
         return (
           <div
             key={`${item.categoryId}-${index}`}

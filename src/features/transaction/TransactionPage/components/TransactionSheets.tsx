@@ -71,7 +71,9 @@ export function TransactionSheets({
       <WalletPicker
         isOpen={walletPickerTarget !== null}
         wallets={wallets}
-        selectedId={walletPickerTarget === 'toWallet' ? (toWalletId ?? '') : walletId}
+        selectedId={walletPickerTarget === 'toWallet'
+          ? (toWalletId ?? '')
+          : walletId}
         onSelect={(selectedId) => {
           if (walletPickerTarget === 'toWallet') {
             onUpdateToWallet(selectedId)

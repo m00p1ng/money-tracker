@@ -10,7 +10,6 @@ import {
   isWithinDateRange,
 } from '@/lib'
 
-
 describe('dateRange helpers', () => {
   const now = new Date('2026-05-23T10:30:00.000Z')
 

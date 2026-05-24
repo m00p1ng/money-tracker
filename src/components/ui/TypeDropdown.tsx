@@ -8,7 +8,6 @@ import {
 
 import { Icon } from '@/components'
 
-
 type TransactionType = 'expense' | 'income' | 'transfer'
 
 const TYPES: { label: string; value: TransactionType }[] = [
@@ -41,6 +40,7 @@ export function TypePickerDropdown({
       }
     }
     document.addEventListener('mousedown', handleMouseDown)
+
     return () => document.removeEventListener('mousedown', handleMouseDown)
   }, [open])
 

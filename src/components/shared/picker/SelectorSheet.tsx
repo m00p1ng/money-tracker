@@ -47,9 +47,11 @@ export function SelectorSheet<T extends string>({
             {option.leading}
             <span className="min-w-0 flex-1 text-left">
               <span className="block truncate">{option.label}</span>
-              {option.description ? (
-                <span className="block truncate text-[11px] font-normal text-white/40">{option.description}</span>
-              ) : null}
+              {option.description
+                ? (
+                  <span className="block truncate text-[11px] font-normal text-white/40">{option.description}</span>
+                )
+                : null}
             </span>
             {value === option.value && <Icon name="fa-circle-check" className="text-(--accent-light)" />}
           </button>

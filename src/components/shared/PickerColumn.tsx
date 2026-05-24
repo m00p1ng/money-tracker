@@ -30,7 +30,9 @@ export function PickerColumn({
                   className={cx(
                     'text-[15px]',
                     { capitalize },
-                    selected ? 'font-bold text-white' : 'font-medium text-white/30',
+                    selected
+                      ? 'font-bold text-white'
+                      : 'font-medium text-white/30',
                   )}
                 >
                   {opt}

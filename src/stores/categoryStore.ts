@@ -27,6 +27,7 @@ async function validateCategory(category: Category): Promise<void> {
     if (category.level !== 1) {
       throw new Error('Root category must be level 1')
     }
+
     return
   }
 
@@ -100,7 +101,9 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
     return get().items.find((category) => category.id === id)
   },
   parentOf(category) {
-    return category.parentId ? get().findById(category.parentId) : undefined
+    return category.parentId
+      ? get().findById(category.parentId)
+      : undefined
   },
   childrenOf(id) {
     return get().items.filter((category) => category.parentId === id)

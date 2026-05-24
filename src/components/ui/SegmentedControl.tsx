@@ -23,12 +23,16 @@ export function SegmentedControl<T extends string>({
           key={segment.value}
           className={cx(
             'rounded-[9px] px-3.5 py-1.5 text-xs font-semibold',
-            segment.value === value ? 'text-white' : 'text-white/40',
+            segment.value === value
+              ? 'text-white'
+              : 'text-white/40',
           )}
-          style={segment.value === value ? {
-            background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))',
-            boxShadow: '0 2px 10px color-mix(in srgb, var(--accent) 40%, transparent)',
-          } : undefined}
+          style={segment.value === value
+            ? {
+              background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))',
+              boxShadow: '0 2px 10px color-mix(in srgb, var(--accent) 40%, transparent)',
+            }
+            : undefined}
           onClick={() => onChange(segment.value)}
           type="button"
         >

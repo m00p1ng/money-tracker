@@ -28,6 +28,7 @@ interface NavigationDirectionProviderProps {
 
 export function NavigationDirectionProvider({ children }: NavigationDirectionProviderProps) {
   const [direction, setDirection] = useState<Direction>('forward')
+
   return (
     <NavigationDirectionContext.Provider value={{ direction, setDirection }}>
       {children}
@@ -44,6 +45,7 @@ export function useNavigationDirection() {
 export function useBackNavigate() {
   const navigate = useNavigate()
   const { setDirection } = useNavigationDirection()
+
   return useCallback(
     (to: To | number, options?: NavigateOptions) => {
       setDirection('back')

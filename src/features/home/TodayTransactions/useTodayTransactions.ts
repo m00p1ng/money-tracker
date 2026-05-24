@@ -12,7 +12,10 @@ export function useTodayTransactions() {
   const rows: TodayTransactionRowData[] = transactions.flatMap((transaction) =>
     transaction.items.map((item, index) => {
       const category = findCategory(item.categoryId)
-      const parent = category ? parentOf(category) : undefined
+      const parent = category
+        ? parentOf(category)
+        : undefined
+
       return {
         key: `${transaction.id}-${index}`,
         to: `/transaction/${transaction.id}`,
@@ -21,8 +24,12 @@ export function useTodayTransactions() {
         iconColor: category?.color ?? '#94a3b8',
         primaryLabel: category?.name ?? 'Unknown',
         secondaryLabel: parent?.name ?? transaction.type,
-        amount: `${transaction.type === 'income' ? '+' : '-'}${formatAmount(item.amount, transaction.currency)}`,
-        amountColor: transaction.type === 'income' ? 'text-income' : 'text-expense',
+        amount: `${transaction.type === 'income'
+          ? '+'
+          : '-'}${formatAmount(item.amount, transaction.currency)}`,
+        amountColor: transaction.type === 'income'
+          ? 'text-income'
+          : 'text-expense',
       }
     }))
 

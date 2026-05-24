@@ -29,6 +29,7 @@ export function validateDraft(draft: TransactionDraft): string[] {
     if (!Number.isFinite(draft.transferAmount) || (draft.transferAmount ?? 0) <= 0) {
       errors.push('Enter a transfer amount')
     }
+
     return errors
   }
 
@@ -38,6 +39,7 @@ export function validateDraft(draft: TransactionDraft): string[] {
   if (draft.items.some((item) => item.amount <= 0)) {
     errors.push('Enter an amount for every category')
   }
+
   return errors
 }
 
@@ -79,7 +81,10 @@ export function deriveTransactionStatus(input: {
 
   const transactionDate = new Date(input.date)
   const now = input.now ?? new Date()
-  return transactionDate > now ? 'planned' : 'overdue'
+
+  return transactionDate > now
+    ? 'planned'
+    : 'overdue'
 }
 
 export function buildTransaction(input: {
@@ -127,7 +132,11 @@ export function buildTransaction(input: {
     createdAt: input.now,
     ...transferFields,
     status,
-    repeat: status === 'paid' ? undefined : input.repeat,
-    cleared: status === 'paid' ? (input.cleared ?? false) : false,
+    repeat: status === 'paid'
+      ? undefined
+      : input.repeat,
+    cleared: status === 'paid'
+      ? (input.cleared ?? false)
+      : false,
   }
 }

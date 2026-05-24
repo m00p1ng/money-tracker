@@ -11,6 +11,7 @@ vi.mock('framer-motion', () => {
         ref: React.Ref<HTMLElement>,
       ) =>
         React.createElement(tag, { ...props, ref }, children))
+
   return {
     motion: new Proxy(
       {},

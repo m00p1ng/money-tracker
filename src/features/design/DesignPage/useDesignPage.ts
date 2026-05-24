@@ -50,6 +50,7 @@ export function useDesignPage() {
       obs.observe(el)
       observers.push(obs)
     }
+
     return () => observers.forEach((o) => o.disconnect())
   }, [])
 

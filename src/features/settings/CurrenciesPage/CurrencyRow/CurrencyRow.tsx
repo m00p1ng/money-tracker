@@ -42,22 +42,24 @@ export function CurrencyRow({
       <div className="flex-1 min-w-0">
         <p className="text-md font-semibold">{code}</p>
       </div>
-      {isBase ? (
-        <span
-          className="text-sm font-bold px-2 py-0.5 rounded-md border"
-          style={{
-            background: 'color-mix(in srgb, var(--accent) 12%, transparent)',
-            borderColor: 'color-mix(in srgb, var(--accent) 25%, transparent)',
-            color: 'var(--accent-btn-2)',
-          }}
-        >
-          Base
-        </span>
-      ) : (
-        <span className="mr-2 text-[12px] text-white/40">
-          1 {code} = {rate} {baseCode}
-        </span>
-      )}
+      {isBase
+        ? (
+          <span
+            className="text-sm font-bold px-2 py-0.5 rounded-md border"
+            style={{
+              background: 'color-mix(in srgb, var(--accent) 12%, transparent)',
+              borderColor: 'color-mix(in srgb, var(--accent) 25%, transparent)',
+              color: 'var(--accent-btn-2)',
+            }}
+          >
+            Base
+          </span>
+        )
+        : (
+          <span className="mr-2 text-[12px] text-white/40">
+            1 {code} = {rate} {baseCode}
+          </span>
+        )}
       <Icon name="fa-chevron-right" className="text-sm text-white/20" />
     </Link>
   )

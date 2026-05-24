@@ -6,7 +6,6 @@ import {
 
 import { applyTheme, themes } from '@/lib'
 
-
 describe('theme utilities', () => {
   it('each theme defines income, expense, and danger tokens', () => {
     const themeKeys = Object.keys(themes) as (keyof typeof themes)[]
@@ -23,7 +22,6 @@ describe('theme utilities', () => {
     expect(document.documentElement.style.getPropertyValue('--expense')).toBe('#f87171')
     expect(document.documentElement.style.getPropertyValue('--danger')).toBe('#ef4444')
   })
-
 
   it('defines eight presets', () => {
     expect(Object.keys(themes)).toEqual([

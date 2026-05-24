@@ -27,6 +27,7 @@ export function RepeatPicker({
   function buildConfig(preset: RepeatPreset): RepeatConfig {
     if (preset === 'custom') {
       const customUnit = value.customUnit ?? 'month'
+
       return {
         preset: 'custom',
         customEvery: value.customEvery ?? 1,

@@ -43,6 +43,7 @@ export function SelectInput({
     }
     document.addEventListener('mousedown', handleMouseDown)
     document.addEventListener('keydown', handleKeyDown)
+
     return () => {
       document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('keydown', handleKeyDown)
@@ -62,8 +63,12 @@ export function SelectInput({
         className={[
           'flex min-h-11 w-full items-center justify-between rounded-lg border px-3',
           'bg-white/5 text-slate-50 outline-none transition-colors',
-          isOpen ? 'border-(--accent)' : 'border-white/10',
-          disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
+          isOpen
+            ? 'border-(--accent)'
+            : 'border-white/10',
+          disabled
+            ? 'cursor-not-allowed opacity-50'
+            : 'cursor-pointer',
         ].join(' ')}
       >
         <span>{selected?.label ?? placeholder ?? ''}</span>
@@ -76,7 +81,9 @@ export function SelectInput({
           strokeWidth="2"
           className={[
             'shrink-0 text-slate-500 transition-transform duration-200',
-            isOpen ? 'rotate-180' : '',
+            isOpen
+              ? 'rotate-180'
+              : '',
           ].join(' ')}
         >
           <polyline points="6 9 12 15 18 9" />

@@ -7,7 +7,6 @@ import {
 
 import { useTransactionDraftStore } from '@/stores'
 
-
 beforeEach(() => {
   useTransactionDraftStore.getState().clear()
 })

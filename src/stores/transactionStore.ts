@@ -15,6 +15,7 @@ function total(transaction: Transaction): number {
 
 function isCurrentMonth(isoDate: string, now = new Date()): boolean {
   const date = new Date(isoDate)
+
   return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()
 }
 
@@ -31,6 +32,7 @@ function localDateString(value: string): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
+
   return `${year}-${month}-${day}`
 }
 
@@ -38,12 +40,14 @@ function todayString(now: Date): string {
   const year = now.getFullYear()
   const month = String(now.getMonth() + 1).padStart(2, '0')
   const day = String(now.getDate()).padStart(2, '0')
+
   return `${year}-${month}-${day}`
 }
 
 function addDays(value: string, days: number): string {
   const [year, month, day] = value.split('-').map(Number)
   const date = new Date(year, month - 1, day + days)
+
   return todayString(date)
 }
 
@@ -87,7 +91,9 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
   },
   async update(transaction) {
     await db.transactions.put(transaction)
-    set({ items: sortNewestFirst(get().items.map((item) => (item.id === transaction.id ? transaction : item))) })
+    set({ items: sortNewestFirst(get().items.map((item) => (item.id === transaction.id
+      ? transaction
+      : item))) })
   },
   async remove(id) {
     await db.transactions.delete(id)
@@ -100,7 +106,9 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     }
     const updated = { ...tx, cleared: !tx.cleared }
     await db.transactions.update(id, { cleared: updated.cleared })
-    set({ items: get().items.map((item) => (item.id === id ? updated : item)) })
+    set({ items: get().items.map((item) => (item.id === id
+      ? updated
+      : item)) })
   },
   findById(id) {
     return get().items.find((transaction) => transaction.id === id)
@@ -125,6 +133,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     const realRows: UpcomingTransactionRow[] = get()
       .items.filter((transaction) => {
         const date = localDateString(transaction.date)
+
         return transaction.status === 'overdue' || (transaction.status === 'planned' && date <= tomorrow)
       })
       .map((transaction) => ({
@@ -150,6 +159,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
       if (!aOverdue && bOverdue) {
         return 1
       }
+
       return a.date.localeCompare(b.date)
     })
   },
@@ -170,6 +180,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
       if (!get().items.some((transaction) => transaction.id === existing.id)) {
         set({ items: sortNewestFirst([existing, ...get().items]) })
       }
+
       return existing
     }
 
@@ -183,6 +194,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     const transaction = buildRepeatOccurrence(source, occurrenceDate, createId, now)
     await db.transactions.put(transaction)
     set({ items: sortNewestFirst([transaction, ...get().items]) })
+
     return transaction
   },
 }))

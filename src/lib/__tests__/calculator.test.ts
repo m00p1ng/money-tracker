@@ -6,7 +6,6 @@ import {
 
 import { createCalcState, pressCalcKey } from '@/lib'
 
-
 describe('calculator', () => {
   it('appends digits and decimal points', () => {
     let state = createCalcState()

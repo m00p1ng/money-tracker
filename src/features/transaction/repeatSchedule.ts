@@ -40,6 +40,7 @@ function todayString(now: Date): string {
   const year = now.getFullYear()
   const month = String(now.getMonth() + 1).padStart(2, '0')
   const day = String(now.getDate()).padStart(2, '0')
+
   return `${year}-${month}-${day}`
 }
 
@@ -85,6 +86,7 @@ function addDays(value: string, days: number): string {
   }
 
   const date = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + days))
+
   return formatDateParts({
     year: date.getUTCFullYear(),
     month: date.getUTCMonth() + 1,
@@ -146,6 +148,7 @@ export function nextRepeatDate(day: string, repeat: RepeatConfig): string {
   if (repeat.customUnit === 'year') {
     return addMonths(day, repeat.customEvery * 12)
   }
+
   return day
 }
 
@@ -167,6 +170,7 @@ function shouldProjectRepeat(repeat: RepeatConfig | undefined): repeat is Repeat
   if (repeat.preset === 'custom') {
     return isValidCustomRepeat(repeat)
   }
+
   return true
 }
 

@@ -57,6 +57,7 @@ export function CalculatorKeyboard({ onPress, onDismiss }: CalculatorKeyboardPro
           const isDelete = key === '⌫'
           const icon = keyIcons[key]
           const accentKeyClass = 'border border-[var(--accent)]/30 bg-[var(--accent)]/25 text-white disabled:opacity-50'
+
           return (
             <button
               key={key}
@@ -70,7 +71,9 @@ export function CalculatorKeyboard({ onPress, onDismiss }: CalculatorKeyboardPro
               onClick={() => onPress(key)}
               type="button"
             >
-              {icon ? <FontAwesomeIcon icon={icon} /> : key}
+              {icon
+                ? <FontAwesomeIcon icon={icon} />
+                : key}
             </button>
           )
         })}

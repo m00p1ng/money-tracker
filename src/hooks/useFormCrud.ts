@@ -26,14 +26,19 @@ export function useFormCrud<T extends { id: string }>({
       const msg = validate(data)
       if (msg) {
         setError(msg)
+
         return
       }
     }
     try {
-      await (existing ? update(data) : add(data))
+      await (existing
+        ? update(data)
+        : add(data))
       navigate(navigateTo)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to save')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to save')
     }
   }
 
@@ -45,7 +50,9 @@ export function useFormCrud<T extends { id: string }>({
       await remove(existing.id)
       navigate(navigateTo)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to delete')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to delete')
     }
   }
 

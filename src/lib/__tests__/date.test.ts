@@ -12,7 +12,6 @@ import {
   toDatetimeLocalValue,
 } from '@/lib'
 
-
 describe('date utilities', () => {
   it('formats the header date', () => {
     expect(formatHeaderDate(new Date('2026-05-22T09:00:00'))).toBe('Fri, 22 May 2026')

@@ -10,19 +10,28 @@ type Operator = (typeof operators)[number]
 
 export function createCalcState(amount = 0): CalcState {
   return {
-    display: amount > 0 ? String(amount) : '',
-    expression: amount > 0 ? String(amount) : '',
+    display: amount > 0
+      ? String(amount)
+      : '',
+    expression: amount > 0
+      ? String(amount)
+      : '',
     result: amount,
     lastKey: null,
   }
 }
 
 function updateExpression(expression: string, oldDisplay: string, newDisplay: string): string {
-  return oldDisplay && expression.endsWith(oldDisplay) ? `${expression.slice(0, -oldDisplay.length)}${newDisplay}` : `${expression}${newDisplay}`
+  return oldDisplay && expression.endsWith(oldDisplay)
+    ? `${expression.slice(0, -oldDisplay.length)}${newDisplay}`
+    : `${expression}${newDisplay}`
 }
 
 function tokens(expression: string, display: string): string[] {
-  const combined = expression.endsWith(display) ? expression : [expression, display].filter(Boolean).join(' ')
+  const combined = expression.endsWith(display)
+    ? expression
+    : [expression, display].filter(Boolean).join(' ')
+
   return combined.trim().split(/\s+/).filter(Boolean)
 }
 
@@ -33,7 +42,9 @@ function evaluate(rawTokens: string[]): number {
     while (index !== -1) {
       const left = Number(working[index - 1])
       const right = Number(working[index + 1])
-      const value = operator === '×' ? left * right : left / right
+      const value = operator === '×'
+        ? left * right
+        : left / right
       working.splice(index - 1, 3, String(value))
       index = working.indexOf(operator)
     }
@@ -42,9 +53,14 @@ function evaluate(rawTokens: string[]): number {
   for (let index = 1; index < working.length; index += 2) {
     const operator = working[index] as Operator
     const right = Number(working[index + 1])
-    total = operator === '+' ? total + right : total - right
+    total = operator === '+'
+      ? total + right
+      : total - right
   }
-  return Number.isFinite(total) ? total : 0
+
+  return Number.isFinite(total)
+    ? total
+    : 0
 }
 
 export function pressCalcKey(state: CalcState, key: string): CalcState {
@@ -57,8 +73,11 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
         lastKey: key,
       }
     }
-    const display = state.display === '0' ? key : `${state.display}${key}`
+    const display = state.display === '0'
+      ? key
+      : `${state.display}${key}`
     const expression = updateExpression(state.expression, state.display, display)
+
     return {
       display,
       expression,
@@ -79,8 +98,11 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
         lastKey: key,
       }
     }
-    const display = state.display ? `${state.display}.` : '0.'
+    const display = state.display
+      ? `${state.display}.`
+      : '0.'
     const expression = updateExpression(state.expression, state.display, display)
+
     return {
       display,
       expression,
@@ -93,6 +115,7 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
     if (!state.display) {
       return state
     }
+
     return {
       ...state,
       display: '',
@@ -107,6 +130,7 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
     }
     const rawTokens = tokens(state.expression, state.display)
     const result = evaluate(rawTokens)
+
     return {
       display: String(result),
       expression: rawTokens.join(' '),
@@ -119,8 +143,11 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
     if (!state.display) {
       return state
     }
-    const display = state.display.startsWith('-') ? state.display.slice(1) : `-${state.display}`
+    const display = state.display.startsWith('-')
+      ? state.display.slice(1)
+      : `-${state.display}`
     const expression = updateExpression(state.expression, state.display, display)
+
     return {
       display,
       expression,
@@ -131,8 +158,11 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
 
   if (key === '⌫') {
     const display = state.display.slice(0, -1)
-    const finalDisplay = display === '-' ? '' : display
+    const finalDisplay = display === '-'
+      ? ''
+      : display
     const expression = updateExpression(state.expression, state.display, finalDisplay)
+
     return {
       display: finalDisplay,
       expression,

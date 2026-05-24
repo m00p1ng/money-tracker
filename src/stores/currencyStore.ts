@@ -34,7 +34,9 @@ function normalizeCurrency(currency: Currency): Currency {
     throw new Error('Currency rate must be positive')
   }
 
-  return normalized.isBase ? { ...normalized, rate: 1 } : normalized
+  return normalized.isBase
+    ? { ...normalized, rate: 1 }
+    : normalized
 }
 
 export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
@@ -45,11 +47,13 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
   async add(currency) {
     const incoming = normalizeCurrency(currency)
     const existing = await db.currencies.get(incoming.code)
-    const normalized = existing?.isBase ? {
-      ...incoming,
-      isBase: true,
-      rate: 1,
-    } : incoming
+    const normalized = existing?.isBase
+      ? {
+        ...incoming,
+        isBase: true,
+        rate: 1,
+      }
+      : incoming
     await db.currencies.put(normalized)
     set({ items: [...get().items.filter((item) => item.code !== normalized.code), normalized] })
     if (normalized.isBase) {
@@ -58,7 +62,9 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
   },
   async update(currency) {
     const existing = await db.currencies.get(currency.code.trim().toUpperCase())
-    const normalized = normalizeCurrency(existing?.isBase ? { ...currency, isBase: true } : currency)
+    const normalized = normalizeCurrency(existing?.isBase
+      ? { ...currency, isBase: true }
+      : currency)
     await db.currencies.put(normalized)
     set({ items: [...get().items.filter((item) => item.code !== normalized.code), normalized] })
     if (normalized.isBase) {
@@ -90,7 +96,9 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
     const items = currencies.map((currency) => ({
       ...currency,
       isBase: currency.code === normalizedCode,
-      rate: currency.code === normalizedCode ? 1 : currency.rate,
+      rate: currency.code === normalizedCode
+        ? 1
+        : currency.rate,
     }))
 
     await db.currencies.bulkPut(items)
@@ -98,6 +106,7 @@ export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
   },
   findByCode(code) {
     const normalizedCode = code.trim().toUpperCase()
+
     return get().items.find((currency) => currency.code === normalizedCode)
   },
 }))

@@ -13,7 +13,6 @@ import {
 
 import { TypePickerDropdown } from '@/components'
 
-
 describe('TypePickerDropdown', () => {
   it('renders current type label', () => {
     render(<TypePickerDropdown value="expense" onChange={vi.fn()} />)

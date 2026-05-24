@@ -6,7 +6,6 @@ import {
 
 import { hexToRgba } from '@/lib'
 
-
 describe('hexToRgba', () => {
   it('converts a hex color to rgba', () => {
     expect(hexToRgba('#10b981', 0.15)).toBe('rgba(16,185,129,0.15)')

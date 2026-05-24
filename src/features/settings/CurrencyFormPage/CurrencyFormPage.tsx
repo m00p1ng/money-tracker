@@ -45,7 +45,9 @@ export function CurrencyFormPage({
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
-      <PageHeader title={existing ? 'Edit Currency' : 'New Currency'} onBack={onBack} />
+      <PageHeader title={existing
+        ? 'Edit Currency'
+        : 'New Currency'} onBack={onBack} />
       <Card className="space-y-4">
         <Field label="Code">
           <TextInput
@@ -80,7 +82,9 @@ export function CurrencyFormPage({
             onChange={(event) => setForm({
               ...form,
               isBase: event.target.checked,
-              rate: event.target.checked ? 1 : form.rate,
+              rate: event.target.checked
+                ? 1
+                : form.rate,
             })}
           />
           Base currency
@@ -88,7 +92,9 @@ export function CurrencyFormPage({
         <FormErrorMessage error={error} />
       </Card>
       <Button type="submit" variant="accent">Save</Button>
-      {existing ? <Button type="button" variant="danger" onClick={handleDelete}>Delete</Button> : null}
+      {existing
+        ? <Button type="button" variant="danger" onClick={handleDelete}>Delete</Button>
+        : null}
     </form>
   )
 }

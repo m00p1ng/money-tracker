@@ -16,9 +16,11 @@ export function FormActions({
   return (
     <div className="space-y-3">
       <Button fullWidth type="submit" variant="accent">{submitLabel}</Button>
-      {showDelete ? (
-        <Button fullWidth onClick={onDelete} type="button" variant="danger">{deleteLabel}</Button>
-      ) : null}
+      {showDelete
+        ? (
+          <Button fullWidth onClick={onDelete} type="button" variant="danger">{deleteLabel}</Button>
+        )
+        : null}
     </div>
   )
 }

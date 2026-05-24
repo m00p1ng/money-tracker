@@ -49,7 +49,9 @@ export function CategoryFormPage({
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
-      <PageHeader title={existing ? 'Edit Category' : 'New Category'} onBack={onBack} />
+      <PageHeader title={existing
+        ? 'Edit Category'
+        : 'New Category'} onBack={onBack} />
       <Card className="space-y-4">
         <Field label="Name">
           <TextInput
@@ -84,7 +86,9 @@ export function CategoryFormPage({
               setForm({
                 ...form,
                 parentId: parent?.id,
-                level: parent ? ((parent.level + 1) as Category['level']) : 1,
+                level: parent
+                  ? ((parent.level + 1) as Category['level'])
+                  : 1,
                 type: parent?.type ?? form.type,
               })
             }}
@@ -93,11 +97,13 @@ export function CategoryFormPage({
         <FormErrorMessage error={error} />
       </Card>
       <Button type="submit" variant="accent">Save</Button>
-      {existing ? <Button
-        type="button"
-        variant="danger"
-        onClick={handleDelete}
-      >Delete</Button> : null}
+      {existing
+        ? <Button
+          type="button"
+          variant="danger"
+          onClick={handleDelete}
+        >Delete</Button>
+        : null}
     </form>
   )
 }

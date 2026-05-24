@@ -6,7 +6,6 @@ import {
 
 import { createId } from '@/lib'
 
-
 describe('id utilities', () => {
   it('returns a non-empty string', () => {
     const id = createId()

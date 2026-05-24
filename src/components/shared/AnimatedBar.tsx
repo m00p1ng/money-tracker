@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 
 import { formatAmount } from '@/lib'
 
-
 type AnimatedBarProps = {
   value: number
   maxValue: number
@@ -22,7 +21,9 @@ export function AnimatedBar({
   currency,
   delay = 0,
 }: AnimatedBarProps) {
-  const widthPercent = maxValue > 0 ? `${Math.min((value / maxValue) * 100, 100)}%` : '0%'
+  const widthPercent = maxValue > 0
+    ? `${Math.min((value / maxValue) * 100, 100)}%`
+    : '0%'
 
   return (
     <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]">

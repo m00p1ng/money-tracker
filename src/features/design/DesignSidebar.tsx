@@ -104,7 +104,9 @@ export function DesignTopNav({ activeId }: DesignTopNavProps) {
         {ALL_ITEMS.map((item) => (
           <button
             key={item.id}
-            ref={item.id === activeId ? activeRef : null}
+            ref={item.id === activeId
+              ? activeRef
+              : null}
             type="button"
             onClick={() => scrollTo(item.id)}
             className={cx(
@@ -134,6 +136,7 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
   const visibleGroups = normalizedSearch
     ? NAV_GROUPS.map((group) => {
       const groupMatches = group.label.toLowerCase().includes(normalizedSearch)
+
       return {
         ...group,
         items: groupMatches
@@ -175,34 +178,38 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
           ].join(' ')}
         />
       </div>
-      {visibleGroups.length > 0 ? visibleGroups.map((group) => (
-        <div key={group.label} className="mt-4 first:mt-0">
-          <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[1px] text-white/25">
-            {group.label}
-          </p>
-          {group.items.map((item) => (
-            <button
-              key={item.id}
-              ref={item.id === activeId ? activeRef : null}
-              type="button"
-              onClick={() => {
-                scrollTo(item.id)
-                setSearch('')
-              }}
-              className={cx(
-                'w-full whitespace-nowrap rounded-lg px-3 py-1.5 text-left text-[13px] transition-colors',
-                activeId === item.id
-                  ? 'bg-accent/10 font-semibold text-accent-light'
-                  : 'text-white/50 hover:text-white/80',
-              )}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      )) : (
-        <p className="px-3 py-4 text-sm text-white/35">No matches</p>
-      )}
+      {visibleGroups.length > 0
+        ? visibleGroups.map((group) => (
+          <div key={group.label} className="mt-4 first:mt-0">
+            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[1px] text-white/25">
+              {group.label}
+            </p>
+            {group.items.map((item) => (
+              <button
+                key={item.id}
+                ref={item.id === activeId
+                  ? activeRef
+                  : null}
+                type="button"
+                onClick={() => {
+                  scrollTo(item.id)
+                  setSearch('')
+                }}
+                className={cx(
+                  'w-full whitespace-nowrap rounded-lg px-3 py-1.5 text-left text-[13px] transition-colors',
+                  activeId === item.id
+                    ? 'bg-accent/10 font-semibold text-accent-light'
+                    : 'text-white/50 hover:text-white/80',
+                )}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        ))
+        : (
+          <p className="px-3 py-4 text-sm text-white/35">No matches</p>
+        )}
     </nav>
   )
 }

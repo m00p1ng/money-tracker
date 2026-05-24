@@ -4,7 +4,6 @@ import { Link } from 'react-router'
 
 import { Icon } from '@/components'
 
-
 const navItems = [
   {
     label: 'Home',
@@ -54,15 +53,21 @@ export function BottomNav({ pathname, onSettingsPress }: BottomNavProps) {
     >
       <div className="mx-auto grid max-w-107.5 grid-cols-5">
         {navItems.map((item) => {
-          const active = item.to === '/' ? pathname === '/' : pathname.startsWith(item.to)
+          const active = item.to === '/'
+            ? pathname === '/'
+            : pathname.startsWith(item.to)
           const activeLabel = 'font-semibold bg-gradient-to-br'
             + ' from-[var(--accent-btn-2)] to-[var(--accent)] bg-clip-text text-transparent'
           const content = (
             <>
               <Icon
                 name={item.icon}
-                className={cx('text-[19px] mb-1', active ? 'text-accent' : 'text-white/22')}
-                style={active ? { color: 'var(--accent-btn-2)' } : undefined}
+                className={cx('text-[19px] mb-1', active
+                  ? 'text-accent'
+                  : 'text-white/22')}
+                style={active
+                  ? { color: 'var(--accent-btn-2)' }
+                  : undefined}
               />
               <span
                 className={cx(
@@ -88,11 +93,14 @@ export function BottomNav({ pathname, onSettingsPress }: BottomNavProps) {
               </button>
             )
           }
+
           return (
             <Link
               key={item.label}
               className="flex flex-col items-center py-1.5"
-              onClick={item.label === 'Settings' ? onSettingsPress : undefined}
+              onClick={item.label === 'Settings'
+                ? onSettingsPress
+                : undefined}
               to={item.to}
             >
               {content}

@@ -125,6 +125,7 @@ export function TransactionPage({
     if (key === 'THB') {
       setCurrencyPickerOpen(true)
       onOpenCurrencyPicker()
+
       return
     }
 
@@ -140,8 +141,12 @@ export function TransactionPage({
 
   return (
     <div
-      className={cx('space-y-2', focusedIndex !== null ? 'pb-64' : 'pb-6')}
-      onClick={focusedIndex !== null ? onDismissKeyboard : undefined}
+      className={cx('space-y-2', focusedIndex !== null
+        ? 'pb-64'
+        : 'pb-6')}
+      onClick={focusedIndex !== null
+        ? onDismissKeyboard
+        : undefined}
     >
       <TransactionHeader
         type={type}
@@ -150,75 +155,83 @@ export function TransactionPage({
         onSave={onSave}
       />
 
-      {type === 'transfer' ? (
-        <div className="space-y-2">
-          <WalletSelectorRow
-            ariaLabel="From Wallet"
-            label="From Wallet"
-            wallet={wallet}
-            fallbackName="Cash"
-            fallbackColor="#38bdf8"
-            onClick={() => setWalletPickerTarget('wallet')}
-          />
-
-          <WalletSelectorRow
-            ariaLabel="To Wallet"
-            label="To Wallet"
-            wallet={toWallet}
-            fallbackName="Select wallet"
-            fallbackColor="#a855f7"
-            onClick={() => setWalletPickerTarget('toWallet')}
-          />
-
-          {currency !== wallet?.currency ? (
-            <ExchangeRateRow
-              label="Exchange Rate"
-              value={exchangeRate}
-              defaultRate={defaultRate}
-              onChange={onUpdateExchangeRate}
+      {type === 'transfer'
+        ? (
+          <div className="space-y-2">
+            <WalletSelectorRow
+              ariaLabel="From Wallet"
+              label="From Wallet"
+              wallet={wallet}
+              fallbackName="Cash"
+              fallbackColor="#38bdf8"
+              onClick={() => setWalletPickerTarget('wallet')}
             />
-          ) : null}
 
-          {type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency ? (
-            <ExchangeRateRow
-              label="Destination Exchange Rate"
-              value={toExchangeRate}
-              defaultRate={defaultRate}
-              onChange={onUpdateToExchangeRate}
+            <WalletSelectorRow
+              ariaLabel="To Wallet"
+              label="To Wallet"
+              wallet={toWallet}
+              fallbackName="Select wallet"
+              fallbackColor="#a855f7"
+              onClick={() => setWalletPickerTarget('toWallet')}
             />
-          ) : null}
-        </div>
-      ) : (
-        <>
-          <WalletSelectorRow
-            ariaLabel="Wallet"
-            label="Wallet"
-            wallet={wallet}
-            fallbackName="Cash"
-            fallbackColor="#38bdf8"
-            showBalance
-            onClick={() => setWalletPickerTarget('wallet')}
-          />
 
-          <CategoryItemsCard
-            items={items}
-            focusedIndex={focusedIndex}
-            onFocus={handleFocusItem}
-            onAdd={onAddCategory}
-            onRemove={onRemoveItem}
-            onChangeCategory={onChangeCategory}
-          />
+            {currency !== wallet?.currency
+              ? (
+                <ExchangeRateRow
+                  label="Exchange Rate"
+                  value={exchangeRate}
+                  defaultRate={defaultRate}
+                  onChange={onUpdateExchangeRate}
+                />
+              )
+              : null}
 
-          {currency !== wallet?.currency ? (
-            <ExchangeRateRow
-              label="Exchange Rate"
-              value={exchangeRate}
-              defaultRate={defaultRate}
-              onChange={onUpdateExchangeRate}
+            {type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency
+              ? (
+                <ExchangeRateRow
+                  label="Destination Exchange Rate"
+                  value={toExchangeRate}
+                  defaultRate={defaultRate}
+                  onChange={onUpdateToExchangeRate}
+                />
+              )
+              : null}
+          </div>
+        )
+        : (
+          <>
+            <WalletSelectorRow
+              ariaLabel="Wallet"
+              label="Wallet"
+              wallet={wallet}
+              fallbackName="Cash"
+              fallbackColor="#38bdf8"
+              showBalance
+              onClick={() => setWalletPickerTarget('wallet')}
             />
-          ) : null}
-        </>
-      )}
+
+            <CategoryItemsCard
+              items={items}
+              focusedIndex={focusedIndex}
+              onFocus={handleFocusItem}
+              onAdd={onAddCategory}
+              onRemove={onRemoveItem}
+              onChangeCategory={onChangeCategory}
+            />
+
+            {currency !== wallet?.currency
+              ? (
+                <ExchangeRateRow
+                  label="Exchange Rate"
+                  value={exchangeRate}
+                  defaultRate={defaultRate}
+                  onChange={onUpdateExchangeRate}
+                />
+              )
+              : null}
+          </>
+        )}
 
       <DateTimeRow
         date={date}
@@ -243,16 +256,18 @@ export function TransactionPage({
         onFocusNoteField={onFocusNoteField}
       />
 
-      {isEditMode ? (
-        <button
-          aria-label="Delete transaction"
-          className="w-full rounded-xl bg-danger/15 py-3 text-sm font-medium text-danger"
-          onClick={onDelete}
-          type="button"
-        >
-          Delete
-        </button>
-      ) : null}
+      {isEditMode
+        ? (
+          <button
+            aria-label="Delete transaction"
+            className="w-full rounded-xl bg-danger/15 py-3 text-sm font-medium text-danger"
+            onClick={onDelete}
+            type="button"
+          >
+            Delete
+          </button>
+        )
+        : null}
 
       <TransactionSheets
         date={date}

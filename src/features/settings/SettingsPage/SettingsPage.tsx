@@ -53,7 +53,9 @@ export function SettingsPage({
           iconBg="rgba(16,185,129,0.15)"
           iconColor="#34d399"
           label="Wallets"
-          sub={`${walletCount} account${walletCount !== 1 ? 's' : ''}`}
+          sub={`${walletCount} account${walletCount !== 1
+            ? 's'
+            : ''}`}
           to="/settings/wallets"
         />
         <ListRow

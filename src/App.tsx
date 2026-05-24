@@ -49,8 +49,13 @@ const tabVariants: Variants = {
 }
 
 function makePageVariants(direction: 'forward' | 'back'): Variants {
-  const enterX = direction === 'back' ? -24 : 24
-  const exitX = direction === 'back' ? 24 : -24
+  const enterX = direction === 'back'
+    ? -24
+    : 24
+  const exitX = direction === 'back'
+    ? 24
+    : -24
+
   return {
     initial: {
       opacity: 0,
@@ -87,8 +92,11 @@ function useRouteVariants(pathname: string, direction: 'forward' | 'back'): Vari
   if (state.prevPath !== pathname) {
     const isCurrentTab = TAB_ROUTES.has(pathname)
     const isPrevTab = TAB_ROUTES.has(state.prevPath)
-    const variants = isCurrentTab && isPrevTab ? tabVariants : makePageVariants(direction)
+    const variants = isCurrentTab && isPrevTab
+      ? tabVariants
+      : makePageVariants(direction)
     setState({ prevPath: pathname, variants })
+
     return variants
   }
 
@@ -111,6 +119,7 @@ export function RoutedApp() {
     if (route === '/settings') {
       return location.pathname === '/settings' || location.pathname.startsWith('/settings/')
     }
+
     return location.pathname === route
   })
 

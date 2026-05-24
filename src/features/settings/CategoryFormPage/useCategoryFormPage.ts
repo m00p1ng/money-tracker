@@ -8,7 +8,9 @@ export function useCategoryFormPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const backNavigate = useBackNavigate()
-  const existing = useCategoryStore((state) => (id ? state.findById(id) : undefined))
+  const existing = useCategoryStore((state) => (id
+    ? state.findById(id)
+    : undefined))
   const categories = useCategoryStore((state) => state.items)
   const add = useCategoryStore((state) => state.add)
   const update = useCategoryStore((state) => state.update)
@@ -17,20 +19,26 @@ export function useCategoryFormPage() {
   async function onSubmit(form: Category, setError: (err: string | null) => void) {
     if (!form.name.trim()) {
       setError('Name is required')
+
       return
     }
     if (form.parentId) {
       const parent = categories.find((c) => c.id === form.parentId)
       if (parent && parent.type !== form.type) {
         setError('Category type must match parent type')
+
         return
       }
     }
     try {
-      await (existing ? update(form) : add(form))
+      await (existing
+        ? update(form)
+        : add(form))
       navigate('/settings/categories')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to save category')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to save category')
     }
   }
 
@@ -42,7 +50,9 @@ export function useCategoryFormPage() {
       await remove(existing.id)
       navigate('/settings/categories')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to delete category')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to delete category')
     }
   }
 
