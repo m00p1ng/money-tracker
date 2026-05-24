@@ -14,7 +14,9 @@ type WheelPickerProps = {
   onChange: (value: Record<string, string>) => void
 }
 
-export function WheelPicker({ columns, value, onChange }: WheelPickerProps) {
+export function WheelPicker({
+  columns, value, onChange,
+}: WheelPickerProps) {
   return (
     <div
       className="grid gap-2.5"

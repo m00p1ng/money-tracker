@@ -14,8 +14,12 @@ const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, 
 const MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
 
 const TIME_COLUMNS = [
-  { name: 'hour', label: 'Hour', options: HOUR_OPTIONS },
-  { name: 'minute', label: 'Minute', options: MINUTE_OPTIONS },
+  {
+    name: 'hour', label: 'Hour', options: HOUR_OPTIONS,
+  },
+  {
+    name: 'minute', label: 'Minute', options: MINUTE_OPTIONS,
+  },
 ]
 
 interface DatePickerSheetProps {

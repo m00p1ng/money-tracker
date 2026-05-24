@@ -9,11 +9,11 @@ import {
   ListGroup,
   ListRow,
   PageHeader,
-  WheelPicker,
   SectionDivider,
   SectionLabel,
   SelectorSheet,
   TransactionRow,
+  WheelPicker,
 } from '@/components'
 import type { SelectorOption } from '@/components'
 
@@ -188,8 +188,12 @@ export function SharedComponentsSection() {
         <div className="max-w-xs">
           <WheelPicker
             columns={[
-              { name: 'hour', label: 'Hour', options: HOUR_OPTIONS },
-              { name: 'minute', label: 'Minute', options: MINUTE_OPTIONS },
+              {
+                name: 'hour', label: 'Hour', options: HOUR_OPTIONS,
+              },
+              {
+                name: 'minute', label: 'Minute', options: MINUTE_OPTIONS,
+              },
             ]}
             value={pickerValue}
             onChange={setPickerValue}
