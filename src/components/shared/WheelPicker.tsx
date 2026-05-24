@@ -1,11 +1,17 @@
 import { WheelPicker as WheelPickerBase, WheelPickerWrapper } from '@ncdai/react-wheel-picker'
+import type { ReactNode } from 'react'
 
 import '@ncdai/react-wheel-picker/style.css'
+
+type WheelPickerOption = string | {
+  value: string
+  label: ReactNode
+}
 
 export type WheelPickerColumn = {
   name: string
   label: string
-  options: string[]
+  options: WheelPickerOption[]
   capitalize?: boolean
 }
 
@@ -19,7 +25,7 @@ export function WheelPicker({
   columns, value, onChange,
 }: WheelPickerProps) {
   return (
-    <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-white/4">
+    <div className="overflow-hidden">
       <div
         className="grid pt-2"
         style={{ gridTemplateColumns: `repeat(${columns.length}, 1fr)` }}
@@ -34,12 +40,18 @@ export function WheelPicker({
             key={col.name}
             value={value[col.name]}
             onValueChange={(v) => onChange({ ...value, [col.name]: String(v) })}
-            options={col.options.map((opt) => ({
-              value: opt,
-              label: col.capitalize
-                ? <span className="capitalize">{opt}</span>
-                : opt,
-            }))}
+            options={col.options.map((opt) => {
+              const option = typeof opt === 'string'
+                ? { value: opt, label: opt }
+                : opt
+
+              return {
+                value: option.value,
+                label: col.capitalize
+                  ? <span className="capitalize">{option.label}</span>
+                  : option.label,
+              }
+            })}
             optionItemHeight={43}
             visibleCount={12}
             classNames={{
