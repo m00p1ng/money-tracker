@@ -1,5 +1,11 @@
 import cx from 'classnames'
-import { useEffect, useRef } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+
+import { Icon } from '@/components'
 
 const NAV_GROUPS = [
   {
@@ -123,6 +129,19 @@ interface DesignSidebarProps {
 
 export function DesignSidebar({ activeId }: DesignSidebarProps) {
   const activeRef = useRef<HTMLButtonElement | null>(null)
+  const [search, setSearch] = useState('')
+  const normalizedSearch = search.trim().toLowerCase()
+  const visibleGroups = normalizedSearch
+    ? NAV_GROUPS.map((group) => {
+      const groupMatches = group.label.toLowerCase().includes(normalizedSearch)
+      return {
+        ...group,
+        items: groupMatches
+          ? group.items
+          : group.items.filter((item) => item.label.toLowerCase().includes(normalizedSearch)),
+      }
+    }).filter((group) => group.items.length > 0)
+    : NAV_GROUPS
 
   useEffect(() => {
     activeRef.current?.scrollIntoView({
@@ -138,7 +157,25 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
       'border-r border-white/8 bg-white/2 px-3 py-4 md:flex',
     ].join(' ')}>
       <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>
-      {NAV_GROUPS.map((group) => (
+      <div className="relative mb-2">
+        <Icon
+          name="fa-magnifying-glass"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-white/25"
+        />
+        <input
+          aria-label="Search design sections"
+          type="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search sections"
+          className={[
+            'h-9 w-full rounded-lg border border-white/[0.07] bg-white/[0.04]',
+            'pl-8 pr-3 text-[13px] text-white/80 outline-none transition-colors',
+            'placeholder:text-white/25 focus:border-accent/35 focus:bg-white/[0.06]',
+          ].join(' ')}
+        />
+      </div>
+      {visibleGroups.length > 0 ? visibleGroups.map((group) => (
         <div key={group.label} className="mt-4 first:mt-0">
           <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[1px] text-white/25">
             {group.label}
@@ -148,7 +185,10 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
               key={item.id}
               ref={item.id === activeId ? activeRef : null}
               type="button"
-              onClick={() => scrollTo(item.id)}
+              onClick={() => {
+                scrollTo(item.id)
+                setSearch('')
+              }}
               className={cx(
                 'w-full whitespace-nowrap rounded-lg px-3 py-1.5 text-left text-[13px] transition-colors',
                 activeId === item.id
@@ -160,7 +200,9 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
             </button>
           ))}
         </div>
-      ))}
+      )) : (
+        <p className="px-3 py-4 text-sm text-white/35">No matches</p>
+      )}
     </nav>
   )
 }

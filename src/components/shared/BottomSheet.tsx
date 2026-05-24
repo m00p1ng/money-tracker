@@ -29,8 +29,8 @@ export function BottomSheet({
           <motion.div
             key="sheet"
             className={[
-              'fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[430px]',
-              'rounded-t-3xl border-t border-white/[0.08] bg-[var(--bg)] pb-8',
+              'fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-107.5',
+              'rounded-t-3xl border-t border-white/8 bg-(--bg) pb-8',
             ].join(' ')}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
@@ -42,8 +42,8 @@ export function BottomSheet({
             }}
           >
             <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-white/15" />
-            <h3 className="px-5 pb-2.5 pt-3.5 text-center text-[15px] font-bold">{title}</h3>
-            <div className="mx-5 mb-2.5 h-px bg-white/[0.06]" />
+            <h3 className="px-5 pb-2.5 pt-3.5 text-center text-base font-bold">{title}</h3>
+            <div className="mx-5 mb-2.5 h-px bg-white/6" />
             {children}
           </motion.div>
         </>

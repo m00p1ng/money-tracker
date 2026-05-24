@@ -13,7 +13,7 @@ import {
   PageHeader,
   SegmentedControl,
   SelectInput,
-  SwitchField,
+  Switch,
   TextInput,
 } from '@/components'
 import { createId, hexToRgba } from '@/lib'
@@ -154,7 +154,7 @@ export function WalletFormPage({
           </Field>
         ) : null}
 
-        <SwitchField
+        <Switch
           checked={reconciliationEnabled}
           description={reconciliationDescription}
           label="Reconciliation"

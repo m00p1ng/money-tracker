@@ -4,4 +4,3 @@ export { BottomNavContainer as BottomNav } from './BottomNav/BottomNavContainer'
 
 export * from './ui'
 export * from './shared'
-export * from './ui'

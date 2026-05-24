@@ -1,4 +1,4 @@
-import { Button } from './Button'
+import { Button } from '../shared/Button'
 
 interface FormActionsProps {
   submitLabel?: string

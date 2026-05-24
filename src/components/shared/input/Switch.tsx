@@ -1,18 +1,18 @@
 import cx from 'classnames'
 
-interface SwitchFieldProps {
+interface SwitchField {
   label: string
   description?: string
   checked: boolean
   onChange: (checked: boolean) => void
 }
 
-export function SwitchField({
+export function Switch({
   label,
   description,
   checked,
   onChange,
-}: SwitchFieldProps) {
+}: SwitchField) {
   return (
     <label className="flex cursor-pointer items-center justify-between gap-4 rounded-lg bg-white/[0.03] px-3 py-3">
       <span className="min-w-0">

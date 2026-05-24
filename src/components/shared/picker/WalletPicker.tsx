@@ -1,7 +1,7 @@
-import cx from 'classnames'
-
-import { BottomSheet, Icon } from '@/components'
+import { Icon } from '@/components'
 import type { Wallet } from '@/types/domain'
+
+import { SelectorSheet, type SelectorOption } from './SelectorSheet'
 
 interface WalletPickerProps {
   isOpen: boolean
@@ -18,37 +18,31 @@ export function WalletPicker({
   onSelect,
   onClose,
 }: WalletPickerProps) {
-  return (
-    <BottomSheet isOpen={isOpen} onClose={onClose} title="Wallet">
-      <div className="space-y-1.5 px-4">
-        {wallets.map((wallet) => (
-          <button
-            key={wallet.id}
-            className={cx(
-              'flex w-full items-center gap-3 rounded-xl px-3.5 py-3',
-              { 'border border-(--accent)/30 bg-(--accent)/12': selectedId === wallet.id },
-            )}
-            onClick={() => {
-              onSelect(wallet.id); onClose()
-            }}
-            type="button"
-          >
-            <div
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] text-sm"
-              style={{ background: `${wallet.color}25`, color: wallet.color }}
-            >
-              <Icon name={wallet.icon} />
-            </div>
-            <div className="flex-1 text-left">
-              <p className="text-sm font-medium">{wallet.name}</p>
-              <p className="text-[11px] text-white/40">{wallet.currency} · {wallet.balance.toFixed(2)}</p>
-            </div>
-            {selectedId === wallet.id && (
-              <Icon name="fa-circle-check" className="text-(--accent-light)" />
-            )}
-          </button>
-        ))}
+  const options: SelectorOption<string>[] = wallets.map((wallet) => ({
+    label: wallet.name,
+    value: wallet.id,
+    description: `${wallet.currency} · ${wallet.balance.toFixed(2)}`,
+    leading: (
+      <div
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] text-sm"
+        style={{ background: `${wallet.color}25`, color: wallet.color }}
+      >
+        <Icon name={wallet.icon} />
       </div>
-    </BottomSheet>
+    ),
+  }))
+
+  return (
+    <SelectorSheet
+      isOpen={isOpen}
+      title="Wallet"
+      options={options}
+      value={selectedId}
+      onSelect={(walletId) => {
+        onSelect(walletId)
+        onClose()
+      }}
+      onClose={onClose}
+    />
   )
 }

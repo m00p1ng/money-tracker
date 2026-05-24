@@ -7,12 +7,12 @@ import {
   vi,
 } from 'vitest'
 
-import { SwitchField } from '@/components'
+import { Switch } from '@/components'
 
 describe('SwitchField', () => {
   it('renders label and description', () => {
     render(
-      <SwitchField
+      <Switch
         checked={false}
         description="Include this wallet in reconciliation checks"
         label="Reconciliation"
@@ -28,7 +28,7 @@ describe('SwitchField', () => {
     const onChange = vi.fn()
 
     render(
-      <SwitchField
+      <Switch
         checked={false}
         label="Reconciliation"
         onChange={onChange}
