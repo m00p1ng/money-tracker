@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { Link } from 'react-router'
+
 import {
   Icon,
   AnimatedBar,
@@ -8,11 +10,12 @@ import {
   Card,
 } from '@/components'
 import { DateRangePresetPicker } from '@/components/ui'
-import { walletRunningRows } from '@/features/balance/balanceCalculations'
+import { isReconciliationEnabled, walletRunningRows } from '@/features/balance/balanceCalculations'
 import {
   type DateRangePreset,
   getPresetRange,
   formatAmount,
+  hexToRgba,
 } from '@/lib'
 import type {
   Category,
@@ -63,6 +66,7 @@ export function WalletDetailPage({
   const range = getPresetRange(preset)
   const rows = walletRunningRows(wallet, transactions, range)
   const isCredit = wallet.type === 'credit_card'
+  const reconciliation = isReconciliationEnabled(wallet)
 
   const totalExpenses = rows
     .filter((row) => row.amount < 0)
@@ -134,34 +138,36 @@ export function WalletDetailPage({
               />
             </div>
           </div>
-          <div className="px-3 pb-3">
-            <div className="mb-1.5 flex items-center justify-between">
-              <span
-                className="flex items-center gap-1.5 text-xs uppercase tracking-wide"
-                style={{ color: 'var(--accent-light)' }}
-              >
-                <Icon name="fa-circle-check" />
-                Cleared Debt
-              </span>
-              <span className="text-xs font-semibold" style={{ color: 'var(--accent-light)' }}>
-                {formatAmount(clearedAmount, wallet.currency)}
-              </span>
+          {reconciliation && (
+            <div className="px-3 pb-3">
+              <div className="mb-1.5 flex items-center justify-between">
+                <span
+                  className="flex items-center gap-1.5 text-xs uppercase tracking-wide"
+                  style={{ color: 'var(--accent-light)' }}
+                >
+                  <Icon name="fa-circle-check" />
+                  Cleared Debt
+                </span>
+                <span className="text-xs font-semibold" style={{ color: 'var(--accent-light)' }}>
+                  {formatAmount(clearedAmount, wallet.currency)}
+                </span>
+              </div>
+              <AnimatedBar
+                value={clearedAmount}
+                maxValue={currentAmount || 1}
+                colorFrom="#6c47ff"
+                colorTo="#9b7dff"
+                textColor="#1a1030"
+                currency={wallet.currency}
+                delay={0.3}
+              />
+              {currentAmount !== clearedAmount && (
+                <p className="mt-1 text-[11px] text-white/40">
+                  {formatAmount(currentAmount - clearedAmount, wallet.currency)} uncleared
+                </p>
+              )}
             </div>
-            <AnimatedBar
-              value={clearedAmount}
-              maxValue={currentAmount || 1}
-              colorFrom="#6c47ff"
-              colorTo="#9b7dff"
-              textColor="#1a1030"
-              currency={wallet.currency}
-              delay={0.3}
-            />
-            {currentAmount !== clearedAmount && (
-              <p className="mt-1 text-[11px] text-white/40">
-                {formatAmount(currentAmount - clearedAmount, wallet.currency)} uncleared
-              </p>
-            )}
-          </div>
+          )}
         </>
       ) : (
         <div className="space-y-3">
@@ -183,34 +189,36 @@ export function WalletDetailPage({
               delay={0.1}
             />
           </div>
-          <div>
-            <div className="mb-1.5 flex items-center justify-between">
-              <span
-                className="flex items-center gap-1.5 text-xs uppercase tracking-wide"
-                style={{ color: 'var(--accent-light)' }}
-              >
-                <Icon name="fa-circle-check" />
-                Cleared
-              </span>
-              <span className="text-xs font-semibold" style={{ color: 'var(--accent-light)' }}>
-                {formatAmount(clearedAmount, wallet.currency)}
-              </span>
+          {reconciliation && (
+            <div>
+              <div className="mb-1.5 flex items-center justify-between">
+                <span
+                  className="flex items-center gap-1.5 text-xs uppercase tracking-wide"
+                  style={{ color: 'var(--accent-light)' }}
+                >
+                  <Icon name="fa-circle-check" />
+                  Cleared
+                </span>
+                <span className="text-xs font-semibold" style={{ color: 'var(--accent-light)' }}>
+                  {formatAmount(clearedAmount, wallet.currency)}
+                </span>
+              </div>
+              <AnimatedBar
+                value={clearedAmount}
+                maxValue={currentAmount}
+                colorFrom="#6c47ff"
+                colorTo="#9b7dff"
+                textColor="#1a1030"
+                currency={wallet.currency}
+                delay={0.2}
+              />
+              {currentAmount !== clearedAmount && (
+                <p className="mt-1 text-[11px] text-white/40">
+                  {formatAmount(currentAmount - clearedAmount, wallet.currency)} uncleared
+                </p>
+              )}
             </div>
-            <AnimatedBar
-              value={clearedAmount}
-              maxValue={currentAmount}
-              colorFrom="#6c47ff"
-              colorTo="#9b7dff"
-              textColor="#1a1030"
-              currency={wallet.currency}
-              delay={0.2}
-            />
-            {currentAmount !== clearedAmount && (
-              <p className="mt-1 text-[11px] text-white/40">
-                {formatAmount(currentAmount - clearedAmount, wallet.currency)} uncleared
-              </p>
-            )}
-          </div>
+          )}
           <div>
             <div className="mb-1.5 flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-amber-400">
@@ -242,15 +250,50 @@ export function WalletDetailPage({
       <section>
         <SectionDivider label="Transactions" />
         {rows.length === 0 && <Card className="text-sm text-slate-400">No transactions in this range.</Card>}
-        {rows.map((row) => (
-          <SwipeableTransactionRow
-            key={row.transaction.id}
-            row={row}
-            wallet={wallet}
-            categories={categories}
-            onToggleCleared={onToggleCleared}
-          />
-        ))}
+        {rows.map((row) => {
+          if (reconciliation) {
+            return (
+              <SwipeableTransactionRow
+                key={row.transaction.id}
+                row={row}
+                wallet={wallet}
+                categories={categories}
+                onToggleCleared={onToggleCleared}
+              />
+            )
+          }
+          const isCredit = wallet.type === 'credit_card'
+          const category = categories.find((c) => c.id === row.transaction.items[0]?.categoryId)
+          const iconColor = category?.color ?? wallet.color
+          return (
+            <Link key={row.transaction.id} to={`/transaction/${row.transaction.id}`} className="mb-2 block">
+              <Card className="flex items-center gap-2.5">
+                <div
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm"
+                  style={{ background: hexToRgba(iconColor, 0.15), color: iconColor }}
+                >
+                  <Icon name={category?.icon ?? 'fa-ellipsis'} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold">{category?.name ?? row.transaction.type}</p>
+                  <p className="mt-0.5 text-xs text-white/30">
+                    {new Date(row.transaction.date).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className={row.amount >= 0 ? 'text-sm font-bold text-income' : 'text-sm font-bold text-expense'}>
+                    {row.amount >= 0 ? '+' : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
+                  </p>
+                  <p className={isCredit ? 'mt-0.5 text-xs text-expense/70' : 'mt-0.5 text-xs text-white/28'}>
+                    {isCredit
+                      ? `${formatAmount(row.runningAmount, wallet.currency)} debt`
+                      : formatAmount(row.runningAmount, wallet.currency)}
+                  </p>
+                </div>
+              </Card>
+            </Link>
+          )
+        })}
       </section>
 
       <DateRangePresetPicker
