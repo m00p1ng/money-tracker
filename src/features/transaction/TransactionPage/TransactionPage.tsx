@@ -2,10 +2,7 @@ import cx from 'classnames'
 import { useState } from 'react'
 
 import { CategoryItemsCardContainer } from '@/features/transaction/CategoryItemsCard/CategoryItemsCardContainer'
-import {
-  createCalcState,
-  pressCalcKey,
-} from '@/lib'
+import { createCalcState, pressCalcKey } from '@/lib'
 import type {
   RepeatConfig,
   TransactionType,
@@ -14,18 +11,18 @@ import type {
   TransactionItem,
 } from '@/types/domain'
 
-import { CalculatorKeyboardSheet } from './CalculatorKeyboardSheet'
-import { DateTimeRow } from './DateTimeRow'
-import { ExchangeRateRow } from './ExchangeRateRow'
-import { NoteField } from './NoteField'
-import { ReconciliationRow } from './ReconciliationRow'
-import { RepeatRow } from './RepeatRow'
-import { TransactionHeader } from './TransactionHeader'
 import {
+  CalculatorKeyboardSheet,
+  DateTimeRow,
+  ExchangeRateRow,
+  NoteField,
+  ReconciliationRow,
+  RepeatRow,
+  TransactionHeader,
+  WalletSelectorRow,
   TransactionSheets,
   type WalletPickerTarget,
-} from './TransactionSheets'
-import { WalletSelectorRow } from './WalletSelectorRow'
+} from './components'
 
 export interface TransactionPageProps {
   type: TransactionType
@@ -124,11 +121,13 @@ export function TransactionPage({
     if (focusedIndex === null) {
       return
     }
+
     if (key === 'THB') {
       setCurrencyPickerOpen(true)
       onOpenCurrencyPicker()
       return
     }
+
     const next = pressCalcKey(calc, key)
     setCalc(next)
     onPressCalcKey(key, next.result)
@@ -161,6 +160,7 @@ export function TransactionPage({
             fallbackColor="#38bdf8"
             onClick={() => setWalletPickerTarget('wallet')}
           />
+
           <WalletSelectorRow
             ariaLabel="To Wallet"
             label="To Wallet"
@@ -169,6 +169,7 @@ export function TransactionPage({
             fallbackColor="#a855f7"
             onClick={() => setWalletPickerTarget('toWallet')}
           />
+
           {currency !== wallet?.currency ? (
             <ExchangeRateRow
               label="Exchange Rate"
@@ -177,6 +178,7 @@ export function TransactionPage({
               onChange={onUpdateExchangeRate}
             />
           ) : null}
+
           {type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency ? (
             <ExchangeRateRow
               label="Destination Exchange Rate"
@@ -197,6 +199,7 @@ export function TransactionPage({
             showBalance
             onClick={() => setWalletPickerTarget('wallet')}
           />
+
           <CategoryItemsCardContainer
             items={items}
             focusedIndex={focusedIndex}
@@ -205,6 +208,7 @@ export function TransactionPage({
             onRemove={onRemoveItem}
             onChangeCategory={onChangeCategory}
           />
+
           {currency !== wallet?.currency ? (
             <ExchangeRateRow
               label="Exchange Rate"

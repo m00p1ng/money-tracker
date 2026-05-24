@@ -19,11 +19,16 @@ import {
   useTransactionStore,
   useWalletStore,
 } from '@/stores'
-import type { RepeatConfig, TransactionType } from '@/types/domain'
+import type {
+  RepeatConfig,
+  Transaction,
+  TransactionType,
+  Wallet,
+} from '@/types/domain'
 
 import type { TransactionPageProps } from './TransactionPage'
 
-export function useTransactionPage(): TransactionPageProps {
+function useTransactionPageRouting() {
   const navigate = useNavigate()
   const backNavigate = useBackNavigate()
   const {
@@ -33,15 +38,11 @@ export function useTransactionPage(): TransactionPageProps {
   } = useParams()
   const existing = useTransactionStore((state) => (id ? state.findById(id) : undefined))
   const sourceRepeat = useTransactionStore((state) => (sourceId ? state.findById(sourceId) : undefined))
-  const add = useTransactionStore((state) => state.add)
-  const update = useTransactionStore((state) => state.update)
-  const remove = useTransactionStore((state) => state.remove)
-  const wallets = useWalletStore((state) => state.items)
-  const currencies = useCurrencyStore((state) => state.items)
+  const [searchParams] = useSearchParams()
+
   const isEditMode = Boolean(id && existing)
   const isRepeatMaterialization = Boolean(sourceId && repeatDate)
   const initial = isRepeatMaterialization ? sourceRepeat : existing
-  const [searchParams] = useSearchParams()
   const seedCategoryId = !isEditMode && !isRepeatMaterialization
     ? searchParams.get('categoryId') ?? undefined
     : undefined
@@ -49,6 +50,26 @@ export function useTransactionPage(): TransactionPageProps {
     ? (searchParams.get('type') ?? 'expense') as TransactionType
     : undefined
 
+  return {
+    navigate,
+    backNavigate,
+    existing,
+    isEditMode,
+    isRepeatMaterialization,
+    initial,
+    seedCategoryId,
+    seedType,
+    repeatDate,
+  }
+}
+
+function useTransactionPageDraft(
+  existing: Transaction | undefined,
+  initial: Transaction | undefined,
+  seedType: TransactionType | undefined,
+  seedCategoryId: string | undefined,
+  wallets: TransactionPageProps['wallets'],
+) {
   const draftStore = useTransactionDraftStore()
   const updateDraft = draftStore.update
   const clearDraft = draftStore.clear
@@ -71,41 +92,72 @@ export function useTransactionPage(): TransactionPageProps {
     repeatConfig: initial?.repeat ?? { preset: 'never' },
     transferAmount: initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0,
     cleared: existing?.cleared ?? false,
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [])
 
   useEffect(() => {
     if (!draftStore.draft) {
       useTransactionDraftStore.getState().init(initialDraft)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const draft = draftStore.draft ?? initialDraft
 
-  const {
-    type,
-    walletId,
-    toWalletId,
-    items,
-    focusedIndex,
-    date,
-    note,
-    currency,
-    exchangeRate,
-    toExchangeRate,
-    repeatConfig,
-    transferAmount,
-    cleared,
-  } = draft
+  return {
+    draft,
+    updateDraft,
+    clearDraft,
+  }
+}
 
-  const selectedCurrency = currencies.find((item) => item.code === currency)
-  const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
-  const isPlanned = new Date(date) > new Date()
-  const wallet = wallets.find((item) => item.id === walletId)
-  const walletReconciliationEnabled = wallet ? isReconciliationEnabled(wallet) : false
+type UseTransactionSaveHandlerOptions = {
+  draft: ReturnType<typeof useTransactionPageDraft>['draft']
+  wallet: Wallet | undefined
+  wallets: Wallet[]
+  defaultRate: string
+  isPlanned: boolean
+  isRepeatMaterialization: boolean
+  repeatDate: string | undefined
+  existing: Transaction | undefined
+  isEditMode: boolean
+  add: (transaction: Transaction) => Promise<void>
+  update: (transaction: Transaction) => Promise<void>
+  clearDraft: () => void
+  navigate: ReturnType<typeof useNavigate>
+}
 
-  async function onSave() {
+function useTransactionSaveHandler({
+  draft,
+  wallet,
+  wallets,
+  defaultRate,
+  isPlanned,
+  isRepeatMaterialization,
+  repeatDate,
+  existing,
+  isEditMode,
+  add,
+  update,
+  clearDraft,
+  navigate,
+}: UseTransactionSaveHandlerOptions) {
+  return async function onSave() {
+    const {
+      type,
+      walletId,
+      toWalletId,
+      items,
+      transferAmount,
+      currency,
+      exchangeRate,
+      toExchangeRate,
+      date,
+      repeatConfig,
+      note,
+      cleared,
+    } = draft
+
     const errors = validateDraft({
       type,
       walletId,
@@ -156,8 +208,15 @@ export function useTransactionPage(): TransactionPageProps {
     clearDraft()
     navigate('/')
   }
+}
 
-  async function onDelete() {
+function useTransactionDeleteHandler(
+  existing: Transaction | undefined,
+  remove: (id: string) => Promise<void>,
+  clearDraft: () => void,
+  navigate: ReturnType<typeof useNavigate>,
+) {
+  return async function onDelete() {
     if (!existing) {
       return
     }
@@ -168,6 +227,76 @@ export function useTransactionPage(): TransactionPageProps {
     clearDraft()
     navigate('/')
   }
+}
+
+export function useTransactionPage(): TransactionPageProps {
+  const {
+    navigate,
+    backNavigate,
+    existing,
+    isEditMode,
+    isRepeatMaterialization,
+    initial,
+    seedCategoryId,
+    seedType,
+    repeatDate,
+  } = useTransactionPageRouting()
+
+  const wallets = useWalletStore((state) => state.items)
+  const currencies = useCurrencyStore((state) => state.items)
+  const add = useTransactionStore((state) => state.add)
+  const update = useTransactionStore((state) => state.update)
+  const remove = useTransactionStore((state) => state.remove)
+
+  const {
+    draft, updateDraft, clearDraft,
+  } = useTransactionPageDraft(
+    existing,
+    initial,
+    seedType,
+    seedCategoryId,
+    wallets,
+  )
+
+  const {
+    type,
+    walletId,
+    toWalletId,
+    items,
+    focusedIndex,
+    date,
+    note,
+    currency,
+    exchangeRate,
+    toExchangeRate,
+    repeatConfig,
+    transferAmount,
+    cleared,
+  } = draft
+
+  const selectedCurrency = currencies.find((item) => item.code === currency)
+  const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
+  const isPlanned = new Date(date) > new Date()
+  const wallet = wallets.find((item) => item.id === walletId)
+  const walletReconciliationEnabled = wallet ? isReconciliationEnabled(wallet) : false
+
+  const onSave = useTransactionSaveHandler({
+    draft,
+    wallet,
+    wallets,
+    defaultRate,
+    isPlanned,
+    isRepeatMaterialization,
+    repeatDate,
+    existing,
+    isEditMode,
+    add,
+    update,
+    clearDraft,
+    navigate,
+  })
+
+  const onDelete = useTransactionDeleteHandler(existing, remove, clearDraft, navigate)
 
   return {
     type,
@@ -214,7 +343,8 @@ export function useTransactionPage(): TransactionPageProps {
     onOpenCurrencyPicker: () => { /* handled in dumb component */ },
     onSave,
     onBack: () => {
-      clearDraft(); backNavigate('/')
+      clearDraft()
+      backNavigate('/')
     },
     onDelete,
     onDismissKeyboard: () => updateDraft({ focusedIndex: null }),
