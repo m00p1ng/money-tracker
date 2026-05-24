@@ -5,15 +5,18 @@ import {
 } from 'react'
 
 import {
+  FormActions,
   FormErrorMessage,
+  Icon,
   PageHeader,
-  Button,
   Card,
   Field,
   SelectInput,
+  SegmentedControl,
+  SwitchField,
   TextInput,
 } from '@/components'
-import { createId } from '@/lib'
+import { createId, hexToRgba } from '@/lib'
 import type {
   Currency,
   Wallet,
@@ -30,6 +33,20 @@ interface WalletFormPageProps {
 }
 
 const DEFAULT_CURRENCY = 'THB'
+
+function walletTypeLabel(type: WalletType) {
+  return type === 'credit_card' ? 'Credit Card' : 'Payment Account'
+}
+
+function nextTypeIcon(type: WalletType, currentIcon: string) {
+  if (type === 'credit_card' && currentIcon === 'fa-wallet') {
+    return 'fa-credit-card'
+  }
+  if (type === 'payment' && currentIcon === 'fa-credit-card') {
+    return 'fa-wallet'
+  }
+  return currentIcon
+}
 
 export function WalletFormPage({
   wallet,
@@ -60,25 +77,55 @@ export function WalletFormPage({
     await onDelete(setError)
   }
 
+  function handleTypeChange(type: WalletType) {
+    setForm((current) => ({
+      ...current,
+      type,
+      icon: nextTypeIcon(type, current.icon),
+    }))
+  }
+
   const reconciliationEnabled = form.reconciliationEnabled ?? false
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <PageHeader title={title} onBack={onBack} />
       <Card className="space-y-4">
+        <div className="flex items-center gap-3 rounded-xl bg-white/[0.03] p-3">
+          <div
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] text-base"
+            style={{
+              background: hexToRgba(form.color, 0.15),
+              color: form.color,
+            }}
+          >
+            <Icon name={form.icon} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-base font-semibold text-slate-50">
+              {form.name.trim() || 'New wallet'}
+            </p>
+            <p className="mt-0.5 text-sm text-white/40">{walletTypeLabel(form.type)}</p>
+          </div>
+          <span className="shrink-0 text-xs font-semibold text-white/45">{form.currency}</span>
+        </div>
+
         <Field label="Name">
           <TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </Field>
-        <Field label="Type">
-          <SelectInput
+
+        <div className="space-y-2">
+          <span className="text-sm font-medium text-slate-300">Type</span>
+          <SegmentedControl
             value={form.type}
-            options={[
+            segments={[
               { value: 'payment', label: 'Payment' },
               { value: 'credit_card', label: 'Credit Card' },
             ]}
-            onChange={(value) => setForm({ ...form, type: value as WalletType })}
+            onChange={handleTypeChange}
           />
-        </Field>
+        </div>
+
         <Field label="Currency">
           <SelectInput
             value={form.currency}
@@ -93,6 +140,7 @@ export function WalletFormPage({
             onChange={(e) => setForm({ ...form, balance: Number(e.target.value) })}
           />
         </Field>
+
         {form.type === 'credit_card' ? (
           <Field label="Credit Limit">
             <TextInput
@@ -102,37 +150,18 @@ export function WalletFormPage({
             />
           </Field>
         ) : null}
-        <Field label="Reconciliation">
-          <label className="flex cursor-pointer items-center gap-3">
-            <div className="relative">
-              <input
-                type="checkbox"
-                className="sr-only"
-                checked={reconciliationEnabled}
-                onChange={(e) => setForm({ ...form, reconciliationEnabled: e.target.checked })}
-              />
-              <div
-                className={[
-                  'h-6 w-11 rounded-full transition-colors',
-                  reconciliationEnabled ? 'bg-accent' : 'bg-white/15',
-                ].join(' ')}
-              />
-              <div
-                className={[
-                  'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform',
-                  reconciliationEnabled ? 'translate-x-5' : 'translate-x-0.5',
-                ].join(' ')}
-              />
-            </div>
-            <span className="text-sm text-white/70">
-              {reconciliationEnabled ? 'Enabled' : 'Disabled'}
-            </span>
-          </label>
-        </Field>
+
+        <SwitchField
+          checked={reconciliationEnabled}
+          description={reconciliationEnabled ? 'Included in reconciliation checks' : 'Excluded from reconciliation checks'}
+          label="Reconciliation"
+          onChange={(checked) => setForm({ ...form, reconciliationEnabled: checked })}
+        />
+
         <FormErrorMessage error={error} />
       </Card>
-      <Button type="submit" variant="accent">Save</Button>
-      {wallet ? <Button type="button" variant="danger" onClick={handleDelete}>Delete</Button> : null}
+
+      <FormActions showDelete={Boolean(wallet)} onDelete={handleDelete} />
     </form>
   )
 }

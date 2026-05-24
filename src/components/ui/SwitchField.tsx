@@ -23,6 +23,7 @@ export function SwitchField({
       </span>
       <span className="relative shrink-0">
         <input
+          aria-label={label}
           checked={checked}
           className="sr-only"
           onChange={(event) => onChange(event.target.checked)}

@@ -73,7 +73,7 @@ describe('WalletFormPage', () => {
     expect(screen.getByText('New Wallet')).toBeInTheDocument()
     expect(screen.getByText('New wallet')).toBeInTheDocument()
     expect(screen.getByText('Payment Account')).toBeInTheDocument()
-    expect(screen.getByText('THB')).toBeInTheDocument()
+    expect(screen.getAllByText('THB')).toHaveLength(2)
     expect(screen.getByRole('button', { name: 'Payment' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
@@ -84,7 +84,7 @@ describe('WalletFormPage', () => {
 
     expect(screen.getByText('Edit Wallet')).toBeInTheDocument()
     expect(screen.getByText('Visa')).toBeInTheDocument()
-    expect(screen.getByText('Credit Card')).toBeInTheDocument()
+    expect(screen.getAllByText('Credit Card').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument()
   })
 
