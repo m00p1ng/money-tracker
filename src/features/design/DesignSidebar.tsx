@@ -42,7 +42,7 @@ const NAV_GROUPS = [
       { id: 'transaction-row', label: 'TransactionRow' },
       { id: 'list-group', label: 'ListGroup + ListRow' },
       { id: 'add-row', label: 'AddRow' },
-      { id: 'picker-column', label: 'PickerColumn' },
+      { id: 'wheel-picker', label: 'WheelPicker' },
       { id: 'bottom-sheet', label: 'BottomSheet' },
     ],
   },

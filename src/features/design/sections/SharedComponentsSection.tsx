@@ -9,7 +9,7 @@ import {
   ListGroup,
   ListRow,
   PageHeader,
-  PickerColumn,
+  WheelPicker,
   SectionDivider,
   SectionLabel,
   SelectorSheet,
@@ -184,19 +184,13 @@ export function SharedComponentsSection() {
         </div>
       </SubSection>
 
-      <SubSection id="picker-column" title="PickerColumn">
-        <div className="grid grid-cols-2 gap-3 max-w-xs">
-          <PickerColumn
-            label="Hour"
-            name="hour"
-            options={HOUR_OPTIONS}
-            value={pickerValue}
-            onChange={setPickerValue}
-          />
-          <PickerColumn
-            label="Minute"
-            name="minute"
-            options={MINUTE_OPTIONS}
+      <SubSection id="wheel-picker" title="WheelPicker">
+        <div className="max-w-xs">
+          <WheelPicker
+            columns={[
+              { name: 'hour', label: 'Hour', options: HOUR_OPTIONS },
+              { name: 'minute', label: 'Minute', options: MINUTE_OPTIONS },
+            ]}
             value={pickerValue}
             onChange={setPickerValue}
           />
