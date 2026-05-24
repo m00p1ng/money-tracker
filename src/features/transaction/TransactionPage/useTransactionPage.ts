@@ -19,7 +19,7 @@ import {
   useTransactionStore,
   useWalletStore,
 } from '@/stores'
-import type { RepeatConfig, TransactionType, Wallet } from '@/types/domain'
+import type { RepeatConfig, TransactionType } from '@/types/domain'
 
 import type { TransactionPageProps } from './TransactionPage'
 
@@ -103,7 +103,7 @@ export function useTransactionPage(): TransactionPageProps {
   const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
   const isPlanned = new Date(date) > new Date()
   const wallet = wallets.find((item) => item.id === walletId)
-  const walletReconciliationEnabled = isReconciliationEnabled(wallet ?? {} as Wallet)
+  const walletReconciliationEnabled = wallet ? isReconciliationEnabled(wallet) : false
 
   async function onSave() {
     const errors = validateDraft({
