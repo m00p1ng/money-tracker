@@ -47,10 +47,13 @@ import { WheelPicker as WheelPickerBase } from '@ncdai/react-wheel-picker'
 import '@ncdai/react-wheel-picker/style.css'
 ```
 
-Map each column's `string[]` options to the library's `{ value, label }` format:
+Map each column's `string[]` options to the library's `{ value, label }` format. When `capitalize` is set, wrap label in a span (library accepts `ReactNode`):
 
 ```tsx
-options={col.options.map((opt) => ({ value: opt, label: opt }))}
+options={col.options.map((opt) => ({
+  value: opt,
+  label: col.capitalize ? <span className="capitalize">{opt}</span> : opt,
+}))}
 ```
 
 Per-column controlled value extracted from the shared Record and merged back on change:
