@@ -60,6 +60,8 @@ export function WalletFormPage({
     await onDelete(setError)
   }
 
+  const reconciliationEnabled = form.reconciliationEnabled ?? false
+
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <PageHeader title={title} onBack={onBack} />
@@ -100,24 +102,24 @@ export function WalletFormPage({
               <input
                 type="checkbox"
                 className="sr-only"
-                checked={form.reconciliationEnabled ?? false}
+                checked={reconciliationEnabled}
                 onChange={(e) => setForm({ ...form, reconciliationEnabled: e.target.checked })}
               />
               <div
                 className={[
                   'h-6 w-11 rounded-full transition-colors',
-                  (form.reconciliationEnabled ?? false) ? 'bg-accent' : 'bg-white/15',
+                  reconciliationEnabled ? 'bg-accent' : 'bg-white/15',
                 ].join(' ')}
               />
               <div
                 className={[
                   'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform',
-                  (form.reconciliationEnabled ?? false) ? 'translate-x-5' : 'translate-x-0.5',
+                  reconciliationEnabled ? 'translate-x-5' : 'translate-x-0.5',
                 ].join(' ')}
               />
             </div>
             <span className="text-sm text-white/70">
-              {(form.reconciliationEnabled ?? false) ? 'Enabled' : 'Disabled'}
+              {reconciliationEnabled ? 'Enabled' : 'Disabled'}
             </span>
           </label>
         </Field>
