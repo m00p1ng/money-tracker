@@ -87,3 +87,7 @@ export function walletClearedAmount(wallet: Wallet, transactions: Transaction[])
     .filter((t) => t.cleared && t.type !== 'transfer')
     .reduce((sum, t) => sum + signedWalletAmount(wallet, t), wallet.balance)
 }
+
+export function isReconciliationEnabled(wallet: Wallet): boolean {
+  return wallet.reconciliationEnabled === true
+}

@@ -8,6 +8,7 @@ import {
   amountInWalletCurrency,
   assetsTotal,
   debtTotal,
+  isReconciliationEnabled,
   walletClearedAmount,
   walletCurrentAmount,
   walletRunningRows,
@@ -340,5 +341,33 @@ describe('balance calculations', () => {
       },
     ]
     expect(walletClearedAmount(wallet, txns)).toBe(500)
+  })
+
+  describe('isReconciliationEnabled', () => {
+    it('returns false when reconciliationEnabled is undefined', () => {
+      const wallet: Wallet = {
+        id: 'w1', name: 'W', type: 'payment',
+        currency: 'THB', balance: 0, color: '#fff', icon: 'fa-wallet',
+      }
+      expect(isReconciliationEnabled(wallet)).toBe(false)
+    })
+
+    it('returns false when reconciliationEnabled is false', () => {
+      const wallet: Wallet = {
+        id: 'w1', name: 'W', type: 'payment',
+        currency: 'THB', balance: 0, color: '#fff', icon: 'fa-wallet',
+        reconciliationEnabled: false,
+      }
+      expect(isReconciliationEnabled(wallet)).toBe(false)
+    })
+
+    it('returns true when reconciliationEnabled is true', () => {
+      const wallet: Wallet = {
+        id: 'w1', name: 'W', type: 'payment',
+        currency: 'THB', balance: 0, color: '#fff', icon: 'fa-wallet',
+        reconciliationEnabled: true,
+      }
+      expect(isReconciliationEnabled(wallet)).toBe(true)
+    })
   })
 })

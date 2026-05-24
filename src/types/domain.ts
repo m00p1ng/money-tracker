@@ -43,6 +43,7 @@ export type Wallet = {
   creditLimit?: number
   color: string
   icon: string
+  reconciliationEnabled?: boolean
 }
 
 export type Category = {
