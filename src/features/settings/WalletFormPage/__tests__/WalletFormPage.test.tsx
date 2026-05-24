@@ -13,6 +13,10 @@ import type {
   Wallet,
 } from '@/types/domain'
 
+type SetFormError = (err: string | null) => void
+type SubmitWallet = (form: Wallet, setError: SetFormError) => Promise<void>
+type DeleteWallet = (setError: SetFormError) => Promise<void>
+
 const currencies: Currency[] = [
   {
     code: 'THB',
@@ -43,8 +47,8 @@ const existingWallet: Wallet = {
 }
 
 function renderPage(props: Partial<React.ComponentProps<typeof WalletFormPage>> = {}) {
-  const onSubmit = vi.fn(async () => {})
-  const onDelete = vi.fn(async () => {})
+  const onSubmit = vi.fn<SubmitWallet>(async () => {})
+  const onDelete = vi.fn<DeleteWallet>(async () => {})
   const onBack = vi.fn()
 
   render(

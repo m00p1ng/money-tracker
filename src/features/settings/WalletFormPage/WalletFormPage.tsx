@@ -86,6 +86,9 @@ export function WalletFormPage({
   }
 
   const reconciliationEnabled = form.reconciliationEnabled ?? false
+  const reconciliationDescription = reconciliationEnabled
+    ? 'Included in reconciliation checks'
+    : 'Excluded from reconciliation checks'
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
@@ -153,7 +156,7 @@ export function WalletFormPage({
 
         <SwitchField
           checked={reconciliationEnabled}
-          description={reconciliationEnabled ? 'Included in reconciliation checks' : 'Excluded from reconciliation checks'}
+          description={reconciliationDescription}
           label="Reconciliation"
           onChange={(checked) => setForm({ ...form, reconciliationEnabled: checked })}
         />
