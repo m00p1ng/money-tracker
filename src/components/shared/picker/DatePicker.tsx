@@ -5,13 +5,18 @@ import 'react-day-picker/dist/style.css'
 import {
   BottomSheet,
   Button,
-  PickerColumn,
+  WheelPicker,
 } from '@/components'
 
 type TimeValue = { hour: string; minute: string }
 
 const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
 const MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
+
+const TIME_COLUMNS = [
+  { name: 'hour', label: 'Hour', options: HOUR_OPTIONS },
+  { name: 'minute', label: 'Minute', options: MINUTE_OPTIONS },
+]
 
 interface DatePickerSheetProps {
   isOpen: boolean
@@ -83,18 +88,9 @@ export function DatePicker({
       </div>
 
       {/* Time picker wheels */}
-      <div className="mx-4 mt-3 grid grid-cols-2 gap-2.5">
-        <PickerColumn
-          label="Hour"
-          name="hour"
-          options={HOUR_OPTIONS}
-          value={pickerValue}
-          onChange={(v) => setPickerValue(v as TimeValue)}
-        />
-        <PickerColumn
-          label="Minute"
-          name="minute"
-          options={MINUTE_OPTIONS}
+      <div className="mx-4 mt-3">
+        <WheelPicker
+          columns={TIME_COLUMNS}
           value={pickerValue}
           onChange={(v) => setPickerValue(v as TimeValue)}
         />
