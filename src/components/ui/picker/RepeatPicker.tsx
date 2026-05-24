@@ -62,15 +62,15 @@ export function RepeatPicker({
             key={p.value}
             className={cx(
               'flex w-full items-center justify-between rounded-xl px-3.5 py-3',
-              { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': preset === p.value },
+              { 'border border-(--accent)/30 bg-(--accent)/12': preset === p.value },
             )}
             onClick={() => setPreset(p.value)}
             type="button"
           >
             <span
-              className={cx('text-sm', preset === p.value ? 'font-bold text-[var(--accent-light)]' : 'font-medium')}
+              className={cx('text-sm', preset === p.value ? 'font-bold text-(--accent-light)' : 'font-medium')}
             >{p.label}</span>
-            {preset === p.value && <Icon name="fa-circle-check" className="text-[var(--accent-light)]" />}
+            {preset === p.value && <Icon name="fa-circle-check" className="text-(--accent-light)" />}
           </button>
         ))}
       </div>
@@ -94,7 +94,12 @@ export function RepeatPicker({
         </div>
       )}
       <div className="px-4 mt-3">
-        <Button variant="accent" fullWidth type="button" onClick={handleConfirm}>Confirm</Button>
+        <Button
+          variant="accent"
+          fullWidth
+          type="button"
+          onClick={handleConfirm}
+        >Confirm</Button>
       </div>
     </BottomSheet>
   )

@@ -32,7 +32,7 @@ export function CurrencyPicker({
             key={c.code}
             className={cx(
               'flex w-full items-center gap-3 rounded-xl px-3.5 py-3',
-              { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': selectedCode === c.code },
+              { 'border border-(--accent)/30 bg-(--accent)/12': selectedCode === c.code },
             )}
             onClick={() => {
               onSelect(c.code); onClose()
@@ -40,7 +40,7 @@ export function CurrencyPicker({
             type="button"
           >
             <div
-              className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[9px] bg-white/[0.06] text-xl"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] bg-white/6 text-xl"
             >
               {currencyFlag(c.code)}
             </div>
@@ -49,7 +49,7 @@ export function CurrencyPicker({
               <p className="text-[11px] text-white/40">{c.name}</p>
             </div>
             {selectedCode === c.code && (
-              <Icon name="fa-circle-check" className="text-[var(--accent-light)]" />
+              <Icon name="fa-circle-check" className="text-(--accent-light)" />
             )}
           </button>
         ))}

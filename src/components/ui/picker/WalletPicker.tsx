@@ -26,7 +26,7 @@ export function WalletPicker({
             key={wallet.id}
             className={cx(
               'flex w-full items-center gap-3 rounded-xl px-3.5 py-3',
-              { 'border border-[var(--accent)]/30 bg-[var(--accent)]/[0.12]': selectedId === wallet.id },
+              { 'border border-(--accent)/30 bg-(--accent)/12': selectedId === wallet.id },
             )}
             onClick={() => {
               onSelect(wallet.id); onClose()
@@ -34,7 +34,7 @@ export function WalletPicker({
             type="button"
           >
             <div
-              className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[9px] text-sm"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] text-sm"
               style={{ background: `${wallet.color}25`, color: wallet.color }}
             >
               <Icon name={wallet.icon} />
@@ -44,7 +44,7 @@ export function WalletPicker({
               <p className="text-[11px] text-white/40">{wallet.currency} · {wallet.balance.toFixed(2)}</p>
             </div>
             {selectedId === wallet.id && (
-              <Icon name="fa-circle-check" className="text-[var(--accent-light)]" />
+              <Icon name="fa-circle-check" className="text-(--accent-light)" />
             )}
           </button>
         ))}

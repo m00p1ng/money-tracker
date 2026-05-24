@@ -94,7 +94,7 @@ export function SelectInput({
         className={[
           'flex min-h-11 w-full items-center justify-between rounded-lg border px-3',
           'bg-white/5 text-slate-50 outline-none transition-colors',
-          isOpen ? 'border-[var(--accent)]' : 'border-white/10',
+          isOpen ? 'border-(--accent)' : 'border-white/10',
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
         ].join(' ')}
       >

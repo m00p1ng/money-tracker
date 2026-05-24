@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { DayPicker } from 'react-day-picker'
 
 import 'react-day-picker/dist/style.css'
-import { BottomSheet, PickerColumn  } from '@/components'
+import { BottomSheet, PickerColumn } from '@/components'
 import { Button } from '@/components/ui'
 
 type TimeValue = { hour: string; minute: string }
@@ -17,7 +17,7 @@ interface DatePickerSheetProps {
   onClose: () => void
 }
 
-export function DatePickerSheet({
+export function DatePicker({
   isOpen,
   value,
   onChange,
