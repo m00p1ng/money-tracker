@@ -262,12 +262,11 @@ export function WalletDetailPage({
               />
             )
           }
-          const isCredit = wallet.type === 'credit_card'
           const category = categories.find((c) => c.id === row.transaction.items[0]?.categoryId)
           const iconColor = category?.color ?? wallet.color
           return (
             <Link key={row.transaction.id} to={`/transaction/${row.transaction.id}`} className="mb-2 block">
-              <Card className="flex items-center gap-2.5">
+              <Card className="flex items-center gap-2.5 transition-opacity active:opacity-70">
                 <div
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm"
                   style={{ background: hexToRgba(iconColor, 0.15), color: iconColor }}
