@@ -20,6 +20,7 @@ export type TransactionDraft = {
   toExchangeRate: string
   repeatConfig: RepeatConfig
   transferAmount: number
+  cleared: boolean
 }
 
 type TransactionDraftStore = {

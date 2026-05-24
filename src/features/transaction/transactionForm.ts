@@ -96,6 +96,7 @@ export function buildTransaction(input: {
   note?: string
   markedPaid?: boolean
   repeat?: RepeatConfig
+  cleared?: boolean
   now: string
   createId: () => string
 }): Transaction {
@@ -127,5 +128,6 @@ export function buildTransaction(input: {
     ...transferFields,
     status,
     repeat: status === 'paid' ? undefined : input.repeat,
+    cleared: status === 'paid' ? (input.cleared ?? false) : false,
   }
 }
