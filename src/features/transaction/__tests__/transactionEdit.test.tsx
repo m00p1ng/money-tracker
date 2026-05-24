@@ -104,7 +104,8 @@ describe('TransactionPage edit mode', () => {
   })
 
   it('calls update when saving an edited transaction', async () => {
-    const updateSpy = vi.spyOn(useTransactionStore.getState(), 'update')
+    const user = userEvent.setup()
+    const updateSpy = vi.spyOn(useTransactionStore.getState(), 'update').mockResolvedValue(undefined)
 
     render(
       <MemoryRouter initialEntries={['/transaction/tx-1']}>
@@ -115,7 +116,7 @@ describe('TransactionPage edit mode', () => {
     )
 
     const saveButton = screen.getByRole('button', { name: 'Save' })
-    await userEvent.click(saveButton)
+    await user.click(saveButton)
 
     expect(updateSpy).toHaveBeenCalledTimes(1)
     expect(updateSpy).toHaveBeenCalledWith(expect.objectContaining({
@@ -128,8 +129,9 @@ describe('TransactionPage edit mode', () => {
   })
 
   it('shows confirm dialog and removes transaction on delete', async () => {
+    const user = userEvent.setup()
     const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
-    const removeSpy = vi.spyOn(useTransactionStore.getState(), 'remove')
+    const removeSpy = vi.spyOn(useTransactionStore.getState(), 'remove').mockResolvedValue(undefined)
 
     render(
       <MemoryRouter initialEntries={['/transaction/tx-1']}>
@@ -140,7 +142,7 @@ describe('TransactionPage edit mode', () => {
     )
 
     const deleteButton = screen.getByRole('button', { name: 'Delete transaction' })
-    await userEvent.click(deleteButton)
+    await user.click(deleteButton)
 
     expect(confirmSpy).toHaveBeenCalledWith('Delete this transaction?')
     expect(removeSpy).toHaveBeenCalledTimes(1)
@@ -246,6 +248,7 @@ describe('TransactionPage type switching', () => {
   })
 
   it('clears items when type changes from expense to income', async () => {
+    const user = userEvent.setup()
     // Navigate in with a categoryId to seed an item
     render(
       <MemoryRouter initialEntries={['/transaction/new?type=expense&categoryId=exp-food']}>
@@ -259,8 +262,8 @@ describe('TransactionPage type switching', () => {
 
     // Open type picker and switch to income
     const typeTrigger = screen.getByRole('button', { name: /expense/i })
-    await userEvent.click(typeTrigger)
-    await userEvent.click(screen.getByRole('button', { name: 'Income' }))
+    await user.click(typeTrigger)
+    await user.click(screen.getByRole('button', { name: 'Income' }))
 
     expect(useTransactionDraftStore.getState().draft?.items).toHaveLength(0)
   })
