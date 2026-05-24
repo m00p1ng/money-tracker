@@ -70,15 +70,21 @@ export function WalletFormPage({
           <TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </Field>
         <Field label="Type">
-          <SelectInput value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as WalletType })}>
-            <option value="payment">Payment</option>
-            <option value="credit_card">Credit Card</option>
-          </SelectInput>
+          <SelectInput
+            value={form.type}
+            options={[
+              { value: 'payment', label: 'Payment' },
+              { value: 'credit_card', label: 'Credit Card' },
+            ]}
+            onChange={(value) => setForm({ ...form, type: value as WalletType })}
+          />
         </Field>
         <Field label="Currency">
-          <SelectInput value={form.currency} onChange={(e) => setForm({ ...form, currency: e.target.value })}>
-            {currencies.map((c) => <option key={c.code} value={c.code}>{c.code}</option>)}
-          </SelectInput>
+          <SelectInput
+            value={form.currency}
+            options={currencies.map((c) => ({ value: c.code, label: c.code }))}
+            onChange={(value) => setForm({ ...form, currency: value })}
+          />
         </Field>
         <Field label="Starting Balance">
           <TextInput

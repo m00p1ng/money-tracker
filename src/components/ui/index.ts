@@ -6,6 +6,7 @@ export {
   TextInput,
   SelectInput,
   TextAreaInput,
+  type SelectOption,
 } from './Field'
 export { SegmentedControl } from './SegmentedControl'
 export { TypePickerDropdown } from './TypeDropdown'

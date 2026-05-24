@@ -63,32 +63,32 @@ export function CategoryFormPage({
         <Field label="Type">
           <SelectInput
             value={form.type}
-            onChange={(event) => setForm({
-              ...form,
-              type: event.target.value as TransactionType,
-            })}
-          >
-            <option value="expense">Expense</option>
-            <option value="income">Income</option>
-          </SelectInput>
+            options={[
+              { value: 'expense', label: 'Expense' },
+              { value: 'income', label: 'Income' },
+            ]}
+            onChange={(value) => setForm({ ...form, type: value as TransactionType })}
+          />
         </Field>
         <Field label="Parent">
-          <SelectInput value={form.parentId ?? ''} onChange={(event) => {
-            const parent = categories.find((category) => category.id === event.target.value)
-            setForm({
-              ...form,
-              parentId: parent?.id,
-              level: parent ? ((parent.level + 1) as Category['level']) : 1,
-              type: parent?.type ?? form.type,
-            })
-          }}>
-            <option value="">Root</option>
-            {categories
-              .filter((category) => category.type === form.type && category.level < 5)
-              .map((category) => <option key={category.id} value={category.id}>{category.name}</option>)
-            }
-          </SelectInput>
-
+          <SelectInput
+            value={form.parentId ?? ''}
+            options={[
+              { value: '', label: 'Root' },
+              ...categories
+                .filter((c) => c.type === form.type && c.level < 5)
+                .map((c) => ({ value: c.id, label: c.name })),
+            ]}
+            onChange={(value) => {
+              const parent = categories.find((c) => c.id === value)
+              setForm({
+                ...form,
+                parentId: parent?.id,
+                level: parent ? ((parent.level + 1) as Category['level']) : 1,
+                type: parent?.type ?? form.type,
+              })
+            }}
+          />
         </Field>
         <FormErrorMessage error={error} />
       </Card>

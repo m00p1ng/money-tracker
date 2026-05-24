@@ -95,6 +95,7 @@ function VariantLabel({ label }: VariantLabelProps) {
 }
 
 export function UIComponentsSection() {
+  const [selectDemo, setSelectDemo] = useState('a')
   const [seg2, setSeg2] = useState<'a' | 'b'>('a')
   const [seg3, setSeg3] = useState<'a' | 'b' | 'c'>('a')
   const [pickerType, setPickerType] = useState<'expense' | 'income' | 'transfer'>('expense')
@@ -153,10 +154,14 @@ export function UIComponentsSection() {
           </div>
           <div>
             <Field label="Select input">
-              <SelectInput>
-                <option>Option A</option>
-                <option>Option B</option>
-              </SelectInput>
+              <SelectInput
+                value={selectDemo}
+                options={[
+                  { value: 'a', label: 'Option A' },
+                  { value: 'b', label: 'Option B' },
+                ]}
+                onChange={setSelectDemo}
+              />
             </Field>
             <VariantLabel label="SelectInput" />
           </div>
