@@ -122,24 +122,35 @@ interface DesignSidebarProps {
 }
 
 export function DesignSidebar({ activeId }: DesignSidebarProps) {
+  const activeRef = useRef<HTMLButtonElement | null>(null)
+
+  useEffect(() => {
+    activeRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'nearest',
+    })
+  }, [activeId])
+
   return (
     <nav className={[
-      'hidden w-52 shrink-0 flex-col gap-1 overflow-y-auto',
-      'border-r border-white/8 bg-white/2 px-2 py-4 md:flex',
+      'hidden w-72 shrink-0 flex-col gap-1 overflow-y-auto',
+      'border-r border-white/8 bg-white/2 px-3 py-4 md:flex',
     ].join(' ')}>
-      <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>
+      <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>
       {NAV_GROUPS.map((group) => (
-        <div key={group.label}>
-          <p className="mt-2 px-2 pb-1 text-[10px] font-semibold uppercase tracking-[1px] text-white/25">
+        <div key={group.label} className="mt-4 first:mt-0">
+          <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[1px] text-white/25">
             {group.label}
           </p>
           {group.items.map((item) => (
             <button
               key={item.id}
+              ref={item.id === activeId ? activeRef : null}
               type="button"
               onClick={() => scrollTo(item.id)}
               className={cx(
-                'w-full whitespace-nowrap rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors',
+                'w-full whitespace-nowrap rounded-lg px-3 py-1.5 text-left text-[13px] transition-colors',
                 activeId === item.id
                   ? 'bg-accent/10 font-semibold text-accent-light'
                   : 'text-white/50 hover:text-white/80',
