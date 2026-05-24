@@ -66,6 +66,7 @@ export interface TransactionPageProps {
   isPlanned: boolean
   defaultRate: string
   cleared: boolean
+  walletReconciliationEnabled: boolean
   onChangeType: (v: TransactionType) => void
   onUpdateExchangeRate: (value: string) => void
   onUpdateToExchangeRate: (value: string) => void
@@ -107,6 +108,7 @@ export function TransactionPage({
   isPlanned,
   defaultRate,
   cleared,
+  walletReconciliationEnabled,
   onChangeType,
   onUpdateExchangeRate,
   onUpdateToExchangeRate,
@@ -363,7 +365,7 @@ export function TransactionPage({
         )}
       </button>
 
-      {!isPlanned && type !== 'transfer' && (
+      {!isPlanned && type !== 'transfer' && walletReconciliationEnabled && (
         <button
           type="button"
           className={[

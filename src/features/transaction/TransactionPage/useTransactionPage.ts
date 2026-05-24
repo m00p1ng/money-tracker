@@ -6,6 +6,7 @@ import {
 } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
+import { isReconciliationEnabled } from '@/features/balance/balanceCalculations'
 import {
   buildTransaction,
   validateDraft,
@@ -18,7 +19,7 @@ import {
   useTransactionStore,
   useWalletStore,
 } from '@/stores'
-import type { RepeatConfig, TransactionType } from '@/types/domain'
+import type { RepeatConfig, TransactionType, Wallet } from '@/types/domain'
 
 import type { TransactionPageProps } from './TransactionPage'
 
@@ -102,6 +103,7 @@ export function useTransactionPage(): TransactionPageProps {
   const defaultRate = selectedCurrency?.rate ? String(selectedCurrency.rate) : ''
   const isPlanned = new Date(date) > new Date()
   const wallet = wallets.find((item) => item.id === walletId)
+  const walletReconciliationEnabled = isReconciliationEnabled(wallet ?? {} as Wallet)
 
   async function onSave() {
     const errors = validateDraft({
@@ -186,6 +188,7 @@ export function useTransactionPage(): TransactionPageProps {
     isPlanned,
     defaultRate,
     cleared,
+    walletReconciliationEnabled,
     onToggleCleared: () => updateDraft({ cleared: !cleared }),
     onChangeType: (v: TransactionType) => updateDraft({
       type: v,
