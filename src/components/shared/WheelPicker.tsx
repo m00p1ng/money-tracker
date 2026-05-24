@@ -1,5 +1,6 @@
-import cx from 'classnames'
-import Picker from 'react-mobile-picker'
+import { WheelPicker as WheelPickerBase } from '@ncdai/react-wheel-picker'
+
+import '@ncdai/react-wheel-picker/style.css'
 
 export type WheelPickerColumn = {
   name: string
@@ -25,27 +26,23 @@ export function WheelPicker({
       {columns.map((col) => (
         <div key={col.name} className="overflow-hidden rounded-xl border border-white/[0.07] bg-white/4">
           <p className="pt-2 text-center text-[10px] uppercase tracking-[1px] text-white/30">{col.label}</p>
-          <Picker value={value} onChange={onChange} height={120} itemHeight={40} wheelMode="natural">
-            <Picker.Column name={col.name}>
-              {col.options.map((opt) => (
-                <Picker.Item key={opt} value={opt}>
-                  {({ selected }) => (
-                    <span
-                      className={cx(
-                        'text-[15px]',
-                        { capitalize: col.capitalize },
-                        selected
-                          ? 'font-bold text-white'
-                          : 'font-medium text-white/30',
-                      )}
-                    >
-                      {opt}
-                    </span>
-                  )}
-                </Picker.Item>
-              ))}
-            </Picker.Column>
-          </Picker>
+          <WheelPickerBase
+            value={value[col.name]}
+            onValueChange={(v) => onChange({ ...value, [col.name]: String(v) })}
+            options={col.options.map((opt) => ({
+              value: opt,
+              label: col.capitalize
+                ? <span className="capitalize">{opt}</span>
+                : opt,
+            }))}
+            optionItemHeight={40}
+            visibleCount={4}
+            classNames={{
+              highlightWrapper: 'bg-(--accent)/15 border-y border-(--accent)/30',
+              highlightItem: 'font-bold text-white',
+              optionItem: 'text-white/30 font-medium text-[15px]',
+            }}
+          />
         </div>
       ))}
     </div>
