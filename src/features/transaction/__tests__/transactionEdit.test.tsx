@@ -151,6 +151,7 @@ describe('TransactionPage edit mode', () => {
   })
 
   it('does not remove transaction when confirm is cancelled', async () => {
+    const user = userEvent.setup()
     const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false)
     const removeSpy = vi.spyOn(useTransactionStore.getState(), 'remove')
 
@@ -163,7 +164,7 @@ describe('TransactionPage edit mode', () => {
     )
 
     const deleteButton = await screen.findByRole('button', { name: 'Delete transaction' })
-    await userEvent.click(deleteButton)
+    await user.click(deleteButton)
 
     expect(confirmSpy).toHaveBeenCalledWith('Delete this transaction?')
     expect(removeSpy).not.toHaveBeenCalled()

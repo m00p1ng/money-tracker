@@ -8,7 +8,7 @@ import {
 } from 'vitest'
 
 import HomePage from '@/features/home/HomePage'
-import { formatShortDate } from '@/lib'
+import { formatHeaderDate } from '@/lib'
 import { useCategoryStore, useTransactionStore } from '@/stores'
 
 describe('HomePage', () => {
@@ -93,6 +93,6 @@ describe('HomePage', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByText(formatShortDate(new Date()))).toBeInTheDocument()
+    expect(screen.getByText(formatHeaderDate(new Date()))).toBeInTheDocument()
   })
 })
