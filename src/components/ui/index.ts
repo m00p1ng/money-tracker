@@ -9,6 +9,8 @@ export {
   type SelectOption,
 } from './Field'
 export { SegmentedControl } from './SegmentedControl'
+export { SwitchField } from './SwitchField'
+export { FormActions } from './FormActions'
 export { TypePickerDropdown } from './TypeDropdown'
 export { CurrencyPicker } from './picker/CurrencyPicker'
 export { DateRangePresetPicker } from './picker/DateRangePresetPicker'
