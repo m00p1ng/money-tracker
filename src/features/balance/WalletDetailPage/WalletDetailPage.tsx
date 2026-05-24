@@ -1,6 +1,4 @@
-import cx from 'classnames'
 import { useState } from 'react'
-import { Link } from 'react-router'
 
 import {
   Icon,
@@ -12,7 +10,6 @@ import {
 import { DateRangePresetPicker } from '@/components/ui'
 import { walletRunningRows } from '@/features/balance/balanceCalculations'
 import {
-  hexToRgba,
   type DateRangePreset,
   getPresetRange,
   formatAmount,
@@ -22,6 +19,8 @@ import type {
   Transaction,
   Wallet,
 } from '@/types/domain'
+
+import { SwipeableTransactionRow } from './SwipeableTransactionRow'
 
 function formatDateLabel(dateStr: string): string {
   const [year, month, day] = dateStr.split('-').map(Number)
@@ -35,7 +34,9 @@ export type WalletDetailPageProps = {
   transactions: Transaction[]
   categories: Category[]
   currentAmount: number
+  clearedAmount: number
   onBack: () => void
+  onToggleCleared: (id: string) => void
 }
 
 export function WalletDetailPage({
@@ -43,7 +44,9 @@ export function WalletDetailPage({
   transactions,
   categories,
   currentAmount,
+  clearedAmount,
   onBack,
+  onToggleCleared,
 }: WalletDetailPageProps) {
   const [preset, setPreset] = useState<DateRangePreset>('this-month')
   const [isPresetSheetOpen, setPresetSheetOpen] = useState(false)
@@ -131,6 +134,34 @@ export function WalletDetailPage({
               />
             </div>
           </div>
+          <div className="px-3 pb-3">
+            <div className="mb-1.5 flex items-center justify-between">
+              <span
+                className="flex items-center gap-1.5 text-xs uppercase tracking-wide"
+                style={{ color: 'var(--accent-light)' }}
+              >
+                <Icon name="fa-circle-check" />
+                Cleared Debt
+              </span>
+              <span className="text-xs font-semibold" style={{ color: 'var(--accent-light)' }}>
+                {formatAmount(clearedAmount, wallet.currency)}
+              </span>
+            </div>
+            <AnimatedBar
+              value={clearedAmount}
+              maxValue={currentAmount || 1}
+              colorFrom="#6c47ff"
+              colorTo="#9b7dff"
+              textColor="#1a1030"
+              currency={wallet.currency}
+              delay={0.3}
+            />
+            {currentAmount !== clearedAmount && (
+              <p className="mt-1 text-[11px] text-white/40">
+                {formatAmount(currentAmount - clearedAmount, wallet.currency)} uncleared
+              </p>
+            )}
+          </div>
         </>
       ) : (
         <div className="space-y-3">
@@ -154,6 +185,34 @@ export function WalletDetailPage({
           </div>
           <div>
             <div className="mb-1.5 flex items-center justify-between">
+              <span
+                className="flex items-center gap-1.5 text-xs uppercase tracking-wide"
+                style={{ color: 'var(--accent-light)' }}
+              >
+                <Icon name="fa-circle-check" />
+                Cleared
+              </span>
+              <span className="text-xs font-semibold" style={{ color: 'var(--accent-light)' }}>
+                {formatAmount(clearedAmount, wallet.currency)}
+              </span>
+            </div>
+            <AnimatedBar
+              value={clearedAmount}
+              maxValue={currentAmount}
+              colorFrom="#6c47ff"
+              colorTo="#9b7dff"
+              textColor="#1a1030"
+              currency={wallet.currency}
+              delay={0.2}
+            />
+            {currentAmount !== clearedAmount && (
+              <p className="mt-1 text-[11px] text-white/40">
+                {formatAmount(currentAmount - clearedAmount, wallet.currency)} uncleared
+              </p>
+            )}
+          </div>
+          <div>
+            <div className="mb-1.5 flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-amber-400">
                 <Icon name="fa-arrow-down" />
                 Expenses
@@ -170,7 +229,7 @@ export function WalletDetailPage({
                 colorTo="#fde047"
                 textColor="#451a03"
                 currency={wallet.currency}
-                delay={0.2}
+                delay={0.3}
               />
             )}
             {totalExpenses === 0 && (
@@ -183,36 +242,15 @@ export function WalletDetailPage({
       <section>
         <SectionDivider label="Transactions" />
         {rows.length === 0 && <Card className="text-sm text-slate-400">No transactions in this range.</Card>}
-        {rows.map((row) => {
-          const category = categories.find((item) => item.id === row.transaction.items[0]?.categoryId)
-          const iconColor = category?.color ?? wallet.color
-          return (
-            <Link key={row.transaction.id} to={`/transaction/${row.transaction.id}`}>
-              <Card className="mb-2 flex items-center gap-2.5 cursor-pointer active:opacity-70 transition-opacity">
-                <div
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm"
-                  style={{ background: hexToRgba(iconColor, 0.15), color: iconColor }}
-                >
-                  <Icon name={category?.icon ?? 'fa-ellipsis'} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold">{category?.name ?? row.transaction.type}</p>
-                  <p className="mt-0.5 text-xs text-white/30">{new Date(row.transaction.date).toLocaleDateString()}</p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className={cx('text-sm font-bold', row.amount >= 0 ? 'text-income' : 'text-expense')}>
-                    {row.amount >= 0 ? '+' : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
-                  </p>
-                  <p className={cx('mt-0.5 text-xs', isCredit ? 'text-expense/70' : 'text-white/28')}>
-                    {isCredit
-                      ? `${formatAmount(row.runningAmount, wallet.currency)} debt`
-                      : formatAmount(row.runningAmount, wallet.currency)}
-                  </p>
-                </div>
-              </Card>
-            </Link>
-          )
-        })}
+        {rows.map((row) => (
+          <SwipeableTransactionRow
+            key={row.transaction.id}
+            row={row}
+            wallet={wallet}
+            categories={categories}
+            onToggleCleared={onToggleCleared}
+          />
+        ))}
       </section>
 
       <DateRangePresetPicker

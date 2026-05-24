@@ -1,7 +1,10 @@
 import { useParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { walletCurrentAmount } from '@/features/balance/balanceCalculations'
+import {
+  walletClearedAmount,
+  walletCurrentAmount,
+} from '@/features/balance/balanceCalculations'
 import {
   useCategoryStore,
   useTransactionStore,
@@ -16,12 +19,16 @@ export function useWalletDetailPage(): WalletDetailPageProps {
   const wallet = useWalletStore((state) => state.items.find((item) => item.id === id))
   const transactions = useTransactionStore((state) => state.items)
   const categories = useCategoryStore((state) => state.items)
+  const toggleCleared = useTransactionStore((state) => state.toggleCleared)
   const currentAmount = wallet ? walletCurrentAmount(wallet, transactions) : 0
+  const clearedAmount = wallet ? walletClearedAmount(wallet, transactions) : 0
   return {
     wallet,
     transactions,
     categories,
     currentAmount,
+    clearedAmount,
     onBack: () => backNavigate('/balance'),
+    onToggleCleared: (txId) => { void toggleCleared(txId) },
   }
 }
