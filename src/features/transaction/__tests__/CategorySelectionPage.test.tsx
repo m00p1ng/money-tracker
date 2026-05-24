@@ -127,6 +127,7 @@ describe('CategorySelectionPage with draft store', () => {
       toExchangeRate: '',
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
+      cleared: false,
     })
   })
 

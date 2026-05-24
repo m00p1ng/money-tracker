@@ -19,7 +19,7 @@ const NAV_GROUPS = [
       { id: 'segmented-control', label: 'SegmentedControl' },
       { id: 'type-picker', label: 'TypePickerDropdown' },
       { id: 'currency-picker', label: 'CurrencyPicker' },
-      { id: 'date-picker', label: 'DatePickerSheet' },
+      { id: 'date-picker', label: 'DatePicker' },
       { id: 'repeat-picker', label: 'RepeatPicker' },
       { id: 'wallet-picker', label: 'WalletPicker' },
       { id: 'date-range-preset-picker', label: 'DateRangePresetPicker' },
