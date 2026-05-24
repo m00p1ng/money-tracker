@@ -7,9 +7,12 @@ import {
   DatePicker,
   DateRangePresetPicker,
   Field,
+  FormActions,
   RepeatPicker,
   SegmentedControl,
   SelectInput,
+  Switch,
+  TextAreaInput,
   TextInput,
   TypePickerDropdown,
   WalletPicker,
@@ -114,6 +117,9 @@ export function UIComponentsSection() {
 
   const [dateRangeOpen, setDateRangeOpen] = useState(false)
   const [selectedDateRange, setSelectedDateRange] = useState<DateRangePreset>('this-month')
+
+  const [switchChecked, setSwitchChecked] = useState(false)
+  const [switchWithDesc, setSwitchWithDesc] = useState(true)
 
   return (
     <div className="space-y-10">
@@ -277,6 +283,53 @@ export function UIComponentsSection() {
             }}
             onClose={() => setDateRangeOpen(false)}
           />
+        </div>
+        </SubSection>
+
+      <SubSection id="switch" title="Switch">
+        <div className="space-y-4 max-w-sm">
+          <div>
+            <Switch
+              label="Notifications"
+              checked={switchChecked}
+              onChange={setSwitchChecked}
+            />
+            <VariantLabel label="without description" />
+          </div>
+          <div>
+            <Switch
+              label="Dark mode"
+              description="Use dark theme across the app"
+              checked={switchWithDesc}
+              onChange={setSwitchWithDesc}
+            />
+            <VariantLabel label="with description" />
+          </div>
+        </div>
+      </SubSection>
+
+      <SubSection id="textarea-input" title="TextAreaInput">
+        <div className="max-w-sm">
+          <TextAreaInput placeholder="Write a note…" rows={3} />
+          <VariantLabel label="default" />
+        </div>
+      </SubSection>
+
+      <SubSection id="form-actions" title="FormActions">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div>
+            <FormActions submitLabel="Save" />
+            <VariantLabel label="save only" />
+          </div>
+          <div>
+            <FormActions
+              submitLabel="Save"
+              showDelete
+              deleteLabel="Delete"
+              onDelete={() => {}}
+            />
+            <VariantLabel label="with delete" />
+          </div>
         </div>
       </SubSection>
     </div>

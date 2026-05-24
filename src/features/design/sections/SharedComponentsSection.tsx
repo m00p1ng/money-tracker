@@ -4,6 +4,7 @@ import {
   AddRow,
   AnimatedBar,
   BottomSheet,
+  Button,
   FormErrorMessage,
   ListGroup,
   ListRow,
@@ -11,9 +12,10 @@ import {
   PickerColumn,
   SectionDivider,
   SectionLabel,
+  SelectorSheet,
   TransactionRow,
-  Button,
 } from '@/components'
+import type { SelectorOption } from '@/components'
 
 interface SubSectionProps {
   id: string
@@ -44,6 +46,14 @@ const MINUTE_OPTIONS = ['00', '15', '30', '45']
 export function SharedComponentsSection() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [pickerValue, setPickerValue] = useState<Record<string, string>>({ hour: '08', minute: '00' })
+  const [selectorOpen, setSelectorOpen] = useState(false)
+  const [selectorValue, setSelectorValue] = useState<'usd' | 'eur' | 'thb'>('usd')
+
+  const SELECTOR_OPTIONS: SelectorOption<'usd' | 'eur' | 'thb'>[] = [
+    { label: 'US Dollar', value: 'usd', description: 'USD' },
+    { label: 'Euro', value: 'eur', description: 'EUR' },
+    { label: 'Thai Baht', value: 'thb', description: 'THB' },
+  ]
 
   return (
     <div className="space-y-10">
@@ -197,6 +207,21 @@ export function SharedComponentsSection() {
               <Button variant="accent" fullWidth onClick={() => setSheetOpen(false)}>Confirm</Button>
             </div>
           </BottomSheet>
+        </div>
+      </SubSection>
+
+      <SubSection id="selector-sheet" title="SelectorSheet">
+        <div className="space-y-3">
+          <Button variant="ghost" onClick={() => setSelectorOpen(true)}>Open SelectorSheet</Button>
+          <VariantLabel label={`selected: ${selectorValue}`} />
+          <SelectorSheet
+            isOpen={selectorOpen}
+            title="Select Currency"
+            options={SELECTOR_OPTIONS}
+            value={selectorValue}
+            onSelect={(value) => { setSelectorValue(value); setSelectorOpen(false) }}
+            onClose={() => setSelectorOpen(false)}
+          />
         </div>
       </SubSection>
     </div>

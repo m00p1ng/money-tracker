@@ -1,5 +1,6 @@
-import type React from 'react'
+import React, { useState } from 'react'
 
+import { Button } from '@/components'
 import { WalletRow } from '@/features/balance/BalancePage/WalletRow/WalletRow'
 import { SwipeableTransactionRow } from '@/features/balance/WalletDetailPage/SwipeableTransactionRow'
 import { SummaryCards } from '@/features/home/SummaryCards'
@@ -8,8 +9,19 @@ import { UpcomingTransactions } from '@/features/home/UpcomingTransactions'
 import { CurrencyRow } from '@/features/settings/CurrenciesPage/CurrencyRow/CurrencyRow'
 import { CalculatorKeyboard } from '@/features/transaction/CalculatorKeyboard'
 import { CategoryItemsCard } from '@/features/transaction/CategoryItemsCard'
+import { CalculatorKeyboardSheet } from '@/features/transaction/TransactionPage/components/CalculatorKeyboardSheet'
+import { DateTimeRow } from '@/features/transaction/TransactionPage/components/DateTimeRow'
+import { ExchangeRateRow } from '@/features/transaction/TransactionPage/components/ExchangeRateRow'
+import { NoteField } from '@/features/transaction/TransactionPage/components/NoteField'
+import { ReconciliationRow } from '@/features/transaction/TransactionPage/components/ReconciliationRow'
+import { RepeatRow } from '@/features/transaction/TransactionPage/components/RepeatRow'
+import { TransactionHeader } from '@/features/transaction/TransactionPage/components/TransactionHeader'
+import { TransactionSheets } from '@/features/transaction/TransactionPage/components/TransactionSheets'
+import { WalletSelectorRow } from '@/features/transaction/TransactionPage/components/WalletSelectorRow'
 import type {
   Category,
+  Currency,
+  RepeatConfig,
   Transaction,
   Wallet,
 } from '@/types/domain'
@@ -85,7 +97,41 @@ const STUB_TRANSACTION: Transaction = {
   cleared: false,
 }
 
+const STUB_CURRENCY_USD: Currency = {
+  code: 'USD',
+  symbol: '$',
+  name: 'US Dollar',
+  isBase: true,
+  rate: 1,
+}
+
+const STUB_CURRENCY_EUR: Currency = {
+  code: 'EUR',
+  symbol: '€',
+  name: 'Euro',
+  isBase: false,
+  rate: 0.92,
+}
+
+const STUB_REPEAT_NEVER: RepeatConfig = { preset: 'never' }
+const STUB_REPEAT_DAILY: RepeatConfig = { preset: 'daily' }
+
+function VariantLabel({ label }: { label: string }) {
+  return <p className="mt-2 text-center text-[10px] text-white/30">{label}</p>
+}
+
 export function FeatureSection() {
+  const [txType, setTxType] = useState<'expense' | 'income' | 'transfer'>('expense')
+  const [cleared, setCleared] = useState(false)
+  const [note, setNote] = useState('Lunch with team')
+  const [exchangeRate, setExchangeRate] = useState('0.92')
+  const [calcSheetOpen, setCalcSheetOpen] = useState(false)
+  const [txSheetsDateOpen, setTxSheetsDateOpen] = useState(false)
+  const [txSheetsDate, setTxSheetsDate] = useState(new Date().toISOString())
+  const [txSheetsWallet, setTxSheetsWallet] = useState('w1')
+  const [txSheetsCurrency, setTxSheetsCurrency] = useState('USD')
+  const [txSheetsRepeat, setTxSheetsRepeat] = useState<RepeatConfig>({ preset: 'never' })
+
   return (
     <div className="space-y-12">
       <div>
@@ -150,6 +196,155 @@ export function FeatureSection() {
             findCategory={() => undefined}
             parentOf={() => undefined}
           />
+        </SubSection>
+      </PageGroup>
+
+      <PageGroup label="Transaction Form">
+        <SubSection id="transaction-header" title="TransactionHeader">
+          <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+            <TransactionHeader
+              type={txType}
+              onChangeType={setTxType}
+              onBack={() => {}}
+              onSave={async () => {}}
+            />
+          </div>
+          <VariantLabel label={`current type: ${txType}`} />
+        </SubSection>
+
+        <SubSection id="date-time-row" title="DateTimeRow">
+          <div className="space-y-2">
+            <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+              <DateTimeRow
+                date={new Date(Date.now() - 86400000).toISOString()}
+                isPlanned={false}
+                onClick={() => {}}
+              />
+            </div>
+            <VariantLabel label="past date (normal)" />
+            <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+              <DateTimeRow
+                date={new Date(Date.now() + 86400000).toISOString()}
+                isPlanned={true}
+                onClick={() => {}}
+              />
+            </div>
+            <VariantLabel label="future date (planned badge)" />
+          </div>
+        </SubSection>
+
+        <SubSection id="wallet-selector-row" title="WalletSelectorRow">
+          <div className="space-y-2">
+            <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+              <WalletSelectorRow
+                ariaLabel="Select wallet"
+                label="Wallet"
+                wallet={STUB_WALLET_PAYMENT}
+                fallbackName="Select wallet"
+                fallbackColor="#6c47ff"
+                onClick={() => {}}
+              />
+            </div>
+            <VariantLabel label="without balance" />
+            <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+              <WalletSelectorRow
+                ariaLabel="Select wallet"
+                label="Wallet"
+                wallet={STUB_WALLET_PAYMENT}
+                fallbackName="Select wallet"
+                fallbackColor="#6c47ff"
+                showBalance
+                onClick={() => {}}
+              />
+            </div>
+            <VariantLabel label="with balance" />
+          </div>
+        </SubSection>
+
+        <SubSection id="note-field" title="NoteField">
+          <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+            <NoteField
+              note={note}
+              onUpdateNote={setNote}
+              onFocusNoteField={() => {}}
+            />
+          </div>
+        </SubSection>
+
+        <SubSection id="exchange-rate-row" title="ExchangeRateRow">
+          <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+            <ExchangeRateRow
+              label="USD → EUR"
+              value={exchangeRate}
+              defaultRate="0.92"
+              onChange={setExchangeRate}
+            />
+          </div>
+        </SubSection>
+
+        <SubSection id="reconciliation-row" title="ReconciliationRow">
+          <div className="space-y-2">
+            <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+              <ReconciliationRow cleared={false} onToggle={() => {}} />
+            </div>
+            <VariantLabel label="not cleared" />
+            <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+              <ReconciliationRow cleared={cleared} onToggle={() => setCleared((v) => !v)} />
+            </div>
+            <VariantLabel label="cleared (tap to toggle)" />
+          </div>
+        </SubSection>
+
+        <SubSection id="repeat-row" title="RepeatRow">
+          <div className="space-y-2">
+            <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+              <RepeatRow repeatConfig={STUB_REPEAT_NEVER} onClick={() => {}} />
+            </div>
+            <VariantLabel label="never" />
+            <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+              <RepeatRow repeatConfig={STUB_REPEAT_DAILY} onClick={() => {}} />
+            </div>
+            <VariantLabel label="daily" />
+          </div>
+        </SubSection>
+
+        <SubSection id="calculator-keyboard-sheet" title="CalculatorKeyboardSheet">
+          <div className="space-y-3">
+            <Button variant="ghost" onClick={() => setCalcSheetOpen(true)}>Open CalculatorKeyboardSheet</Button>
+            <CalculatorKeyboardSheet
+              isOpen={calcSheetOpen}
+              onPress={(key) => { if (key === 'confirm') setCalcSheetOpen(false) }}
+            />
+          </div>
+        </SubSection>
+
+        <SubSection id="transaction-sheets" title="TransactionSheets">
+          <div className="space-y-3">
+            <Button variant="ghost" onClick={() => setTxSheetsDateOpen(true)}>Open DatePicker via TransactionSheets</Button>
+            <TransactionSheets
+              date={txSheetsDate}
+              walletPickerTarget={null}
+              isRepeatPickerOpen={false}
+              isCurrencyPickerOpen={false}
+              isDatePickerOpen={txSheetsDateOpen}
+              wallets={[STUB_WALLET_PAYMENT, STUB_WALLET_CREDIT]}
+              currencies={[STUB_CURRENCY_USD, STUB_CURRENCY_EUR]}
+              walletId={txSheetsWallet}
+              toWalletId={undefined}
+              currency={txSheetsCurrency}
+              repeatConfig={txSheetsRepeat}
+              onUpdateDate={(d) => { setTxSheetsDate(d.toISOString()); setTxSheetsDateOpen(false) }}
+              onUpdateWallet={setTxSheetsWallet}
+              onUpdateToWallet={() => {}}
+              onUpdateCurrency={setTxSheetsCurrency}
+              onUpdateRepeatConfig={setTxSheetsRepeat}
+              onCloseWalletPicker={() => {}}
+              onCloseCurrencyPicker={() => {}}
+              onCloseDatePicker={() => setTxSheetsDateOpen(false)}
+              onCloseRepeatPicker={() => {}}
+            />
+            <VariantLabel label="date picker sheet" />
+          </div>
         </SubSection>
       </PageGroup>
 
