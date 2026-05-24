@@ -1,1 +1,1 @@
-export { useFormCrud } from '@/hooks/shared/useFormCrud'
+export { useFormCrud } from './useFormCrud'
