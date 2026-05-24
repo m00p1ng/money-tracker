@@ -81,3 +81,9 @@ export function walletRunningRows(wallet: Wallet, transactions: Transaction[], r
     .filter((row) => isWithinDateRange(row.transaction.date, range))
     .reverse()
 }
+
+export function walletClearedAmount(wallet: Wallet, transactions: Transaction[]): number {
+  return walletTransactions(wallet.id, transactions)
+    .filter((t) => t.cleared)
+    .reduce((sum, t) => sum + signedWalletAmount(wallet, t), wallet.balance)
+}

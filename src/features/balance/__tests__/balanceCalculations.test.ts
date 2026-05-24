@@ -8,6 +8,7 @@ import {
   amountInWalletCurrency,
   assetsTotal,
   debtTotal,
+  walletClearedAmount,
   walletCurrentAmount,
   walletRunningRows,
   walletTransactions,
@@ -278,5 +279,66 @@ describe('balance calculations', () => {
       walletRunningRows(wallets[0], history, { start: '2026-05-01', end: '2026-05-31' })
         .map((row) => [row.transaction.id, row.runningAmount]),
     ).toEqual([['range-income', 950]])
+  })
+
+  it('counts only cleared transactions for cleared balance', () => {
+    const wallet: Wallet = {
+      id: 'cash',
+      name: 'Cash',
+      type: 'payment',
+      currency: 'THB',
+      balance: 1000,
+      color: '#10b981',
+      icon: 'fa-wallet',
+    }
+    const txns: Transaction[] = [
+      {
+        id: 'cleared-expense',
+        type: 'expense',
+        walletId: 'cash',
+        currency: 'THB',
+        items: [{ categoryId: 'food', amount: 200 }],
+        date: '2026-05-01T08:00:00.000Z',
+        createdAt: '2026-05-01T08:00:00.000Z',
+        cleared: true,
+      },
+      {
+        id: 'uncleared-expense',
+        type: 'expense',
+        walletId: 'cash',
+        currency: 'THB',
+        items: [{ categoryId: 'food', amount: 100 }],
+        date: '2026-05-02T08:00:00.000Z',
+        createdAt: '2026-05-02T08:00:00.000Z',
+        cleared: false,
+      },
+    ]
+    // book: 1000 - 200 - 100 = 700; cleared: 1000 - 200 = 800
+    expect(walletClearedAmount(wallet, txns)).toBe(800)
+  })
+
+  it('returns wallet.balance when no transactions are cleared', () => {
+    const wallet: Wallet = {
+      id: 'cash',
+      name: 'Cash',
+      type: 'payment',
+      currency: 'THB',
+      balance: 500,
+      color: '#10b981',
+      icon: 'fa-wallet',
+    }
+    const txns: Transaction[] = [
+      {
+        id: 'uncleared',
+        type: 'expense',
+        walletId: 'cash',
+        currency: 'THB',
+        items: [{ categoryId: 'food', amount: 100 }],
+        date: '2026-05-01T08:00:00.000Z',
+        createdAt: '2026-05-01T08:00:00.000Z',
+        cleared: false,
+      },
+    ]
+    expect(walletClearedAmount(wallet, txns)).toBe(500)
   })
 })
