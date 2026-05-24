@@ -1,6 +1,6 @@
 import cx from 'classnames'
 
-import { Icon, BottomSheet } from '@/components'
+import { BottomSheet, Icon } from '@/components'
 import type { Wallet } from '@/types/domain'
 
 interface WalletPickerProps {

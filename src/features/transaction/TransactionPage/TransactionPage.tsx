@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { CategoryItemsCardContainer } from '@/features/transaction/CategoryItemsCard/CategoryItemsCardContainer'
 import { createCalcState, pressCalcKey } from '@/lib'
 import type {
+  Currency,
   RepeatConfig,
+  TransactionItem,
   TransactionType,
   Wallet,
-  Currency,
-  TransactionItem,
 } from '@/types/domain'
 
 import {
@@ -19,8 +19,8 @@ import {
   ReconciliationRow,
   RepeatRow,
   TransactionHeader,
-  WalletSelectorRow,
   TransactionSheets,
+  WalletSelectorRow,
   type WalletPickerTarget,
 } from './components'
 

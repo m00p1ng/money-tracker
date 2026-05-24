@@ -3,22 +3,22 @@ import React, { useState } from 'react'
 import {
   Button,
   Card,
-  Field,
-  TextInput,
-  SelectInput,
   CurrencyPicker,
   DatePicker,
   DateRangePresetPicker,
+  Field,
   RepeatPicker,
+  SegmentedControl,
+  SelectInput,
+  TextInput,
   TypePickerDropdown,
   WalletPicker,
-  SegmentedControl,
-} from '@/components/ui'
+} from '@/components'
 import type { DateRangePreset } from '@/lib'
 import type {
   Currency,
-  Wallet,
   RepeatConfig,
+  Wallet,
 } from '@/types/domain'
 
 const STUB_CURRENCIES: Currency[] = [

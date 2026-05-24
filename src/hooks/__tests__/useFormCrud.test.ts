@@ -1,10 +1,10 @@
-import { renderHook, act } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import {
   describe,
-  it,
   expect,
+  it,
   vi,
 } from 'vitest'
 

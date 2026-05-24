@@ -4,8 +4,8 @@ import {
   faDivide,
   faEquals,
   faMinus,
-  faPlusMinus,
   faPlus,
+  faPlusMinus,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 
-import { AddRow } from '@/components/shared/AddRow'
-import { AnimatedBar } from '@/components/shared/AnimatedBar'
-import { BottomSheet } from '@/components/shared/BottomSheet'
-import { FormErrorMessage } from '@/components/shared/FormErrorMessage'
-import { ListGroup } from '@/components/shared/ListGroup'
-import { ListRow } from '@/components/shared/ListRow'
-import { PageHeader } from '@/components/shared/PageHeader'
-import { PickerColumn } from '@/components/shared/PickerColumn'
-import { SectionDivider } from '@/components/shared/SectionDivider'
-import { SectionLabel } from '@/components/shared/SectionLabel'
-import { TransactionRow } from '@/components/shared/TransactionRow'
-import { Button } from '@/components/ui'
+import {
+  AddRow,
+  AnimatedBar,
+  BottomSheet,
+  FormErrorMessage,
+  ListGroup,
+  ListRow,
+  PageHeader,
+  PickerColumn,
+  SectionDivider,
+  SectionLabel,
+  TransactionRow,
+  Button,
+} from '@/components'
 
 interface SubSectionProps {
   id: string
@@ -70,7 +72,7 @@ export function SharedComponentsSection() {
 
       <SubSection id="page-header" title="PageHeader">
         <div className="rounded-2xl border border-white/6 bg-white/4 p-4">
-          <PageHeader title="Page Title" onBack={() => {}} />
+          <PageHeader title="Page Title" onBack={() => { }} />
           <VariantLabel label="default (no rightSlot)" />
         </div>
       </SubSection>

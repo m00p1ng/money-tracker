@@ -7,7 +7,7 @@ import {
   vi,
 } from 'vitest'
 
-import { SwitchField } from '@/components/ui'
+import { SwitchField } from '@/components'
 
 describe('SwitchField', () => {
   it('renders label and description', () => {

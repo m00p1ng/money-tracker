@@ -7,7 +7,7 @@ import {
   vi,
 } from 'vitest'
 
-import { FormActions } from '@/components/ui'
+import { FormActions } from '@/components'
 
 describe('FormActions', () => {
   it('renders a submit action', () => {

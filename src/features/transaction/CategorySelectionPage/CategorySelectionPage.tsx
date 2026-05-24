@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { Icon } from '@/components'
-import { TypePickerDropdown } from '@/components/ui'
+import { Icon, TypePickerDropdown } from '@/components'
 import type { Category } from '@/types/domain'
 
 const gridVariants = {

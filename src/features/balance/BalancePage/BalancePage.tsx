@@ -1,6 +1,6 @@
 import {
-  Icon,
   AnimatedBar,
+  Icon,
   SectionDivider,
 } from '@/components'
 import { formatAmount } from '@/lib'

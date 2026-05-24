@@ -1,7 +1,7 @@
 import {
+  fireEvent,
   render,
   screen,
-  fireEvent,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {
@@ -11,7 +11,7 @@ import {
   vi,
 } from 'vitest'
 
-import { TypePickerDropdown } from '@/components/ui'
+import { TypePickerDropdown } from '@/components'
 
 
 describe('TypePickerDropdown', () => {

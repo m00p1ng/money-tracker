@@ -15,7 +15,7 @@ export function SegmentedControl<T extends string>({
 }: SegmentedControlProps<T>) {
   return (
     <div
-      className="grid rounded-xl bg-white/[0.06] p-0.5"
+      className="grid rounded-xl bg-white/6 p-0.5"
       style={{ gridTemplateColumns: `repeat(${segments.length}, minmax(0, 1fr))` }}
     >
       {segments.map((segment) => (

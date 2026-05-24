@@ -3,7 +3,7 @@ import {
   DatePicker,
   RepeatPicker,
   WalletPicker,
-} from '@/components/ui'
+} from '@/components'
 import type {
   Currency,
   RepeatConfig,

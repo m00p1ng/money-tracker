@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 
-import { Icon, Card } from '@/components'
-import { hexToRgba, formatAmount } from '@/lib'
+import { Card, Icon } from '@/components'
+import { formatAmount, hexToRgba } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 export interface WalletRowProps {

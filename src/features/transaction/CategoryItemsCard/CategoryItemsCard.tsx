@@ -2,7 +2,7 @@ import cx from 'classnames'
 
 import { Icon } from '@/components'
 import { formatAmount } from '@/lib'
-import type { TransactionItem, Category  } from '@/types/domain'
+import type { Category, TransactionItem  } from '@/types/domain'
 
 export interface CategoryItemsCardProps {
   items: TransactionItem[]

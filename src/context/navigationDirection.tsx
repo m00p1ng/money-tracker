@@ -1,8 +1,8 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useState,
-  useCallback,
 } from 'react'
 import {
   useNavigate,
@@ -19,7 +19,7 @@ interface NavigationDirectionContextValue {
 
 const NavigationDirectionContext = createContext<NavigationDirectionContextValue>({
   direction: 'forward',
-  setDirection: () => {},
+  setDirection: () => { },
 })
 
 interface NavigationDirectionProviderProps {

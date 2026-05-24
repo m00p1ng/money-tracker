@@ -1,6 +1,6 @@
 import cx from 'classnames'
 
-import { Icon, BottomSheet } from '@/components'
+import { BottomSheet, Icon } from '@/components'
 import type { Currency } from '@/types/domain'
 
 function currencyFlag(code: string): string {

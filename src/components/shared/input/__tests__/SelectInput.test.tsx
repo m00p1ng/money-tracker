@@ -1,7 +1,7 @@
 import {
+  fireEvent,
   render,
   screen,
-  fireEvent,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {
@@ -11,7 +11,7 @@ import {
   vi,
 } from 'vitest'
 
-import { SelectInput } from '@/components/ui/Field'
+import { SelectInput } from '@/components'
 
 const OPTIONS = [
   { value: 'expense', label: 'Expense' },

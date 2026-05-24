@@ -1,15 +1,15 @@
-import { renderHook, act } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import {
   describe,
-  it,
   expect,
+  it,
 } from 'vitest'
 
 import {
   NavigationDirectionProvider,
-  useNavigationDirection,
   useBackNavigate,
+  useNavigationDirection,
 } from '@/context/navigationDirection'
 
 interface WrapperProps {

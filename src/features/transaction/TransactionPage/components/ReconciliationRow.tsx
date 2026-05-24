@@ -14,7 +14,7 @@ export function ReconciliationRow({
       type="button"
       className={[
         'flex w-full items-center gap-3 rounded-2xl',
-        'border border-white/[0.07] bg-white/[0.04] px-4 py-3 text-left',
+        'border border-white/[0.07] bg-white/4 px-4 py-3 text-left',
       ].join(' ')}
       style={cleared
         ? { borderColor: 'color-mix(in srgb, var(--accent) 20%, transparent)' }
@@ -22,7 +22,7 @@ export function ReconciliationRow({
       onClick={onToggle}
     >
       <div
-        className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-xs"
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs"
         style={{
           background: cleared
             ? 'color-mix(in srgb, var(--accent) 15%, transparent)'

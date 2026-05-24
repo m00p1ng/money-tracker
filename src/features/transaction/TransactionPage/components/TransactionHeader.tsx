@@ -1,5 +1,4 @@
-import { Icon } from '@/components'
-import { TypePickerDropdown } from '@/components/ui'
+import { Icon, TypePickerDropdown } from '@/components'
 import type { TransactionType } from '@/types/domain'
 
 interface TransactionHeaderProps {
