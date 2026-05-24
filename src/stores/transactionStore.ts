@@ -61,6 +61,7 @@ type TransactionStore = {
   add: (transaction: Transaction) => Promise<void>
   update: (transaction: Transaction) => Promise<void>
   remove: (id: string) => Promise<void>
+  toggleCleared: (id: string) => Promise<void>
   findById: (id: string) => Transaction | undefined
   monthlyIncome: () => number
   monthlyExpense: () => number
@@ -91,6 +92,13 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
   async remove(id) {
     await db.transactions.delete(id)
     set({ items: get().items.filter((transaction) => transaction.id !== id) })
+  },
+  async toggleCleared(id) {
+    const tx = get().items.find((item) => item.id === id)
+    if (!tx) return
+    const updated = { ...tx, cleared: !tx.cleared }
+    await db.transactions.update(id, { cleared: updated.cleared })
+    set({ items: get().items.map((item) => (item.id === id ? updated : item)) })
   },
   findById(id) {
     return get().items.find((transaction) => transaction.id === id)

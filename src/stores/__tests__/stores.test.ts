@@ -716,4 +716,22 @@ describe('stores', () => {
     expect(await db.currencies.get('THB')).toMatchObject({ isBase: true, rate: 1 })
     expect(useCurrencyStore.getState().findByCode('THB')).toMatchObject({ isBase: true, rate: 1 })
   })
+
+  it('toggleCleared flips cleared flag and persists to Dexie', async () => {
+    await seedDatabase()
+    await bootstrapStores()
+
+    await useTransactionStore.getState().add(
+      transaction({ id: 'tx-clear', cleared: false }),
+    )
+
+    await useTransactionStore.getState().toggleCleared('tx-clear')
+
+    expect(useTransactionStore.getState().findById('tx-clear')?.cleared).toBe(true)
+    const fromDb = await db.transactions.get('tx-clear')
+    expect(fromDb?.cleared).toBe(true)
+
+    await useTransactionStore.getState().toggleCleared('tx-clear')
+    expect(useTransactionStore.getState().findById('tx-clear')?.cleared).toBe(false)
+  })
 })
