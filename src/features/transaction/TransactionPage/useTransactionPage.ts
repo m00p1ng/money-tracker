@@ -69,6 +69,7 @@ export function useTransactionPage(): TransactionPageProps {
     toExchangeRate: String(initial?.toExchangeRate ?? ''),
     repeatConfig: initial?.repeat ?? { preset: 'never' },
     transferAmount: initial?.type === 'transfer' ? initial.items[0]?.amount ?? 0 : 0,
+    cleared: existing?.cleared ?? false,
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [])
 
@@ -94,6 +95,7 @@ export function useTransactionPage(): TransactionPageProps {
     toExchangeRate,
     repeatConfig,
     transferAmount,
+    cleared,
   } = draft
 
   const selectedCurrency = currencies.find((item) => item.code === currency)
@@ -140,6 +142,7 @@ export function useTransactionPage(): TransactionPageProps {
       markedPaid,
       repeat: repeatConfig.preset === 'never' ? undefined : repeatConfig,
       note,
+      cleared,
       now: existing?.createdAt ?? new Date().toISOString(),
       createId,
     })
@@ -182,6 +185,8 @@ export function useTransactionPage(): TransactionPageProps {
     isEditMode,
     isPlanned,
     defaultRate,
+    cleared,
+    onToggleCleared: () => updateDraft({ cleared: !cleared }),
     onChangeType: (v: TransactionType) => updateDraft({
       type: v,
       items: [],
