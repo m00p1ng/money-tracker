@@ -2,7 +2,7 @@ import cx from 'classnames'
 
 import { Icon } from '@/components'
 import { themes } from '@/lib'
-import type { ThemePreset, Wallet } from '@/types/domain'
+import type { ThemePreset } from '@/types/domain'
 
 const names: Record<ThemePreset, string> = {
   forest: 'Forest',
@@ -17,7 +17,6 @@ const names: Record<ThemePreset, string> = {
 
 interface ThemePageProps {
   selected: ThemePreset
-  firstWallet: Wallet | undefined
   onBack: () => void
   onSelectTheme: (theme: ThemePreset) => void
 }

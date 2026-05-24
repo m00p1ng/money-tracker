@@ -40,10 +40,8 @@ export function UpcomingTransactions({ rows }: UpcomingTransactionsProps) {
 
   return (
     <section>
-      <div className="mb-3">
-        <SectionLabel>Upcoming</SectionLabel>
-      </div>
-      <motion.div className="space-y-2" variants={listVariants} initial="hidden" animate="visible">
+      <SectionLabel>Upcoming</SectionLabel>
+      <motion.div className="space-y-2 mt-3" variants={listVariants} initial="hidden" animate="visible">
         {rows.map((row) => (
           <motion.div key={row.id} variants={rowVariants}>
             <TransactionRow

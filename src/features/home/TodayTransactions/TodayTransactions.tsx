@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 
 import { SectionLabel, TransactionRow } from '@/components'
-import { formatShortDate } from '@/lib'
 
 const listVariants = {
   hidden: {},
@@ -40,12 +39,17 @@ type TodayTransactionsProps = {
 export function TodayTransactions({ rows }: TodayTransactionsProps) {
   return (
     <section>
-      <div className="mb-3 flex items-end justify-between">
-        <SectionLabel>Today</SectionLabel>
-        <span className="text-sm text-slate-400">{formatShortDate(new Date())}</span>
-      </div>
-      <motion.div className="space-y-2" variants={listVariants} initial="hidden" animate="visible">
-        {rows.length === 0 ? <p className="py-8 text-center text-sm text-slate-500">No transactions today</p> : null}
+      <SectionLabel>Today</SectionLabel>
+      <motion.div
+        className="space-y-2 mt-3"
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {rows.length === 0
+          ? <p className="py-8 text-center text-sm text-slate-500">No transactions today</p>
+          : null
+        }
         {rows.map((row) => (
           <motion.div key={row.key} variants={rowVariants}>
             <TransactionRow
