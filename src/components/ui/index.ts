@@ -10,6 +10,7 @@ export {
 export { SegmentedControl } from './SegmentedControl'
 export { TypePickerDropdown } from './TypeDropdown'
 export { CurrencyPicker } from './picker/CurrencyPicker'
+export { DateRangePresetPicker } from './picker/DateRangePresetPicker'
 export { DatePickerSheet } from './picker/DatePickerSheet'
 export { RepeatPicker } from './picker/RepeatPicker'
 export { WalletPicker } from './picker/WalletPicker'

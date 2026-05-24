@@ -5,11 +5,11 @@ import { Link } from 'react-router'
 import {
   Icon,
   AnimatedBar,
-  BottomSheet,
   PageHeader,
   SectionDivider,
   Card,
 } from '@/components'
+import { DateRangePresetPicker } from '@/components/ui'
 import { walletRunningRows } from '@/features/balance/balanceCalculations'
 import {
   hexToRgba,
@@ -22,16 +22,6 @@ import type {
   Transaction,
   Wallet,
 } from '@/types/domain'
-
-const PRESETS: { label: string; value: DateRangePreset }[] = [
-  { label: 'Last 7d', value: 'last-7d' },
-  { label: 'Last 30d', value: 'last-30d' },
-  { label: 'Last 90d', value: 'last-90d' },
-  { label: 'This Month', value: 'this-month' },
-  { label: 'Last Month', value: 'last-month' },
-  { label: 'This Year', value: 'this-year' },
-  { label: 'Last Year', value: 'last-year' },
-]
 
 function formatDateLabel(dateStr: string): string {
   const [year, month, day] = dateStr.split('-').map(Number)
@@ -75,7 +65,9 @@ export function WalletDetailPage({
     .filter((row) => row.amount < 0)
     .reduce((sum, row) => sum + Math.abs(row.amount), 0)
 
-  const creditUsedRatio = isCredit && wallet.creditLimit ? Math.min((currentAmount / wallet.creditLimit) * 100, 100) : 0
+  const creditUsedRatio = isCredit && wallet.creditLimit
+    ? Math.min((currentAmount / wallet.creditLimit) * 100, 100)
+    : 0
 
   return (
     <div className="space-y-4">
@@ -83,11 +75,11 @@ export function WalletDetailPage({
 
       <div>
         <div className="mb-2 flex items-center gap-2">
-          <Card className="flex-1 !p-2.5">
+          <Card className="flex-1 p-2.5!">
             <p className="text-[10px] uppercase tracking-wide text-white/30">Begin</p>
             <p className="mt-0.5 text-sm font-semibold">{formatDateLabel(range.start)}</p>
           </Card>
-          <Card className="flex-1 !p-2.5">
+          <Card className="flex-1 p-2.5!">
             <p className="text-[10px] uppercase tracking-wide text-white/30">End</p>
             <p className="mt-0.5 text-sm font-semibold">{formatDateLabel(range.end)}</p>
           </Card>
@@ -95,8 +87,8 @@ export function WalletDetailPage({
             aria-label="More date range options"
             onClick={() => setPresetSheetOpen(true)}
             className={[
-              'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl',
-              'border border-white/[0.08] bg-white/[0.05] text-white/50',
+              'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
+              'border border-white/8 bg-white/5 text-white/50',
             ].join(' ')}
             type="button"
           >
@@ -132,9 +124,9 @@ export function WalletDetailPage({
                 {formatAmount(currentAmount, wallet.currency)} / {formatAmount(wallet.creditLimit, wallet.currency)}
               </span>
             </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
+            <div className="h-1.5 overflow-hidden rounded-full bg-white/8">
               <div
-                className="h-1.5 rounded-full bg-gradient-to-r from-red-400 to-orange-400"
+                className="h-1.5 rounded-full bg-linear-to-r from-red-400 to-orange-400"
                 style={{ width: `${creditUsedRatio}%` }}
               />
             </div>
@@ -182,7 +174,7 @@ export function WalletDetailPage({
               />
             )}
             {totalExpenses === 0 && (
-              <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]" />
+              <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/4" />
             )}
           </div>
         </div>
@@ -198,7 +190,7 @@ export function WalletDetailPage({
             <Link key={row.transaction.id} to={`/transaction/${row.transaction.id}`}>
               <Card className="mb-2 flex items-center gap-2.5 cursor-pointer active:opacity-70 transition-opacity">
                 <div
-                  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl text-sm"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm"
                   style={{ background: hexToRgba(iconColor, 0.15), color: iconColor }}
                 >
                   <Icon name={category?.icon ?? 'fa-ellipsis'} />
@@ -207,7 +199,7 @@ export function WalletDetailPage({
                   <p className="text-sm font-semibold">{category?.name ?? row.transaction.type}</p>
                   <p className="mt-0.5 text-xs text-white/30">{new Date(row.transaction.date).toLocaleDateString()}</p>
                 </div>
-                <div className="flex-shrink-0 text-right">
+                <div className="shrink-0 text-right">
                   <p className={cx('text-sm font-bold', row.amount >= 0 ? 'text-income' : 'text-expense')}>
                     {row.amount >= 0 ? '+' : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
                   </p>
@@ -223,28 +215,12 @@ export function WalletDetailPage({
         })}
       </section>
 
-      <BottomSheet isOpen={isPresetSheetOpen} onClose={() => setPresetSheetOpen(false)} title="Date Range">
-        <div className="px-4 space-y-1">
-          {PRESETS.map((p) => (
-            <button
-              key={p.value}
-              type="button"
-              onClick={() => {
-                setPreset(p.value); setPresetSheetOpen(false)
-              }}
-              className={cx(
-                'flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors',
-                preset === p.value
-                  ? 'bg-accent/15 text-accent-light'
-                  : 'text-white/70 hover:bg-white/[0.05]',
-              )}
-            >
-              {p.label}
-              {preset === p.value && <Icon name="fa-circle-check" className="text-accent" />}
-            </button>
-          ))}
-        </div>
-      </BottomSheet>
+      <DateRangePresetPicker
+        isOpen={isPresetSheetOpen}
+        value={preset}
+        onSelect={setPreset}
+        onClose={() => setPresetSheetOpen(false)}
+      />
     </div>
   )
 }

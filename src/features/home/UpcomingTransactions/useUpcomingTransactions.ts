@@ -12,15 +12,19 @@ function badgeFor(day: string): string {
   const tomorrowDate = new Date()
   tomorrowDate.setDate(tomorrowDate.getDate() + 1)
   const tomorrow = tomorrowDate.toISOString().slice(0, 10)
+
   if (day < today) {
     return 'Overdue'
   }
+
   if (day === today) {
     return 'Today'
   }
+
   if (day === tomorrow) {
     return 'Tomorrow'
   }
+
   return day
 }
 
@@ -31,7 +35,9 @@ export function useUpcomingTransactions() {
   const rawRows = upcomingTransactions()
 
   const rows: UpcomingTransactionRowData[] = rawRows.map((row) => {
-    const transaction = row.kind === 'real' ? row.transaction : row.occurrence.transaction
+    const transaction = row.kind === 'real'
+      ? row.transaction
+      : row.occurrence.transaction
     const firstItem = transaction.items[0]
     const category = firstItem ? findCategory(firstItem.categoryId) : undefined
     const fromWallet = findWallet(transaction.walletId)
@@ -44,10 +50,13 @@ export function useUpcomingTransactions() {
       row.kind === 'real'
         ? `/transaction/${transaction.id}`
         : `/transaction/repeat/${row.occurrence.sourceId}/${row.occurrence.occurrenceDate}`
+
     return {
       id: row.id,
       to,
-      icon: transaction.type === 'transfer' ? 'fa-right-left' : category?.icon ?? 'fa-clock',
+      icon: transaction.type === 'transfer'
+        ? 'fa-right-left'
+        : category?.icon ?? 'fa-clock',
       primaryLabel: label,
       secondaryLabel: `${badgeFor(row.date)}${row.kind === 'virtual-repeat' ? ' · Repeat' : ''}`,
       amount: formatAmount(firstItem?.amount ?? 0, transaction.currency),

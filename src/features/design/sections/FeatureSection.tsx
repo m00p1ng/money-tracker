@@ -21,7 +21,7 @@ function SubSection({
     <section id={id} className="scroll-mt-8">
       <h3 className="mb-3 text-base font-semibold text-white/70">{title}</h3>
       {children}
-      <hr className="mt-6 border-white/[0.06]" />
+      <hr className="mt-6 border-white/6" />
     </section>
   )
 }

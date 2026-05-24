@@ -34,7 +34,7 @@ export function HomePage({ onAddTransaction }: HomePageProps) {
       <motion.header variants={sectionVariants} className="flex items-start justify-between">
         <div>
           <p className="text-sm text-slate-400">{formatHeaderDate(new Date())}</p>
-          <h1 className="bg-gradient-to-r from-white to-white/75 bg-clip-text text-2xl font-semibold text-transparent">
+          <h1 className="bg-linear-to-r from-white to-white/75 bg-clip-text text-2xl font-semibold text-transparent">
             Overview
           </h1>
         </div>

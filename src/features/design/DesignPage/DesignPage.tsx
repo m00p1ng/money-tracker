@@ -15,12 +15,12 @@ export function DesignPage({
   onNavigateBack,
 }: DesignPageProps) {
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[var(--bg)] text-slate-50">
+    <div className="flex h-screen flex-col overflow-hidden bg-(--bg) text-slate-50">
       <DesignTopNav activeId={activeId} />
       <div className="flex min-h-0 flex-1">
         <DesignSidebar activeId={activeId} />
         <div ref={contentRef} className="flex-1 overflow-y-auto px-4 py-6 md:px-6 md:py-8">
-          <div className="mx-auto w-full max-w-[430px]">
+          <div className="mx-auto w-full max-w-107.5">
             <div className="mb-6 flex items-center justify-between">
               <h1 className="text-xl font-bold">Design System</h1>
               <button
@@ -32,9 +32,9 @@ export function DesignPage({
               </button>
             </div>
             <TokensSection />
-            <hr className="my-8 border-white/[0.08]" />
+            <hr className="my-8 border-white/8" />
             <UIComponentsSection />
-            <hr className="my-8 border-white/[0.08]" />
+            <hr className="my-8 border-white/8" />
             <FeatureSection />
           </div>
         </div>

@@ -47,9 +47,9 @@ function ColorSwatch({ name, variable }: ColorSwatchProps) {
   )
 
   return (
-    <div className="overflow-hidden rounded-xl border border-white/[0.08]">
+    <div className="overflow-hidden rounded-xl border border-white/8">
       <div className="h-12" style={{ background: `var(${variable})` }} />
-      <div className="bg-white/[0.04] px-3 py-2">
+      <div className="bg-white/4 px-3 py-2">
         <p className="text-[11px] font-semibold text-slate-100">{name}</p>
         <p className="text-[10px] text-white/40">{variable}</p>
         <p className="text-[10px] text-white/25">{resolved}</p>
@@ -95,10 +95,10 @@ export function TokensSection() {
           title="Typography"
           description="Font: Inter — text size scale used in the app"
         />
-        <div className="space-y-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+        <div className="space-y-3 rounded-xl border border-white/8 bg-white/3 p-4">
           {TYPE_SCALE.map(({ label, className }) => (
             <div key={label} className="flex items-baseline gap-4">
-              <span className="w-36 flex-shrink-0 text-[10px] text-white/30">{label}</span>
+              <span className="w-36 shrink-0 text-[10px] text-white/30">{label}</span>
               <span className={`${className} font-medium`}>The quick brown fox</span>
             </div>
           ))}
@@ -107,10 +107,10 @@ export function TokensSection() {
 
       <section>
         <SectionHeading id="spacing" title="Spacing" description="Tailwind spacing values used across the app" />
-        <div className="space-y-2 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+        <div className="space-y-2 rounded-xl border border-white/8 bg-white/3 p-4">
           {SPACING_SCALE.map(({ label, size }) => (
             <div key={label} className="flex items-center gap-4">
-              <span className="w-24 flex-shrink-0 text-[10px] text-white/30">{label}</span>
+              <span className="w-24 shrink-0 text-[10px] text-white/30">{label}</span>
               <div className="rounded bg-accent/40" style={{ width: size, height: 16 }} />
             </div>
           ))}

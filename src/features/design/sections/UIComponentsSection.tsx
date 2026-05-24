@@ -186,7 +186,7 @@ export function UIComponentsSection() {
       </SubSection>
 
       <SubSection id="type-picker" title="TypePickerDropdown">
-        <div className="max-w-xs rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+        <div className="max-w-xs rounded-xl border border-white/8 bg-white/3 p-4">
           <TypePickerDropdown value={pickerType} onChange={setPickerType} />
           <VariantLabel label={`current: ${pickerType}`} />
         </div>
