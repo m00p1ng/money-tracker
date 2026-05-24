@@ -94,6 +94,33 @@ export function WalletFormPage({
             />
           </Field>
         ) : null}
+        <Field label="Reconciliation">
+          <label className="flex cursor-pointer items-center gap-3">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={form.reconciliationEnabled ?? false}
+                onChange={(e) => setForm({ ...form, reconciliationEnabled: e.target.checked })}
+              />
+              <div
+                className={[
+                  'h-6 w-11 rounded-full transition-colors',
+                  (form.reconciliationEnabled ?? false) ? 'bg-accent' : 'bg-white/15',
+                ].join(' ')}
+              />
+              <div
+                className={[
+                  'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform',
+                  (form.reconciliationEnabled ?? false) ? 'translate-x-5' : 'translate-x-0.5',
+                ].join(' ')}
+              />
+            </div>
+            <span className="text-sm text-white/70">
+              {(form.reconciliationEnabled ?? false) ? 'Enabled' : 'Disabled'}
+            </span>
+          </label>
+        </Field>
         <FormErrorMessage error={error} />
       </Card>
       <Button type="submit" variant="accent">Save</Button>
