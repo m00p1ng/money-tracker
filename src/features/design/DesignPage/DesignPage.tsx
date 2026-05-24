@@ -1,5 +1,6 @@
 import { DesignSidebar, DesignTopNav } from '@/features/design/DesignSidebar'
 import { FeatureSection } from '@/features/design/sections/FeatureSection'
+import { SharedComponentsSection } from '@/features/design/sections/SharedComponentsSection'
 import { TokensSection } from '@/features/design/sections/TokensSection'
 import { UIComponentsSection } from '@/features/design/sections/UIComponentsSection'
 
@@ -34,6 +35,8 @@ export function DesignPage({
             <TokensSection />
             <hr className="my-8 border-white/8" />
             <UIComponentsSection />
+            <hr className="my-8 border-white/8" />
+            <SharedComponentsSection />
             <hr className="my-8 border-white/8" />
             <FeatureSection />
           </div>

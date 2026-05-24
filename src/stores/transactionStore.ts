@@ -95,7 +95,9 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
   },
   async toggleCleared(id) {
     const tx = get().items.find((item) => item.id === id)
-    if (!tx) return
+    if (!tx) {
+      return
+    }
     const updated = { ...tx, cleared: !tx.cleared }
     await db.transactions.update(id, { cleared: updated.cleared })
     set({ items: get().items.map((item) => (item.id === id ? updated : item)) })

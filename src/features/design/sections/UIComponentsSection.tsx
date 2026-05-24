@@ -8,11 +8,13 @@ import {
   SelectInput,
   CurrencyPicker,
   DatePickerSheet,
+  DateRangePresetPicker,
   RepeatPicker,
   TypePickerDropdown,
   WalletPicker,
   SegmentedControl,
 } from '@/components/ui'
+import type { DateRangePreset } from '@/lib'
 import type {
   Currency,
   Wallet,
@@ -108,6 +110,9 @@ export function UIComponentsSection() {
 
   const [walletOpen, setWalletOpen] = useState(false)
   const [selectedWallet, setSelectedWallet] = useState('w1')
+
+  const [dateRangeOpen, setDateRangeOpen] = useState(false)
+  const [selectedDateRange, setSelectedDateRange] = useState<DateRangePreset>('this-month')
 
   return (
     <div className="space-y-10">
@@ -250,6 +255,22 @@ export function UIComponentsSection() {
               setSelectedWallet(id); setWalletOpen(false)
             }}
             onClose={() => setWalletOpen(false)}
+          />
+        </div>
+      </SubSection>
+
+      <SubSection id="date-range-preset-picker" title="DateRangePresetPicker">
+        <div className="space-y-3">
+          <Button variant="ghost" onClick={() => setDateRangeOpen(true)}>Open DateRangePresetPicker</Button>
+          <VariantLabel label={`selected: ${selectedDateRange}`} />
+          <DateRangePresetPicker
+            isOpen={dateRangeOpen}
+            value={selectedDateRange}
+            onSelect={(preset) => {
+              setSelectedDateRange(preset)
+              setDateRangeOpen(false)
+            }}
+            onClose={() => setDateRangeOpen(false)}
           />
         </div>
       </SubSection>

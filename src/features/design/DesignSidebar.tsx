@@ -22,16 +22,50 @@ const NAV_GROUPS = [
       { id: 'date-picker', label: 'DatePickerSheet' },
       { id: 'repeat-picker', label: 'RepeatPicker' },
       { id: 'wallet-picker', label: 'WalletPicker' },
+      { id: 'date-range-preset-picker', label: 'DateRangePresetPicker' },
     ],
   },
   {
-    label: 'Feature',
+    label: 'Shared Components',
+    items: [
+      { id: 'section-label', label: 'SectionLabel' },
+      { id: 'section-divider', label: 'SectionDivider' },
+      { id: 'form-error-message', label: 'FormErrorMessage' },
+      { id: 'page-header', label: 'PageHeader' },
+      { id: 'animated-bar', label: 'AnimatedBar' },
+      { id: 'transaction-row', label: 'TransactionRow' },
+      { id: 'list-group', label: 'ListGroup + ListRow' },
+      { id: 'add-row', label: 'AddRow' },
+      { id: 'picker-column', label: 'PickerColumn' },
+      { id: 'bottom-sheet', label: 'BottomSheet' },
+    ],
+  },
+  {
+    label: 'Feature — Home',
     items: [
       { id: 'summary-cards', label: 'SummaryCards' },
-      { id: 'calculator-keyboard', label: 'CalculatorKeyboard' },
-      { id: 'category-items-card', label: 'CategoryItemsCard' },
       { id: 'today-transactions', label: 'TodayTransactions' },
       { id: 'upcoming-transactions', label: 'UpcomingTransactions' },
+    ],
+  },
+  {
+    label: 'Feature — Balance',
+    items: [
+      { id: 'wallet-row', label: 'WalletRow' },
+      { id: 'swipeable-transaction-row', label: 'SwipeableTransactionRow' },
+    ],
+  },
+  {
+    label: 'Feature — Transaction',
+    items: [
+      { id: 'calculator-keyboard', label: 'CalculatorKeyboard' },
+      { id: 'category-items-card', label: 'CategoryItemsCard' },
+    ],
+  },
+  {
+    label: 'Feature — Settings',
+    items: [
+      { id: 'currency-row', label: 'CurrencyRow' },
     ],
   },
 ]

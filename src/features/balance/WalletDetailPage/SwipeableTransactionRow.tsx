@@ -1,5 +1,7 @@
 import cx from 'classnames'
-import { animate, motion, useMotionValue } from 'framer-motion'
+import {
+  animate, motion, useMotionValue,
+} from 'framer-motion'
 import { useNavigate } from 'react-router'
 
 import { Card, Icon } from '@/components'
@@ -14,7 +16,12 @@ type Props = {
   onToggleCleared: (id: string) => void
 }
 
-export function SwipeableTransactionRow({ row, wallet, categories, onToggleCleared }: Props) {
+export function SwipeableTransactionRow({
+  row,
+  wallet,
+  categories,
+  onToggleCleared,
+}: Props) {
   const navigate = useNavigate()
   const x = useMotionValue(0)
   const isCredit = wallet.type === 'credit_card'
@@ -24,25 +31,39 @@ export function SwipeableTransactionRow({ row, wallet, categories, onToggleClear
 
   function handleDragEnd() {
     if (x.get() < -36) {
-      animate(x, -72, { type: 'spring', stiffness: 400, damping: 30 })
+      animate(x, -72, {
+        type: 'spring',
+        stiffness: 400,
+        damping: 30,
+      })
     } else {
-      animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 })
+      animate(x, 0, {
+        type: 'spring',
+        stiffness: 400,
+        damping: 30,
+      })
     }
   }
 
   function handleRowClick() {
-    if (Math.abs(x.get()) > 4) return
+    if (Math.abs(x.get()) > 4) {
+      return
+    }
     navigate(`/transaction/${row.transaction.id}`)
   }
 
   function handleActionClick() {
     onToggleCleared(row.transaction.id)
-    animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 })
+    animate(x, 0, {
+      type: 'spring',
+      stiffness: 400,
+      damping: 30,
+    })
   }
 
   return (
     <div className="relative mb-2 overflow-hidden rounded-2xl">
-      <div className="absolute inset-y-0 right-0 flex w-[72px] flex-col items-center justify-center gap-1 bg-accent/15">
+      <div className="absolute inset-y-0 right-0 flex w-18 flex-col items-center justify-center gap-1 bg-accent/15">
         <button
           type="button"
           onClick={handleActionClick}

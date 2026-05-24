@@ -1,4 +1,5 @@
 import cx from 'classnames'
+import type { MouseEventHandler } from 'react'
 import { Link } from 'react-router'
 
 import { Icon } from '@/components'
@@ -39,18 +40,19 @@ const navItems = [
 
 type BottomNavProps = {
   pathname: string
+  onSettingsPress: MouseEventHandler<HTMLAnchorElement>
 }
 
-export function BottomNav({ pathname }: BottomNavProps) {
+export function BottomNav({ pathname, onSettingsPress }: BottomNavProps) {
   return (
     <nav
       aria-label="Primary"
       className={[
-        'fixed inset-x-0 bottom-0 z-20 border-t border-[var(--nav-border)]',
+        'fixed inset-x-0 bottom-0 z-20 border-t border-(--nav-border)',
         'bg-app-bg/95 pb-7 pt-2.5 backdrop-blur-xl',
       ].join(' ')}
     >
-      <div className="mx-auto grid max-w-[430px] grid-cols-5">
+      <div className="mx-auto grid max-w-107.5 grid-cols-5">
         {navItems.map((item) => {
           const active = item.to === '/' ? pathname === '/' : pathname.startsWith(item.to)
           const activeLabel = 'font-semibold bg-gradient-to-br'
@@ -87,7 +89,12 @@ export function BottomNav({ pathname }: BottomNavProps) {
             )
           }
           return (
-            <Link key={item.label} className="flex flex-col items-center py-1.5" to={item.to}>
+            <Link
+              key={item.label}
+              className="flex flex-col items-center py-1.5"
+              onClick={item.label === 'Settings' ? onSettingsPress : undefined}
+              to={item.to}
+            >
               {content}
             </Link>
           )

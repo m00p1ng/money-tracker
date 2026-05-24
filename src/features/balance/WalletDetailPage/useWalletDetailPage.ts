@@ -29,6 +29,8 @@ export function useWalletDetailPage(): WalletDetailPageProps {
     currentAmount,
     clearedAmount,
     onBack: () => backNavigate('/balance'),
-    onToggleCleared: (txId) => { void toggleCleared(txId) },
+    onToggleCleared: (txId) => {
+      toggleCleared(txId)
+    },
   }
 }

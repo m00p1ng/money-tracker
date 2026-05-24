@@ -1,5 +1,10 @@
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router'
+import userEvent from '@testing-library/user-event'
+import {
+  MemoryRouter,
+  Route,
+  Routes,
+} from 'react-router'
 import {
   afterEach,
   describe,
@@ -100,6 +105,45 @@ describe('App routing', () => {
 
     expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument()
+  })
+
+  it('opens the design page after pressing Settings in the bottom navigation three times', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/settings']}>
+        <Routes>
+          <Route path="/design" element={<div>Design System</div>} />
+          <Route path="/*" element={<RoutedApp />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    const settingsTab = screen.getByRole('link', { name: /Settings/i })
+    await user.click(settingsTab)
+    expect(screen.queryByText('Design System')).not.toBeInTheDocument()
+
+    await user.click(settingsTab)
+    expect(screen.queryByText('Design System')).not.toBeInTheDocument()
+
+    await user.click(settingsTab)
+    expect(screen.getByText('Design System')).toBeInTheDocument()
+  })
+
+  it('does not open the design page with Shift+D', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/settings']}>
+        <Routes>
+          <Route path="/design" element={<div>Design System</div>} />
+          <Route path="/*" element={<RoutedApp />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await user.keyboard('{Shift>}D{/Shift}')
+
+    expect(screen.queryByText('Design System')).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
   })
 
   it('renders Settings menu rows and child settings routes', () => {
