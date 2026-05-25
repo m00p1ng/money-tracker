@@ -39,7 +39,12 @@ export function BalanceFeatSection() {
       </SubSection>
 
       <SubSection id="date-range-header" title="DateRangeHeader">
-        <DateRangeHeader range={STUB_RANGE} onOpenPreset={() => {}} />
+        <DateRangeHeader
+          range={STUB_RANGE}
+          onClickStart={() => {}}
+          onClickEnd={() => {}}
+          onOpenPreset={() => {}}
+        />
       </SubSection>
 
       <SubSection id="credit-card-stats" title="CreditCardStats">

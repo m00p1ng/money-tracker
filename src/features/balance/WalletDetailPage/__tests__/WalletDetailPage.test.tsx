@@ -58,4 +58,22 @@ describe('WalletDetailPage', () => {
     expect(onSearch).toHaveBeenCalledTimes(1)
     expect(onAdd).toHaveBeenCalledTimes(1)
   })
+
+  it('opens start date picker when Begin is tapped', async () => {
+    const user = userEvent.setup()
+    renderPage()
+
+    await user.click(screen.getByRole('button', { name: 'Begin' }))
+
+    expect(screen.getByText('Start Date')).toBeInTheDocument()
+  })
+
+  it('opens end date picker when End is tapped', async () => {
+    const user = userEvent.setup()
+    renderPage()
+
+    await user.click(screen.getByRole('button', { name: 'End' }))
+
+    expect(screen.getByText('End Date')).toBeInTheDocument()
+  })
 })

@@ -2,12 +2,17 @@ import { useState } from 'react'
 
 import {
   Card,
+  DateOnlyPicker,
   DateRangePresetPicker,
   Icon,
   PageHeader,
 } from '@/components'
 import { isReconciliationEnabled, walletRunningRows } from '@/features/balance/balanceCalculations'
-import { getPresetRange, type DateRangePreset } from '@/lib'
+import {
+  getPresetRange,
+  type DateRange,
+  type DateRangePreset,
+} from '@/lib'
 import type {
   Category,
   Transaction,
@@ -43,8 +48,10 @@ export function WalletDetailPage({
   onSearch,
   onToggleCleared,
 }: WalletDetailPageProps) {
-  const [preset, setPreset] = useState<DateRangePreset>('this-month')
+  const [range, setRange] = useState<DateRange>(getPresetRange('this-month'))
   const [isPresetSheetOpen, setPresetSheetOpen] = useState(false)
+  const [isStartPickerOpen, setStartPickerOpen] = useState(false)
+  const [isEndPickerOpen, setEndPickerOpen] = useState(false)
 
   if (!wallet) {
     return (
@@ -55,7 +62,6 @@ export function WalletDetailPage({
     )
   }
 
-  const range = getPresetRange(preset)
   const rows = walletRunningRows(wallet, transactions, range)
   const isCredit = wallet.type === 'credit_card'
   const reconciliation = isReconciliationEnabled(wallet)
@@ -63,6 +69,11 @@ export function WalletDetailPage({
   const totalExpenses = rows
     .filter((row) => row.amount < 0)
     .reduce((sum, row) => sum + Math.abs(row.amount), 0)
+
+  function handlePresetSelect(preset: DateRangePreset) {
+    setRange(getPresetRange(preset))
+    setPresetSheetOpen(false)
+  }
 
   return (
     <div className="space-y-4">
@@ -92,7 +103,12 @@ export function WalletDetailPage({
         )}
       />
 
-      <DateRangeHeader range={range} onOpenPreset={() => setPresetSheetOpen(true)} />
+      <DateRangeHeader
+        range={range}
+        onClickStart={() => setStartPickerOpen(true)}
+        onClickEnd={() => setEndPickerOpen(true)}
+        onOpenPreset={() => setPresetSheetOpen(true)}
+      />
 
       {isCredit && wallet.creditLimit
         ? (
@@ -139,10 +155,26 @@ export function WalletDetailPage({
         })}
       </section>
 
+      <DateOnlyPicker
+        isOpen={isStartPickerOpen}
+        title="Start Date"
+        value={range.start}
+        onChange={(date) => setRange((prev) => ({ ...prev, start: date }))}
+        onClose={() => setStartPickerOpen(false)}
+      />
+
+      <DateOnlyPicker
+        isOpen={isEndPickerOpen}
+        title="End Date"
+        value={range.end}
+        onChange={(date) => setRange((prev) => ({ ...prev, end: date }))}
+        onClose={() => setEndPickerOpen(false)}
+      />
+
       <DateRangePresetPicker
         isOpen={isPresetSheetOpen}
-        value={preset}
-        onSelect={setPreset}
+        value="this-month"
+        onSelect={handlePresetSelect}
         onClose={() => setPresetSheetOpen(false)}
       />
     </div>
