@@ -25,8 +25,8 @@ export function HomeTitle({ onAddTransaction, onNavigateToCalendar }: HomeTitleP
           {formatHeaderDay(new Date())}
         </span>
         <div className="row-span-2 self-stretch bg-white/30" />
-        <span className="text-sm font-medium text-white">{formatHeaderWeekday(new Date())}</span>
-        <span className="text-sm font-medium text-white">{formatHeaderMonthYear(new Date())}</span>
+        <span className="text-sm font-medium text-white text-left">{formatHeaderWeekday(new Date())}</span>
+        <span className="text-sm font-medium text-white text-left">{formatHeaderMonthYear(new Date())}</span>
       </button>
       <button
         aria-label="Add transaction"

@@ -179,7 +179,10 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
           : group.items.filter((item) => item.label.toLowerCase().includes(normalizedSearch)),
       }
     }).filter((group) => group.items.length > 0)
-    : NAV_GROUPS
+    : NAV_GROUPS.map((group) => ({
+      ...group,
+      items: group.slug === section ? group.items : [],
+    }))
 
   useEffect(() => {
     activeRef.current?.scrollIntoView({
@@ -253,9 +256,8 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
             ))}
           </div>
         ))
-        : (
-          <p className="px-3 py-4 text-sm text-white/35">No matches</p>
-        )}
+        : <p className="px-3 py-4 text-sm text-white/35">No matches</p>
+      }
     </nav>
   )
 }
