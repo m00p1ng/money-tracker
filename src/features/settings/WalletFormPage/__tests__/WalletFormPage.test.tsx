@@ -10,10 +10,6 @@ import {
 import { WalletFormPage } from '@/features/settings/WalletFormPage/WalletFormPage'
 import type { Currency, Wallet } from '@/types/domain'
 
-type SetFormError = (err: string | null) => void
-type SubmitWallet = (form: Wallet, setError: SetFormError) => Promise<void>
-type DeleteWallet = (setError: SetFormError) => Promise<void>
-
 const currencies: Currency[] = [
   {
     code: 'THB',
@@ -44,13 +40,14 @@ const existingWallet: Wallet = {
 }
 
 function renderPage(props: Partial<React.ComponentProps<typeof WalletFormPage>> = {}) {
-  const onSubmit = vi.fn<SubmitWallet>(async () => { })
-  const onDelete = vi.fn<DeleteWallet>(async () => { })
+  const onSubmit = vi.fn<(form: Wallet) => Promise<void>>(async () => {})
+  const onDelete = vi.fn<() => Promise<void>>(async () => {})
   const onBack = vi.fn()
 
   render(
     <WalletFormPage
       currencies={currencies}
+      error={null}
       initialType="payment"
       onBack={onBack}
       onDelete={onDelete}
@@ -135,5 +132,10 @@ describe('WalletFormPage', () => {
     const { onSubmit } = renderPage()
     await userEvent.click(screen.getByRole('button', { name: 'Save' }))
     expect(onSubmit.mock.calls[0][0]).toMatchObject({ icon: 'fa-wallet' })
+  })
+
+  it('displays error prop when provided', () => {
+    renderPage({ error: 'Name is required' })
+    expect(screen.getByText('Name is required')).toBeInTheDocument()
   })
 })

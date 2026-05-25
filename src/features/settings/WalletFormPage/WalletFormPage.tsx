@@ -25,10 +25,11 @@ import type {
 interface WalletFormPageProps {
   wallet: Wallet | undefined
   currencies: Currency[]
+  error: string | null
   initialType: WalletType
   onBack: () => void
-  onSubmit: (form: Wallet, setError: (err: string | null) => void) => Promise<void>
-  onDelete: (setError: (err: string | null) => void) => Promise<void>
+  onSubmit: (form: Wallet) => Promise<void>
+  onDelete: () => Promise<void>
 }
 
 const DEFAULT_CURRENCY = 'THB'
@@ -42,12 +43,12 @@ function walletTypeLabel(type: WalletType) {
 export function WalletFormPage({
   wallet,
   currencies,
+  error,
   initialType,
   onBack,
   onSubmit,
   onDelete,
 }: WalletFormPageProps) {
-  const [error, setError] = useState<string | null>(null)
   const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [iconPickerOpen, setIconPickerOpen] = useState(false)
   const [form, setForm] = useState<Wallet>(() => wallet ?? {
@@ -67,11 +68,11 @@ export function WalletFormPage({
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    await onSubmit(form, setError)
+    await onSubmit(form)
   }
 
   async function handleDelete() {
-    await onDelete(setError)
+    await onDelete()
   }
 
   const reconciliationEnabled = form.reconciliationEnabled ?? false
