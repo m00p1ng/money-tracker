@@ -53,7 +53,7 @@ describe('theme utilities', () => {
 
   it('applies bgGlow4 and bgGlow5 CSS variables', () => {
     applyTheme('forest')
-    expect(document.documentElement.style.getPropertyValue('--bg-glow-4')).toBe('#10b98112')
-    expect(document.documentElement.style.getPropertyValue('--bg-glow-5')).toBe('#34d39910')
+    expect(document.documentElement.style.getPropertyValue('--bg-glow-4')).toBe('#10b98128')
+    expect(document.documentElement.style.getPropertyValue('--bg-glow-5')).toBe('#34d39920')
   })
 })
