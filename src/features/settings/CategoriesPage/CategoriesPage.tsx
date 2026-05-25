@@ -39,6 +39,7 @@ export function CategoriesPage({
       <ListGroup label={`${typeLabel} Categories`}>
         {categories.map((category) => {
           const count = subCountMap[category.id] ?? 0
+
           return (
             <ListRow
               key={category.id}
@@ -46,7 +47,9 @@ export function CategoriesPage({
               iconBg={hexToRgba(category.color, 0.15)}
               iconColor={category.color}
               label={category.name}
-              sub={count > 0 ? `${count} sub-categories` : 'No sub-categories'}
+              sub={count > 0
+                ? `${count} sub-categories`
+                : 'No sub-categories'}
               to={`/settings/categories/${category.id}`}
             />
           )

@@ -1,7 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
-import { describe, expect, it, vi } from 'vitest'
+import {
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
 import { CategoriesPage } from '@/features/settings/CategoriesPage/CategoriesPage'
 import type { Category, TransactionType } from '@/types/domain'
@@ -19,8 +24,12 @@ const makeCategory = (overrides: Partial<Category>): Category => ({
 
 const defaultProps = {
   categories: [
-    makeCategory({ id: 'cat-1', name: 'Food & Drink', type: 'expense' }),
-    makeCategory({ id: 'cat-2', name: 'Transport', type: 'expense' }),
+    makeCategory({
+      id: 'cat-1', name: 'Food & Drink', type: 'expense',
+    }),
+    makeCategory({
+      id: 'cat-2', name: 'Transport', type: 'expense',
+    }),
   ],
   subCountMap: { 'cat-1': 4, 'cat-2': 0 },
   activeType: 'expense' as TransactionType,
