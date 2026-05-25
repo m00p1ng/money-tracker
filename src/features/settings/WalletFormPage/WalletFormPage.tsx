@@ -129,7 +129,10 @@ export function WalletFormPage({
           type="button"
           aria-label="icon"
           onClick={() => setIconPickerOpen(true)}
-          className="flex min-h-11 w-full items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors"
+          className={[
+            'flex min-h-11 w-full items-center gap-2 rounded-lg',
+            'border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors',
+          ].join(' ')}
         >
           <Icon name={form.icon} />
           <span className="text-sm">{form.icon}</span>

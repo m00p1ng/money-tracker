@@ -15,9 +15,9 @@ import {
   TransactionRow,
   WheelPicker,
 } from '@/components'
-import { IconPicker } from '@/components/shared/picker/IconPicker'
 import type { SelectorOption } from '@/components'
 import { Background } from '@/components/Background'
+import { IconPicker } from '@/components/shared/picker/IconPicker'
 
 interface SubSectionProps {
   id: string
@@ -231,7 +231,10 @@ export function SharedComponentsSection() {
           <button
             type="button"
             onClick={() => setIconPickerOpen(true)}
-            className="flex min-h-11 w-full items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors"
+            className={[
+              'flex min-h-11 w-full items-center gap-2 rounded-lg',
+              'border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors',
+            ].join(' ')}
           >
             <Icon name={iconValue} />
             <span className="text-sm">{iconValue}</span>

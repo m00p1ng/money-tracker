@@ -52,7 +52,9 @@ export function CategoryFormPage({
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
-      <PageHeader title={existing ? 'Edit Category' : 'New Category'} onBack={onBack} />
+      <PageHeader title={existing
+        ? 'Edit Category'
+        : 'New Category'} onBack={onBack} />
 
       <div className="flex items-center gap-3 rounded-xl bg-white/3 p-3">
         <div
@@ -84,7 +86,10 @@ export function CategoryFormPage({
             type="button"
             aria-label="icon"
             onClick={() => setIconPickerOpen(true)}
-            className="flex min-h-11 w-full items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors"
+            className={[
+              'flex min-h-11 w-full items-center gap-2 rounded-lg',
+              'border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors',
+            ].join(' ')}
           >
             <Icon name={form.icon} />
             <span className="text-sm">{form.icon}</span>
