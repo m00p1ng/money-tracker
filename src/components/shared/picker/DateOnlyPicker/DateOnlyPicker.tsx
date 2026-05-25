@@ -30,8 +30,12 @@ export function DateOnlyPicker({
       <div className="mx-4 mt-3">
         <WheelPicker
           columns={picker.columns}
-          value={{ date: picker.pickerValue }}
-          onChange={(next) => picker.handleChange(next.date)}
+          value={picker.pickerValue}
+          onChange={(next) => picker.handleChange({
+            day: next.day,
+            month: next.month,
+            year: next.year,
+          })}
         />
       </div>
 

@@ -108,7 +108,7 @@ export function SharedComponentsSection() {
             maxValue={5000}
             colorFrom="#6c47ff"
             colorTo="#a78bfa"
-            textColor="#fff"
+            textColor="#090914"
             currency="USD"
           />
           <VariantLabel label="64% filled" />
@@ -117,7 +117,7 @@ export function SharedComponentsSection() {
             maxValue={5000}
             colorFrom="#22c55e"
             colorTo="#86efac"
-            textColor="#fff"
+            textColor="#052e16"
             currency="USD"
           />
           <VariantLabel label="100% filled" />
@@ -126,7 +126,7 @@ export function SharedComponentsSection() {
             maxValue={5000}
             colorFrom="#6c47ff"
             colorTo="#a78bfa"
-            textColor="#fff"
+            textColor="#090914"
             currency="USD"
           />
           <VariantLabel label="0% filled" />
