@@ -6,6 +6,7 @@ import {
   BottomSheet,
   Button,
   FormErrorMessage,
+  Icon,
   ListGroup,
   ListRow,
   PageHeader,
@@ -14,6 +15,7 @@ import {
   TransactionRow,
   WheelPicker,
 } from '@/components'
+import { IconPicker } from '@/components/shared/picker/IconPicker'
 import type { SelectorOption } from '@/components'
 import { Background } from '@/components/Background'
 
@@ -44,6 +46,8 @@ const HOUR_OPTIONS = ['06', '07', '08', '09', '10', '11', '12']
 const MINUTE_OPTIONS = ['00', '15', '30', '45']
 
 export function SharedComponentsSection() {
+  const [iconPickerOpen, setIconPickerOpen] = useState(false)
+  const [iconValue, setIconValue] = useState('fa-utensils')
   const [sheetOpen, setSheetOpen] = useState(false)
   const [pickerValue, setPickerValue] = useState<Record<string, string>>({ hour: '08', minute: '00' })
   const [selectorOpen, setSelectorOpen] = useState(false)
@@ -219,6 +223,26 @@ export function SharedComponentsSection() {
               <Button variant="accent" fullWidth onClick={() => setSheetOpen(false)}>Confirm</Button>
             </div>
           </BottomSheet>
+        </div>
+      </SubSection>
+
+      <SubSection id="icon-picker" title="IconPicker">
+        <div className="space-y-3">
+          <button
+            type="button"
+            onClick={() => setIconPickerOpen(true)}
+            className="flex min-h-11 w-full items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors"
+          >
+            <Icon name={iconValue} />
+            <span className="text-sm">{iconValue}</span>
+          </button>
+          <VariantLabel label={`selected: ${iconValue}`} />
+          <IconPicker
+            isOpen={iconPickerOpen}
+            selectedIcon={iconValue}
+            onSelect={setIconValue}
+            onClose={() => setIconPickerOpen(false)}
+          />
         </div>
       </SubSection>
 
