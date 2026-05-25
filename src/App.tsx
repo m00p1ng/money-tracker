@@ -31,20 +31,14 @@ import { CategorySelectionPage, TransactionPage } from '@/features/transaction'
 const TAB_ROUTES = new Set(['/', '/balance', '/settings'])
 
 const tabVariants: Variants = {
-  initial: { opacity: 0, y: 8 },
+  initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 400,
-      damping: 30,
-    },
+    transition: { duration: 0.2 },
   },
   exit: {
     opacity: 0,
-    y: -8,
-    transition: { duration: 0.12 },
+    transition: { duration: 0.15 },
   },
 }
 
