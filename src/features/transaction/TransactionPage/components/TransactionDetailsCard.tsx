@@ -35,7 +35,10 @@ export function TransactionDetailsCard({
   return (
     <div>
       <p className="mb-1.5 px-0.5 text-[9px] uppercase tracking-[1.5px] text-white/20">Details</p>
-      <div className="divide-y divide-white/[0.05] overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.04]">
+      <div className={[
+        'divide-y divide-white/[0.05] overflow-hidden',
+        'rounded-2xl border border-white/[0.07] bg-white/[0.04]',
+      ].join(' ')}>
         <DateTimeRow date={date} isPlanned={isPlanned} variant="flat" onClick={onUpdateDate} />
 
         {!isPlanned && walletReconciliationEnabled && (
