@@ -10,7 +10,9 @@ export type WalletStatsProps = {
   reconciliation: boolean
 }
 
-export function WalletStats({ wallet, currentAmount, clearedAmount, totalExpenses, reconciliation }: WalletStatsProps) {
+export function WalletStats({
+  wallet, currentAmount, clearedAmount, totalExpenses, reconciliation,
+}: WalletStatsProps) {
   return (
     <div className="space-y-3">
       <div>

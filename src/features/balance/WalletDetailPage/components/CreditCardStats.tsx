@@ -9,7 +9,9 @@ export type CreditCardStatsProps = {
   reconciliation: boolean
 }
 
-export function CreditCardStats({ wallet, currentAmount, clearedAmount, reconciliation }: CreditCardStatsProps) {
+export function CreditCardStats({
+  wallet, currentAmount, clearedAmount, reconciliation,
+}: CreditCardStatsProps) {
   const creditLimit = wallet.creditLimit!
   const creditUsedRatio = Math.min((currentAmount / creditLimit) * 100, 100)
 

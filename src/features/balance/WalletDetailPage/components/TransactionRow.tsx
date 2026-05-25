@@ -11,7 +11,9 @@ export type TransactionRowProps = {
   categories: Category[]
 }
 
-export function TransactionRow({ row, wallet, categories }: TransactionRowProps) {
+export function TransactionRow({
+  row, wallet, categories,
+}: TransactionRowProps) {
   const isCredit = wallet.type === 'credit_card'
   const category = categories.find((c) => c.id === row.transaction.items[0]?.categoryId)
   const iconColor = category?.color ?? wallet.color
@@ -35,7 +37,9 @@ export function TransactionRow({ row, wallet, categories }: TransactionRowProps)
           <p className={row.amount >= 0
             ? 'text-sm font-bold text-income'
             : 'text-sm font-bold text-expense'}>
-            {row.amount >= 0 ? '+' : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
+            {row.amount >= 0
+              ? '+'
+              : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
           </p>
           <p className={isCredit
             ? 'mt-0.5 text-xs text-expense/70'
