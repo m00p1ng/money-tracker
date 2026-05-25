@@ -1,9 +1,12 @@
+import cx from 'classnames'
+
 import { Icon } from '@/components'
 
 interface ExchangeRateRowProps {
   label: string
   value: string
   defaultRate: string
+  variant?: 'standalone' | 'flat'
   onChange: (value: string) => void
 }
 
@@ -11,10 +14,14 @@ export function ExchangeRateRow({
   label,
   value,
   defaultRate,
+  variant = 'standalone',
   onChange,
 }: ExchangeRateRowProps) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-4 py-3">
+    <div className={cx(
+      'flex items-center gap-3 px-4 py-3',
+      variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/[0.04]',
+    )}>
       <div className={[
         'flex h-8 w-8 shrink-0 items-center justify-center',
         'rounded-xl bg-amber-400/15 text-amber-400 text-xs',
