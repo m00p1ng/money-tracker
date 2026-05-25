@@ -1,18 +1,25 @@
+import cx from 'classnames'
+
 import { Icon } from '@/components'
 
 interface NoteFieldProps {
   note: string
+  variant?: 'standalone' | 'flat'
   onUpdateNote: (value: string) => void
   onFocusNoteField: () => void
 }
 
 export function NoteField({
   note,
+  variant = 'standalone',
   onUpdateNote,
   onFocusNoteField,
 }: NoteFieldProps) {
   return (
-    <div className="flex items-start gap-3 rounded-2xl border border-white/[0.07] bg-white/4 px-4 py-3">
+    <div className={cx(
+      'flex items-start gap-3 px-4 py-3',
+      variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
+    )}>
       <div className={[
         'mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center',
         'rounded-xl bg-white/[0.07] text-slate-400 text-xs',

@@ -12,17 +12,13 @@ import type {
 
 import {
   CalculatorKeyboardSheet,
-  DateTimeRow,
-  ExchangeRateRow,
-  NoteField,
-  ReconciliationRow,
-  RepeatRow,
+  TransactionDetailsCard,
   TransactionHeader,
+  TransactionPrimaryCard,
   TransactionSheets,
-  WalletSelectorRow,
+  TransferPrimaryCard,
   type WalletPickerTarget,
 } from './components'
-import { CategoryItemsCard } from './components'
 
 export interface TransactionPageProps {
   type: TransactionType
@@ -79,6 +75,7 @@ export function TransactionPage({
   exchangeRate,
   toExchangeRate,
   repeatConfig,
+  transferAmount,
   wallets,
   currencies,
   isEditMode,
@@ -114,9 +111,6 @@ export function TransactionPage({
   const [isCurrencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [isDatePickerOpen, setDatePickerOpen] = useState(false)
 
-  const wallet = wallets.find((item) => item.id === walletId)
-  const toWallet = wallets.find((item) => item.id === toWalletId)
-
   function handlePress(key: string) {
     if (focusedIndex === null) {
       return
@@ -139,6 +133,8 @@ export function TransactionPage({
     setCalc(createCalcState(items[index]?.amount ?? 0))
   }
 
+  const wallet = wallets.find((w) => w.id === walletId)
+
   return (
     <div
       className={cx('space-y-2', focusedIndex !== null
@@ -157,117 +153,63 @@ export function TransactionPage({
 
       {type === 'transfer'
         ? (
-          <div className="space-y-2">
-            <WalletSelectorRow
-              ariaLabel="From Wallet"
-              label="From Wallet"
-              wallet={wallet}
-              fallbackName="Cash"
-              fallbackColor="#38bdf8"
-              onClick={() => setWalletPickerTarget('wallet')}
-            />
-
-            <WalletSelectorRow
-              ariaLabel="To Wallet"
-              label="To Wallet"
-              wallet={toWallet}
-              fallbackName="Select wallet"
-              fallbackColor="#a855f7"
-              onClick={() => setWalletPickerTarget('toWallet')}
-            />
-
-            {currency !== wallet?.currency
-              ? (
-                <ExchangeRateRow
-                  label="Exchange Rate"
-                  value={exchangeRate}
-                  defaultRate={defaultRate}
-                  onChange={onUpdateExchangeRate}
-                />
-              )
-              : null}
-
-            {type === 'transfer' && currency !== wallets.find((item) => item.id === toWalletId)?.currency
-              ? (
-                <ExchangeRateRow
-                  label="Destination Exchange Rate"
-                  value={toExchangeRate}
-                  defaultRate={defaultRate}
-                  onChange={onUpdateToExchangeRate}
-                />
-              )
-              : null}
-          </div>
+          <TransferPrimaryCard
+            wallets={wallets}
+            walletId={walletId}
+            toWalletId={toWalletId}
+            currency={currency}
+            exchangeRate={exchangeRate}
+            toExchangeRate={toExchangeRate}
+            defaultRate={defaultRate}
+            transferAmount={transferAmount}
+            onFromWalletClick={() => setWalletPickerTarget('wallet')}
+            onToWalletClick={() => setWalletPickerTarget('toWallet')}
+            onUpdateExchangeRate={onUpdateExchangeRate}
+            onUpdateToExchangeRate={onUpdateToExchangeRate}
+          />
         )
         : (
-          <>
-            <WalletSelectorRow
-              ariaLabel="Wallet"
-              label="Wallet"
-              wallet={wallet}
-              fallbackName="Cash"
-              fallbackColor="#38bdf8"
-              showBalance
-              onClick={() => setWalletPickerTarget('wallet')}
-            />
-
-            <CategoryItemsCard
-              items={items}
-              focusedIndex={focusedIndex}
-              onFocus={handleFocusItem}
-              onAdd={onAddCategory}
-              onRemove={onRemoveItem}
-              onChangeCategory={onChangeCategory}
-            />
-
-            {currency !== wallet?.currency
-              ? (
-                <ExchangeRateRow
-                  label="Exchange Rate"
-                  value={exchangeRate}
-                  defaultRate={defaultRate}
-                  onChange={onUpdateExchangeRate}
-                />
-              )
-              : null}
-          </>
+          <TransactionPrimaryCard
+            type={type}
+            wallet={wallet}
+            items={items}
+            focusedIndex={focusedIndex}
+            currency={currency}
+            exchangeRate={exchangeRate}
+            defaultRate={defaultRate}
+            onWalletClick={() => setWalletPickerTarget('wallet')}
+            onFocusItem={handleFocusItem}
+            onRemoveItem={onRemoveItem}
+            onChangeCategory={onChangeCategory}
+            onAddCategory={onAddCategory}
+            onUpdateExchangeRate={onUpdateExchangeRate}
+          />
         )}
 
-      <DateTimeRow
+      <TransactionDetailsCard
         date={date}
         isPlanned={isPlanned}
-        onClick={() => setDatePickerOpen(true)}
-      />
-
-      {!isPlanned && type !== 'transfer' && walletReconciliationEnabled && (
-        <ReconciliationRow cleared={cleared} onToggle={onToggleCleared} />
-      )}
-
-      {isPlanned && (
-        <RepeatRow
-          repeatConfig={repeatConfig}
-          onClick={() => setRepeatPickerOpen(true)}
-        />
-      )}
-
-      <NoteField
+        walletReconciliationEnabled={type !== 'transfer' && walletReconciliationEnabled}
+        cleared={cleared}
+        repeatConfig={repeatConfig}
         note={note}
+        onUpdateDate={() => setDatePickerOpen(true)}
+        onToggleCleared={onToggleCleared}
+        onUpdateRepeatConfig={() => setRepeatPickerOpen(true)}
         onUpdateNote={onUpdateNote}
         onFocusNoteField={onFocusNoteField}
       />
 
-      {isEditMode
-        ? (
-          <button
-            aria-label="Delete transaction"
-            className="w-full rounded-xl bg-danger/15 py-3 text-sm font-medium text-danger"
-            onClick={onDelete}
-            type="button"
-          >
-            Delete
-          </button>
-        )
-        : null}
+      {isEditMode && (
+        <button
+          aria-label="Delete transaction"
+          className="w-full rounded-xl border border-danger/20 bg-danger/[0.07] py-3 text-sm font-semibold text-danger"
+          onClick={onDelete}
+          type="button"
+        >
+          Delete
+        </button>
+      )}
 
       <TransactionSheets
         date={date}

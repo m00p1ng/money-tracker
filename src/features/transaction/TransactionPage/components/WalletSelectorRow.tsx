@@ -1,3 +1,5 @@
+import cx from 'classnames'
+
 import { Icon } from '@/components'
 import type { Wallet } from '@/types/domain'
 
@@ -8,6 +10,7 @@ interface WalletSelectorRowProps {
   fallbackName: string
   fallbackColor: string
   showBalance?: boolean
+  variant?: 'standalone' | 'flat'
   onClick: () => void
 }
 
@@ -18,6 +21,7 @@ export function WalletSelectorRow({
   fallbackName,
   fallbackColor,
   showBalance = false,
+  variant = 'standalone',
   onClick,
 }: WalletSelectorRowProps) {
   const color = wallet?.color ?? fallbackColor
@@ -25,10 +29,10 @@ export function WalletSelectorRow({
   return (
     <button
       aria-label={ariaLabel}
-      className={[
-        'flex w-full items-center gap-3 rounded-2xl',
-        'border border-white/[0.07] bg-white/4 px-4 py-3 text-left',
-      ].join(' ')}
+      className={cx(
+        'flex w-full items-center gap-3 px-4 py-3 text-left',
+        variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
+      )}
       onClick={onClick}
       type="button"
     >

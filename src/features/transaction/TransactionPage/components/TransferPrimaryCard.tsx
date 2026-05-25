@@ -1,0 +1,134 @@
+import { Icon } from '@/components'
+import { formatAmount } from '@/lib'
+import type { Wallet } from '@/types/domain'
+
+import { ExchangeRateRow } from './ExchangeRateRow'
+
+interface TransferPrimaryCardProps {
+  wallets: Wallet[]
+  walletId: string
+  toWalletId: string | undefined
+  currency: string
+  exchangeRate: string
+  toExchangeRate: string
+  defaultRate: string
+  transferAmount: number
+  onFromWalletClick: () => void
+  onToWalletClick: () => void
+  onUpdateExchangeRate: (value: string) => void
+  onUpdateToExchangeRate: (value: string) => void
+}
+
+interface WalletColumnProps {
+  label: string
+  wallet: Wallet | undefined
+  fallbackName: string
+  fallbackColor: string
+  onClick: () => void
+}
+
+function WalletColumn({ label, wallet, fallbackName, fallbackColor, onClick }: WalletColumnProps) {
+  const color = wallet?.color ?? fallbackColor
+
+  return (
+    <button
+      type="button"
+      className="flex flex-1 flex-col items-center gap-2 px-3 py-4 text-center"
+      onClick={onClick}
+    >
+      <p className="text-[9px] uppercase tracking-[1.5px] text-white/35">{label}</p>
+      <div
+        className="flex h-9 w-9 items-center justify-center rounded-xl text-xs"
+        style={{ background: `${color}25`, color }}
+      >
+        <Icon name={wallet?.icon ?? 'fa-wallet'} />
+      </div>
+      <div>
+        <p className="text-sm font-bold">{wallet?.name ?? fallbackName}</p>
+        {wallet && (
+          <p className="mt-0.5 text-[10px] text-white/40">
+            {wallet.currency} {wallet.balance.toFixed(2)}
+          </p>
+        )}
+      </div>
+    </button>
+  )
+}
+
+export function TransferPrimaryCard({
+  wallets,
+  walletId,
+  toWalletId,
+  currency,
+  exchangeRate,
+  toExchangeRate,
+  defaultRate,
+  transferAmount,
+  onFromWalletClick,
+  onToWalletClick,
+  onUpdateExchangeRate,
+  onUpdateToExchangeRate,
+}: TransferPrimaryCardProps) {
+  const fromWallet = wallets.find((w) => w.id === walletId)
+  const toWallet = wallets.find((w) => w.id === toWalletId)
+  const showFromExchangeRate = currency !== fromWallet?.currency
+  const showToExchangeRate = currency !== toWallet?.currency
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-white/[0.085] bg-white/[0.08]">
+      <div className="flex items-stretch border-b border-white/[0.05]">
+        <WalletColumn
+          label="From"
+          wallet={fromWallet}
+          fallbackName="Cash"
+          fallbackColor="#38bdf8"
+          onClick={onFromWalletClick}
+        />
+
+        <div className="flex items-center px-1 text-white/25">
+          <Icon name="fa-arrow-right" />
+        </div>
+
+        <WalletColumn
+          label="To"
+          wallet={toWallet}
+          fallbackName="Select wallet"
+          fallbackColor="#a855f7"
+          onClick={onToWalletClick}
+        />
+      </div>
+
+      {showFromExchangeRate && (
+        <div className="border-b border-white/[0.05]">
+          <ExchangeRateRow
+            label="Exchange Rate"
+            value={exchangeRate}
+            defaultRate={defaultRate}
+            variant="flat"
+            onChange={onUpdateExchangeRate}
+          />
+        </div>
+      )}
+
+      {showToExchangeRate && (
+        <div className="border-b border-white/[0.05]">
+          <ExchangeRateRow
+            label="Destination Exchange Rate"
+            value={toExchangeRate}
+            defaultRate={defaultRate}
+            variant="flat"
+            onChange={onUpdateToExchangeRate}
+          />
+        </div>
+      )}
+
+      <div className="flex items-center justify-between border-t border-accent/20 bg-accent/10 px-4 py-3">
+        <span className="text-[9px] uppercase tracking-[1px] text-white/40">Amount</span>
+        <span className="text-xl font-bold text-accent-light">
+          {formatAmount(transferAmount)}
+          <span className="ml-1.5 text-[10px] font-normal opacity-50">{currency}</span>
+        </span>
+      </div>
+    </div>
+  )
+}

@@ -210,8 +210,8 @@ describe('TransactionPage edit mode', () => {
 
     await user.click(screen.getByRole('button', { name: /expense/i }))
     await user.click(screen.getByRole('button', { name: 'Transfer' }))
-    expect(screen.getByText('From Wallet')).toBeInTheDocument()
-    expect(screen.getByText('To Wallet')).toBeInTheDocument()
+    expect(screen.getByText('From')).toBeInTheDocument()
+    expect(screen.getByText('To')).toBeInTheDocument()
     expect(screen.queryByText('Categories')).not.toBeInTheDocument()
   })
 })

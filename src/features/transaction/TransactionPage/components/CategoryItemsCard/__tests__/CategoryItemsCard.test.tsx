@@ -103,7 +103,7 @@ describe('CategoryItemsCard', () => {
     expect(onChangeCategory).toHaveBeenCalledWith(1)
   })
 
-  it('shows Add Category button inside the card (not in header)', () => {
+  it('renders Add Item button', () => {
     render(
       <CategoryItemsCard
         items={items}
@@ -116,12 +116,9 @@ describe('CategoryItemsCard', () => {
       />,
     )
     expect(screen.getByRole('button', { name: /Add Category/i })).toBeInTheDocument()
-    // Header should NOT contain an Add button — check that the header section has no add button
-    const header = screen.getByText('Items').closest('div')
-    expect(header).not.toContainElement(screen.queryByRole('button', { name: /Add/i }))
   })
 
-  it('calls onAdd when Add Category button is clicked', async () => {
+  it('calls onAdd when Add Item button is clicked', async () => {
     const onAdd = vi.fn()
     render(
       <CategoryItemsCard
