@@ -14,7 +14,7 @@ import {
   TextInput,
 } from '@/components'
 import { IconPicker } from '@/components/shared/picker/IconPicker'
-import { createId, hexToRgba } from '@/lib'
+import { createId } from '@/lib'
 import type { Category, TransactionType } from '@/types/domain'
 
 interface CategoryFormPageProps {
@@ -43,7 +43,6 @@ export function CategoryFormPage({
     type: 'expense',
     level: 1,
     icon: 'fa-circle',
-    color: '#10b981',
     isDefault: false,
   })
 
@@ -61,13 +60,10 @@ export function CategoryFormPage({
       <PageHeader title={title} onBack={onBack} />
 
       <div className="flex items-center gap-3 rounded-xl bg-white/3 p-3">
-        <div
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] text-base"
-          style={{
-            background: hexToRgba(form.color, 0.15),
-            color: form.color,
-          }}
-        >
+        <div className={[
+          'flex h-11 w-11 shrink-0 items-center justify-center',
+          'rounded-[14px] bg-white/10 text-base text-slate-50',
+        ].join(' ')}>
           <Icon name={form.icon} />
         </div>
         <div className="min-w-0 flex-1">

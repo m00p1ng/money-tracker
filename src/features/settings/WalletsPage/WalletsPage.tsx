@@ -5,7 +5,6 @@ import {
   ListRow,
   PageHeader,
 } from '@/components'
-import { hexToRgba } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 interface WalletsPageProps {
@@ -28,8 +27,6 @@ export function WalletsPage({
           <ListRow
             key={w.id}
             icon={w.icon}
-            iconBg={hexToRgba(w.color, 0.15)}
-            iconColor={w.color}
             label={w.name}
             sub="Payment Account"
             to={`/settings/wallets/${w.id}`}
@@ -49,8 +46,6 @@ export function WalletsPage({
           <ListRow
             key={w.id}
             icon={w.icon}
-            iconBg={hexToRgba(w.color, 0.15)}
-            iconColor={w.color}
             label={w.name}
             sub="Credit Card"
             to={`/settings/wallets/${w.id}`}

@@ -47,8 +47,6 @@ export function UpcomingTransactions({ rows }: UpcomingTransactionsProps) {
             <TransactionRow
               to={row.to}
               icon={row.icon}
-              iconBg="rgba(251,191,36,0.15)"
-              iconColor="#fcd34d"
               primaryLabel={row.primaryLabel}
               secondaryLabel={row.secondaryLabel}
               amount={row.amount}

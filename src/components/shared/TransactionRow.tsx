@@ -5,8 +5,6 @@ import { Icon } from '@/components'
 type TransactionRowProps = {
   to: string
   icon: string
-  iconBg: string
-  iconColor: string
   primaryLabel: string
   secondaryLabel: string
   amount: string
@@ -18,8 +16,6 @@ type TransactionRowProps = {
 export function TransactionRow({
   to,
   icon,
-  iconBg,
-  iconColor,
   primaryLabel,
   secondaryLabel,
   amount,
@@ -31,17 +27,17 @@ export function TransactionRow({
     <Link
       to={to}
       className={[
-        'flex items-center gap-3 rounded-2xl border border-white/6 bg-white/4',
-        'px-4 py-3.5 backdrop-blur transition-[background,box-shadow]',
+        'flex items-center gap-1 rounded-2xl border border-white/6 bg-white/4',
+        'px-3 py-3 backdrop-blur transition-[background,box-shadow]',
         'hover:bg-accent/8 hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--accent)_15%,transparent)]',
       ].join(' ')}
       style={{ display: 'flex', transform: 'translateX(0)' }}
     >
       <span
         className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
-        style={{ backgroundColor: iconBg, color: iconColor }}
+        style={{ color: '#63758F' }}
       >
-        <Icon name={icon} />
+        <Icon name={icon} style={{ height: 40 }} />
       </span>
       <span className="min-w-0 flex-1">
         <span className="block truncate font-medium">{primaryLabel}</span>

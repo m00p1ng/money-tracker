@@ -91,8 +91,6 @@ export function CalendarPage({
                   key={row.key}
                   to={row.to}
                   icon={row.icon}
-                  iconBg={row.iconBg}
-                  iconColor={row.iconColor}
                   primaryLabel={row.primaryLabel}
                   secondaryLabel={row.secondaryLabel}
                   amount={row.amount}

@@ -53,7 +53,6 @@ export type Category = {
   parentId?: string
   level: 1 | 2 | 3 | 4 | 5
   icon: string
-  color: string
   isDefault: boolean
 }
 

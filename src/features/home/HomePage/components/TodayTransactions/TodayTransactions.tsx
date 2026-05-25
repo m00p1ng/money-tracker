@@ -24,8 +24,6 @@ export type TodayTransactionRowData = {
   key: string
   to: string
   icon: string
-  iconBg: string
-  iconColor: string
   primaryLabel: string
   secondaryLabel: string
   amount: string
@@ -61,8 +59,6 @@ export function TodayTransactions({
             <TransactionRow
               to={row.to}
               icon={row.icon}
-              iconBg={row.iconBg}
-              iconColor={row.iconColor}
               primaryLabel={row.primaryLabel}
               secondaryLabel={row.secondaryLabel}
               amount={row.amount}

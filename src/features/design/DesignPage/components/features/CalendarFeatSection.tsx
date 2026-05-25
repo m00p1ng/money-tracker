@@ -24,8 +24,6 @@ export function CalendarFeatSection() {
                 key: 'demo-1',
                 to: '#',
                 icon: 'fa-utensils',
-                iconBg: '#65a30d25',
-                iconColor: '#65a30d',
                 primaryLabel: 'Food & Drink',
                 secondaryLabel: 'Lifestyle',
                 amount: '-฿120.00',

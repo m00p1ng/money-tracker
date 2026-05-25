@@ -12,7 +12,7 @@ export const STUB_WALLET_PAYMENT: Wallet = {
   type: 'payment',
   currency: 'USD',
   balance: 500,
-  color: '#22c55e',
+  color: '#10b981',
   icon: 'fa-wallet',
 }
 
@@ -33,7 +33,6 @@ export const STUB_CATEGORY: Category = {
   type: 'expense',
   level: 1,
   icon: 'fa-burger',
-  color: '#ef4444',
   isDefault: true,
 }
 

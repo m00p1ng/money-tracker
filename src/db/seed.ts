@@ -7,24 +7,24 @@ import type {
 } from '@/types/domain'
 
 const expenseRoots = [
-  ['Food & Drink', 'fa-utensils', '#65a30d', ['Restaurant', 'Groceries', 'Coffee']],
-  ['Transport', 'fa-car', '#0284c7', ['Fuel', 'Public Transit', 'Taxi']],
-  ['Shopping', 'fa-bag-shopping', '#db2777', ['Clothes', 'Electronics', 'Household']],
-  ['Bills & Utilities', 'fa-file-invoice-dollar', '#ca8a04', ['Electricity', 'Water', 'Internet']],
-  ['Health', 'fa-heart-pulse', '#dc2626', ['Medicine', 'Doctor', 'Gym']],
-  ['Entertainment', 'fa-film', '#7c3aed', ['Movies', 'Games', 'Streaming']],
-  ['Education', 'fa-graduation-cap', '#2563eb', ['Books', 'Courses', 'Supplies']],
-  ['Personal Care', 'fa-spa', '#be185d', ['Haircut', 'Cosmetics', 'Spa']],
-  ['Travel', 'fa-plane', '#0891b2', ['Hotel', 'Flight', 'Activities']],
-  ['Other', 'fa-ellipsis', '#64748b', ['Miscellaneous', 'Uncategorized', 'Adjustment']],
+  ['Food & Drink', 'fa-utensils', ['Restaurant', 'Groceries', 'Coffee']],
+  ['Transport', 'fa-car', ['Fuel', 'Public Transit', 'Taxi']],
+  ['Shopping', 'fa-bag-shopping', ['Clothes', 'Electronics', 'Household']],
+  ['Bills & Utilities', 'fa-file-invoice-dollar', ['Electricity', 'Water', 'Internet']],
+  ['Health', 'fa-heart-pulse', ['Medicine', 'Doctor', 'Gym']],
+  ['Entertainment', 'fa-film', ['Movies', 'Games', 'Streaming']],
+  ['Education', 'fa-graduation-cap', ['Books', 'Courses', 'Supplies']],
+  ['Personal Care', 'fa-spa', ['Haircut', 'Cosmetics', 'Spa']],
+  ['Travel', 'fa-plane', ['Hotel', 'Flight', 'Activities']],
+  ['Other', 'fa-ellipsis', ['Miscellaneous', 'Uncategorized', 'Adjustment']],
 ] as const
 
 const incomeRoots = [
-  ['Salary', 'fa-money-bill-wave', '#16a34a', ['Base Pay', 'Bonus', 'Overtime']],
-  ['Freelance', 'fa-laptop-code', '#0d9488', ['Project', 'Consulting', 'Design']],
-  ['Investment', 'fa-chart-line', '#4f46e5', ['Dividends', 'Interest', 'Capital Gains']],
-  ['Gift', 'fa-gift', '#e11d48', ['Birthday', 'Holiday', 'Other Gift']],
-  ['Other', 'fa-circle-plus', '#64748b', ['Miscellaneous', 'Refund', 'Adjustment']],
+  ['Salary', 'fa-money-bill-wave', ['Base Pay', 'Bonus', 'Overtime']],
+  ['Freelance', 'fa-laptop-code', ['Project', 'Consulting', 'Design']],
+  ['Investment', 'fa-chart-line', ['Dividends', 'Interest', 'Capital Gains']],
+  ['Gift', 'fa-gift', ['Birthday', 'Holiday', 'Other Gift']],
+  ['Other', 'fa-circle-plus', ['Miscellaneous', 'Refund', 'Adjustment']],
 ] as const
 
 const wallet: Wallet = {
@@ -59,7 +59,7 @@ function slug(value: string): string {
 function buildCategories(): Category[] {
   const categories: Category[] = []
 
-  for (const [name, icon, color, children] of expenseRoots) {
+  for (const [name, icon, children] of expenseRoots) {
     const rootId = `expense-${slug(name)}`
     categories.push({
       id: rootId,
@@ -67,7 +67,6 @@ function buildCategories(): Category[] {
       type: 'expense',
       level: 1,
       icon,
-      color,
       isDefault: true,
     })
     for (const child of children) {
@@ -78,13 +77,12 @@ function buildCategories(): Category[] {
         parentId: rootId,
         level: 2,
         icon,
-        color,
         isDefault: true,
       })
     }
   }
 
-  for (const [name, icon, color, children] of incomeRoots) {
+  for (const [name, icon, children] of incomeRoots) {
     const rootId = `income-${slug(name)}`
     categories.push({
       id: rootId,
@@ -92,7 +90,6 @@ function buildCategories(): Category[] {
       type: 'income',
       level: 1,
       icon,
-      color,
       isDefault: true,
     })
     for (const child of children) {
@@ -103,7 +100,6 @@ function buildCategories(): Category[] {
         parentId: rootId,
         level: 2,
         icon,
-        color,
         isDefault: true,
       })
     }

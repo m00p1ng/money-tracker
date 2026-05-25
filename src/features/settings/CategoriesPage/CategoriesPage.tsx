@@ -5,7 +5,6 @@ import {
   PageHeader,
   TypePickerDropdown,
 } from '@/components'
-import { hexToRgba } from '@/lib'
 import type { Category, TransactionType } from '@/types/domain'
 
 interface CategoriesPageProps {
@@ -45,8 +44,6 @@ export function CategoriesPage({
             <ListRow
               key={category.id}
               icon={category.icon}
-              iconBg={hexToRgba(category.color, 0.15)}
-              iconColor={category.color}
               label={category.name}
               sub={count > 0
                 ? `${count} sub-categories`

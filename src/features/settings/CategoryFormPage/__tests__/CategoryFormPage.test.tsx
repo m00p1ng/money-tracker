@@ -19,7 +19,6 @@ const existingCategory: Category = {
   type: 'expense',
   level: 1,
   icon: 'fa-utensils',
-  color: '#65a30d',
   isDefault: false,
 }
 

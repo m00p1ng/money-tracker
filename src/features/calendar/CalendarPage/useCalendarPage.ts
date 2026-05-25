@@ -21,8 +21,6 @@ export type CalendarRowData = {
   key: string
   to: string
   icon: string
-  iconBg: string
-  iconColor: string
   primaryLabel: string
   secondaryLabel: string
   amount: string
@@ -98,8 +96,6 @@ export function useCalendarPage() {
       key: tx.id,
       to: `/transaction/${tx.id}`,
       icon: category?.icon ?? 'fa-ellipsis',
-      iconBg: `${category?.color ?? '#64748b'}25`,
-      iconColor: category?.color ?? '#94a3b8',
       primaryLabel: category?.name ?? 'Unknown',
       secondaryLabel,
       amount: `${amountPrefix}${formatAmount(firstItem?.amount ?? 0, tx.currency)}`,
@@ -138,8 +134,6 @@ export function useCalendarPage() {
       icon: tx.type === 'transfer'
         ? 'fa-right-left'
         : category?.icon ?? 'fa-clock',
-      iconBg: `${category?.color ?? '#64748b'}25`,
-      iconColor: category?.color ?? '#94a3b8',
       primaryLabel,
       secondaryLabel,
       amount: formatAmount(firstItem?.amount ?? 0, tx.currency),

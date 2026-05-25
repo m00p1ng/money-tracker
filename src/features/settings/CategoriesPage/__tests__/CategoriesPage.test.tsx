@@ -17,7 +17,6 @@ const makeCategory = (overrides: Partial<Category>): Category => ({
   type: 'expense',
   level: 1,
   icon: 'fa-utensils',
-  color: '#ef4444',
   isDefault: false,
   ...overrides,
 })

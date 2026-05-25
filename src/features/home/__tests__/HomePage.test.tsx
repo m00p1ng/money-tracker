@@ -32,7 +32,6 @@ describe('HomePage', () => {
           type: 'expense',
           level: 1,
           icon: 'fa-utensils',
-          color: '#65a30d',
           isDefault: true,
         },
         {
@@ -42,7 +41,6 @@ describe('HomePage', () => {
           parentId: 'expense-food-and-drink',
           level: 2,
           icon: 'fa-utensils',
-          color: '#65a30d',
           isDefault: true,
         },
         {
@@ -51,7 +49,6 @@ describe('HomePage', () => {
           type: 'income',
           level: 1,
           icon: 'fa-money-bill',
-          color: '#3b82f6',
           isDefault: true,
         },
       ],

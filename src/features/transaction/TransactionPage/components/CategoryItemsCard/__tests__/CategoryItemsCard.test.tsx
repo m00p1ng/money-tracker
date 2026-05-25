@@ -24,7 +24,6 @@ const categories: Category[] = [
     type: 'expense',
     level: 1,
     icon: 'fa-utensils',
-    color: '#65a30d',
     isDefault: true,
   },
   {
@@ -34,7 +33,6 @@ const categories: Category[] = [
     parentId: 'expense-food-and-drink',
     level: 2,
     icon: 'fa-utensils',
-    color: '#65a30d',
     isDefault: true,
   },
 ]

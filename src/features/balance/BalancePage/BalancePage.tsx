@@ -4,7 +4,7 @@ import {
   ListGroup,
   ListRow,
 } from '@/components'
-import { formatAmount, hexToRgba } from '@/lib'
+import { formatAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 export type WalletWithAmount = {
@@ -60,8 +60,6 @@ export function BalancePage({
             <ListRow
               key={wallet.id}
               icon={wallet.icon}
-              iconBg={hexToRgba(wallet.color, 0.15)}
-              iconColor={wallet.color}
               label={wallet.name}
               to={`/balance/wallet/${wallet.id}`}
               trailing={
@@ -83,8 +81,6 @@ export function BalancePage({
             <ListRow
               key={wallet.id}
               icon={wallet.icon}
-              iconBg={hexToRgba(wallet.color, 0.15)}
-              iconColor={wallet.color}
               label={wallet.name}
               to={`/balance/wallet/${wallet.id}`}
               trailing={

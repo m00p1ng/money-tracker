@@ -142,8 +142,6 @@ export function SharedComponentsSection() {
           <TransactionRow
             to="#"
             icon="fa-burger"
-            iconBg="rgba(239,68,68,0.15)"
-            iconColor="#ef4444"
             primaryLabel="Food & Drinks"
             secondaryLabel="Today, 12:30"
             amount="-$12.50"
@@ -152,8 +150,6 @@ export function SharedComponentsSection() {
           <TransactionRow
             to="#"
             icon="fa-briefcase"
-            iconBg="rgba(34,197,94,0.15)"
-            iconColor="#22c55e"
             primaryLabel="Salary"
             secondaryLabel="Yesterday"
             amount="+$3,200.00"
@@ -166,23 +162,17 @@ export function SharedComponentsSection() {
         <ListGroup label="General">
           <ListRow
             icon="fa-wallet"
-            iconBg="rgba(108,71,255,0.15)"
-            iconColor="#6c47ff"
             label="Wallets"
             sub="3 wallets"
             to="#"
           />
           <ListRow
             icon="fa-tag"
-            iconBg="rgba(234,179,8,0.15)"
-            iconColor="#eab308"
             label="Categories"
             to="#"
           />
           <ListRow
             icon="fa-coins"
-            iconBg="rgba(34,197,94,0.15)"
-            iconColor="#22c55e"
             label="Currencies"
             trailing={<span className="text-xs text-white/30">USD</span>}
             to="#"

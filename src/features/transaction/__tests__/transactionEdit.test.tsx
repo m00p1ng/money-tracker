@@ -32,8 +32,8 @@ describe('TransactionPage edit mode', () => {
         type: 'payment',
         currency: 'THB',
         balance: 0,
-        color: '#10b981',
         icon: 'fa-wallet',
+        color: '#10b981',
       }],
     })
     useCategoryStore.setState({
@@ -44,7 +44,6 @@ describe('TransactionPage edit mode', () => {
         parentId: 'expense-food-and-drink',
         level: 2,
         icon: 'fa-utensils',
-        color: '#65a30d',
         isDefault: true,
       }],
     })
@@ -186,8 +185,8 @@ describe('TransactionPage edit mode', () => {
           type: 'payment',
           currency: 'THB',
           balance: 0,
-          color: '#10b981',
           icon: 'fa-wallet',
+          color: '#10b981',
         },
         {
           id: 'wallet-bank',
@@ -195,8 +194,8 @@ describe('TransactionPage edit mode', () => {
           type: 'payment',
           currency: 'THB',
           balance: 0,
-          color: '#0ea5e9',
           icon: 'fa-building-columns',
+          color: '#10b981',
         },
       ],
     })
@@ -225,8 +224,8 @@ describe('TransactionPage edit mode', () => {
           type: 'payment',
           currency: 'THB',
           balance: 0,
-          color: '#10b981',
           icon: 'fa-wallet',
+          color: '#10b981',
         },
         {
           id: 'wallet-bank',
@@ -234,8 +233,8 @@ describe('TransactionPage edit mode', () => {
           type: 'payment',
           currency: 'THB',
           balance: 0,
-          color: '#0ea5e9',
           icon: 'fa-building-columns',
+          color: '#10b981',
         },
       ],
     })
@@ -278,7 +277,6 @@ describe('TransactionPage edit mode', () => {
           type: 'expense',
           level: 1,
           icon: 'fa-utensils',
-          color: '#65a30d',
           isDefault: true,
         },
         {
@@ -288,7 +286,6 @@ describe('TransactionPage edit mode', () => {
           parentId: 'expense-food-and-drink',
           level: 2,
           icon: 'fa-utensils',
-          color: '#65a30d',
           isDefault: true,
         },
       ],
@@ -324,7 +321,6 @@ describe('TransactionPage type switching', () => {
           type: 'expense' as const,
           level: 1 as const,
           icon: 'fa-utensils',
-          color: '#65a30d',
           isDefault: true,
         },
       ],
@@ -336,8 +332,8 @@ describe('TransactionPage type switching', () => {
           name: 'Cash',
           type: 'payment' as const,
           currency: 'THB',
-          color: '#38bdf8',
           icon: 'fa-wallet',
+          color: '#10b981',
           balance: 0,
         },
       ],

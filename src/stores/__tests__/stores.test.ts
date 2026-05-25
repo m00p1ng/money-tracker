@@ -196,8 +196,8 @@ describe('stores', () => {
       currency: 'THB',
       balance: 0,
       creditLimit: 10000,
-      color: '#ef4444',
       icon: 'fa-credit-card',
+      color: '#10b981',
     })
 
     expect(await db.wallets.get('wallet-card')).toMatchObject({
@@ -230,8 +230,8 @@ describe('stores', () => {
       currency: 'THB',
       balance: 0,
       creditLimit: 10000,
-      color: '#ef4444',
       icon: 'fa-credit-card',
+      color: '#10b981',
     })
     await useTransactionStore.getState().add({
       id: 'tx-card',
@@ -258,8 +258,8 @@ describe('stores', () => {
       type: 'payment',
       currency: 'THB',
       balance: 1500,
-      color: '#10b981',
       icon: 'fa-wallet',
+      color: '#10b981',
     })
 
     expect(await db.wallets.get('wallet-cash')).toMatchObject({ name: 'Petty Cash', balance: 1500 })
@@ -277,8 +277,8 @@ describe('stores', () => {
       currency: 'THB',
       balance: 0,
       creditLimit: 10000,
-      color: '#ef4444',
       icon: 'fa-credit-card',
+      color: '#10b981',
     })
     await db.categories.put({
       id: 'expense-custom',
@@ -286,7 +286,6 @@ describe('stores', () => {
       type: 'expense',
       level: 1,
       icon: 'fa-tag',
-      color: '#64748b',
       isDefault: false,
     })
     await db.currencies.put({
@@ -307,8 +306,8 @@ describe('stores', () => {
       currency: 'THB',
       balance: 250,
       creditLimit: 10000,
-      color: '#ef4444',
       icon: 'fa-credit-card',
+      color: '#10b981',
     })
     await useCategoryStore.getState().update({
       id: 'expense-custom',
@@ -316,7 +315,6 @@ describe('stores', () => {
       type: 'expense',
       level: 1,
       icon: 'fa-tag',
-      color: '#ef4444',
       isDefault: false,
     })
     await useCurrencyStore.getState().update({
@@ -330,7 +328,6 @@ describe('stores', () => {
     expect(useWalletStore.getState().findById('wallet-card')).toMatchObject({ name: 'Rewards Visa', balance: 250 })
     expect(useCategoryStore.getState().findById('expense-custom')).toMatchObject({
       name: 'Custom Updated',
-      color: '#ef4444',
     })
     expect(useCurrencyStore.getState().findByCode('USD')).toMatchObject({ name: 'US Dollar Updated', rate: 35 })
   })
@@ -345,7 +342,6 @@ describe('stores', () => {
       type: 'expense',
       level: 1,
       icon: 'fa-tag',
-      color: '#64748b',
       isDefault: false,
     })
     await useCategoryStore.getState().add({
@@ -355,7 +351,6 @@ describe('stores', () => {
       parentId: 'expense-custom',
       level: 2,
       icon: 'fa-tag',
-      color: '#64748b',
       isDefault: false,
     })
 
@@ -410,7 +405,6 @@ describe('stores', () => {
         type: 'expense',
         level: 1,
         icon: 'fa-tag',
-        color: '#64748b',
         isDefault: false,
       },
       {
@@ -420,7 +414,6 @@ describe('stores', () => {
         parentId: 'expense-custom',
         level: 2,
         icon: 'fa-tag',
-        color: '#64748b',
         isDefault: false,
       },
     ])
@@ -444,7 +437,6 @@ describe('stores', () => {
           type: 'expense',
           level: 1,
           icon: 'fa-tag',
-          color: '#64748b',
           isDefault: false,
         },
       ],
@@ -458,7 +450,6 @@ describe('stores', () => {
         parentId: 'expense-custom',
         level: 2,
         icon: 'fa-tag',
-        color: '#64748b',
         isDefault: false,
       }),
     ).rejects.toThrow('Parent category does not exist')
@@ -472,7 +463,6 @@ describe('stores', () => {
         parentId: 'expense-custom',
         level: 2,
         icon: 'fa-utensils',
-        color: '#65a30d',
         isDefault: true,
       }),
     ).rejects.toThrow('Parent category does not exist')
@@ -489,7 +479,6 @@ describe('stores', () => {
         type: 'income',
         level: 1,
         icon: 'fa-bag-shopping',
-        color: '#db2777',
         isDefault: true,
       }),
     ).rejects.toThrow('Category has child categories')
@@ -507,7 +496,6 @@ describe('stores', () => {
         type: 'income',
         level: 1,
         icon: 'fa-bag-shopping',
-        color: '#db2777',
         isDefault: true,
       }),
     ).rejects.toThrow('Category has child categories')
@@ -524,14 +512,12 @@ describe('stores', () => {
       type: 'expense',
       level: 1,
       icon: 'fa-bag-shopping',
-      color: '#ef4444',
       isDefault: true,
     })
 
-    expect(await db.categories.get('expense-shopping')).toMatchObject({ name: 'Retail', color: '#ef4444' })
+    expect(await db.categories.get('expense-shopping')).toMatchObject({ name: 'Retail' })
     expect(useCategoryStore.getState().findById('expense-shopping')).toMatchObject({
       name: 'Retail',
-      color: '#ef4444',
     })
   })
 
@@ -622,8 +608,8 @@ describe('stores', () => {
       type: 'payment',
       currency: 'USD',
       balance: 0,
-      color: '#10b981',
       icon: 'fa-wallet',
+      color: '#10b981',
     })
 
     await expect(useCurrencyStore.getState().remove('USD')).rejects.toThrow('Currency is used by wallets')
@@ -647,8 +633,8 @@ describe('stores', () => {
       type: 'payment',
       currency: ' usd ',
       balance: 0,
-      color: '#10b981',
       icon: 'fa-wallet',
+      color: '#10b981',
     })
 
     await expect(useCurrencyStore.getState().remove('USD')).rejects.toThrow('Currency is used by wallets')

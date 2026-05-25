@@ -18,7 +18,7 @@ export function TransactionRow({
   const category = transaction.type !== 'transfer'
     ? categories.find((c) => c.id === transaction.items[0]?.categoryId)
     : undefined
-  const base = buildTransactionBaseProps(transaction, category, wallets, wallet.color)
+  const base = buildTransactionBaseProps(transaction, category, wallets)
 
   return (
     <div className="mb-2">

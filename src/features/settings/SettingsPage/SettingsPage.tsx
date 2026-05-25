@@ -15,17 +15,6 @@ const THEME_LABELS: Record<string, string> = {
   void: 'Void',
 }
 
-const THEME_COLORS: Record<string, string> = {
-  forest: '#10b981',
-  midnight: '#a855f7',
-  ocean: '#38bdf8',
-  sunset: '#fb7185',
-  amber: '#fbbf24',
-  arctic: '#94a3b8',
-  sakura: '#f9a8d4',
-  void: '#374151',
-}
-
 interface SettingsPageProps {
   walletCount: number
   categoryCount: number
@@ -39,8 +28,6 @@ export function SettingsPage({
   currencyCode,
   theme,
 }: SettingsPageProps) {
-  const themeColor = THEME_COLORS[theme] ?? '#10b981'
-
   return (
     <div className="space-y-5">
       <header>
@@ -50,8 +37,6 @@ export function SettingsPage({
       <ListGroup label="Wallets & Data">
         <ListRow
           icon="fa-wallet"
-          iconBg="rgba(16,185,129,0.15)"
-          iconColor="#34d399"
           label="Wallets"
           sub={`${walletCount} account${walletCount !== 1
             ? 's'
@@ -60,16 +45,12 @@ export function SettingsPage({
         />
         <ListRow
           icon="fa-tag"
-          iconBg="rgba(168,85,247,0.15)"
-          iconColor="#a855f7"
           label="Categories"
           sub={`${categoryCount} categories`}
           to="/settings/categories"
         />
         <ListRow
           icon="fa-coins"
-          iconBg="rgba(56,189,248,0.15)"
-          iconColor="#38bdf8"
           label="Currencies"
           sub={currencyCode || undefined}
           to="/settings/currencies"
@@ -79,25 +60,15 @@ export function SettingsPage({
       <ListGroup label="Appearance">
         <ListRow
           icon="fa-palette"
-          iconBg="rgba(16,185,129,0.15)"
-          iconColor="#34d399"
           label="Theme"
           sub={THEME_LABELS[theme]}
           to="/settings/theme"
-          trailing={
-            <div className="flex items-center gap-2 text-white/25">
-              <span className="text-lg" style={{ color: themeColor }}>●</span>
-              <Icon name="fa-chevron-right" className="text-base" />
-            </div>
-          }
         />
       </ListGroup>
 
       <ListGroup label="General">
         <ListRow
           icon="fa-earth-asia"
-          iconBg="rgba(245,158,11,0.15)"
-          iconColor="#f59e0b"
           label="Language"
           to="/settings"
           trailing={
@@ -109,8 +80,6 @@ export function SettingsPage({
         />
         <ListRow
           icon="fa-calendar-days"
-          iconBg="rgba(255,255,255,0.07)"
-          iconColor="#aaa"
           label="Date Format"
           to="/settings"
           trailing={

@@ -73,10 +73,7 @@ export function CategorySelectionPage({
                 'border border-white/[0.07] bg-white/4 px-2 py-3.5',
               ].join(' ')}
             >
-              <span
-                className="grid h-11 w-11 place-items-center rounded-xl text-xl"
-                style={{ backgroundColor: `${category.color}25`, color: category.color }}
-              >
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
                 <Icon name={category.icon} />
               </span>
               <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
