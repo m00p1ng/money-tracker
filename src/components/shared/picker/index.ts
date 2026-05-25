@@ -1,4 +1,5 @@
 export { CurrencyPicker } from './CurrencyPicker'
+export { DateOnlyPicker } from './DateOnlyPicker'
 export { DateRangePresetPicker } from './DateRangePresetPicker'
 export { DatePicker } from './DatePicker'
 export { RepeatPicker } from './RepeatPicker'
