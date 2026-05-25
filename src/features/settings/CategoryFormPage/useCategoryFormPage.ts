@@ -16,7 +16,9 @@ export function useCategoryFormPage() {
   const update = useCategoryStore((state) => state.update)
   const remove = useCategoryStore((state) => state.remove)
 
-  const { error, onSubmit, onDelete } = useFormCrud<Category>({
+  const {
+    error, onSubmit, onDelete,
+  } = useFormCrud<Category>({
     existing,
     add,
     update,

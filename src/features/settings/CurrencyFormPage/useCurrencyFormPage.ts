@@ -15,7 +15,9 @@ export function useCurrencyFormPage() {
   const update = useCurrencyStore((state) => state.update)
   const remove = useCurrencyStore((state) => state.remove)
 
-  const { error, onSubmit, onDelete } = useFormCrud<Currency>({
+  const {
+    error, onSubmit, onDelete,
+  } = useFormCrud<Currency>({
     existing,
     add,
     update,

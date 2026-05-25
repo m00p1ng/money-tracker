@@ -21,7 +21,9 @@ export function useWalletFormPage() {
   const remove = useWalletStore((state) => state.remove)
   const initialType: WalletType = (searchParams.get('type') as WalletType) || wallet?.type || 'payment'
 
-  const { error, onSubmit, onDelete } = useFormCrud<Wallet>({
+  const {
+    error, onSubmit, onDelete,
+  } = useFormCrud<Wallet>({
     existing: wallet,
     add,
     update,
