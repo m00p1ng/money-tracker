@@ -465,6 +465,7 @@ export function FeatureSection() {
               onNext={() => {}}
               onAdd={() => {}}
               onBack={() => {}}
+              onSearch={() => {}}
             />
           </div>
         </SubSection>

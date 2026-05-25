@@ -12,7 +12,7 @@ export function PageHeader({
   rightSlot,
 }: PageHeaderProps) {
   return (
-    <header className="grid grid-cols-[36px_1fr_36px] items-center gap-3">
+    <header className="grid grid-cols-[36px_1fr_auto] items-center gap-3">
       <button
         aria-label="Back"
         onClick={onBack}

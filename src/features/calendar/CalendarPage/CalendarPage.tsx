@@ -22,6 +22,7 @@ type CalendarPageProps = {
   onNext: () => void
   onAdd: () => void
   onBack: () => void
+  onSearch: () => void
 }
 
 export function CalendarPage({
@@ -37,6 +38,7 @@ export function CalendarPage({
   onNext,
   onAdd,
   onBack,
+  onSearch,
 }: CalendarPageProps) {
   return (
     <div className="flex flex-col">
@@ -45,15 +47,25 @@ export function CalendarPage({
           title={`${MONTH_NAMES[currentMonth]} ${currentYear}`}
           onBack={onBack}
           rightSlot={(
-            <button
-              type="button"
-              aria-label="Add transaction"
-              onClick={onAdd}
-              className="grid h-9 w-9 place-items-center rounded-xl text-white"
-              style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))' }}
-            >
-              <Icon name="fa-plus" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                aria-label="Search"
+                onClick={onSearch}
+                className="grid h-9 w-9 place-items-center rounded-xl bg-white/5 text-slate-300"
+              >
+                <Icon name="fa-magnifying-glass" />
+              </button>
+              <button
+                type="button"
+                aria-label="Add transaction"
+                onClick={onAdd}
+                className="grid h-9 w-9 place-items-center rounded-xl text-white"
+                style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))' }}
+              >
+                <Icon name="fa-plus" />
+              </button>
+            </div>
           )}
         />
         <CalendarGrid
