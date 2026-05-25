@@ -13,6 +13,15 @@ interface WalletsPageProps {
   onBack: () => void
 }
 
+function WalletTrailing({ currency }: { currency: string }) {
+  return (
+    <div className="flex items-center gap-2 text-white/25">
+      <span className="text-xs text-white/40">{currency}</span>
+      <Icon name="fa-chevron-right" className="text-base" />
+    </div>
+  )
+}
+
 export function WalletsPage({
   payments,
   cards,
@@ -30,12 +39,7 @@ export function WalletsPage({
             label={w.name}
             sub="Payment Account"
             to={`/settings/wallets/${w.id}`}
-            trailing={
-              <div className="flex items-center gap-2 text-white/25">
-                <span className="text-xs text-white/40">{w.currency}</span>
-                <Icon name="fa-chevron-right" className="text-base" />
-              </div>
-            }
+            trailing={<WalletTrailing currency={w.currency} />}
           />
         ))}
         <AddRow label="Add Payment Account" to="/settings/wallets/new?type=payment" />
@@ -49,12 +53,7 @@ export function WalletsPage({
             label={w.name}
             sub="Credit Card"
             to={`/settings/wallets/${w.id}`}
-            trailing={
-              <div className="flex items-center gap-2 text-white/25">
-                <span className="text-xs text-white/40">{w.currency}</span>
-                <Icon name="fa-chevron-right" className="text-base" />
-              </div>
-            }
+            trailing={<WalletTrailing currency={w.currency} />}
           />
         ))}
         <AddRow label="Add Credit Card" to="/settings/wallets/new?type=credit_card" />
