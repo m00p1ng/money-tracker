@@ -1,4 +1,5 @@
 export * from './calculator'
+export * from './iconOptions'
 export * from './color'
 export * from './date'
 export * from './dateRange'
