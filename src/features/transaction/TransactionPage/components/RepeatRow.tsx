@@ -1,51 +1,41 @@
+import cx from 'classnames'
+
 import { Icon } from '@/components'
 import type { RepeatConfig } from '@/types/domain'
 
 function formatRepeat(config: RepeatConfig): string {
-  if (config.preset === 'daily') {
-    return 'Daily'
-  }
-
-  if (config.preset === '2weeks') {
-    return 'Every 2 Weeks'
-  }
-
-  if (config.preset === 'monthly') {
-    return 'Monthly'
-  }
-
-  if (config.preset === 'yearly') {
-    return 'Yearly'
-  }
-
+  if (config.preset === 'daily') return 'Daily'
+  if (config.preset === '2weeks') return 'Every 2 Weeks'
+  if (config.preset === 'monthly') return 'Monthly'
+  if (config.preset === 'yearly') return 'Yearly'
   if (config.preset === 'custom' && config.customEvery && config.customUnit) {
-    const unit = config.customEvery === 1
-      ? config.customUnit
-      : `${config.customUnit}s`
-
+    const unit = config.customEvery === 1 ? config.customUnit : `${config.customUnit}s`
     return `Every ${config.customEvery} ${unit}`
   }
-
   return 'Never'
 }
 
 interface RepeatRowProps {
   repeatConfig: RepeatConfig
+  variant?: 'standalone' | 'flat'
   onClick: () => void
 }
 
 export function RepeatRow({
   repeatConfig,
+  variant = 'standalone',
   onClick,
 }: RepeatRowProps) {
+  const isActive = repeatConfig.preset !== 'never'
+
   return (
     <button
       aria-label="Repeat"
-      className={[
-        'flex w-full items-center gap-3 rounded-2xl',
-        'border border-white/[0.07] bg-white/4 px-4 py-3 text-left',
-      ].join(' ')}
-      style={repeatConfig.preset !== 'never'
+      className={cx(
+        'flex w-full items-center gap-3 px-4 py-3 text-left',
+        variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
+      )}
+      style={variant === 'standalone' && isActive
         ? { borderColor: 'color-mix(in srgb, var(--accent) 20%, transparent)' }
         : undefined}
       onClick={onClick}
@@ -64,10 +54,7 @@ export function RepeatRow({
         <p className="text-xs text-white/35">Repeat</p>
         <p
           className="mt-0.5 text-sm font-semibold"
-          style={repeatConfig.preset !== 'never'
-            ? { color: 'var(--accent-light)' }
-            : undefined
-          }
+          style={isActive ? { color: 'var(--accent-light)' } : undefined}
         >
           {formatRepeat(repeatConfig)}
         </p>
