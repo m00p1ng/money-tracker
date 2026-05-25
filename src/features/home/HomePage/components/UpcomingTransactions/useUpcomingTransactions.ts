@@ -1,4 +1,8 @@
-import { formatAmount, formatShortDate } from '@/lib'
+import {
+  formatAmount,
+  formatShortDate,
+  titleWithNote,
+} from '@/lib'
 import {
   useCategoryStore,
   useTransactionStore,
@@ -6,14 +10,6 @@ import {
 } from '@/stores'
 
 import type { UpcomingTransactionRowData } from './UpcomingTransactions'
-
-function titleWithNote(title: string, note: string | undefined): string {
-  const trimmed = note?.trim()
-
-  return trimmed
-    ? `${title} (${trimmed})`
-    : title
-}
 
 function dateLabelFor(day: string): string {
   const [year, month, date] = day.split('-').map(Number)

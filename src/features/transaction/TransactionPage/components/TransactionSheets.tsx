@@ -1,6 +1,6 @@
 import {
   CurrencyPicker,
-  DatePicker,
+  DateTimePicker,
   RepeatPicker,
   WalletPicker,
 } from '@/components'
@@ -59,7 +59,7 @@ export function TransactionSheets({
 }: TransactionSheetsProps) {
   return (
     <>
-      <DatePicker
+      <DateTimePicker
         isOpen={isDatePickerOpen}
         value={new Date(date.replace('T', ' '))}
         onChange={(value) => {

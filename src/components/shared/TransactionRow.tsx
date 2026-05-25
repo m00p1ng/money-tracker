@@ -11,6 +11,8 @@ type TransactionRowProps = {
   secondaryLabel: string
   amount: string
   amountColor: string
+  secondaryAmount?: string
+  secondaryAmountColor?: string
 }
 
 export function TransactionRow({
@@ -22,6 +24,8 @@ export function TransactionRow({
   secondaryLabel,
   amount,
   amountColor,
+  secondaryAmount,
+  secondaryAmountColor,
 }: TransactionRowProps) {
   return (
     <Link
@@ -43,7 +47,12 @@ export function TransactionRow({
         <span className="block truncate font-medium">{primaryLabel}</span>
         <span className="block truncate text-sm text-slate-500">{secondaryLabel}</span>
       </span>
-      <span className={`font-semibold ${amountColor}`}>{amount}</span>
+      <span className="shrink-0 text-right">
+        <span className={`block font-semibold ${amountColor}`}>{amount}</span>
+        {secondaryAmount && (
+          <span className={`block text-xs ${secondaryAmountColor ?? 'text-white/28'}`}>{secondaryAmount}</span>
+        )}
+      </span>
     </Link>
   )
 }

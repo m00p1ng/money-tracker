@@ -37,6 +37,7 @@ function renderPage(props: Partial<React.ComponentProps<typeof WalletDetailPage>
       onToggleCleared={onToggleCleared}
       transactions={[]}
       wallet={wallet}
+      wallets={[wallet]}
       {...props}
     />,
   )

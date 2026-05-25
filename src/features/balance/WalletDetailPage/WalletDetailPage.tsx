@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import {
   Card,
-  DateOnlyPicker,
+  DatePicker,
   DateRangePresetPicker,
   Icon,
   PageHeader,
@@ -27,6 +27,7 @@ import { SwipeableTransactionRow } from './SwipeableTransactionRow'
 
 export type WalletDetailPageProps = {
   wallet: Wallet | undefined
+  wallets: Wallet[]
   transactions: Transaction[]
   categories: Category[]
   currentAmount: number
@@ -39,6 +40,7 @@ export type WalletDetailPageProps = {
 
 export function WalletDetailPage({
   wallet,
+  wallets,
   transactions,
   categories,
   currentAmount,
@@ -138,6 +140,7 @@ export function WalletDetailPage({
                 key={row.transaction.id}
                 row={row}
                 wallet={wallet}
+                wallets={wallets}
                 categories={categories}
                 onToggleCleared={onToggleCleared}
               />
@@ -149,13 +152,14 @@ export function WalletDetailPage({
               key={row.transaction.id}
               row={row}
               wallet={wallet}
+              wallets={wallets}
               categories={categories}
             />
           )
         })}
       </section>
 
-      <DateOnlyPicker
+      <DatePicker
         isOpen={isStartPickerOpen}
         title="Start Date"
         value={range.start}
@@ -163,7 +167,7 @@ export function WalletDetailPage({
         onClose={() => setStartPickerOpen(false)}
       />
 
-      <DateOnlyPicker
+      <DatePicker
         isOpen={isEndPickerOpen}
         title="End Date"
         value={range.end}

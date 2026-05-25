@@ -8,7 +8,7 @@ import {
   vi,
 } from 'vitest'
 
-import { useDateOnlyPicker } from '../useDateOnlyPicker'
+import { useDatePicker } from '../useDatePicker'
 
 describe('useDateOnlyPicker', () => {
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('useDateOnlyPicker', () => {
     const onChange = vi.fn()
     const onClose = vi.fn()
     const { result } = renderHook(() =>
-      useDateOnlyPicker('2026-05-15', onChange, onClose),
+      useDatePicker('2026-05-15', onChange, onClose),
     )
 
     expect(result.current.pickerValue).toEqual({
@@ -36,7 +36,7 @@ describe('useDateOnlyPicker', () => {
 
   it('exposes day, full month, and year columns', () => {
     const { result } = renderHook(() =>
-      useDateOnlyPicker('2026-05-15', vi.fn(), vi.fn()),
+      useDatePicker('2026-05-15', vi.fn(), vi.fn()),
     )
 
     expect(result.current.columns.map((column) => column.name)).toEqual(['day', 'month', 'year'])
@@ -60,7 +60,7 @@ describe('useDateOnlyPicker', () => {
     const onChange = vi.fn()
     const onClose = vi.fn()
     const { result } = renderHook(() =>
-      useDateOnlyPicker('2026-05-15', onChange, onClose),
+      useDatePicker('2026-05-15', onChange, onClose),
     )
 
     act(() => {
@@ -80,7 +80,7 @@ describe('useDateOnlyPicker', () => {
 
   it('falls back to today when value is out of range', () => {
     const { result } = renderHook(() =>
-      useDateOnlyPicker('1990-01-01', vi.fn(), vi.fn()),
+      useDatePicker('1990-01-01', vi.fn(), vi.fn()),
     )
 
     expect(result.current.pickerValue).toEqual({
@@ -92,7 +92,7 @@ describe('useDateOnlyPicker', () => {
 
   it('clamps the day when changing to a shorter month', () => {
     const { result } = renderHook(() =>
-      useDateOnlyPicker('2026-03-31', vi.fn(), vi.fn()),
+      useDatePicker('2026-03-31', vi.fn(), vi.fn()),
     )
 
     act(() => {

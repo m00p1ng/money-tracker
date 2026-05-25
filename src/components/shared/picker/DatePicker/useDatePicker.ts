@@ -1,53 +1,75 @@
 import { useMemo, useState } from 'react'
 
-type DateTimeValue = {
-  date: string
-  hour: string
-  minute: string
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
+
+type PickerValue = {
+  day: string
+  month: string
+  year: string
 }
 
-const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
-const MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
-
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const DAY_MS = 24 * 60 * 60 * 1000
-
 export function useDatePicker(
-  value: Date,
-  onChange: (date: Date) => void,
+  value: string,
+  onChange: (date: string) => void,
   onClose: () => void,
 ) {
   const todayKey = toDateKey(new Date())
-  const dateOptions = useMemo(() => createDateOptions(new Date()), [])
-  const [pickerValue, setPickerValue] = useState<DateTimeValue>(() => createPickerValue(value, dateOptions, todayKey))
+  const todayValue = dateKeyToPickerValue(todayKey)
+  const yearOptions = useMemo(() => createYearOptions(new Date()), [])
 
-  const columns = useMemo(() => [
-    {
-      name: 'date',
-      label: 'Date',
-      options: dateOptions,
-    },
-    {
-      name: 'hour',
-      label: 'Hour',
-      options: HOUR_OPTIONS,
-    },
-    {
-      name: 'minute',
-      label: 'Minute',
-      options: MINUTE_OPTIONS,
-    },
-  ], [dateOptions])
+  const [pickerValue, setPickerValue] = useState<PickerValue>(() => {
+    const initialValue = dateKeyToPickerValue(value)
+    const inRange = yearOptions.includes(initialValue.year)
 
-  function handleChange(nextValue: Record<string, string>) {
-    setPickerValue(nextValue as DateTimeValue)
+    return inRange
+      ? initialValue
+      : todayValue
+  })
+
+  const columns = useMemo(() => {
+    const maxDay = daysInMonth(Number(pickerValue.year), Number(pickerValue.month))
+
+    return [
+      {
+        name: 'day',
+        label: 'Day',
+        options: Array.from({ length: maxDay }, (_, index) => padNumber(index + 1)),
+      },
+      {
+        name: 'month',
+        label: 'Month',
+        options: MONTHS.map((label, index) => ({
+          value: padNumber(index + 1),
+          label,
+        })),
+      },
+      {
+        name: 'year',
+        label: 'Year',
+        options: yearOptions,
+      },
+    ]
+  }, [pickerValue.month, pickerValue.year, yearOptions])
+
+  function handleChange(next: PickerValue) {
+    setPickerValue(clampPickerValue(next))
   }
 
   function handleConfirm() {
-    const result = dateFromKey(pickerValue.date)
-    result.setHours(Number(pickerValue.hour), Number(pickerValue.minute), 0, 0)
-    onChange(result)
+    onChange(pickerValueToDateKey(pickerValue))
     onClose()
   }
 
@@ -59,44 +81,10 @@ export function useDatePicker(
   }
 }
 
-function createDateOptions(referenceDate: Date) {
-  const today = startOfDay(referenceDate)
-  const start = new Date(today)
-  start.setFullYear(today.getFullYear() - 1)
+function createYearOptions(referenceDate: Date) {
+  const year = referenceDate.getFullYear()
 
-  const end = new Date(today)
-  end.setFullYear(today.getFullYear() + 1)
-
-  const options = []
-  for (let time = start.getTime(); time <= end.getTime(); time += DAY_MS) {
-    const date = new Date(time)
-    const value = toDateKey(date)
-    options.push({
-      value,
-      label: value === toDateKey(today)
-        ? 'Today'
-        : `${WEEKDAYS[date.getDay()]} ${date.getDate()} ${MONTHS[date.getMonth()]}`,
-    })
-  }
-
-  return options
-}
-
-function createPickerValue(value: Date, dateOptions: Array<{ value: string }>, todayKey: string): DateTimeValue {
-  const valueDateKey = toDateKey(value)
-  const date = dateOptions.some((option) => option.value === valueDateKey)
-    ? valueDateKey
-    : todayKey
-
-  return {
-    date,
-    hour: String(value.getHours()).padStart(2, '0'),
-    minute: String(value.getMinutes()).padStart(2, '0'),
-  }
-}
-
-function startOfDay(date: Date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  return Array.from({ length: 41 }, (_, index) => String(year - 20 + index))
 }
 
 function toDateKey(date: Date) {
@@ -107,8 +95,45 @@ function toDateKey(date: Date) {
   return `${year}-${month}-${day}`
 }
 
-function dateFromKey(key: string) {
-  const [year, month, day] = key.split('-').map(Number)
+function dateKeyToPickerValue(dateKey: string): PickerValue {
+  const [year, month, day] = dateKey.split('-')
 
-  return new Date(year, month - 1, day)
+  return clampPickerValue({
+    day,
+    month,
+    year,
+  })
+}
+
+function pickerValueToDateKey(value: PickerValue) {
+  return `${value.year}-${value.month}-${value.day}`
+}
+
+function clampPickerValue(value: PickerValue): PickerValue {
+  const year = Number(value.year)
+  const month = Number(value.month)
+  const day = Number(value.day)
+  const safeYear = Number.isFinite(year)
+    ? year
+    : new Date().getFullYear()
+  const safeMonth = Number.isFinite(month)
+    ? Math.min(Math.max(month, 1), 12)
+    : 1
+  const safeDay = Number.isFinite(day)
+    ? Math.min(Math.max(day, 1), daysInMonth(safeYear, safeMonth))
+    : 1
+
+  return {
+    day: padNumber(safeDay),
+    month: padNumber(safeMonth),
+    year: String(safeYear),
+  }
+}
+
+function daysInMonth(year: number, month: number) {
+  return new Date(year, month, 0).getDate()
+}
+
+function padNumber(value: number) {
+  return String(value).padStart(2, '0')
 }

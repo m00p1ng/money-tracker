@@ -13,7 +13,7 @@ import {
   vi,
 } from 'vitest'
 
-import { DatePicker } from '@/components'
+import { DateTimePicker } from '@/components'
 
 vi.mock('@ncdai/react-wheel-picker', () => ({
   WheelPickerWrapper: ({ children }: { children: ReactNode }) => (
@@ -55,7 +55,7 @@ describe('DatePicker', () => {
 
   it('renders a first date wheel column with Today selected by default', () => {
     render(
-      <DatePicker
+      <DateTimePicker
         isOpen
         value={new Date(2026, 4, 25, 14, 30)}
         onChange={vi.fn()}
@@ -74,7 +74,7 @@ describe('DatePicker', () => {
     const onClose = vi.fn()
 
     render(
-      <DatePicker
+      <DateTimePicker
         isOpen
         value={new Date(2026, 4, 25, 14, 30)}
         onChange={onChange}

@@ -8,12 +8,13 @@ import { useNavigate } from 'react-router'
 
 import { Card, Icon } from '@/components'
 import type { RunningWalletRow } from '@/features/balance/balanceCalculations'
-import { formatAmount, hexToRgba } from '@/lib'
+import { buildTransactionBaseProps, formatAmount } from '@/lib'
 import type { Category, Wallet } from '@/types/domain'
 
 type Props = {
   row: RunningWalletRow
   wallet: Wallet
+  wallets: Wallet[]
   categories: Category[]
   onToggleCleared: (id: string) => void
 }
@@ -21,15 +22,19 @@ type Props = {
 export function SwipeableTransactionRow({
   row,
   wallet,
+  wallets,
   categories,
   onToggleCleared,
 }: Props) {
   const navigate = useNavigate()
   const x = useMotionValue(0)
   const isCredit = wallet.type === 'credit_card'
-  const category = categories.find((c) => c.id === row.transaction.items[0]?.categoryId)
-  const iconColor = category?.color ?? wallet.color
-  const isCleared = row.transaction.cleared ?? false
+  const { transaction } = row
+  const category = transaction.type !== 'transfer'
+    ? categories.find((c) => c.id === transaction.items[0]?.categoryId)
+    : undefined
+  const base = buildTransactionBaseProps(transaction, category, wallets, wallet.color)
+  const isCleared = transaction.cleared ?? false
 
   function handleDragEnd() {
     if (x.get() < -36) {
@@ -51,11 +56,11 @@ export function SwipeableTransactionRow({
     if (Math.abs(x.get()) > 4) {
       return
     }
-    navigate(`/transaction/${row.transaction.id}`)
+    navigate(`/transaction/${transaction.id}`)
   }
 
   function handleActionClick() {
-    onToggleCleared(row.transaction.id)
+    onToggleCleared(transaction.id)
     animate(x, 0, {
       type: 'spring',
       stiffness: 400,
@@ -103,15 +108,13 @@ export function SwipeableTransactionRow({
         <Card className="flex items-center gap-2.5 transition-opacity active:opacity-70">
           <div
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm"
-            style={{ background: hexToRgba(iconColor, 0.15), color: iconColor }}
+            style={{ background: base.iconBg, color: base.iconColor }}
           >
-            <Icon name={category?.icon ?? 'fa-ellipsis'} />
+            <Icon name={base.icon} />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold">{category?.name ?? row.transaction.type}</p>
-            <p className="mt-0.5 text-xs text-white/30">
-              {new Date(row.transaction.date).toLocaleDateString()}
-            </p>
+            <p className="text-sm font-semibold">{base.primaryLabel}</p>
+            <p className="mt-0.5 text-xs text-white/30">{base.secondaryLabel}</p>
           </div>
           {isCleared && (
             <Icon

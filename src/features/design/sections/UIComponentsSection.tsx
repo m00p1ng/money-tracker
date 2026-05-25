@@ -4,8 +4,8 @@ import {
   Button,
   Card,
   CurrencyPicker,
-  DatePicker,
   DateRangePresetPicker,
+  DateTimePicker,
   Field,
   FormActions,
   RepeatPicker,
@@ -224,11 +224,11 @@ export function UIComponentsSection() {
         </div>
       </SubSection>
 
-      <SubSection id="date-picker" title="DatePicker">
+      <SubSection id="date-time-picker" title="DateTimePicker">
         <div className="space-y-3">
           <Button variant="ghost" onClick={() => setDateOpen(true)}>Open DatePicker</Button>
           <VariantLabel label={`selected: ${selectedDate.toLocaleDateString()}`} />
-          <DatePicker
+          <DateTimePicker
             isOpen={dateOpen}
             value={selectedDate}
             onChange={(d) => {

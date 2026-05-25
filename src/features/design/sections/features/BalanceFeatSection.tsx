@@ -33,6 +33,7 @@ export function BalanceFeatSection() {
             runningAmount: 487.5,
           }}
           wallet={STUB_WALLET_PAYMENT}
+          wallets={[STUB_WALLET_PAYMENT]}
           categories={[STUB_CATEGORY]}
           onToggleCleared={() => {}}
         />
@@ -87,6 +88,7 @@ export function BalanceFeatSection() {
         <TransactionRow
           row={STUB_RUNNING_ROW}
           wallet={STUB_WALLET_PAYMENT}
+          wallets={[STUB_WALLET_PAYMENT]}
           categories={[STUB_CATEGORY]}
         />
       </SubSection>

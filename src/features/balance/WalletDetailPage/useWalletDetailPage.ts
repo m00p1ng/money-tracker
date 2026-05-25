@@ -18,6 +18,7 @@ export function useWalletDetailPage(): WalletDetailPageProps {
   const navigate = useNavigate()
   const backNavigate = useBackNavigate()
   const wallet = useWalletStore((state) => state.items.find((item) => item.id === id))
+  const wallets = useWalletStore((state) => state.items)
   const transactions = useTransactionStore((state) => state.items)
   const categories = useCategoryStore((state) => state.items)
   const toggleCleared = useTransactionStore((state) => state.toggleCleared)
@@ -30,6 +31,7 @@ export function useWalletDetailPage(): WalletDetailPageProps {
 
   return {
     wallet,
+    wallets,
     transactions,
     categories,
     currentAmount,
