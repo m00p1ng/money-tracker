@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
-type UseFormCrudOptions<T extends { id: string }> = {
+type UseFormCrudOptions<T> = {
   existing: T | undefined
   add: (data: T) => Promise<void>
   update: (data: T) => Promise<void>
-  remove: (id: string) => Promise<void>
+  remove: (item: T) => Promise<void>
   navigateTo: string
   validate?: (data: T) => string | null
 }
 
-export function useFormCrud<T extends { id: string }>({
+export function useFormCrud<T>({
   existing,
   add,
   update,
@@ -47,7 +47,7 @@ export function useFormCrud<T extends { id: string }>({
       return
     }
     try {
-      await remove(existing.id)
+      await remove(existing)
       navigate(navigateTo)
     } catch (err) {
       setError(err instanceof Error

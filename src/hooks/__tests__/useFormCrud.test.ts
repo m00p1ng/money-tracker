@@ -25,7 +25,7 @@ function makeOptions(overrides: Partial<Parameters<typeof useFormCrud<Item>>[0]>
     existing: undefined as Item | undefined,
     add: vi.fn().mockResolvedValue(undefined),
     update: vi.fn().mockResolvedValue(undefined),
-    remove: vi.fn().mockResolvedValue(undefined),
+    remove: vi.fn<(i: Item) => Promise<void>>().mockResolvedValue(undefined),
     navigateTo: '/list',
     validate: () => null as string | null,
     ...overrides,
@@ -62,13 +62,13 @@ describe('useFormCrud', () => {
     expect(result.current.error).toBe('Save failed')
   })
 
-  it('calls remove when existing is defined', async () => {
+  it('calls remove with the full item when existing is defined', async () => {
     const opts = makeOptions({ existing: item })
     const { result } = renderHook(() => useFormCrud(opts), { wrapper })
     await act(async () => {
       await result.current.onDelete()
     })
-    expect(opts.remove).toHaveBeenCalledWith('1')
+    expect(opts.remove).toHaveBeenCalledWith(item)
   })
 
   it('does nothing on delete when existing is undefined', async () => {
