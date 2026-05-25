@@ -103,37 +103,39 @@ export function RoutedApp() {
 
   return (
     <AppShell showBottomNav={showBottomNav}>
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={location.pathname}
-          variants={variants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          style={{ minHeight: '100%' }}
-        >
-          <Routes location={location}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/balance" element={<BalancePage />} />
-            <Route path="/balance/wallet/:id" element={<WalletDetailPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/settings/wallets" element={<WalletsPage />} />
-            <Route path="/settings/wallets/new" element={<WalletFormPage />} />
-            <Route path="/settings/wallets/:id" element={<WalletFormPage />} />
-            <Route path="/settings/categories" element={<CategoriesPage />} />
-            <Route path="/settings/categories/new" element={<CategoryFormPage />} />
-            <Route path="/settings/categories/:id" element={<CategoryFormPage />} />
-            <Route path="/settings/currencies" element={<CurrenciesPage />} />
-            <Route path="/settings/currencies/new" element={<CurrencyFormPage />} />
-            <Route path="/settings/currencies/:code" element={<CurrencyFormPage />} />
-            <Route path="/settings/theme" element={<ThemePage />} />
-            <Route path="/transaction/category" element={<CategorySelectionPage />} />
-            <Route path="/transaction/new" element={<TransactionPage />} />
-            <Route path="/transaction/repeat/:sourceId/:date" element={<TransactionPage />} />
-            <Route path="/transaction/:id" element={<TransactionPage />} />
-          </Routes>
-        </motion.div>
-      </AnimatePresence>
+      <div style={{ position: 'relative', overflow: 'hidden', minHeight: '100%' }}>
+        <AnimatePresence mode="sync" initial={false}>
+          <motion.div
+            key={location.pathname}
+            variants={variants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            style={{ position: 'absolute', width: '100%', top: 0 }}
+          >
+            <Routes location={location}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/balance" element={<BalancePage />} />
+              <Route path="/balance/wallet/:id" element={<WalletDetailPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/settings/wallets" element={<WalletsPage />} />
+              <Route path="/settings/wallets/new" element={<WalletFormPage />} />
+              <Route path="/settings/wallets/:id" element={<WalletFormPage />} />
+              <Route path="/settings/categories" element={<CategoriesPage />} />
+              <Route path="/settings/categories/new" element={<CategoryFormPage />} />
+              <Route path="/settings/categories/:id" element={<CategoryFormPage />} />
+              <Route path="/settings/currencies" element={<CurrenciesPage />} />
+              <Route path="/settings/currencies/new" element={<CurrencyFormPage />} />
+              <Route path="/settings/currencies/:code" element={<CurrencyFormPage />} />
+              <Route path="/settings/theme" element={<ThemePage />} />
+              <Route path="/transaction/category" element={<CategorySelectionPage />} />
+              <Route path="/transaction/new" element={<TransactionPage />} />
+              <Route path="/transaction/repeat/:sourceId/:date" element={<TransactionPage />} />
+              <Route path="/transaction/:id" element={<TransactionPage />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </AppShell>
   )
 }
