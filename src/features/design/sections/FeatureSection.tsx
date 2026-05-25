@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { Button } from '@/components'
 import { SwipeableTransactionRow, WalletRow } from '@/features/balance'
+import { CalendarPageView } from '@/features/calendar'
 import { CreditCardStats } from '@/features/balance/WalletDetailPage/components/CreditCardStats'
 import { DateRangeHeader } from '@/features/balance/WalletDetailPage/components/DateRangeHeader'
 import { TransactionRow } from '@/features/balance/WalletDetailPage/components/TransactionRow'
@@ -162,7 +163,7 @@ export function FeatureSection() {
 
       <PageGroup label="Home">
         <SubSection id="home-title" title="HomeTitle">
-          <HomeTitle onAddTransaction={() => { }} />
+          <HomeTitle onAddTransaction={() => { }} onNavigateToCalendar={() => { }} />
         </SubSection>
 
         <SubSection id="summary-cards" title="SummaryCards">
@@ -425,6 +426,47 @@ export function FeatureSection() {
               onCloseRepeatPicker={() => { }}
             />
             <VariantLabel label="date picker sheet" />
+          </div>
+        </SubSection>
+      </PageGroup>
+
+      <PageGroup label="Calendar">
+        <SubSection id="calendar-page" title="CalendarPage">
+          <VariantLabel label="Default (today selected)" />
+          <div className="overflow-hidden rounded-2xl border border-white/10">
+            <CalendarPageView
+              currentYear={2026}
+              currentMonth={4}
+              today="2026-05-25"
+              selectedDate="2026-05-25"
+              indicatorMap={{
+                '2026-05-01': 'transaction',
+                '2026-05-06': 'transaction',
+                '2026-05-15': 'both',
+                '2026-05-25': 'transaction',
+                '2026-05-28': 'upcoming',
+              }}
+              listRows={[
+                {
+                  key: 'demo-1',
+                  to: '#',
+                  icon: 'fa-utensils',
+                  iconBg: '#65a30d25',
+                  iconColor: '#65a30d',
+                  primaryLabel: 'Food & Drink',
+                  secondaryLabel: 'Lifestyle',
+                  amount: '-฿120.00',
+                  amountColor: 'text-expense',
+                },
+              ]}
+              listHeader="25 May"
+              onSelectDate={() => {}}
+              onPrev={() => {}}
+              onNext={() => {}}
+              onAdd={() => {}}
+              onBack={() => {}}
+              onSearch={() => {}}
+            />
           </div>
         </SubSection>
       </PageGroup>
