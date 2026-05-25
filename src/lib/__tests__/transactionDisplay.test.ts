@@ -86,8 +86,10 @@ describe('buildTransactionRowDisplay', () => {
       icon: 'fa-mug-hot',
       primaryLabel: 'Coffee, Food (brunch)',
       secondaryLabel: 'Food & Drink',
-      amount: '-$30.00',
+      amount: '$30.00',
       amountColor: 'text-expense',
+      secondaryAmount: undefined,
+      secondaryAmountColor: undefined,
     })
   })
 

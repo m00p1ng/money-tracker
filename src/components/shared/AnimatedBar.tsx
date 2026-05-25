@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-import { formatAmount } from '@/lib'
+import { formatSignedAmount } from '@/lib'
 
 type AnimatedBarProps = {
   value: number
@@ -24,7 +24,7 @@ export function AnimatedBar({
   const widthPercent = maxValue > 0
     ? `${Math.min((value / maxValue) * 100, 100)}%`
     : '0%'
-  const label = formatAmount(value, currency)
+  const label = formatSignedAmount(value, currency)
 
   return (
     <div

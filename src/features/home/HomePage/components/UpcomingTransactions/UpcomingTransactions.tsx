@@ -27,6 +27,7 @@ export type UpcomingTransactionRowData = {
   primaryLabel: string
   secondaryLabel: string
   amount: string
+  amountColor: string
 }
 
 type UpcomingTransactionsProps = {
@@ -50,7 +51,7 @@ export function UpcomingTransactions({ rows }: UpcomingTransactionsProps) {
               primaryLabel={row.primaryLabel}
               secondaryLabel={row.secondaryLabel}
               amount={row.amount}
-              amountColor="text-amber-200"
+              amountColor={row.amountColor}
             />
           </motion.div>
         ))}

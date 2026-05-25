@@ -123,7 +123,7 @@ describe('HomePage', () => {
 
     expect(screen.getByText('Income')).toBeInTheDocument()
     expect(screen.getByText('Expense')).toBeInTheDocument()
-    expect(screen.getByText('฿28.00')).toBeInTheDocument()
+    expect(screen.getAllByText('฿28.00').length).toBeGreaterThan(0)
     expect(screen.getByText('Coffee (my note)')).toBeInTheDocument()
     expect(screen.getAllByText('25 Feb')).toHaveLength(2)
     expect(screen.getByText('Transfer (mooping->test)')).toBeInTheDocument()
@@ -154,9 +154,41 @@ describe('HomePage', () => {
     )
 
     expect(screen.getByText('Coffee, Food')).toBeInTheDocument()
-    expect(screen.getByText('-$30.00')).toBeInTheDocument()
+    expect(screen.getAllByText('$30.00').length).toBeGreaterThan(0)
     expect(screen.queryByText('Coffee')).not.toBeInTheDocument()
     expect(screen.queryByText('Food')).not.toBeInTheDocument()
+  })
+
+  it('shows grouped upcoming expenses with shared transaction row formatting', () => {
+    useTransactionStore.setState({
+      items: [
+        {
+          id: 'tx-upcoming-multiple-items',
+          type: 'expense',
+          walletId: 'wallet-cash',
+          currency: 'USD',
+          status: 'planned',
+          items: [
+            { categoryId: 'expense-food-and-drink-coffee', amount: 10 },
+            { categoryId: 'expense-food-and-drink-food', amount: 20 },
+          ],
+          date: '2026-02-26T08:00:00.000Z',
+          createdAt: new Date().toISOString(),
+          note: 'brunch',
+        },
+      ],
+    })
+
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Upcoming')).toBeInTheDocument()
+    expect(screen.getByText('Coffee, Food (brunch)')).toBeInTheDocument()
+    expect(screen.getByText('26 Feb')).toBeInTheDocument()
+    expect(screen.getAllByText('$30.00').length).toBeGreaterThan(0)
   })
 
   it('shows today income and expense totals when they exist', () => {

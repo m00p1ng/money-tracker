@@ -247,7 +247,7 @@ describe('TransactionPage edit mode', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByText(/Bank · THB 0.00/)).toBeInTheDocument()
+    expect(screen.getByText(/Bank · ฿0.00/)).toBeInTheDocument()
   })
 
   it('goes back to the previous non-category page', async () => {

@@ -1,8 +1,6 @@
 import {
-  formatAmount,
+  buildTransactionRowDisplay,
   formatShortDate,
-  summarizeTransactionItems,
-  titleWithNote,
 } from '@/lib'
 import {
   useCategoryStore,
@@ -21,37 +19,30 @@ function dateLabelFor(day: string): string {
 export function useUpcomingTransactions() {
   const upcomingTransactions = useTransactionStore((state) => state.upcomingTransactions)
   const findCategory = useCategoryStore((state) => state.findById)
-  const findWallet = useWalletStore((state) => state.findById)
+  const wallets = useWalletStore((state) => state.items)
   const rawRows = upcomingTransactions()
 
   const rows: UpcomingTransactionRowData[] = rawRows.map((row) => {
     const transaction = row.kind === 'real'
       ? row.transaction
       : row.occurrence.transaction
-    const summary = summarizeTransactionItems(transaction, findCategory)
-    const fromWallet = findWallet(transaction.walletId)
-    const toWallet = transaction.toWalletId
-      ? findWallet(transaction.toWalletId)
-      : undefined
-    const label = transaction.type === 'transfer'
-      ? `Transfer (${fromWallet?.name ?? 'Wallet'}->${toWallet?.name ?? 'Wallet'})`
-      : summary.label
     const to =
       row.kind === 'real'
         ? `/transaction/${transaction.id}`
         : `/transaction/repeat/${row.occurrence.sourceId}/${row.occurrence.occurrenceDate}`
+    const secondaryLabel = `${dateLabelFor(row.date)}${row.kind === 'virtual-repeat'
+      ? ' · Repeat'
+      : ''}`
 
     return {
       id: row.id,
+      ...buildTransactionRowDisplay({
+        transaction,
+        findCategory,
+        wallets,
+        secondaryLabel,
+      }),
       to,
-      icon: transaction.type === 'transfer'
-        ? 'fa-right-left'
-        : summary.category?.icon ?? 'fa-clock',
-      primaryLabel: titleWithNote(label, transaction.note),
-      secondaryLabel: `${dateLabelFor(row.date)}${row.kind === 'virtual-repeat'
-        ? ' · Repeat'
-        : ''}`,
-      amount: formatAmount(summary.amount, transaction.currency),
     }
   })
 

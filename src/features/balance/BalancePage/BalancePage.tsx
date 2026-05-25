@@ -4,7 +4,7 @@ import {
   ListGroup,
   ListRow,
 } from '@/components'
-import { formatAmount } from '@/lib'
+import { formatAmount, formatSignedAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 export type WalletWithAmount = {
@@ -65,7 +65,7 @@ export function BalancePage({
               trailing={
                 <>
                   <span className="text-sm font-semibold text-white/55">
-                    {formatAmount(amount, wallet.currency)}
+                    {formatSignedAmount(amount, wallet.currency)}
                   </span>
                   <Icon name="fa-chevron-right" className="text-base" />
                 </>
