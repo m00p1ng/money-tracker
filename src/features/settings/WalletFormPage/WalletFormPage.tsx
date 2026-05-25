@@ -14,6 +14,7 @@ import {
   TextInput,
 } from '@/components'
 import { CurrencyPicker } from '@/components/shared/picker/CurrencyPicker'
+import { IconPicker } from '@/components/shared/picker/IconPicker'
 import { createId, hexToRgba } from '@/lib'
 import type {
   Currency,
@@ -48,6 +49,7 @@ export function WalletFormPage({
 }: WalletFormPageProps) {
   const [error, setError] = useState<string | null>(null)
   const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false)
+  const [iconPickerOpen, setIconPickerOpen] = useState(false)
   const [form, setForm] = useState<Wallet>(() => wallet ?? {
     id: createId(),
     name: '',
@@ -121,6 +123,23 @@ export function WalletFormPage({
         selectedCode={form.currency}
         onSelect={(code) => setForm({ ...form, currency: code })}
         onClose={() => setCurrencyPickerOpen(false)}
+      />
+      <Field label="Icon">
+        <button
+          type="button"
+          aria-label="icon"
+          onClick={() => setIconPickerOpen(true)}
+          className="flex min-h-11 w-full items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors"
+        >
+          <Icon name={form.icon} />
+          <span className="text-sm">{form.icon}</span>
+        </button>
+      </Field>
+      <IconPicker
+        isOpen={iconPickerOpen}
+        selectedIcon={form.icon}
+        onSelect={(icon) => setForm({ ...form, icon })}
+        onClose={() => setIconPickerOpen(false)}
       />
       <Field label="Starting Balance">
         <TextInput

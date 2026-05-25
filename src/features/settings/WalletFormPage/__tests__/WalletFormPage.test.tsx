@@ -124,4 +124,16 @@ describe('WalletFormPage', () => {
 
     expect(onDelete).toHaveBeenCalledTimes(1)
   })
+
+  it('opens icon picker when icon field is tapped', async () => {
+    renderPage()
+    await userEvent.click(screen.getByRole('button', { name: /icon/i }))
+    expect(screen.getByRole('heading', { name: 'Icon' })).toBeInTheDocument()
+  })
+
+  it('submits with selected icon after picking', async () => {
+    const { onSubmit } = renderPage()
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }))
+    expect(onSubmit.mock.calls[0][0]).toMatchObject({ icon: 'fa-wallet' })
+  })
 })
