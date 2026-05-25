@@ -41,6 +41,8 @@ export const NAV_GROUPS = [
       { id: 'add-row', label: 'AddRow' },
       { id: 'wheel-picker', label: 'WheelPicker' },
       { id: 'bottom-sheet', label: 'BottomSheet' },
+      { id: 'icon-picker', label: 'IconPicker' },
+      { id: 'icon-picker-field', label: 'IconPickerField' },
       { id: 'selector-sheet', label: 'SelectorSheet' },
     ],
   },

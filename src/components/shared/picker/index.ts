@@ -1,6 +1,7 @@
 export { CurrencyPicker } from './CurrencyPicker'
 export { DatePicker } from './DatePicker'
 export { IconPicker } from './IconPicker'
+export { IconPickerField } from './IconPickerField'
 export { DateRangePresetPicker } from './DateRangePresetPicker'
 export { DateTimePicker } from './DateTimePicker'
 export { RepeatPicker } from './RepeatPicker'
