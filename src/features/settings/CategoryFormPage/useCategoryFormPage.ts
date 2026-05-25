@@ -1,12 +1,12 @@
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
+import { useFormCrud } from '@/hooks'
 import { useCategoryStore } from '@/stores'
 import type { Category } from '@/types/domain'
 
 export function useCategoryFormPage() {
   const { id } = useParams()
-  const navigate = useNavigate()
   const backNavigate = useBackNavigate()
   const existing = useCategoryStore((state) => (id
     ? state.findById(id)
@@ -16,49 +16,31 @@ export function useCategoryFormPage() {
   const update = useCategoryStore((state) => state.update)
   const remove = useCategoryStore((state) => state.remove)
 
-  async function onSubmit(form: Category, setError: (err: string | null) => void) {
-    if (!form.name.trim()) {
-      setError('Name is required')
-
-      return
-    }
-    if (form.parentId) {
-      const parent = categories.find((c) => c.id === form.parentId)
-      if (parent && parent.type !== form.type) {
-        setError('Category type must match parent type')
-
-        return
+  const { error, onSubmit, onDelete } = useFormCrud<Category>({
+    existing,
+    add,
+    update,
+    remove: (item) => remove(item.id),
+    navigateTo: '/settings/categories',
+    validate: (form) => {
+      if (!form.name.trim()) {
+        return 'Name is required'
       }
-    }
-    try {
-      await (existing
-        ? update(form)
-        : add(form))
-      navigate('/settings/categories')
-    } catch (err) {
-      setError(err instanceof Error
-        ? err.message
-        : 'Unable to save category')
-    }
-  }
+      if (form.parentId) {
+        const parent = categories.find((c) => c.id === form.parentId)
+        if (parent && parent.type !== form.type) {
+          return 'Category type must match parent type'
+        }
+      }
 
-  async function onDelete(setError: (err: string | null) => void) {
-    if (!existing) {
-      return
-    }
-    try {
-      await remove(existing.id)
-      navigate('/settings/categories')
-    } catch (err) {
-      setError(err instanceof Error
-        ? err.message
-        : 'Unable to delete category')
-    }
-  }
+      return null
+    },
+  })
 
   return {
     existing,
     categories,
+    error,
     onBack: () => backNavigate('/settings/categories'),
     onSubmit,
     onDelete,

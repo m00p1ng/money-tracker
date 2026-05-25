@@ -11,8 +11,6 @@ import type { Category } from '@/types/domain'
 
 import { CategoryFormPage } from '../CategoryFormPage'
 
-type SetError = (err: string | null) => void
-
 const existingCategory: Category = {
   id: 'cat-1',
   name: 'Food',
@@ -23,14 +21,15 @@ const existingCategory: Category = {
 }
 
 function renderPage(props: Partial<React.ComponentProps<typeof CategoryFormPage>> = {}) {
-  const onSubmit = vi.fn<(form: Category, setError: SetError) => Promise<void>>(async () => {})
-  const onDelete = vi.fn<(setError: SetError) => Promise<void>>(async () => {})
+  const onSubmit = vi.fn<(form: Category) => Promise<void>>(async () => {})
+  const onDelete = vi.fn<() => Promise<void>>(async () => {})
   const onBack = vi.fn()
 
   render(
     <CategoryFormPage
       existing={undefined}
       categories={[]}
+      error={null}
       onBack={onBack}
       onSubmit={onSubmit}
       onDelete={onDelete}
@@ -68,5 +67,10 @@ describe('CategoryFormPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Save' }))
     expect(onSubmit).toHaveBeenCalledTimes(1)
     expect(onSubmit.mock.calls[0][0]).toMatchObject({ icon: 'fa-circle' })
+  })
+
+  it('displays error prop when provided', () => {
+    renderPage({ error: 'Name is required' })
+    expect(screen.getByText('Name is required')).toBeInTheDocument()
   })
 })

@@ -20,19 +20,20 @@ import type { Category, TransactionType } from '@/types/domain'
 interface CategoryFormPageProps {
   existing: Category | undefined
   categories: Category[]
+  error: string | null
   onBack: () => void
-  onSubmit: (form: Category, setError: (err: string | null) => void) => Promise<void>
-  onDelete: (setError: (err: string | null) => void) => Promise<void>
+  onSubmit: (form: Category) => Promise<void>
+  onDelete: () => Promise<void>
 }
 
 export function CategoryFormPage({
   existing,
   categories,
+  error,
   onBack,
   onSubmit,
   onDelete,
 }: CategoryFormPageProps) {
-  const [error, setError] = useState<string | null>(null)
   const [iconPickerOpen, setIconPickerOpen] = useState(false)
   const title = useMemo(() => (existing
     ? 'Edit Category'
@@ -48,11 +49,11 @@ export function CategoryFormPage({
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    await onSubmit(form, setError)
+    await onSubmit(form)
   }
 
   async function handleDelete() {
-    await onDelete(setError)
+    await onDelete()
   }
 
   return (
