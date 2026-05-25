@@ -5,6 +5,19 @@ const headerFormatter = new Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
 })
 
+const headerDayFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+})
+
+const headerWeekdayFormatter = new Intl.DateTimeFormat('en-GB', {
+  weekday: 'long',
+})
+
+const headerMonthYearFormatter = new Intl.DateTimeFormat('en-GB', {
+  month: 'long',
+  year: 'numeric',
+})
+
 const shortFormatter = new Intl.DateTimeFormat('en-GB', {
   day: '2-digit',
   month: 'short',
@@ -17,6 +30,18 @@ const rangeFormatter = new Intl.DateTimeFormat('en-GB', {
 
 export function formatHeaderDate(date: Date): string {
   return headerFormatter.format(date)
+}
+
+export function formatHeaderDay(date: Date): string {
+  return headerDayFormatter.format(date)
+}
+
+export function formatHeaderWeekday(date: Date): string {
+  return headerWeekdayFormatter.format(date)
+}
+
+export function formatHeaderMonthYear(date: Date): string {
+  return headerMonthYearFormatter.format(date)
 }
 
 export function formatShortDate(date: Date): string {

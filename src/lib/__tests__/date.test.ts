@@ -6,6 +6,9 @@ import {
 
 import {
   formatHeaderDate,
+  formatHeaderDay,
+  formatHeaderMonthYear,
+  formatHeaderWeekday,
   formatShortDate,
   isTodayInLocalTime,
   monthRangeLabel,
@@ -34,5 +37,17 @@ describe('date utilities', () => {
   it('converts to datetime-local value', () => {
     const date = new Date('2026-05-22T10:30:00')
     expect(toDatetimeLocalValue(date)).toBe('2026-05-22T10:30')
+  })
+
+  it('formats the header day', () => {
+    expect(formatHeaderDay(new Date('2026-05-22T09:00:00'))).toBe('22')
+  })
+
+  it('formats the header weekday', () => {
+    expect(formatHeaderWeekday(new Date('2026-05-22T09:00:00'))).toBe('Friday')
+  })
+
+  it('formats the header month-year', () => {
+    expect(formatHeaderMonthYear(new Date('2026-05-22T09:00:00'))).toBe('May 2026')
   })
 })
