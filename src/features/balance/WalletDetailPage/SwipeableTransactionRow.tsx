@@ -3,10 +3,11 @@ import {
   animate,
   motion,
   useMotionValue,
+  useTransform,
 } from 'framer-motion'
 import { useNavigate } from 'react-router'
 
-import { Card, Icon } from '@/components'
+import { Icon, TransactionRow } from '@/components'
 import type { RunningWalletRow } from '@/features/balance/balanceCalculations'
 import { buildTransactionBaseProps, formatAmount } from '@/lib'
 import type { Category, Wallet } from '@/types/domain'
@@ -28,6 +29,7 @@ export function SwipeableTransactionRow({
 }: Props) {
   const navigate = useNavigate()
   const x = useMotionValue(0)
+  const buttonOpacity = useTransform(x, [-72, -20], [1, 0])
   const isCredit = wallet.type === 'credit_card'
   const { transaction } = row
   const category = transaction.type !== 'transfer'
@@ -70,7 +72,10 @@ export function SwipeableTransactionRow({
 
   return (
     <div className="relative mb-2 overflow-hidden rounded-2xl">
-      <div className="absolute inset-y-0 right-0 flex w-18 flex-col items-center justify-center gap-1 bg-accent/15">
+      <motion.div
+        className="absolute inset-y-0 right-0 flex w-18 flex-col items-center justify-center gap-1 bg-accent/15"
+        style={{ opacity: buttonOpacity }}
+      >
         <button
           type="button"
           onClick={handleActionClick}
@@ -95,7 +100,7 @@ export function SwipeableTransactionRow({
               : 'Clear'}
           </span>
         </button>
-      </div>
+      </motion.div>
       <motion.div
         drag="x"
         style={{ x }}
@@ -105,41 +110,30 @@ export function SwipeableTransactionRow({
         onClick={handleRowClick}
         className="cursor-pointer"
       >
-        <Card className="flex items-center gap-2.5 transition-opacity active:opacity-70">
-          <div
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm"
-            style={{ background: base.iconBg, color: base.iconColor }}
-          >
-            <Icon name={base.icon} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold">{base.primaryLabel}</p>
-            <p className="mt-0.5 text-xs text-white/30">{base.secondaryLabel}</p>
-          </div>
+        <div className="relative">
+          <TransactionRow
+            {...base}
+            amount={`${row.amount >= 0
+              ? '+'
+              : '-'}${formatAmount(Math.abs(row.amount), wallet.currency)}`}
+            amountColor={row.amount >= 0
+              ? 'text-income'
+              : 'text-expense'}
+            secondaryAmount={isCredit
+              ? `${formatAmount(row.runningAmount, wallet.currency)} debt`
+              : formatAmount(row.runningAmount, wallet.currency)}
+            secondaryAmountColor={isCredit
+              ? 'text-expense/70'
+              : 'text-white/28'}
+          />
           {isCleared && (
             <Icon
               name="fa-circle-check"
-              className="shrink-0 text-[12px]"
+              className="pointer-events-none absolute bottom-2 right-2 text-[10px]"
               style={{ color: 'var(--accent-light)' }}
             />
           )}
-          <div className="shrink-0 text-right">
-            <p className={cx('text-sm font-bold', row.amount >= 0
-              ? 'text-income'
-              : 'text-expense')}>
-              {row.amount >= 0
-                ? '+'
-                : '-'}{formatAmount(Math.abs(row.amount), wallet.currency)}
-            </p>
-            <p className={cx('mt-0.5 text-xs', isCredit
-              ? 'text-expense/70'
-              : 'text-white/28')}>
-              {isCredit
-                ? `${formatAmount(row.runningAmount, wallet.currency)} debt`
-                : formatAmount(row.runningAmount, wallet.currency)}
-            </p>
-          </div>
-        </Card>
+        </div>
       </motion.div>
     </div>
   )
