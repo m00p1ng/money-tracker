@@ -13,13 +13,13 @@ export function useSettingsPage() {
 
   const walletCount = wallets.length
   const categoryCount = categories.length
-  const currencyCodes = currencies.slice(0, 3).map((c) => c.code).join(' · ')
+  const currencyCode = currencies.find((currency) => currency.isBase)?.code
   const theme = settings?.theme ?? 'forest'
 
   return {
     walletCount,
     categoryCount,
-    currencyCodes,
+    currencyCode,
     theme,
   }
 }

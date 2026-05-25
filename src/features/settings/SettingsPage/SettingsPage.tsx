@@ -29,14 +29,14 @@ const THEME_COLORS: Record<string, string> = {
 interface SettingsPageProps {
   walletCount: number
   categoryCount: number
-  currencyCodes: string
+  currencyCode: string | undefined
   theme: string
 }
 
 export function SettingsPage({
   walletCount,
   categoryCount,
-  currencyCodes,
+  currencyCode,
   theme,
 }: SettingsPageProps) {
   const themeColor = THEME_COLORS[theme] ?? '#10b981'
@@ -71,7 +71,7 @@ export function SettingsPage({
           iconBg="rgba(56,189,248,0.15)"
           iconColor="#38bdf8"
           label="Currencies"
-          sub={currencyCodes || undefined}
+          sub={currencyCode || undefined}
           to="/settings/currencies"
         />
       </ListGroup>

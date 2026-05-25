@@ -98,7 +98,7 @@ export function SelectInput({
             transition={{ duration: 0.15, ease: 'easeOut' }}
             className={[
               'absolute left-0 right-0 top-[calc(100%+4px)] z-10',
-              'overflow-hidden rounded-lg border border-white/10 bg-[#1a1a2e]',
+              'overflow-hidden rounded-lg border border-white/10 bg-(--bg)',
             ].join(' ')}
           >
             {options.map((option) => (

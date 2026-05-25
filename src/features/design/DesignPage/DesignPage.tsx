@@ -1,6 +1,10 @@
 import { Navigate } from 'react-router'
 
-import { DesignSidebar, DesignTopNav, NAV_GROUPS } from '@/features/design/DesignSidebar'
+import {
+  DesignSidebar,
+  DesignTopNav,
+  NAV_GROUPS,
+} from '@/features/design/DesignSidebar'
 import { BalanceFeatSection } from '@/features/design/sections/features/BalanceFeatSection'
 import { CalendarFeatSection } from '@/features/design/sections/features/CalendarFeatSection'
 import { HomeFeatSection } from '@/features/design/sections/features/HomeFeatSection'
