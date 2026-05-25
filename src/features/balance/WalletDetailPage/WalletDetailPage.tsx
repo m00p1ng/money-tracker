@@ -5,7 +5,6 @@ import {
   DateRangePresetPicker,
   Icon,
   PageHeader,
-  SectionDivider,
 } from '@/components'
 import { isReconciliationEnabled, walletRunningRows } from '@/features/balance/balanceCalculations'
 import { getPresetRange, type DateRangePreset } from '@/lib'
@@ -115,7 +114,6 @@ export function WalletDetailPage({
         )}
 
       <section>
-        <SectionDivider label="Transactions" />
         {rows.length === 0 && <Card className="text-sm text-slate-400">No transactions in this range.</Card>}
         {rows.map((row) => {
           if (reconciliation) {

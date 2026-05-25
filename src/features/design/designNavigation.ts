@@ -33,7 +33,6 @@ export const NAV_GROUPS = [
     items: [
       { id: 'background', label: 'Background' },
       { id: 'section-label', label: 'SectionLabel' },
-      { id: 'section-divider', label: 'SectionDivider' },
       { id: 'form-error-message', label: 'FormErrorMessage' },
       { id: 'page-header', label: 'PageHeader' },
       { id: 'animated-bar', label: 'AnimatedBar' },

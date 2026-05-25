@@ -9,7 +9,6 @@ import {
   ListGroup,
   ListRow,
   PageHeader,
-  SectionDivider,
   SectionLabel,
   SelectorSheet,
   TransactionRow,
@@ -80,10 +79,6 @@ export function SharedComponentsSection() {
 
       <SubSection id="section-label" title="SectionLabel">
         <SectionLabel>Section heading text</SectionLabel>
-      </SubSection>
-
-      <SubSection id="section-divider" title="SectionDivider">
-        <SectionDivider label="Today" />
       </SubSection>
 
       <SubSection id="form-error-message" title="FormErrorMessage">

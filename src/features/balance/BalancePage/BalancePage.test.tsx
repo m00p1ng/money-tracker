@@ -7,6 +7,8 @@ import {
   vi,
 } from 'vitest'
 
+import type { Wallet } from '@/types/domain'
+
 import { BalancePage } from './BalancePage'
 
 vi.mock('@/components', async () => {
@@ -51,6 +53,48 @@ vi.mock('@/components', async () => {
 })
 
 describe('BalancePage', () => {
+  const paymentWallet: Wallet = {
+    id: 'wallet-cash',
+    name: 'Cash',
+    type: 'payment',
+    currency: 'THB',
+    balance: 1000,
+    color: '#22c55e',
+    icon: 'fa-wallet',
+  }
+
+  const creditCard: Wallet = {
+    id: 'wallet-card',
+    name: 'Visa',
+    type: 'credit_card',
+    currency: 'USD',
+    balance: 0,
+    creditLimit: 5000,
+    color: '#f97316',
+    icon: 'fa-credit-card',
+  }
+
+  it('renders wallets with the shared grouped list row styling', () => {
+    render(
+      <MemoryRouter>
+        <BalancePage
+          paymentWallets={[{ wallet: paymentWallet, amount: 1234 }]}
+          creditCards={[{ wallet: creditCard, amount: 250 }]}
+          assets={1234}
+          debt={250}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Payment Accounts')).toBeInTheDocument()
+    expect(screen.getByText('Credit Cards')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Cash/i })).toHaveAttribute('href', '/balance/wallet/wallet-cash')
+    expect(screen.getByRole('link', { name: /Cash/i })).toHaveClass('border-b', 'px-4', 'py-3.5')
+    expect(screen.getByRole('link', { name: /Visa/i })).toHaveAttribute('href', '/balance/wallet/wallet-card')
+    expect(screen.getByText('฿1,234.00')).toBeInTheDocument()
+    expect(screen.getByText('$250.00')).toBeInTheDocument()
+  })
+
   it('uses income and expense colors for asset and debt bars', () => {
     render(
       <MemoryRouter>

@@ -1,12 +1,11 @@
 import {
   AnimatedBar,
   Icon,
-  SectionDivider,
+  ListGroup,
+  ListRow,
 } from '@/components'
-import { formatAmount } from '@/lib'
+import { formatAmount, hexToRgba } from '@/lib'
 import type { Wallet } from '@/types/domain'
-
-import { WalletRow } from './WalletRow'
 
 export type WalletWithAmount = {
   wallet: Wallet;
@@ -56,21 +55,49 @@ export function BalancePage({
       </div>
 
       {paymentWallets.length > 0 && (
-        <section>
-          <SectionDivider label="Payment Accounts" />
+        <ListGroup label="Payment Accounts">
           {paymentWallets.map(({ wallet, amount }) => (
-            <WalletRow key={wallet.id} wallet={wallet} amount={amount} />
+            <ListRow
+              key={wallet.id}
+              icon={wallet.icon}
+              iconBg={hexToRgba(wallet.color, 0.15)}
+              iconColor={wallet.color}
+              label={wallet.name}
+              to={`/balance/wallet/${wallet.id}`}
+              trailing={
+                <>
+                  <span className="text-sm font-semibold text-white/55">
+                    {formatAmount(amount, wallet.currency)}
+                  </span>
+                  <Icon name="fa-chevron-right" className="text-base" />
+                </>
+              }
+            />
           ))}
-        </section>
+        </ListGroup>
       )}
 
       {creditCards.length > 0 && (
-        <section>
-          <SectionDivider label="Credit Cards" />
+        <ListGroup label="Credit Cards">
           {creditCards.map(({ wallet, amount }) => (
-            <WalletRow key={wallet.id} wallet={wallet} amount={amount} />
+            <ListRow
+              key={wallet.id}
+              icon={wallet.icon}
+              iconBg={hexToRgba(wallet.color, 0.15)}
+              iconColor={wallet.color}
+              label={wallet.name}
+              to={`/balance/wallet/${wallet.id}`}
+              trailing={
+                <>
+                  <span className="text-sm font-semibold text-white/55">
+                    {formatAmount(amount, wallet.currency)}
+                  </span>
+                  <Icon name="fa-chevron-right" className="text-base" />
+                </>
+              }
+            />
           ))}
-        </section>
+        </ListGroup>
       )}
     </div>
   )

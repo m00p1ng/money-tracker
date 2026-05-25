@@ -12,7 +12,7 @@ import { CreditCardStats } from './CreditCardStats'
 const wallet: Wallet = {
   id: 'wallet-card',
   name: 'Card',
-  type: 'credit',
+  type: 'credit_card',
   currency: 'USD',
   balance: 0,
   creditLimit: 1000,
