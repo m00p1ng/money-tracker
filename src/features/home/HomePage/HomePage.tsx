@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion'
 
 import {
+  HomeTitle,
   SummaryCards,
   TodayTransactions,
   UpcomingTransactions,
-} from '@/features/home'
-
-import { HomeTitle } from './components'
+} from './components'
 
 const containerVariants = {
   hidden: {},
