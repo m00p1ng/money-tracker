@@ -2,16 +2,19 @@ import { useState } from 'react'
 import { Navigate } from 'react-router'
 
 import { Icon } from '@/components'
-import { NAV_GROUPS } from '@/features/design/designNavigation'
-import { DesignSidebar } from '@/features/design/DesignSidebar'
-import { BalanceFeatSection } from '@/features/design/sections/features/BalanceFeatSection'
-import { CalendarFeatSection } from '@/features/design/sections/features/CalendarFeatSection'
-import { HomeFeatSection } from '@/features/design/sections/features/HomeFeatSection'
-import { SettingsFeatSection } from '@/features/design/sections/features/SettingsFeatSection'
-import { TransactionFeatSection } from '@/features/design/sections/features/TransactionFeatSection'
-import { SharedComponentsSection } from '@/features/design/sections/SharedComponentsSection'
-import { TokensSection } from '@/features/design/sections/TokensSection'
-import { UIComponentsSection } from '@/features/design/sections/UIComponentsSection'
+
+import {
+  BalanceFeatSection,
+  CalendarFeatSection,
+  DesignSidebar,
+  HomeFeatSection,
+  SettingsFeatSection,
+  SharedComponentsSection,
+  TokensSection,
+  TransactionFeatSection,
+  UIComponentsSection,
+} from './components'
+import { NAV_GROUPS } from './designNavigation'
 
 const SECTION_COMPONENTS: Record<string, React.ComponentType> = {
   'tokens': TokensSection,

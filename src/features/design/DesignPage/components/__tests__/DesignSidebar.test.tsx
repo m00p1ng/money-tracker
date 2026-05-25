@@ -13,7 +13,7 @@ import {
   vi,
 } from 'vitest'
 
-import { DesignSidebar } from '@/features/design/DesignSidebar'
+import { DesignSidebar } from '@/features/design/DesignPage/components/DesignSidebar'
 
 function renderSidebar(section = 'tokens') {
   return render(

@@ -1,5 +1,6 @@
 export { BalanceFeatSection } from './features/BalanceFeatSection'
 export { CalendarFeatSection } from './features/CalendarFeatSection'
+export { DesignSidebar } from './DesignSidebar'
 export { HomeFeatSection } from './features/HomeFeatSection'
 export { SettingsFeatSection } from './features/SettingsFeatSection'
 export { TransactionFeatSection } from './features/TransactionFeatSection'

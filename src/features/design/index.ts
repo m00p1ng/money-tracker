@@ -1,4 +1,3 @@
-export { DesignSidebar } from './DesignSidebar'
+export { DesignSidebar } from './DesignPage/components/DesignSidebar'
 export { default as DesignPage } from './DesignPage'
-export { NAV_GROUPS } from './designNavigation'
-export * from './sections'
+export { NAV_GROUPS } from './DesignPage/designNavigation'

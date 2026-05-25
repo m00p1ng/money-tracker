@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router'
 
 import { Icon } from '@/components'
 
-import { NAV_GROUPS } from './designNavigation'
+import { NAV_GROUPS } from '../designNavigation'
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })

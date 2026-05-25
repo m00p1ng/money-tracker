@@ -6,7 +6,7 @@ import {
 } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { NAV_GROUPS } from '../designNavigation'
+import { NAV_GROUPS } from './designNavigation'
 
 export function useDesignPage() {
   const navigate = useNavigate()
