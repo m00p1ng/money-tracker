@@ -7,6 +7,7 @@ import {
 } from 'react-router'
 
 import { AppShell } from '@/components'
+import { Background } from '@/components/Background'
 import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
 import { BalancePage, WalletDetailPage } from '@/features/balance'
 import { CalendarPage } from '@/features/calendar'
@@ -74,13 +75,18 @@ export function RoutedApp() {
 
 export default function App() {
   return (
-    <BrowserRouter basename="/money-tracker">
-      <NavigationDirectionProvider>
-        <Routes>
-          <Route path="/design" element={<DesignPage />} />
-          <Route path="/*" element={<RoutedApp />} />
-        </Routes>
-      </NavigationDirectionProvider>
-    </BrowserRouter>
+    <>
+      <Background />
+      <div className="relative" style={{ zIndex: 1 }}>
+        <BrowserRouter basename="/money-tracker">
+          <NavigationDirectionProvider>
+            <Routes>
+              <Route path="/design" element={<DesignPage />} />
+              <Route path="/*" element={<RoutedApp />} />
+            </Routes>
+          </NavigationDirectionProvider>
+        </BrowserRouter>
+      </div>
+    </>
   )
 }

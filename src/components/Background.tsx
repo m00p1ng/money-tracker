@@ -2,7 +2,7 @@ export function Background() {
   return (
     <div
       className="fixed inset-0 overflow-hidden pointer-events-none"
-      style={{ zIndex: -1 }}
+      style={{ zIndex: 0 }}
     >
       <div
         data-orb="1"
