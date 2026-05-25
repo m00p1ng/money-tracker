@@ -7,12 +7,18 @@ import {
 
 type HomeTitleProps = {
   onAddTransaction: () => void
+  onNavigateToCalendar: () => void
 }
 
-export function HomeTitle({ onAddTransaction }: HomeTitleProps) {
+export function HomeTitle({ onAddTransaction, onNavigateToCalendar }: HomeTitleProps) {
   return (
     <div className="flex items-center justify-between">
-      <div className="grid grid-cols-[auto_1px_auto] items-center gap-x-3">
+      <button
+        type="button"
+        onClick={onNavigateToCalendar}
+        className="grid grid-cols-[auto_1px_auto] items-center gap-x-3"
+        aria-label="Open calendar"
+      >
         <span
           className="row-span-2 bg-linear-to-r from-white to-white/75 bg-clip-text text-5xl font-bold text-transparent"
         >
@@ -21,7 +27,7 @@ export function HomeTitle({ onAddTransaction }: HomeTitleProps) {
         <div className="row-span-2 self-stretch bg-white/30" />
         <span className="text-sm font-medium text-white">{formatHeaderWeekday(new Date())}</span>
         <span className="text-sm font-medium text-white">{formatHeaderMonthYear(new Date())}</span>
-      </div>
+      </button>
       <button
         aria-label="Add transaction"
         onClick={onAddTransaction}

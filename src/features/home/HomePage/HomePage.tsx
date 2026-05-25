@@ -27,13 +27,14 @@ const sectionVariants = {
 
 type HomePageProps = {
   onAddTransaction: () => void
+  onNavigateToCalendar: () => void
 }
 
-export function HomePage({ onAddTransaction }: HomePageProps) {
+export function HomePage({ onAddTransaction, onNavigateToCalendar }: HomePageProps) {
   return (
     <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="visible">
       <motion.header variants={sectionVariants}>
-        <HomeTitle onAddTransaction={onAddTransaction} />
+        <HomeTitle onAddTransaction={onAddTransaction} onNavigateToCalendar={onNavigateToCalendar} />
       </motion.header>
       <motion.div variants={sectionVariants}>
         <SummaryCards />
