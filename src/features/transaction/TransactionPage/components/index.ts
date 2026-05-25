@@ -1,6 +1,9 @@
 export { CalculatorKeyboard } from './CalculatorKeyboard'
 export { CalculatorKeyboardSheet } from './CalculatorKeyboardSheet'
-export { default as CategoryItemsCard } from './CategoryItemsCard'
+export {
+  default as CategoryItemsCard,
+  CategoryItemsCard as CategoryItemsCardView,
+} from './CategoryItemsCard'
 export { DateTimeRow } from './DateTimeRow'
 export { ExchangeRateRow } from './ExchangeRateRow'
 export { NoteField } from './NoteField'

@@ -12,7 +12,7 @@ import { CurrencyRow } from '@/features/settings'
 import {
   CalculatorKeyboard,
   CalculatorKeyboardSheet,
-  CategoryItemsCard,
+  CategoryItemsCardView,
   DateTimeRow,
   ExchangeRateRow,
   NoteField,
@@ -194,7 +194,7 @@ export function FeatureSection() {
         </SubSection>
 
         <SubSection id="category-items-card" title="CategoryItemsCard">
-          <CategoryItemsCard
+          <CategoryItemsCardView
             items={[
               { categoryId: 'stub-1', amount: 500 },
               { categoryId: 'stub-2', amount: 250 },
