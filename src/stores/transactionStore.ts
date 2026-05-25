@@ -5,7 +5,7 @@ import {
   materializeRepeatOccurrence as buildRepeatOccurrence,
   projectRepeatOccurrences,
   type VirtualRepeatOccurrence,
-} from '@/features/transaction/repeatSchedule'
+} from '@/features/transaction'
 import { isTodayInLocalTime } from '@/lib'
 import type { Transaction } from '@/types/domain'
 
