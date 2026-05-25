@@ -77,6 +77,8 @@ type TransactionStore = {
     createId: () => string,
     now: string,
   ) => Promise<Transaction>
+  transactionsByMonth: (year: number, month: number) => Transaction[]
+  upcomingByMonth: (year: number, month: number) => UpcomingTransactionRow[]
 }
 
 export const useTransactionStore = create<TransactionStore>((set, get) => ({
@@ -196,5 +198,42 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     set({ items: sortNewestFirst([transaction, ...get().items]) })
 
     return transaction
+  },
+  transactionsByMonth(year, month) {
+    const prefix = `${year}-${String(month + 1).padStart(2, '0')}`
+    return get()
+      .items.filter(
+        (tx) =>
+          localDateString(tx.date).startsWith(prefix) &&
+          tx.status !== 'planned' &&
+          tx.status !== 'overdue',
+      )
+      .sort((a, b) => b.date.localeCompare(a.date))
+  },
+  upcomingByMonth(year, month) {
+    const prefix = `${year}-${String(month + 1).padStart(2, '0')}`
+    const realRows: UpcomingTransactionRow[] = get()
+      .items.filter(
+        (tx) =>
+          (tx.status === 'planned' || tx.status === 'overdue') &&
+          localDateString(tx.date).startsWith(prefix),
+      )
+      .map((tx) => ({
+        kind: 'real',
+        id: tx.id,
+        date: localDateString(tx.date),
+        transaction: tx,
+      }))
+    const repeatRows: UpcomingTransactionRow[] = projectRepeatOccurrences(get().items)
+      .filter((occ) => occ.occurrenceDate.startsWith(prefix))
+      .map((occ) => ({
+        kind: 'virtual-repeat',
+        id: occ.id,
+        date: occ.occurrenceDate,
+        occurrence: occ,
+      }))
+    return [...realRows, ...repeatRows].sort((a, b) =>
+      a.date.localeCompare(b.date),
+    )
   },
 }))
