@@ -33,7 +33,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
 
   function onTypeChange(newType: 'expense' | 'income' | 'transfer') {
     if (newType === 'transfer') {
-      navigate('/transaction/new?type=transfer')
+      navigate('/transaction/new?type=transfer', { state: { fromCategorySelection: true } })
 
       return
     }
@@ -72,7 +72,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
       return
     }
 
-    navigate(`/transaction/new?type=${type}&categoryId=${category.id}`)
+    navigate(`/transaction/new?type=${type}&categoryId=${category.id}`, { state: { fromCategorySelection: true } })
   }
 
   return {

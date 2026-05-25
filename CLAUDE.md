@@ -18,9 +18,9 @@ Run a single test file:
 npm run test -- src/lib/__tests__/calculator.test.ts
 ```
 
-Before finishing any task, run:
+Before finishing implement task, run:
 ```bash
-npm run lint && npm run test && npm run build
+rtk npm run lint -- --fix && rtk npm run test && rtk npm run build
 ```
 
 ## Architecture

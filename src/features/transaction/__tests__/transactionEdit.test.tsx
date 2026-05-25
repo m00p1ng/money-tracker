@@ -13,6 +13,7 @@ import {
   vi,
 } from 'vitest'
 
+import CategorySelectionPage from '@/features/transaction/CategorySelectionPage'
 import TransactionPage from '@/features/transaction/TransactionPage'
 import {
   useCategoryStore,
@@ -213,6 +214,102 @@ describe('TransactionPage edit mode', () => {
     expect(screen.getByText('From')).toBeInTheDocument()
     expect(screen.getByText('To')).toBeInTheDocument()
     expect(screen.queryByText('Categories')).not.toBeInTheDocument()
+  })
+
+  it('uses walletId search param as the initial wallet', () => {
+    useWalletStore.setState({
+      items: [
+        {
+          id: 'wallet-cash',
+          name: 'Cash',
+          type: 'payment',
+          currency: 'THB',
+          balance: 0,
+          color: '#10b981',
+          icon: 'fa-wallet',
+        },
+        {
+          id: 'wallet-bank',
+          name: 'Bank',
+          type: 'payment',
+          currency: 'THB',
+          balance: 0,
+          color: '#0ea5e9',
+          icon: 'fa-building-columns',
+        },
+      ],
+    })
+
+    render(
+      <MemoryRouter initialEntries={['/transaction/new?walletId=wallet-bank']}>
+        <Routes>
+          <Route path="/transaction/new" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText(/Bank · THB 0.00/)).toBeInTheDocument()
+  })
+
+  it('goes back to the previous non-category page', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <MemoryRouter initialEntries={['/calendar', '/transaction/new']} initialIndex={1}>
+        <Routes>
+          <Route path="/calendar" element={<div data-testid="calendar-page" />} />
+          <Route path="/transaction/new" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+
+    expect(screen.getByTestId('calendar-page')).toBeInTheDocument()
+  })
+
+  it('does not go back to category selection after category-created transaction', async () => {
+    const user = userEvent.setup()
+    useCategoryStore.setState({
+      items: [
+        {
+          id: 'expense-food-and-drink',
+          name: 'Food & Drink',
+          type: 'expense',
+          level: 1,
+          icon: 'fa-utensils',
+          color: '#65a30d',
+          isDefault: true,
+        },
+        {
+          id: 'expense-food-and-drink-coffee',
+          name: 'Coffee',
+          type: 'expense',
+          parentId: 'expense-food-and-drink',
+          level: 2,
+          icon: 'fa-utensils',
+          color: '#65a30d',
+          isDefault: true,
+        },
+      ],
+    })
+
+    render(
+      <MemoryRouter initialEntries={['/', '/transaction/category']} initialIndex={1}>
+        <Routes>
+          <Route path="/" element={<div data-testid="home-page" />} />
+          <Route path="/transaction/category" element={<CategorySelectionPage />} />
+          <Route path="/transaction/new" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await user.click(screen.getByText('Food & Drink'))
+    await user.click(screen.getByText('Coffee'))
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+
+    expect(screen.getByTestId('home-page')).toBeInTheDocument()
+    expect(screen.queryByText('Coffee')).not.toBeInTheDocument()
   })
 })
 

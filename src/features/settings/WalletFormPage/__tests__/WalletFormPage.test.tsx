@@ -75,7 +75,6 @@ describe('WalletFormPage', () => {
     expect(screen.getByText('New wallet')).toBeInTheDocument()
     expect(screen.getByText('Payment Account')).toBeInTheDocument()
     expect(screen.getAllByText('THB')).toHaveLength(2)
-    expect(screen.getByRole('button', { name: 'Payment' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
   })
@@ -89,16 +88,10 @@ describe('WalletFormPage', () => {
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument()
   })
 
-  it('shows and hides credit limit when wallet type changes', async () => {
-    renderPage()
+  it('shows credit limit for credit card create mode', () => {
+    renderPage({ initialType: 'credit_card' })
 
-    expect(screen.queryByText('Credit Limit')).not.toBeInTheDocument()
-
-    await userEvent.click(screen.getByRole('button', { name: 'Credit Card' }))
     expect(screen.getByText('Credit Limit')).toBeInTheDocument()
-
-    await userEvent.click(screen.getByRole('button', { name: 'Payment' }))
-    expect(screen.queryByText('Credit Limit')).not.toBeInTheDocument()
   })
 
   it('submits reconciliation changes', async () => {
@@ -113,10 +106,9 @@ describe('WalletFormPage', () => {
     })
   })
 
-  it('submits credit card type and default icon after switching type', async () => {
-    const { onSubmit } = renderPage()
+  it('submits credit card type and default icon in credit card create mode', async () => {
+    const { onSubmit } = renderPage({ initialType: 'credit_card' })
 
-    await userEvent.click(screen.getByRole('button', { name: 'Credit Card' }))
     await userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
     expect(onSubmit.mock.calls[0][0]).toMatchObject({

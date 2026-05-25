@@ -3,6 +3,7 @@ import { useState } from 'react'
 import {
   Card,
   DateRangePresetPicker,
+  Icon,
   PageHeader,
   SectionDivider,
 } from '@/components'
@@ -26,7 +27,9 @@ export type WalletDetailPageProps = {
   categories: Category[]
   currentAmount: number
   clearedAmount: number
+  onAdd: () => void
   onBack: () => void
+  onSearch: () => void
   onToggleCleared: (id: string) => void
 }
 
@@ -36,7 +39,9 @@ export function WalletDetailPage({
   categories,
   currentAmount,
   clearedAmount,
+  onAdd,
   onBack,
+  onSearch,
   onToggleCleared,
 }: WalletDetailPageProps) {
   const [preset, setPreset] = useState<DateRangePreset>('this-month')
@@ -62,7 +67,31 @@ export function WalletDetailPage({
 
   return (
     <div className="space-y-4">
-      <PageHeader title={wallet.name} onBack={onBack} />
+      <PageHeader
+        title={wallet.name}
+        onBack={onBack}
+        rightSlot={(
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              aria-label="Search"
+              onClick={onSearch}
+              className="grid h-9 w-9 place-items-center rounded-xl text-slate-300"
+            >
+              <Icon name="fa-magnifying-glass" />
+            </button>
+            <button
+              type="button"
+              aria-label="Add transaction"
+              onClick={onAdd}
+              className="grid h-9 w-9 place-items-center rounded-xl text-white"
+              style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))' }}
+            >
+              <Icon name="fa-plus" />
+            </button>
+          </div>
+        )}
+      />
 
       <DateRangeHeader range={range} onOpenPreset={() => setPresetSheetOpen(true)} />
 

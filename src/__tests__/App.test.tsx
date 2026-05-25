@@ -264,6 +264,6 @@ describe('App routing', () => {
     )
 
     expect(screen.getByRole('heading', { name: 'Upcoming' })).toBeInTheDocument()
-    expect(screen.getByText('Overdue')).toBeInTheDocument()
+    expect(screen.getByText('22 May')).toBeInTheDocument()
   })
 })

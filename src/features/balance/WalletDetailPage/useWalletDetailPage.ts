@@ -1,4 +1,7 @@
-import { useParams } from 'react-router'
+import {
+  useNavigate,
+  useParams,
+} from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
 import { walletClearedAmount, walletCurrentAmount } from '@/features/balance'
@@ -12,6 +15,7 @@ import type { WalletDetailPageProps } from './WalletDetailPage'
 
 export function useWalletDetailPage(): WalletDetailPageProps {
   const { id } = useParams()
+  const navigate = useNavigate()
   const backNavigate = useBackNavigate()
   const wallet = useWalletStore((state) => state.items.find((item) => item.id === id))
   const transactions = useTransactionStore((state) => state.items)
@@ -30,7 +34,11 @@ export function useWalletDetailPage(): WalletDetailPageProps {
     categories,
     currentAmount,
     clearedAmount,
+    onAdd: () => navigate(id
+      ? `/transaction/new?walletId=${id}`
+      : '/transaction/new'),
     onBack: () => backNavigate('/balance'),
+    onSearch: () => { },
     onToggleCleared: (txId) => {
       toggleCleared(txId)
     },

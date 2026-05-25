@@ -1,4 +1,4 @@
-import { formatAmount } from '@/lib'
+import { formatAmount, formatShortDate } from '@/lib'
 import {
   useCategoryStore,
   useTransactionStore,
@@ -7,25 +7,18 @@ import {
 
 import type { UpcomingTransactionRowData } from './UpcomingTransactions'
 
-function badgeFor(day: string): string {
-  const today = new Date().toISOString().slice(0, 10)
-  const tomorrowDate = new Date()
-  tomorrowDate.setDate(tomorrowDate.getDate() + 1)
-  const tomorrow = tomorrowDate.toISOString().slice(0, 10)
+function titleWithNote(title: string, note: string | undefined): string {
+  const trimmed = note?.trim()
 
-  if (day < today) {
-    return 'Overdue'
-  }
+  return trimmed
+    ? `${title} (${trimmed})`
+    : title
+}
 
-  if (day === today) {
-    return 'Today'
-  }
+function dateLabelFor(day: string): string {
+  const [year, month, date] = day.split('-').map(Number)
 
-  if (day === tomorrow) {
-    return 'Tomorrow'
-  }
-
-  return day
+  return formatShortDate(new Date(year, month - 1, date))
 }
 
 export function useUpcomingTransactions() {
@@ -46,10 +39,9 @@ export function useUpcomingTransactions() {
     const toWallet = transaction.toWalletId
       ? findWallet(transaction.toWalletId)
       : undefined
-    const label =
-      transaction.type === 'transfer'
-        ? `${fromWallet?.name ?? 'Wallet'} -> ${toWallet?.name ?? 'Wallet'}`
-        : category?.name ?? 'Transaction'
+    const label = transaction.type === 'transfer'
+      ? `Transfer (${fromWallet?.name ?? 'Wallet'}->${toWallet?.name ?? 'Wallet'})`
+      : category?.name ?? 'Transaction'
     const to =
       row.kind === 'real'
         ? `/transaction/${transaction.id}`
@@ -61,8 +53,8 @@ export function useUpcomingTransactions() {
       icon: transaction.type === 'transfer'
         ? 'fa-right-left'
         : category?.icon ?? 'fa-clock',
-      primaryLabel: label,
-      secondaryLabel: `${badgeFor(row.date)}${row.kind === 'virtual-repeat'
+      primaryLabel: titleWithNote(label, transaction.note),
+      secondaryLabel: `${dateLabelFor(row.date)}${row.kind === 'virtual-repeat'
         ? ' · Repeat'
         : ''}`,
       amount: formatAmount(firstItem?.amount ?? 0, transaction.currency),

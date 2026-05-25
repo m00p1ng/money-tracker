@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import {
+  useLocation,
   useNavigate,
   useParams,
   useSearchParams,
@@ -29,6 +30,7 @@ import type {
 import type { TransactionPageProps } from './TransactionPage'
 
 function useTransactionPageRouting() {
+  const location = useLocation()
   const navigate = useNavigate()
   const backNavigate = useBackNavigate()
   const {
@@ -58,8 +60,12 @@ function useTransactionPageRouting() {
   const seedDate = !isEditMode && !isRepeatMaterialization
     ? searchParams.get('date') ?? undefined
     : undefined
+  const seedWalletId = !isEditMode && !isRepeatMaterialization
+    ? searchParams.get('walletId') ?? undefined
+    : undefined
 
   return {
+    location,
     navigate,
     backNavigate,
     existing,
@@ -69,6 +75,7 @@ function useTransactionPageRouting() {
     seedCategoryId,
     seedType,
     seedDate,
+    seedWalletId,
     repeatDate,
   }
 }
@@ -79,6 +86,7 @@ function useTransactionPageDraft(
   seedType: TransactionType | undefined,
   seedCategoryId: string | undefined,
   seedDate: string | undefined,
+  seedWalletId: string | undefined,
   wallets: TransactionPageProps['wallets'],
 ) {
   const draftStore = useTransactionDraftStore()
@@ -86,7 +94,8 @@ function useTransactionPageDraft(
   const clearDraft = draftStore.clear
 
   const initialType = (seedType ?? initial?.type ?? 'expense') as TransactionType
-  const initialWalletId = initial?.walletId ?? wallets[0]?.id ?? 'wallet-cash'
+  const queryWallet = wallets.find((wallet) => wallet.id === seedWalletId)
+  const initialWalletId = initial?.walletId ?? queryWallet?.id ?? wallets[0]?.id ?? 'wallet-cash'
 
   const initialDraft = useMemo(() => ({
     id: existing?.id,
@@ -263,6 +272,7 @@ function useTransactionDeleteHandler(
 
 export function useTransactionPage(): TransactionPageProps {
   const {
+    location,
     navigate,
     backNavigate,
     existing,
@@ -272,6 +282,7 @@ export function useTransactionPage(): TransactionPageProps {
     seedCategoryId,
     seedType,
     seedDate,
+    seedWalletId,
     repeatDate,
   } = useTransactionPageRouting()
 
@@ -289,6 +300,7 @@ export function useTransactionPage(): TransactionPageProps {
     seedType,
     seedCategoryId,
     seedDate,
+    seedWalletId,
     wallets,
   )
 
@@ -386,7 +398,13 @@ export function useTransactionPage(): TransactionPageProps {
     onSave,
     onBack: () => {
       clearDraft()
-      backNavigate('/')
+      if ((location.state as { fromCategorySelection?: boolean } | null)?.fromCategorySelection) {
+        backNavigate('/')
+      } else if (location.key === 'default') {
+        backNavigate('/')
+      } else {
+        backNavigate(-1)
+      }
     },
     onDelete,
     onDismissKeyboard: () => updateDraft({ focusedIndex: null }),

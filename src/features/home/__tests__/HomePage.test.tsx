@@ -1,10 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import {
+  afterEach,
   beforeEach,
   describe,
   expect,
   it,
+  vi,
 } from 'vitest'
 
 import { HomePage } from '@/features/home'
@@ -13,10 +15,15 @@ import {
   formatHeaderMonthYear,
   formatHeaderWeekday,
 } from '@/lib'
-import { useCategoryStore, useTransactionStore } from '@/stores'
+import {
+  useCategoryStore,
+  useTransactionStore,
+  useWalletStore,
+} from '@/stores'
 
 describe('HomePage', () => {
   beforeEach(() => {
+    vi.setSystemTime(new Date('2026-02-25T12:00:00.000Z'))
     useCategoryStore.setState({
       items: [
         {
@@ -38,6 +45,37 @@ describe('HomePage', () => {
           color: '#65a30d',
           isDefault: true,
         },
+        {
+          id: 'income-salary',
+          name: 'Salary',
+          type: 'income',
+          level: 1,
+          icon: 'fa-money-bill',
+          color: '#3b82f6',
+          isDefault: true,
+        },
+      ],
+    })
+    useWalletStore.setState({
+      items: [
+        {
+          id: 'wallet-cash',
+          name: 'mooping',
+          type: 'payment',
+          currency: 'THB',
+          balance: 0,
+          color: '#10b981',
+          icon: 'fa-wallet',
+        },
+        {
+          id: 'wallet-test',
+          name: 'test',
+          type: 'payment',
+          currency: 'THB',
+          balance: 0,
+          color: '#0ea5e9',
+          icon: 'fa-building-columns',
+        },
       ],
     })
     useTransactionStore.setState({
@@ -48,11 +86,26 @@ describe('HomePage', () => {
           walletId: 'wallet-cash',
           currency: 'THB',
           items: [{ categoryId: 'expense-food-and-drink-coffee', amount: 28 }],
-          date: new Date().toISOString(),
+          date: '2026-02-25T08:00:00.000Z',
+          createdAt: new Date().toISOString(),
+          note: 'my note',
+        },
+        {
+          id: 'tx-transfer',
+          type: 'transfer',
+          walletId: 'wallet-cash',
+          toWalletId: 'wallet-test',
+          currency: 'THB',
+          items: [{ categoryId: 'transfer', amount: 100 }],
+          date: '2026-02-25T09:00:00.000Z',
           createdAt: new Date().toISOString(),
         },
       ],
     })
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it('shows monthly totals and today transactions', () => {
@@ -65,8 +118,43 @@ describe('HomePage', () => {
     expect(screen.getByText('Income')).toBeInTheDocument()
     expect(screen.getByText('Expense')).toBeInTheDocument()
     expect(screen.getByText('฿28.00')).toBeInTheDocument()
-    expect(screen.getByText('Coffee')).toBeInTheDocument()
-    expect(screen.getByText('Food & Drink')).toBeInTheDocument()
+    expect(screen.getByText('Coffee (my note)')).toBeInTheDocument()
+    expect(screen.getAllByText('25 Feb')).toHaveLength(2)
+    expect(screen.getByText('Transfer (mooping->test)')).toBeInTheDocument()
+  })
+
+  it('shows today income and expense totals when they exist', () => {
+    useTransactionStore.setState({
+      items: [
+        {
+          id: 'tx-expense',
+          type: 'expense',
+          walletId: 'wallet-cash',
+          currency: 'USD',
+          items: [{ categoryId: 'expense-food-and-drink-coffee', amount: 12 }],
+          date: '2026-02-25T08:00:00.000Z',
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 'tx-income',
+          type: 'income',
+          walletId: 'wallet-cash',
+          currency: 'USD',
+          items: [{ categoryId: 'income-salary', amount: 20 }],
+          date: '2026-02-25T09:00:00.000Z',
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    })
+
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Total Expenses: $12.00')).toBeInTheDocument()
+    expect(screen.getByText('Total Income: $20.00')).toBeInTheDocument()
   })
 
   it('shows empty state when there are no transactions today', () => {

@@ -34,14 +34,20 @@ export type TodayTransactionRowData = {
 
 type TodayTransactionsProps = {
   rows: TodayTransactionRowData[]
+  totalExpense?: string
+  totalIncome?: string
 }
 
-export function TodayTransactions({ rows }: TodayTransactionsProps) {
+export function TodayTransactions({
+  rows,
+  totalExpense,
+  totalIncome,
+}: TodayTransactionsProps) {
   return (
     <section>
       <SectionLabel>Today</SectionLabel>
       <motion.div
-        className="space-y-2 mt-3"
+        className="mt-3 space-y-2"
         variants={listVariants}
         initial="hidden"
         animate="visible"
@@ -65,6 +71,18 @@ export function TodayTransactions({ rows }: TodayTransactionsProps) {
           </motion.div>
         ))}
       </motion.div>
+      {totalExpense || totalIncome
+        ? (
+          <div className="mt-3 space-y-1 text-right text-sm font-medium text-slate-300">
+            {totalExpense
+              ? <p>Total Expenses: {totalExpense}</p>
+              : null}
+            {totalIncome
+              ? <p>Total Income: {totalIncome}</p>
+              : null}
+          </div>
+        )
+        : null}
     </section>
   )
 }

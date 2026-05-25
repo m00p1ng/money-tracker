@@ -1,4 +1,4 @@
-import { formatAmount } from '@/lib'
+import { formatAmount, formatShortDate } from '@/lib'
 import {
   useCategoryStore,
   useTransactionStore,
@@ -7,10 +7,38 @@ import {
 
 import type { TodayTransactionRowData } from './TodayTransactions'
 
+type TotalType = 'expense' | 'income'
+
+function titleWithNote(title: string, note: string | undefined): string {
+  const trimmed = note?.trim()
+
+  return trimmed
+    ? `${title} (${trimmed})`
+    : title
+}
+
+function transactionDateLabel(value: string): string {
+  return formatShortDate(new Date(value))
+}
+
+function totalFor(
+  transactions: ReturnType<typeof useTransactionStore.getState>['items'],
+  type: TotalType,
+): string | undefined {
+  const matching = transactions.filter((transaction) => transaction.type === type)
+  const total = matching.reduce(
+    (sum, transaction) => sum + transaction.items.reduce((itemSum, item) => itemSum + item.amount, 0),
+    0,
+  )
+
+  return total > 0
+    ? formatAmount(total, matching[0]?.currency)
+    : undefined
+}
+
 export function useTodayTransactions() {
   const todayTransactions = useTransactionStore((state) => state.todayTransactions)
   const findCategory = useCategoryStore((state) => state.findById)
-  const parentOf = useCategoryStore((state) => state.parentOf)
   const findWallet = useWalletStore((state) => state.findById)
   const transactions = todayTransactions()
 
@@ -28,8 +56,11 @@ export function useTodayTransactions() {
         icon: 'fa-arrow-right-arrow-left',
         iconBg: '#6366f125',
         iconColor: '#6366f1',
-        primaryLabel: 'Transfer',
-        secondaryLabel: `${fromWallet?.name ?? '—'} → ${toWallet?.name ?? '—'}`,
+        primaryLabel: titleWithNote(
+          `Transfer (${fromWallet?.name ?? '—'}->${toWallet?.name ?? '—'})`,
+          transaction.note,
+        ),
+        secondaryLabel: transactionDateLabel(transaction.date),
         amount: formatAmount(amount, transaction.currency),
         amountColor: 'text-slate-400',
       }]
@@ -37,9 +68,6 @@ export function useTodayTransactions() {
 
     return transaction.items.map((item, index) => {
       const category = findCategory(item.categoryId)
-      const parent = category
-        ? parentOf(category)
-        : undefined
 
       return {
         key: `${transaction.id}-${index}`,
@@ -47,8 +75,8 @@ export function useTodayTransactions() {
         icon: category?.icon ?? 'fa-ellipsis',
         iconBg: `${category?.color ?? '#64748b'}25`,
         iconColor: category?.color ?? '#94a3b8',
-        primaryLabel: category?.name ?? 'Unknown',
-        secondaryLabel: parent?.name ?? transaction.type,
+        primaryLabel: titleWithNote(category?.name ?? 'Unknown', transaction.note),
+        secondaryLabel: transactionDateLabel(transaction.date),
         amount: `${transaction.type === 'income'
           ? '+'
           : '-'}${formatAmount(item.amount, transaction.currency)}`,
@@ -59,5 +87,9 @@ export function useTodayTransactions() {
     })
   })
 
-  return { rows }
+  return {
+    rows,
+    totalExpense: totalFor(transactions, 'expense'),
+    totalIncome: totalFor(transactions, 'income'),
+  }
 }

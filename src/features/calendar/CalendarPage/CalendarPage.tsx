@@ -54,7 +54,7 @@ export function CalendarPage({
                 type="button"
                 aria-label="Search"
                 onClick={onSearch}
-                className="grid h-9 w-9 place-items-center rounded-xl bg-white/5 text-slate-300"
+                className="grid h-9 w-9 place-items-center rounded-xl text-slate-300"
               >
                 <Icon name="fa-magnifying-glass" />
               </button>
