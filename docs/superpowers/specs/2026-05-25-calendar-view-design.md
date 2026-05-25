@@ -9,6 +9,8 @@
 
 New `/calendar` page accessible by tapping the date block in `HomeTitle`. Shows a full-width monthly calendar with transaction indicators, and a scrollable transaction list filtered to the selected date (or full month when no date selected).
 
+The calendar grid is `position: sticky; top: 0` within the page scroll container so it stays visible while the transaction list scrolls beneath it.
+
 ---
 
 ## Routes & Navigation
@@ -60,12 +62,13 @@ Two new selectors:
 
 ```ts
 transactionsByMonth(year: number, month: number): Transaction[]
-// All real transactions whose local date falls in that year/month
+// Transactions whose local date falls in that year/month AND status is NOT 'planned' or 'overdue'
+// (i.e., status is 'paid', undefined, or cleared — completed transactions only)
 // Sorted newest first
-// Excludes planned/overdue (status-based) — those are upcoming
 
 upcomingByMonth(year: number, month: number): UpcomingTransactionRow[]
 // planned/overdue real rows + virtual repeat occurrences whose date falls in that year/month
+// Overdue transactions from prior months do NOT appear (filtered by their own date, not today)
 // Same shape as existing upcomingTransactions()
 ```
 
@@ -152,7 +155,7 @@ Upcoming rows → same `TransactionRow` shape:
 
 Navigates to `/transaction/new?date=YYYY-MM-DD` where date = `selectedDate ?? today`.
 
-`TransactionPage` reads `?date` query param to pre-fill the date field. If param absent, defaults to today (existing behavior unchanged).
+**Required change to `TransactionPage`:** reads `?date` query param via `useSearchParams` to pre-fill the date field in `transactionDraftStore` initial state. If param absent, defaults to today (existing behavior unchanged).
 
 ---
 
