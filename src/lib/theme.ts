@@ -13,7 +13,9 @@ export type ThemeTokens = {
   accentBtn2: string
   navBorder: string
   income: string
+  incomeText: string
   expense: string
+  expenseText: string
   danger: string
 }
 
@@ -31,7 +33,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#10b981',
     navBorder: '#10b98130',
     income: '#4ade80',
+    incomeText: '#052e16',
     expense: '#f87171',
+    expenseText: '#450a0a',
     danger: '#ef4444',
   },
   midnight: {
@@ -47,7 +51,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#6c47ff',
     navBorder: '#6c47ff30',
     income: '#86efac',
+    incomeText: '#052e16',
     expense: '#fca5a5',
+    expenseText: '#450a0a',
     danger: '#f87171',
   },
   ocean: {
@@ -63,7 +69,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#0284c7',
     navBorder: '#0369a130',
     income: '#4ade80',
+    incomeText: '#052e16',
     expense: '#f87171',
+    expenseText: '#450a0a',
     danger: '#ef4444',
   },
   sunset: {
@@ -79,7 +87,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#e11d48',
     navBorder: '#be123c30',
     income: '#4ade80',
+    incomeText: '#052e16',
     expense: '#fca5a5',
+    expenseText: '#450a0a',
     danger: '#f87171',
   },
   amber: {
@@ -95,7 +105,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#d97706',
     navBorder: '#b4530930',
     income: '#4ade80',
+    incomeText: '#052e16',
     expense: '#fca5a5',
+    expenseText: '#450a0a',
     danger: '#ef4444',
   },
   arctic: {
@@ -111,7 +123,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#475569',
     navBorder: '#94a3b830',
     income: '#86efac',
+    incomeText: '#052e16',
     expense: '#fca5a5',
+    expenseText: '#450a0a',
     danger: '#f87171',
   },
   sakura: {
@@ -127,7 +141,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#be185d',
     navBorder: '#9d174d30',
     income: '#86efac',
+    incomeText: '#052e16',
     expense: '#fca5a5',
+    expenseText: '#450a0a',
     danger: '#f87171',
   },
   jade: {
@@ -143,7 +159,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#047857',
     navBorder: '#04785730',
     income: '#6ee7b7',
+    incomeText: '#052e16',
     expense: '#fca5a5',
+    expenseText: '#450a0a',
     danger: '#f87171',
   },
   void: {
@@ -159,7 +177,9 @@ export const themes: Record<ThemePreset, ThemeTokens> = {
     accentBtn2: '#4f46e5',
     navBorder: '#4f46e530',
     income: '#6ee7b7',
+    incomeText: '#052e16',
     expense: '#fca5a5',
+    expenseText: '#450a0a',
     danger: '#f87171',
   },
 }
@@ -179,6 +199,8 @@ export function applyTheme(preset: ThemePreset): void {
   root.style.setProperty('--accent-btn-2', theme.accentBtn2)
   root.style.setProperty('--nav-border', theme.navBorder)
   root.style.setProperty('--income', theme.income)
+  root.style.setProperty('--income-text', theme.incomeText)
   root.style.setProperty('--expense', theme.expense)
+  root.style.setProperty('--expense-text', theme.expenseText)
   root.style.setProperty('--danger', theme.danger)
 }

@@ -11,7 +11,9 @@ describe('theme utilities', () => {
     const themeKeys = Object.keys(themes) as (keyof typeof themes)[]
     for (const key of themeKeys) {
       expect(themes[key].income).toMatch(/^#[0-9a-f]{6}$/i)
+      expect(themes[key].incomeText).toMatch(/^#[0-9a-f]{6}$/i)
       expect(themes[key].expense).toMatch(/^#[0-9a-f]{6}$/i)
+      expect(themes[key].expenseText).toMatch(/^#[0-9a-f]{6}$/i)
       expect(themes[key].danger).toMatch(/^#[0-9a-f]{6}$/i)
     }
   })
@@ -19,7 +21,9 @@ describe('theme utilities', () => {
   it('applies income, expense, and danger CSS variables', () => {
     applyTheme('forest')
     expect(document.documentElement.style.getPropertyValue('--income')).toBe('#4ade80')
+    expect(document.documentElement.style.getPropertyValue('--income-text')).toBe('#052e16')
     expect(document.documentElement.style.getPropertyValue('--expense')).toBe('#f87171')
+    expect(document.documentElement.style.getPropertyValue('--expense-text')).toBe('#450a0a')
     expect(document.documentElement.style.getPropertyValue('--danger')).toBe('#ef4444')
   })
 

@@ -22,7 +22,9 @@
   --accent-btn-2: #10b981;
   --nav-border: #10b98130;
   --income: #4ade80;
+  --income-text: #052e16;
   --expense: #f87171;
+  --expense-text: #450a0a;
   --danger: #ef4444;
   color: #f8fafc;
   background: var(--bg);

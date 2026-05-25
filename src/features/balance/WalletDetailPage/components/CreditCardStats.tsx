@@ -44,8 +44,11 @@ export function CreditCardStats({
         </div>
         <div className="h-1.5 overflow-hidden rounded-full bg-white/8">
           <div
-            className="h-1.5 rounded-full bg-linear-to-r from-red-400 to-orange-400"
-            style={{ width: `${creditUsedRatio}%` }}
+            className="h-1.5 rounded-full"
+            style={{
+              background: 'linear-gradient(to right, var(--accent-btn-1), var(--accent-btn-2))',
+              width: `${creditUsedRatio}%`,
+            }}
           />
         </div>
       </div>
@@ -66,9 +69,9 @@ export function CreditCardStats({
           <AnimatedBar
             value={clearedAmount}
             maxValue={currentAmount || 1}
-            colorFrom="#6c47ff"
-            colorTo="#9b7dff"
-            textColor="#1a1030"
+            colorFrom="var(--accent-btn-1)"
+            colorTo="var(--accent-btn-2)"
+            textColor="var(--accent-light)"
             currency={wallet.currency}
             delay={0.3}
           />

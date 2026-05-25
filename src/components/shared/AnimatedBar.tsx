@@ -24,14 +24,23 @@ export function AnimatedBar({
   const widthPercent = maxValue > 0
     ? `${Math.min((value / maxValue) * 100, 100)}%`
     : '0%'
+  const label = formatAmount(value, currency)
 
   return (
-    <div className="h-11 overflow-hidden rounded-xl border border-white/5 bg-white/[0.04]">
+    <div
+      className="relative h-11 overflow-hidden rounded-xl border border-white/5"
+      style={{ background: textColor }}
+    >
+      <span
+        className="absolute inset-0 flex items-center px-4 text-base font-bold"
+        style={{ color: colorTo, whiteSpace: 'nowrap' }}
+      >
+        {label}
+      </span>
       <motion.div
-        className="flex h-full items-center rounded-xl px-4 text-base font-bold"
+        className="absolute inset-y-0 left-0 overflow-hidden rounded-xl"
         style={{
           background: `linear-gradient(to right, ${colorFrom}, ${colorTo})`,
-          color: textColor,
         }}
         initial={{ width: 0 }}
         animate={{ width: widthPercent }}
@@ -42,7 +51,16 @@ export function AnimatedBar({
           delay,
         }}
       >
-        {formatAmount(value, currency)}
+        <span
+          className="flex h-full items-center px-4 text-base font-bold"
+          style={{
+            color: textColor,
+            minWidth: 'max-content',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {label}
+        </span>
       </motion.div>
     </div>
   )
