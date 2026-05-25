@@ -16,6 +16,7 @@ import {
   WheelPicker,
 } from '@/components'
 import type { SelectorOption } from '@/components'
+import { Background } from '@/components/Background'
 
 interface SubSectionProps {
   id: string
@@ -64,6 +65,18 @@ export function SharedComponentsSection() {
   return (
     <div className="space-y-10">
       <h2 className="text-lg font-bold">Shared Components</h2>
+
+      <SubSection id="background" title="Background">
+        <div className="rounded-2xl border border-white/6 bg-white/4 px-4 py-3 text-sm text-white/50">
+          Fixed full-screen aurora layer — rendered by{' '}
+          <code className="text-accent/80">AppShell</code>, visible behind all content.
+          <br />
+          <span className="mt-1 block text-xs text-white/30">
+            5 animated orbs · 6–9s breathe cycle · GPU composited
+          </span>
+        </div>
+        <Background />
+      </SubSection>
 
       <SubSection id="section-label" title="SectionLabel">
         <SectionLabel>Section heading text</SectionLabel>
