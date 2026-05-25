@@ -13,6 +13,7 @@ const names: Record<ThemePreset, string> = {
   arctic: 'Arctic',
   sakura: 'Sakura',
   void: 'Void',
+  jade: 'Jade',
 }
 
 interface ThemePageProps {

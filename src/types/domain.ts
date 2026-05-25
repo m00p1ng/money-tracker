@@ -1,6 +1,6 @@
 export type TransactionType = 'expense' | 'income' | 'transfer'
 export type WalletType = 'payment' | 'credit_card'
-export type ThemePreset = 'forest' | 'midnight' | 'ocean' | 'sunset' | 'amber' | 'arctic' | 'sakura' | 'void'
+export type ThemePreset = 'forest' | 'midnight' | 'ocean' | 'sunset' | 'amber' | 'arctic' | 'sakura' | 'void' | 'jade'
 
 export type TransactionStatus = 'planned' | 'overdue' | 'paid'
 export type RepeatPreset = 'never' | 'daily' | '2weeks' | 'monthly' | 'yearly' | 'custom'
