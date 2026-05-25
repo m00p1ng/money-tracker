@@ -18,6 +18,7 @@ import {
 import type { SelectorOption } from '@/components'
 import { Background } from '@/components/Background'
 import { IconPicker } from '@/components/shared/picker/IconPicker'
+import { IconPickerField } from '@/components/shared/picker/IconPickerField'
 
 interface SubSectionProps {
   id: string
@@ -236,6 +237,13 @@ export function SharedComponentsSection() {
             onSelect={setIconValue}
             onClose={() => setIconPickerOpen(false)}
           />
+        </div>
+      </SubSection>
+
+      <SubSection id="icon-picker-field" title="IconPickerField">
+        <div className="space-y-3">
+          <IconPickerField value={iconValue} onChange={setIconValue} />
+          <VariantLabel label={`selected: ${iconValue}`} />
         </div>
       </SubSection>
 

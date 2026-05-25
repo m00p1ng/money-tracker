@@ -13,7 +13,7 @@ import {
   SelectInput,
   TextInput,
 } from '@/components'
-import { IconPicker } from '@/components/shared/picker/IconPicker'
+import { IconPickerField } from '@/components/shared/picker/IconPickerField'
 import { createId } from '@/lib'
 import type { Category, TransactionType } from '@/types/domain'
 
@@ -34,7 +34,6 @@ export function CategoryFormPage({
   onSubmit,
   onDelete,
 }: CategoryFormPageProps) {
-  const [iconPickerOpen, setIconPickerOpen] = useState(false)
   const title = useMemo(() => (existing
     ? 'Edit Category'
     : 'New Category'), [existing])
@@ -82,18 +81,7 @@ export function CategoryFormPage({
         />
       </Field>
       <Field label="Icon">
-        <button
-          type="button"
-          aria-label="icon"
-          onClick={() => setIconPickerOpen(true)}
-          className={[
-            'flex min-h-11 w-full items-center gap-2 rounded-lg',
-            'border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors',
-          ].join(' ')}
-        >
-          <Icon name={form.icon} />
-          <span className="text-sm">{form.icon}</span>
-        </button>
+        <IconPickerField value={form.icon} onChange={(icon) => setForm({ ...form, icon })} />
       </Field>
       <Field label="Type">
         <SelectInput
@@ -127,13 +115,6 @@ export function CategoryFormPage({
           }}
         />
       </Field>
-
-      <IconPicker
-        isOpen={iconPickerOpen}
-        selectedIcon={form.icon}
-        onSelect={(icon) => setForm({ ...form, icon })}
-        onClose={() => setIconPickerOpen(false)}
-      />
 
       <FormErrorMessage error={error} />
 
