@@ -23,7 +23,7 @@ describe('theme utilities', () => {
     expect(document.documentElement.style.getPropertyValue('--danger')).toBe('#ef4444')
   })
 
-  it('defines eight presets', () => {
+  it('defines nine presets', () => {
     expect(Object.keys(themes)).toEqual([
       'forest',
       'midnight',
@@ -32,6 +32,7 @@ describe('theme utilities', () => {
       'amber',
       'arctic',
       'sakura',
+      'jade',
       'void',
     ])
   })
@@ -40,5 +41,19 @@ describe('theme utilities', () => {
     applyTheme('forest')
     expect(document.documentElement.style.getPropertyValue('--accent')).toBe('#10b981')
     expect(document.documentElement.style.getPropertyValue('--nav-border')).toBe('#10b98130')
+  })
+
+  it('each theme defines bgGlow4 and bgGlow5 tokens', () => {
+    const themeKeys = Object.keys(themes) as (keyof typeof themes)[]
+    for (const key of themeKeys) {
+      expect(themes[key].bgGlow4).toBeDefined()
+      expect(themes[key].bgGlow5).toBeDefined()
+    }
+  })
+
+  it('applies bgGlow4 and bgGlow5 CSS variables', () => {
+    applyTheme('forest')
+    expect(document.documentElement.style.getPropertyValue('--bg-glow-4')).toBe('#10b98112')
+    expect(document.documentElement.style.getPropertyValue('--bg-glow-5')).toBe('#34d39910')
   })
 })
