@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
 
 import { Button } from '@/components'
-import { WalletRow } from '@/features/balance/BalancePage/WalletRow/WalletRow'
-import { SwipeableTransactionRow } from '@/features/balance/WalletDetailPage/SwipeableTransactionRow'
-import { HomeTitle } from '@/features/home/HomePage/components/HomeTitle'
-import { SummaryCards } from '@/features/home/HomePage/components/SummaryCards'
-import { TodayTransactions } from '@/features/home/HomePage/components/TodayTransactions'
-import { UpcomingTransactions } from '@/features/home/HomePage/components/UpcomingTransactions'
-import { CurrencyRow } from '@/features/settings/CurrenciesPage/CurrencyRow/CurrencyRow'
-import { CalculatorKeyboard } from '@/features/transaction/TransactionPage/components/CalculatorKeyboard'
-import { CalculatorKeyboardSheet } from '@/features/transaction/TransactionPage/components/CalculatorKeyboardSheet'
-import { CategoryItemsCard } from '@/features/transaction/TransactionPage/components/CategoryItemsCard'
-import { DateTimeRow } from '@/features/transaction/TransactionPage/components/DateTimeRow'
-import { ExchangeRateRow } from '@/features/transaction/TransactionPage/components/ExchangeRateRow'
-import { NoteField } from '@/features/transaction/TransactionPage/components/NoteField'
-import { ReconciliationRow } from '@/features/transaction/TransactionPage/components/ReconciliationRow'
-import { RepeatRow } from '@/features/transaction/TransactionPage/components/RepeatRow'
-import { TransactionHeader } from '@/features/transaction/TransactionPage/components/TransactionHeader'
-import { TransactionSheets } from '@/features/transaction/TransactionPage/components/TransactionSheets'
-import { WalletSelectorRow } from '@/features/transaction/TransactionPage/components/WalletSelectorRow'
+import { SwipeableTransactionRow, WalletRow } from '@/features/balance'
+import {
+  HomeTitle,
+  SummaryCards,
+  TodayTransactions,
+  UpcomingTransactions,
+} from '@/features/home'
+import { CurrencyRow } from '@/features/settings'
+import {
+  CalculatorKeyboard,
+  CalculatorKeyboardSheet,
+  CategoryItemsCard,
+  DateTimeRow,
+  ExchangeRateRow,
+  NoteField,
+  ReconciliationRow,
+  RepeatRow,
+  TransactionHeader,
+  TransactionSheets,
+  WalletSelectorRow,
+} from '@/features/transaction'
 import type {
   Category,
   Currency,
