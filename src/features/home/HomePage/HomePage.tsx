@@ -4,7 +4,7 @@ import { Icon } from '@/components'
 import SummaryCards from '@/features/home/SummaryCards'
 import TodayTransactions from '@/features/home/TodayTransactions'
 import UpcomingTransactions from '@/features/home/UpcomingTransactions'
-import { formatHeaderDate } from '@/lib'
+import { formatHeaderDay, formatHeaderMonthYear, formatHeaderWeekday } from '@/lib'
 
 const containerVariants = {
   hidden: {},
@@ -31,12 +31,14 @@ type HomePageProps = {
 export function HomePage({ onAddTransaction }: HomePageProps) {
   return (
     <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="visible">
-      <motion.header variants={sectionVariants} className="flex items-start justify-between">
-        <div>
-          <p className="text-sm text-slate-400">{formatHeaderDate(new Date())}</p>
-          <h1 className="bg-linear-to-r from-white to-white/75 bg-clip-text text-2xl font-semibold text-transparent">
-            Overview
-          </h1>
+      <motion.header variants={sectionVariants} className="flex items-center justify-between">
+        <div className="grid grid-cols-[auto_1px_auto] items-center gap-x-3">
+          <span className="row-span-2 bg-linear-to-r from-white to-white/75 bg-clip-text text-5xl font-bold text-transparent">
+            {formatHeaderDay(new Date())}
+          </span>
+          <div className="row-span-2 self-stretch bg-white/30" />
+          <span className="text-sm font-medium text-white">{formatHeaderWeekday(new Date())}</span>
+          <span className="text-sm text-slate-400">{formatHeaderMonthYear(new Date())}</span>
         </div>
         <button
           aria-label="Add transaction"

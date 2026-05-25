@@ -26,7 +26,7 @@ describe('App routing', () => {
         <RoutedApp />
       </MemoryRouter>,
     )
-    expect(screen.getByText('Overview')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Add transaction' })).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument()
   })
 

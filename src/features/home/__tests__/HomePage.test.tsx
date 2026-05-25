@@ -8,7 +8,7 @@ import {
 } from 'vitest'
 
 import HomePage from '@/features/home/HomePage'
-import { formatHeaderDate } from '@/lib'
+import { formatHeaderDay, formatHeaderMonthYear, formatHeaderWeekday } from '@/lib'
 import { useCategoryStore, useTransactionStore } from '@/stores'
 
 describe('HomePage', () => {
@@ -93,6 +93,8 @@ describe('HomePage', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByText(formatHeaderDate(new Date()))).toBeInTheDocument()
+    expect(screen.getByText(formatHeaderDay(new Date()))).toBeInTheDocument()
+    expect(screen.getByText(formatHeaderWeekday(new Date()))).toBeInTheDocument()
+    expect(screen.getByText(formatHeaderMonthYear(new Date()))).toBeInTheDocument()
   })
 })
