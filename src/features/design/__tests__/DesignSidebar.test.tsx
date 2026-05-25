@@ -7,8 +7,19 @@ import {
   it,
   vi,
 } from 'vitest'
+import { MemoryRouter, Route, Routes } from 'react-router'
 
 import { DesignSidebar } from '@/features/design/DesignSidebar'
+
+function renderSidebar(section = 'tokens') {
+  return render(
+    <MemoryRouter initialEntries={[`/design/${section}`]}>
+      <Routes>
+        <Route path="/design/:section" element={<DesignSidebar activeId="colors" />} />
+      </Routes>
+    </MemoryRouter>,
+  )
+}
 
 beforeEach(() => {
   Element.prototype.scrollIntoView = vi.fn()
@@ -16,13 +27,13 @@ beforeEach(() => {
 
 describe('DesignSidebar', () => {
   it('shows the search icon', () => {
-    render(<DesignSidebar activeId="colors" />)
+    renderSidebar()
 
     expect(document.querySelector('[data-icon="magnifying-glass"]')).toBeInTheDocument()
   })
 
   it('filters navigation items by search text', async () => {
-    render(<DesignSidebar activeId="colors" />)
+    renderSidebar()
 
     const search = screen.getByRole('searchbox', { name: 'Search design sections' })
     await userEvent.type(search, 'wallet')
@@ -38,7 +49,7 @@ describe('DesignSidebar', () => {
   })
 
   it('shows an empty state when search has no matches', async () => {
-    render(<DesignSidebar activeId="colors" />)
+    renderSidebar()
 
     await userEvent.type(screen.getByRole('searchbox', { name: 'Search design sections' }), 'zzzz')
 
