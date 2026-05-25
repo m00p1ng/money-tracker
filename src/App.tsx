@@ -1,6 +1,7 @@
 import { useLayoutEffect } from 'react'
 import {
   BrowserRouter,
+  Navigate,
   Route,
   Routes,
   useLocation,
@@ -81,7 +82,8 @@ export default function App() {
         <BrowserRouter basename="/money-tracker">
           <NavigationDirectionProvider>
             <Routes>
-              <Route path="/design" element={<DesignPage />} />
+              <Route path="/design" element={<Navigate to="/design/tokens" replace />} />
+              <Route path="/design/:section" element={<DesignPage />} />
               <Route path="/*" element={<RoutedApp />} />
             </Routes>
           </NavigationDirectionProvider>
