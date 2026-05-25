@@ -13,20 +13,20 @@ import {
 
 import { AppShell } from '@/components'
 import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
-import BalancePage from '@/features/balance/BalancePage'
-import WalletDetailPage from '@/features/balance/WalletDetailPage'
-import DesignPage from '@/features/design/DesignPage'
-import HomePage from '@/features/home/HomePage'
-import CategoriesPage from '@/features/settings/CategoriesPage'
-import CategoryFormPage from '@/features/settings/CategoryFormPage'
-import CurrenciesPage from '@/features/settings/CurrenciesPage'
-import CurrencyFormPage from '@/features/settings/CurrencyFormPage'
-import SettingsPage from '@/features/settings/SettingsPage'
-import ThemePage from '@/features/settings/ThemePage'
-import WalletFormPage from '@/features/settings/WalletFormPage'
-import WalletsPage from '@/features/settings/WalletsPage'
-import CategorySelectionPage from '@/features/transaction/CategorySelectionPage'
-import TransactionPage from '@/features/transaction/TransactionPage'
+import { BalancePage, WalletDetailPage } from '@/features/balance'
+import { DesignPage } from '@/features/design'
+import { HomePage } from '@/features/home'
+import {
+  CategoriesPage,
+  CategoryFormPage,
+  CurrenciesPage,
+  CurrencyFormPage,
+  SettingsPage,
+  ThemePage,
+  WalletFormPage,
+  WalletsPage,
+} from '@/features/settings'
+import { CategorySelectionPage, TransactionPage } from '@/features/transaction'
 
 const TAB_ROUTES = new Set(['/', '/balance', '/settings'])
 
