@@ -31,7 +31,7 @@ export function WheelPicker({
         style={{ gridTemplateColumns: `repeat(${columns.length}, 1fr)` }}
       >
         {columns.map((col) => (
-          <p key={col.name} className="text-center text-[10px] uppercase tracking-[1px] text-white/30">{col.label}</p>
+          <p key={col.name} className="text-center text-xs uppercase tracking-[1px] text-white/30">{col.label}</p>
         ))}
       </div>
       <WheelPickerWrapper>
@@ -57,7 +57,7 @@ export function WheelPicker({
             classNames={{
               highlightWrapper: 'bg-(--accent)/15 border-y border-(--accent)/30',
               highlightItem: 'font-bold text-white',
-              optionItem: 'text-white/30 font-medium text-[15px]',
+              optionItem: 'text-white/30 font-medium text-sm',
             }}
           />
         ))}

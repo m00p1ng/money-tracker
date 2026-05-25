@@ -1,7 +1,7 @@
 import { useParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { walletClearedAmount, walletCurrentAmount } from '@/features/balance/balanceCalculations'
+import { walletClearedAmount, walletCurrentAmount } from '@/features/balance'
 import {
   useCategoryStore,
   useTransactionStore,

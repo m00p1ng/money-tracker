@@ -98,7 +98,7 @@ export function TokensSection() {
         <div className="space-y-3 rounded-xl border border-white/8 bg-white/3 p-4">
           {TYPE_SCALE.map(({ label, className }) => (
             <div key={label} className="flex items-baseline gap-4">
-              <span className="w-36 shrink-0 text-[10px] text-white/30">{label}</span>
+              <span className="w-36 shrink-0 text-xs text-white/30">{label}</span>
               <span className={`${className} font-medium`}>The quick brown fox</span>
             </div>
           ))}
@@ -110,8 +110,8 @@ export function TokensSection() {
         <div className="space-y-2 rounded-xl border border-white/8 bg-white/3 p-4">
           {SPACING_SCALE.map(({ label, size }) => (
             <div key={label} className="flex items-center gap-4">
-              <span className="w-24 shrink-0 text-[10px] text-white/30">{label}</span>
-              <div className="rounded bg-accent/40" style={{ width: size, height: 16 }} />
+              <span className="w-24 shrink-0 text-xs text-white/30">{label}</span>
+              <div className="rounded bg-accent/40" style={{ width: size, height: 24 }} />
             </div>
           ))}
         </div>

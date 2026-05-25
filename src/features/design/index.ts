@@ -1,0 +1,6 @@
+export { DesignSidebar, DesignTopNav } from './DesignSidebar'
+export { default as DesignPage } from './DesignPage'
+export { FeatureSection } from './sections/FeatureSection'
+export { SharedComponentsSection } from './sections/SharedComponentsSection'
+export { TokensSection } from './sections/TokensSection'
+export { UIComponentsSection } from './sections/UIComponentsSection'

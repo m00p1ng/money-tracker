@@ -179,7 +179,9 @@ export function WalletDetailPage({
                   <Icon name="fa-wallet" />
                   Balance
                 </span>
-                <span className="text-xs font-semibold text-income">{formatAmount(currentAmount, wallet.currency)}</span>
+                <span className="text-xs font-semibold text-income">
+                  {formatAmount(currentAmount, wallet.currency)}
+                </span>
               </div>
               <AnimatedBar
                 value={currentAmount}

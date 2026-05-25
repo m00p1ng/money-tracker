@@ -1,3 +1,4 @@
+export { CalculatorKeyboard } from './CalculatorKeyboard'
 export { CalculatorKeyboardSheet } from './CalculatorKeyboardSheet'
 export { default as CategoryItemsCard } from './CategoryItemsCard'
 export { DateTimeRow } from './DateTimeRow'

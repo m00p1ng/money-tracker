@@ -7,8 +7,12 @@ import {
   it,
 } from 'vitest'
 
-import HomePage from '@/features/home/HomePage'
-import { formatHeaderDay, formatHeaderMonthYear, formatHeaderWeekday } from '@/lib'
+import { HomePage } from '@/features/home'
+import {
+  formatHeaderDay,
+  formatHeaderMonthYear,
+  formatHeaderWeekday,
+} from '@/lib'
 import { useCategoryStore, useTransactionStore } from '@/stores'
 
 describe('HomePage', () => {

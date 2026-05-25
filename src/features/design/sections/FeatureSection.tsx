@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components'
 import { WalletRow } from '@/features/balance/BalancePage/WalletRow/WalletRow'
 import { SwipeableTransactionRow } from '@/features/balance/WalletDetailPage/SwipeableTransactionRow'
+import { HomeTitle } from '@/features/home/HomePage/components/HomeTitle'
 import { SummaryCards } from '@/features/home/SummaryCards'
 import { TodayTransactions } from '@/features/home/TodayTransactions'
 import { UpcomingTransactions } from '@/features/home/UpcomingTransactions'
@@ -145,6 +146,10 @@ export function FeatureSection() {
       </div>
 
       <PageGroup label="Home">
+        <SubSection id="home-title" title="HomeTitle">
+          <HomeTitle onAddTransaction={() => { }} />
+        </SubSection>
+
         <SubSection id="summary-cards" title="SummaryCards">
           <SummaryCards income={0} expense={0} />
         </SubSection>

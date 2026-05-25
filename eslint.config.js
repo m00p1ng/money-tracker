@@ -187,7 +187,7 @@ export default defineConfig([
       '@stylistic/function-call-spacing': ["error", "never"],
       '@stylistic/indent': ["error", 2],
       '@stylistic/key-spacing': ['error', { beforeColon: false, afterColon: true }],
-      '@stylistic/max-len': ['warn', { 'code': 120, 'ignoreTemplateLiterals': true }],
+      '@stylistic/max-len': ['error', { 'code': 120, 'ignoreTemplateLiterals': true }],
       '@stylistic/multiline-ternary': ['error', 'always'],
       '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
       '@stylistic/no-trailing-spaces': 'error',
