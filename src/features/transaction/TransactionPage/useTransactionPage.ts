@@ -6,7 +6,7 @@ import {
 } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { isReconciliationEnabled } from '@/features/balance/balanceCalculations'
+import { isReconciliationEnabled } from '@/features/balance'
 import {
   buildTransaction,
   validateDraft,
