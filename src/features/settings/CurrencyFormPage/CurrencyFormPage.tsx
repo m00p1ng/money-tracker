@@ -12,18 +12,19 @@ import type { Currency } from '@/types/domain'
 
 interface CurrencyFormPageProps {
   existing: Currency | undefined
+  error: string | null
   onBack: () => void
-  onSubmit: (form: Currency, setError: (err: string | null) => void) => Promise<void>
-  onDelete: (setError: (err: string | null) => void) => Promise<void>
+  onSubmit: (form: Currency) => Promise<void>
+  onDelete: () => Promise<void>
 }
 
 export function CurrencyFormPage({
   existing,
+  error,
   onBack,
   onSubmit,
   onDelete,
 }: CurrencyFormPageProps) {
-  const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState<Currency>(() => (
     existing ?? {
       code: '',
@@ -36,11 +37,11 @@ export function CurrencyFormPage({
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    await onSubmit(form, setError)
+    await onSubmit(form)
   }
 
   async function handleDelete() {
-    await onDelete(setError)
+    await onDelete()
   }
 
   return (

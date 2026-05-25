@@ -10,10 +10,6 @@ import {
 import { CurrencyFormPage } from '@/features/settings/CurrencyFormPage/CurrencyFormPage'
 import type { Currency } from '@/types/domain'
 
-type SetFormError = (err: string | null) => void
-type SubmitCurrency = (form: Currency, setError: SetFormError) => Promise<void>
-type DeleteCurrency = (setError: SetFormError) => Promise<void>
-
 const existingCurrency: Currency = {
   code: 'USD',
   symbol: '$',
@@ -23,13 +19,14 @@ const existingCurrency: Currency = {
 }
 
 function renderPage(props: Partial<React.ComponentProps<typeof CurrencyFormPage>> = {}) {
-  const onSubmit = vi.fn<SubmitCurrency>(async () => {})
-  const onDelete = vi.fn<DeleteCurrency>(async () => {})
+  const onSubmit = vi.fn<(form: Currency) => Promise<void>>(async () => {})
+  const onDelete = vi.fn<() => Promise<void>>(async () => {})
   const onBack = vi.fn()
 
   render(
     <CurrencyFormPage
       existing={undefined}
+      error={null}
       onBack={onBack}
       onDelete={onDelete}
       onSubmit={onSubmit}
@@ -99,5 +96,11 @@ describe('CurrencyFormPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
     expect(onSubmit).toHaveBeenCalledTimes(1)
+  })
+
+  it('displays error prop when provided', () => {
+    renderPage({ error: 'Code is required' })
+
+    expect(screen.getByText('Code is required')).toBeInTheDocument()
   })
 })

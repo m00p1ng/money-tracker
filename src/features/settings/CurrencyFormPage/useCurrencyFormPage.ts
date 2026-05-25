@@ -1,12 +1,12 @@
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
+import { useFormCrud } from '@/hooks'
 import { useCurrencyStore } from '@/stores'
 import type { Currency } from '@/types/domain'
 
 export function useCurrencyFormPage() {
   const { code } = useParams()
-  const navigate = useNavigate()
   const backNavigate = useBackNavigate()
   const existing = useCurrencyStore((state) => (code
     ? state.findByCode(code)
@@ -14,60 +14,34 @@ export function useCurrencyFormPage() {
   const add = useCurrencyStore((state) => state.add)
   const update = useCurrencyStore((state) => state.update)
   const remove = useCurrencyStore((state) => state.remove)
-  const setBase = useCurrencyStore((state) => state.setBase)
 
-  async function onSubmit(form: Currency, setError: (err: string | null) => void) {
-    if (!form.code.trim()) {
-      setError('Code is required')
-
-      return
-    }
-    if (!form.symbol.trim()) {
-      setError('Symbol is required')
-
-      return
-    }
-    if (!form.name.trim()) {
-      setError('Name is required')
-
-      return
-    }
-    if (form.rate <= 0) {
-      setError('Rate must be greater than 0')
-
-      return
-    }
-    try {
-      await (existing
-        ? update(form)
-        : add(form))
-      if (form.isBase) {
-        await setBase(form.code.toUpperCase())
+  const { error, onSubmit, onDelete } = useFormCrud<Currency>({
+    existing,
+    add,
+    update,
+    remove: (item) => remove(item.code),
+    navigateTo: '/settings/currencies',
+    validate: (form) => {
+      if (!form.code.trim()) {
+        return 'Code is required'
       }
-      navigate('/settings/currencies')
-    } catch (err) {
-      setError(err instanceof Error
-        ? err.message
-        : 'Unable to save currency')
-    }
-  }
+      if (!form.symbol.trim()) {
+        return 'Symbol is required'
+      }
+      if (!form.name.trim()) {
+        return 'Name is required'
+      }
+      if (form.rate <= 0) {
+        return 'Rate must be greater than 0'
+      }
 
-  async function onDelete(setError: (err: string | null) => void) {
-    if (!existing) {
-      return
-    }
-    try {
-      await remove(existing.code)
-      navigate('/settings/currencies')
-    } catch (err) {
-      setError(err instanceof Error
-        ? err.message
-        : 'Unable to delete currency')
-    }
-  }
+      return null
+    },
+  })
 
   return {
     existing,
+    error,
     onBack: () => backNavigate('/settings/currencies'),
     onSubmit,
     onDelete,
