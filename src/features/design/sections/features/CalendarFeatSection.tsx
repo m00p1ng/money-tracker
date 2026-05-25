@@ -6,7 +6,6 @@ export function CalendarFeatSection() {
   return (
     <div className="space-y-8">
       <SubSection id="calendar-page" title="CalendarPage">
-        <VariantLabel label="Default (today selected)" />
         <div className="overflow-hidden rounded-2xl border border-white/10">
           <CalendarPageView
             currentYear={2026}
@@ -41,6 +40,7 @@ export function CalendarFeatSection() {
             onSearch={() => {}}
           />
         </div>
+        <VariantLabel label="Default (today selected)" />
       </SubSection>
     </div>
   )

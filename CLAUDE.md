@@ -10,11 +10,17 @@ npm run build        # tsc + vite build
 npm run lint         # eslint
 npm run test         # vitest run (single pass)
 npm run test:watch   # vitest watch
+npm run typecheck    # tsc --noEmit (type-check only)
 ```
 
 Run a single test file:
 ```bash
 npm run test -- src/lib/__tests__/calculator.test.ts
+```
+
+Before finishing any task, run:
+```bash
+npm run lint && npm run test && npm run build
 ```
 
 ## Architecture
@@ -31,7 +37,7 @@ Mobile-first personal finance PWA. Data lives in IndexedDB (Dexie). State syncs 
 | `src/db/schema.ts` | Dexie DB class + singleton `db` |
 | `src/db/seed.ts` | First-run seed data |
 | `src/stores/` | Zustand stores — one per domain entity + `transactionDraftStore` for in-progress form state |
-| `src/features/` | Feature modules: `home`, `balance`, `transaction`, `settings`, `design` |
+| `src/features/` | Feature modules: `home`, `balance`, `transaction`, `settings`, `design`, `calendar` |
 | `src/components/` | Global layout (`AppShell`, `BottomNav`), `shared/` UI primitives, `ui/` form controls |
 | `src/lib/` | Pure utility functions (date, format, calculator, color, theme) |
 | `src/hooks/` | Shared hooks (`useFormCrud`) |
@@ -53,7 +59,7 @@ ComponentName/
 
 Three tab routes (`/`, `/balance`, `/settings`) use fade+slide tab transitions. All deeper routes use directional slide transitions based on `NavigationDirectionProvider`. The `/design` route is outside `AppShell` — it's a component design sandbox. When adding any visually renderable component under `src/components/`, add a demo in the appropriate `src/features/design/sections/` file. Use existing `SubSection` + `VariantLabel` helpers.
 
-Design sections: `UIComponentsSection` (form controls/primitives), `SharedComponentsSection` (shared/ components), `FeatureSection` (feature-level components), `TokensSection` (colors/typography tokens).
+Design sections: `UIComponentsSection` (form controls/primitives), `SharedComponentsSection` (shared/ components), `TokensSection` (colors/typography tokens).
 
 ### Repeat transactions
 

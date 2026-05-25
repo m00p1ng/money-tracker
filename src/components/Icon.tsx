@@ -5,6 +5,7 @@ import {
   faArrowTrendUp,
   faArrowUp,
   faBagShopping,
+  faBars,
   faBuildingColumns,
   faCalendar,
   faCalendarDays,
@@ -56,6 +57,7 @@ import type React from 'react'
 library.add(
   faArrowDown,
   faArrowRightArrowLeft,
+  faBars,
   faDeleteLeft,
   faDivide,
   faEquals,

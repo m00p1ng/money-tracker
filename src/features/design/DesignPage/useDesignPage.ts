@@ -1,25 +1,31 @@
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { NAV_GROUPS } from '../DesignSidebar'
+import { NAV_GROUPS } from '../designNavigation'
 
 export function useDesignPage() {
   const navigate = useNavigate()
   const { section = NAV_GROUPS[0].slug } = useParams<{ section: string }>()
   const contentRef = useRef<HTMLDivElement>(null)
 
-  const activeGroup = NAV_GROUPS.find((g) => g.slug === section) ?? NAV_GROUPS[0]
-  const sectionIds = activeGroup.items.map((i) => i.id)
+  const activeGroup = useMemo(
+    () => NAV_GROUPS.find((g) => g.slug === section) ?? NAV_GROUPS[0],
+    [section],
+  )
+  const sectionIds = useMemo(
+    () => activeGroup.items.map((i) => i.id),
+    [activeGroup],
+  )
 
   const [activeId, setActiveId] = useState(sectionIds[0])
-
-  useEffect(() => {
-    setActiveId(sectionIds[0])
-  }, [section]) // reset highlight when switching pages
+  const visibleActiveId = sectionIds.includes(activeId)
+    ? activeId
+    : sectionIds[0]
 
   useEffect(() => {
     const observers: IntersectionObserver[] = []
@@ -41,18 +47,12 @@ export function useDesignPage() {
     }
 
     return () => observers.forEach((o) => o.disconnect())
-  }, [section]) // re-observe when switching pages
+  }, [sectionIds]) // re-observe when switching pages
 
   return {
-    activeId,
+    activeId: visibleActiveId,
     section,
     contentRef,
-    onNavigateBack: () => {
-      if (window.history.length > 1) {
-        navigate(-1)
-      } else {
-        navigate('/', { replace: true })
-      }
-    },
+    onNavigateBack: () => navigate('/'),
   }
 }

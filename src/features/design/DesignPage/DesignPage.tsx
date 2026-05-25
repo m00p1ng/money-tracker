@@ -1,10 +1,9 @@
+import { useState } from 'react'
 import { Navigate } from 'react-router'
 
-import {
-  DesignSidebar,
-  DesignTopNav,
-  NAV_GROUPS,
-} from '@/features/design/DesignSidebar'
+import { Icon } from '@/components'
+import { NAV_GROUPS } from '@/features/design/designNavigation'
+import { DesignSidebar } from '@/features/design/DesignSidebar'
 import { BalanceFeatSection } from '@/features/design/sections/features/BalanceFeatSection'
 import { CalendarFeatSection } from '@/features/design/sections/features/CalendarFeatSection'
 import { HomeFeatSection } from '@/features/design/sections/features/HomeFeatSection'
@@ -38,6 +37,7 @@ export function DesignPage({
   contentRef,
   onNavigateBack,
 }: DesignPageProps) {
+  const [menuOpen, setMenuOpen] = useState(false)
   const SectionComponent = SECTION_COMPONENTS[section]
 
   if (!SectionComponent) {
@@ -48,19 +48,53 @@ export function DesignPage({
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-(--bg) text-slate-50">
-      <DesignTopNav activeId={activeId} section={section} />
+      {/* mobile top bar */}
+      <div className="flex items-center gap-3 border-b border-white/8 bg-white/2 px-4 py-3 md:hidden">
+        <button
+          type="button"
+          aria-label="Open navigation"
+          onClick={() => setMenuOpen(true)}
+          className={[
+            'flex h-8 w-8 items-center justify-center rounded-lg text-white/50',
+            'hover:bg-white/8 hover:text-white/80',
+          ].join(' ')}
+        >
+          <Icon name="fa-bars" className="text-sm" />
+        </button>
+        <span className="flex-1 text-sm font-semibold text-white/70">{groupLabel}</span>
+        <button
+          type="button"
+          onClick={onNavigateBack}
+          className={[
+            'flex h-8 w-8 items-center justify-center rounded-lg text-white/50',
+            'hover:bg-white/8 hover:text-white/80',
+          ].join(' ')}
+          aria-label="Go home"
+        >
+          <Icon name="fa-home" className="text-sm" />
+        </button>
+      </div>
+
       <div className="flex min-h-0 flex-1">
-        <DesignSidebar activeId={activeId} />
+        <DesignSidebar
+          activeId={activeId}
+          isOpen={menuOpen}
+          onClose={() => setMenuOpen(false)}
+        />
         <div ref={contentRef} className="flex-1 overflow-y-auto px-4 py-6 md:px-6 md:py-8">
           <div className="mx-auto w-full max-w-107.5">
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-6 hidden items-center justify-between md:flex">
               <h1 className="text-xl font-bold">{groupLabel}</h1>
               <button
                 type="button"
                 onClick={onNavigateBack}
-                className="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-white/50 hover:text-white/80"
+                className={[
+                  'flex h-8 w-8 items-center justify-center rounded-lg text-white/50',
+                  'hover:bg-white/8 hover:text-white/80',
+                ].join(' ')}
+                aria-label="Go home"
               >
-                ← Back
+                <Icon name="fa-home" className="text-sm" />
               </button>
             </div>
             <SectionComponent />

@@ -5,6 +5,7 @@ import { TransactionRow } from '@/features/balance/WalletDetailPage/components/T
 import { WalletStats } from '@/features/balance/WalletDetailPage/components/WalletStats'
 
 import { SubSection, VariantLabel } from '../sectionHelpers'
+
 import {
   STUB_CATEGORY,
   STUB_RANGE,

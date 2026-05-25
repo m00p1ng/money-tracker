@@ -8,162 +8,27 @@ import { useNavigate, useParams } from 'react-router'
 
 import { Icon } from '@/components'
 
-export const NAV_GROUPS = [
-  {
-    slug: 'tokens',
-    label: 'Tokens',
-    items: [
-      { id: 'colors', label: 'Colors' },
-      { id: 'typography', label: 'Typography' },
-      { id: 'spacing', label: 'Spacing' },
-    ],
-  },
-  {
-    slug: 'ui-components',
-    label: 'UI Components',
-    items: [
-      { id: 'button', label: 'Button' },
-      { id: 'card', label: 'Card' },
-      { id: 'field', label: 'Field' },
-      { id: 'segmented-control', label: 'SegmentedControl' },
-      { id: 'type-picker', label: 'TypePickerDropdown' },
-      { id: 'currency-picker', label: 'CurrencyPicker' },
-      { id: 'date-picker', label: 'DatePicker' },
-      { id: 'repeat-picker', label: 'RepeatPicker' },
-      { id: 'wallet-picker', label: 'WalletPicker' },
-      { id: 'date-range-preset-picker', label: 'DateRangePresetPicker' },
-      { id: 'switch', label: 'Switch' },
-      { id: 'textarea-input', label: 'TextAreaInput' },
-      { id: 'form-actions', label: 'FormActions' },
-    ],
-  },
-  {
-    slug: 'shared-components',
-    label: 'Shared Components',
-    items: [
-      { id: 'background', label: 'Background' },
-      { id: 'section-label', label: 'SectionLabel' },
-      { id: 'section-divider', label: 'SectionDivider' },
-      { id: 'form-error-message', label: 'FormErrorMessage' },
-      { id: 'page-header', label: 'PageHeader' },
-      { id: 'animated-bar', label: 'AnimatedBar' },
-      { id: 'transaction-row', label: 'TransactionRow' },
-      { id: 'list-group', label: 'ListGroup + ListRow' },
-      { id: 'add-row', label: 'AddRow' },
-      { id: 'wheel-picker', label: 'WheelPicker' },
-      { id: 'bottom-sheet', label: 'BottomSheet' },
-      { id: 'selector-sheet', label: 'SelectorSheet' },
-    ],
-  },
-  {
-    slug: 'feature-home',
-    label: 'Feature — Home',
-    items: [
-      { id: 'home-title', label: 'HomeTitle' },
-      { id: 'summary-cards', label: 'SummaryCards' },
-      { id: 'today-transactions', label: 'TodayTransactions' },
-      { id: 'upcoming-transactions', label: 'UpcomingTransactions' },
-    ],
-  },
-  {
-    slug: 'feature-balance',
-    label: 'Feature — Balance',
-    items: [
-      { id: 'wallet-row', label: 'WalletRow' },
-      { id: 'swipeable-transaction-row', label: 'SwipeableTransactionRow' },
-      { id: 'date-range-header', label: 'DateRangeHeader' },
-      { id: 'credit-card-stats', label: 'CreditCardStats' },
-      { id: 'wallet-stats', label: 'WalletStats' },
-      { id: 'balance-transaction-row', label: 'TransactionRow' },
-    ],
-  },
-  {
-    slug: 'feature-transaction',
-    label: 'Feature — Transaction',
-    items: [
-      { id: 'calculator-keyboard', label: 'CalculatorKeyboard' },
-      { id: 'category-items-card', label: 'CategoryItemsCard' },
-      { id: 'transaction-header', label: 'TransactionHeader' },
-      { id: 'date-time-row', label: 'DateTimeRow' },
-      { id: 'wallet-selector-row', label: 'WalletSelectorRow' },
-      { id: 'note-field', label: 'NoteField' },
-      { id: 'exchange-rate-row', label: 'ExchangeRateRow' },
-      { id: 'reconciliation-row', label: 'ReconciliationRow' },
-      { id: 'repeat-row', label: 'RepeatRow' },
-      { id: 'calculator-keyboard-sheet', label: 'CalculatorKeyboardSheet' },
-      { id: 'transaction-sheets', label: 'TransactionSheets' },
-    ],
-  },
-  {
-    slug: 'feature-calendar',
-    label: 'Feature — Calendar',
-    items: [
-      { id: 'calendar-page', label: 'CalendarPage' },
-    ],
-  },
-  {
-    slug: 'feature-settings',
-    label: 'Feature — Settings',
-    items: [
-      { id: 'currency-row', label: 'CurrencyRow' },
-    ],
-  },
-]
+import { NAV_GROUPS } from './designNavigation'
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-/** Horizontal pill bar — shown on small screens only */
-interface DesignTopNavProps {
-  activeId: string
-  section: string
-}
-
-export function DesignTopNav({ activeId, section }: DesignTopNavProps) {
-  const activeRef = useRef<HTMLButtonElement | null>(null)
-  const group = NAV_GROUPS.find((g) => g.slug === section) ?? NAV_GROUPS[0]
-
-  useEffect(() => {
-    activeRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'center',
-    })
-  }, [activeId])
-
-  return (
-    <div className="flex overflow-x-auto border-b border-white/8 bg-white/2 px-3 py-2 md:hidden">
-      <div className="flex gap-1.5">
-        {group.items.map((item) => (
-          <button
-            key={item.id}
-            ref={item.id === activeId ? activeRef : null}
-            type="button"
-            onClick={() => scrollTo(item.id)}
-            className={cx(
-              'shrink-0 rounded-full px-3 py-1 text-sm font-medium transition-colors',
-              activeId === item.id
-                ? 'bg-accent/20 text-accent-light'
-                : 'text-white/40 hover:text-white/70',
-            )}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-/** Vertical sidebar — shown on md+ screens only */
 interface DesignSidebarProps {
   activeId: string
+  isOpen?: boolean
+  onClose?: () => void
 }
 
-export function DesignSidebar({ activeId }: DesignSidebarProps) {
-  const navigate = useNavigate()
+function SidebarContent({
+  activeId,
+  onItemClick,
+}: {
+  activeId: string
+  onItemClick: (groupSlug: string, itemId: string) => void
+}) {
   const { section } = useParams<{ section: string }>()
+  const navigate = useNavigate()
   const activeRef = useRef<HTMLButtonElement | null>(null)
   const [search, setSearch] = useState('')
   const normalizedSearch = search.trim().toLowerCase()
@@ -181,7 +46,9 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
     }).filter((group) => group.items.length > 0)
     : NAV_GROUPS.map((group) => ({
       ...group,
-      items: group.slug === section ? group.items : [],
+      items: group.slug === section
+        ? group.items
+        : [],
     }))
 
   useEffect(() => {
@@ -192,21 +59,11 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
     })
   }, [activeId])
 
-  function handleItemClick(groupSlug: string, itemId: string) {
-    if (groupSlug === section) {
-      scrollTo(itemId)
-    } else {
-      navigate(`/design/${groupSlug}`)
-    }
-    setSearch('')
-  }
-
   return (
-    <nav className={[
-      'hidden w-72 shrink-0 flex-col gap-1 overflow-y-auto',
-      'border-r border-white/8 bg-white/2 px-3 py-4 md:flex',
-    ].join(' ')}>
-      <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[2px] text-white/30">Design System</p>
+    <>
+      <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[2px] text-white/30">
+        Design System
+      </p>
       <div className="relative mb-2">
         <Icon
           name="fa-magnifying-glass"
@@ -230,10 +87,16 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
           <div key={group.label} className="mt-4 first:mt-0">
             <button
               type="button"
-              onClick={() => navigate(`/design/${group.slug}`)}
+              onClick={() => {
+                setSearch('')
+                navigate(`/design/${group.slug}`)
+                onItemClick(group.slug, '')
+              }}
               className={cx(
                 'mb-1 w-full px-3 pb-1 text-left text-[10px] font-semibold uppercase tracking-[1px] transition-colors',
-                section === group.slug ? 'text-white/50' : 'text-white/25 hover:text-white/40',
+                section === group.slug
+                  ? 'text-white/50'
+                  : 'text-white/25 hover:text-white/40',
               )}
             >
               {group.label}
@@ -241,9 +104,14 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
             {group.items.map((item) => (
               <button
                 key={item.id}
-                ref={item.id === activeId ? activeRef : null}
+                ref={item.id === activeId
+                  ? activeRef
+                  : null}
                 type="button"
-                onClick={() => handleItemClick(group.slug, item.id)}
+                onClick={() => {
+                  setSearch('')
+                  onItemClick(group.slug, item.id)
+                }}
                 className={cx(
                   'w-full whitespace-nowrap rounded-lg px-3 py-1.5 text-left text-[13px] transition-colors',
                   item.id === activeId && section === group.slug
@@ -258,6 +126,65 @@ export function DesignSidebar({ activeId }: DesignSidebarProps) {
         ))
         : <p className="px-3 py-4 text-sm text-white/35">No matches</p>
       }
-    </nav>
+    </>
+  )
+}
+
+export function DesignSidebar({
+  activeId, isOpen = false, onClose,
+}: DesignSidebarProps) {
+  const navigate = useNavigate()
+  const { section } = useParams<{ section: string }>()
+
+  function handleItemClick(groupSlug: string, itemId: string) {
+    if (itemId) {
+      if (groupSlug === section) {
+        scrollTo(itemId)
+      } else {
+        navigate(`/design/${groupSlug}`)
+      }
+    }
+    onClose?.()
+  }
+
+  return (
+    <>
+      {/* desktop sidebar */}
+      <nav
+        className={[
+          'hidden w-72 shrink-0 flex-col gap-1 overflow-y-auto',
+          'border-r border-white/8 bg-white/2 px-3 py-4 md:flex',
+        ].join(' ')}
+      >
+        <SidebarContent activeId={activeId} onItemClick={handleItemClick} />
+      </nav>
+
+      {/* mobile drawer */}
+      <div className="md:hidden">
+        {/* backdrop */}
+        <div
+          className={cx(
+            'fixed inset-0 z-40 bg-black/60 transition-opacity duration-200',
+            isOpen
+              ? 'opacity-100'
+              : 'pointer-events-none opacity-0',
+          )}
+          onClick={onClose}
+        />
+        {/* panel */}
+        <nav
+          aria-hidden={!isOpen}
+          className={cx(
+            'fixed inset-y-0 left-0 z-50 flex w-72 flex-col gap-1 overflow-y-auto',
+            'border-r border-white/8 bg-(--bg) px-3 py-4 transition-transform duration-200',
+            isOpen
+              ? 'translate-x-0'
+              : '-translate-x-full',
+          )}
+        >
+          <SidebarContent activeId={activeId} onItemClick={handleItemClick} />
+        </nav>
+      </div>
+    </>
   )
 }

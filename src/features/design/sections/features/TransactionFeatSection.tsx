@@ -17,6 +17,7 @@ import {
 import type { RepeatConfig } from '@/types/domain'
 
 import { SubSection, VariantLabel } from '../sectionHelpers'
+
 import {
   STUB_CURRENCY_EUR,
   STUB_CURRENCY_USD,
@@ -165,7 +166,9 @@ export function TransactionFeatSection() {
           <CalculatorKeyboardSheet
             isOpen={calcSheetOpen}
             onPress={(key) => {
-              if (key === 'confirm') setCalcSheetOpen(false)
+              if (key === 'confirm') {
+                setCalcSheetOpen(false)
+              }
             }}
           />
         </div>
