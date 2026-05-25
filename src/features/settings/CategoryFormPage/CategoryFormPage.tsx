@@ -1,9 +1,12 @@
-import { FormEvent, useState } from 'react'
+import {
+  FormEvent,
+  useMemo,
+  useState,
+} from 'react'
 
 import {
-  Button,
-  Card,
   Field,
+  FormActions,
   FormErrorMessage,
   Icon,
   PageHeader,
@@ -31,6 +34,9 @@ export function CategoryFormPage({
 }: CategoryFormPageProps) {
   const [error, setError] = useState<string | null>(null)
   const [iconPickerOpen, setIconPickerOpen] = useState(false)
+  const title = useMemo(() => (existing
+    ? 'Edit Category'
+    : 'New Category'), [existing])
   const [form, setForm] = useState<Category>(() => existing ?? {
     id: createId(),
     name: '',
@@ -52,9 +58,7 @@ export function CategoryFormPage({
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
-      <PageHeader title={existing
-        ? 'Edit Category'
-        : 'New Category'} onBack={onBack} />
+      <PageHeader title={title} onBack={onBack} />
 
       <div className="flex items-center gap-3 rounded-xl bg-white/3 p-3">
         <div
@@ -74,61 +78,58 @@ export function CategoryFormPage({
         </div>
       </div>
 
-      <Card className="space-y-4">
-        <Field label="Name">
-          <TextInput
-            value={form.name}
-            onChange={(event) => setForm({ ...form, name: event.target.value })}
-          />
-        </Field>
-        <Field label="Icon">
-          <button
-            type="button"
-            aria-label="icon"
-            onClick={() => setIconPickerOpen(true)}
-            className={[
-              'flex min-h-11 w-full items-center gap-2 rounded-lg',
-              'border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors',
-            ].join(' ')}
-          >
-            <Icon name={form.icon} />
-            <span className="text-sm">{form.icon}</span>
-          </button>
-        </Field>
-        <Field label="Type">
-          <SelectInput
-            value={form.type}
-            options={[
-              { value: 'expense', label: 'Expense' },
-              { value: 'income', label: 'Income' },
-            ]}
-            onChange={(value) => setForm({ ...form, type: value as TransactionType })}
-          />
-        </Field>
-        <Field label="Parent">
-          <SelectInput
-            value={form.parentId ?? ''}
-            options={[
-              { value: '', label: 'Root' },
-              ...categories
-                .filter((c) => c.type === form.type && c.level < 5)
-                .map((c) => ({ value: c.id, label: c.name })),
-            ]}
-            onChange={(value) => {
-              const parent = categories.find((c) => c.id === value)
-              setForm({
-                ...form,
-                parentId: parent?.id,
-                level: parent
-                  ? ((parent.level + 1) as Category['level'])
-                  : 1,
-                type: parent?.type ?? form.type,
-              })
-            }}
-          />
-        </Field>
-        <FormErrorMessage error={error} />
-      </Card>
+      <Field label="Name">
+        <TextInput
+          value={form.name}
+          onChange={(event) => setForm({ ...form, name: event.target.value })}
+        />
+      </Field>
+      <Field label="Icon">
+        <button
+          type="button"
+          aria-label="icon"
+          onClick={() => setIconPickerOpen(true)}
+          className={[
+            'flex min-h-11 w-full items-center gap-2 rounded-lg',
+            'border border-white/10 bg-white/5 px-3 text-slate-50 transition-colors',
+          ].join(' ')}
+        >
+          <Icon name={form.icon} />
+          <span className="text-sm">{form.icon}</span>
+        </button>
+      </Field>
+      <Field label="Type">
+        <SelectInput
+          value={form.type}
+          options={[
+            { value: 'expense', label: 'Expense' },
+            { value: 'income', label: 'Income' },
+          ]}
+          onChange={(value) => setForm({ ...form, type: value as TransactionType })}
+        />
+      </Field>
+      <Field label="Parent">
+        <SelectInput
+          value={form.parentId ?? ''}
+          options={[
+            { value: '', label: 'Root' },
+            ...categories
+              .filter((c) => c.type === form.type && c.level < 5)
+              .map((c) => ({ value: c.id, label: c.name })),
+          ]}
+          onChange={(value) => {
+            const parent = categories.find((c) => c.id === value)
+            setForm({
+              ...form,
+              parentId: parent?.id,
+              level: parent
+                ? ((parent.level + 1) as Category['level'])
+                : 1,
+              type: parent?.type ?? form.type,
+            })
+          }}
+        />
+      </Field>
 
       <IconPicker
         isOpen={iconPickerOpen}
@@ -137,10 +138,9 @@ export function CategoryFormPage({
         onClose={() => setIconPickerOpen(false)}
       />
 
-      <Button type="submit" variant="accent">Save</Button>
-      {existing
-        ? <Button type="button" variant="danger" onClick={handleDelete}>Delete</Button>
-        : null}
+      <FormErrorMessage error={error} />
+
+      <FormActions showDelete={Boolean(existing)} onDelete={handleDelete} />
     </form>
   )
 }

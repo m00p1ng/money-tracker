@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import {
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
 import type { Category } from '@/types/domain'
 
@@ -34,7 +39,9 @@ function renderPage(props: Partial<React.ComponentProps<typeof CategoryFormPage>
     />,
   )
 
-  return { onSubmit, onDelete, onBack }
+  return {
+    onSubmit, onDelete, onBack,
+  }
 }
 
 describe('CategoryFormPage', () => {
