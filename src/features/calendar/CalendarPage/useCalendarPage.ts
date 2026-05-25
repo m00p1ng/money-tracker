@@ -193,6 +193,5 @@ export function useCalendarPage() {
     onNext,
     onAdd,
     onBack,
-    onSearch: () => {},
   }
 }
