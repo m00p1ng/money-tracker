@@ -1,6 +1,7 @@
 import {
   formatAmount,
   formatShortDate,
+  summarizeTransactionItems,
   titleWithNote,
 } from '@/lib'
 import {
@@ -27,17 +28,14 @@ export function useUpcomingTransactions() {
     const transaction = row.kind === 'real'
       ? row.transaction
       : row.occurrence.transaction
-    const firstItem = transaction.items[0]
-    const category = firstItem
-      ? findCategory(firstItem.categoryId)
-      : undefined
+    const summary = summarizeTransactionItems(transaction, findCategory)
     const fromWallet = findWallet(transaction.walletId)
     const toWallet = transaction.toWalletId
       ? findWallet(transaction.toWalletId)
       : undefined
     const label = transaction.type === 'transfer'
       ? `Transfer (${fromWallet?.name ?? 'Wallet'}->${toWallet?.name ?? 'Wallet'})`
-      : category?.name ?? 'Transaction'
+      : summary.label
     const to =
       row.kind === 'real'
         ? `/transaction/${transaction.id}`
@@ -48,12 +46,12 @@ export function useUpcomingTransactions() {
       to,
       icon: transaction.type === 'transfer'
         ? 'fa-right-left'
-        : category?.icon ?? 'fa-clock',
+        : summary.category?.icon ?? 'fa-clock',
       primaryLabel: titleWithNote(label, transaction.note),
       secondaryLabel: `${dateLabelFor(row.date)}${row.kind === 'virtual-repeat'
         ? ' · Repeat'
         : ''}`,
-      amount: formatAmount(firstItem?.amount ?? 0, transaction.currency),
+      amount: formatAmount(summary.amount, transaction.currency),
     }
   })
 

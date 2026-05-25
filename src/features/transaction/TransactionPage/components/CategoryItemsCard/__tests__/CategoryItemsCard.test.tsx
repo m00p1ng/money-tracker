@@ -51,6 +51,7 @@ describe('CategoryItemsCard', () => {
     render(
       <CategoryItemsCard
         items={oneItem}
+        currency="THB"
         focusedIndex={0}
         onFocus={vi.fn()}
         onAdd={vi.fn()}
@@ -72,6 +73,7 @@ describe('CategoryItemsCard', () => {
     render(
       <CategoryItemsCard
         items={threeItems}
+        currency="THB"
         focusedIndex={0}
         onFocus={vi.fn()}
         onAdd={vi.fn()}
@@ -88,6 +90,7 @@ describe('CategoryItemsCard', () => {
     render(
       <CategoryItemsCard
         items={items}
+        currency="THB"
         focusedIndex={0}
         onFocus={vi.fn()}
         onAdd={vi.fn()}
@@ -105,6 +108,7 @@ describe('CategoryItemsCard', () => {
     render(
       <CategoryItemsCard
         items={items}
+        currency="THB"
         focusedIndex={0}
         onFocus={vi.fn()}
         onAdd={vi.fn()}
@@ -116,11 +120,79 @@ describe('CategoryItemsCard', () => {
     expect(screen.getByRole('button', { name: /Add Category/i })).toBeInTheDocument()
   })
 
+  it('shows raw amount while focused and fixed decimals when blurred', () => {
+    const { rerender } = render(
+      <CategoryItemsCard
+        items={[{ categoryId: 'expense-food-and-drink-coffee', amount: 3 }]}
+        currency="THB"
+        focusedIndex={0}
+        onFocus={vi.fn()}
+        onAdd={vi.fn()}
+        onRemove={vi.fn()}
+        onChangeCategory={vi.fn()}
+        findCategory={stubFindCategory}
+      />,
+    )
+
+    expect(screen.getByText('3')).toBeInTheDocument()
+    expect(screen.queryByText('฿3.00')).not.toBeInTheDocument()
+
+    rerender(
+      <CategoryItemsCard
+        items={[{ categoryId: 'expense-food-and-drink-coffee', amount: 3 }]}
+        currency="THB"
+        focusedIndex={null}
+        onFocus={vi.fn()}
+        onAdd={vi.fn()}
+        onRemove={vi.fn()}
+        onChangeCategory={vi.fn()}
+        findCategory={stubFindCategory}
+      />,
+    )
+
+    expect(screen.getByText('฿3.00')).toBeInTheDocument()
+  })
+
+  it('formats negative item amounts as signed amounts', () => {
+    render(
+      <CategoryItemsCard
+        items={[{ categoryId: 'expense-food-and-drink-coffee', amount: -50 }]}
+        currency="THB"
+        focusedIndex={null}
+        onFocus={vi.fn()}
+        onAdd={vi.fn()}
+        onRemove={vi.fn()}
+        onChangeCategory={vi.fn()}
+        findCategory={stubFindCategory}
+      />,
+    )
+
+    expect(screen.getByText('(฿50.00)')).toBeInTheDocument()
+  })
+
+  it('formats item amounts with the selected wallet currency', () => {
+    render(
+      <CategoryItemsCard
+        items={[{ categoryId: 'expense-food-and-drink-coffee', amount: -50 }]}
+        currency="USD"
+        focusedIndex={null}
+        onFocus={vi.fn()}
+        onAdd={vi.fn()}
+        onRemove={vi.fn()}
+        onChangeCategory={vi.fn()}
+        findCategory={stubFindCategory}
+      />,
+    )
+
+    expect(screen.getByText('($50.00)')).toBeInTheDocument()
+  })
+
   it('calls onAdd when Add Item button is clicked', async () => {
     const onAdd = vi.fn()
     render(
       <CategoryItemsCard
         items={items}
+        currency="THB"
         focusedIndex={0}
         onFocus={vi.fn()}
         onAdd={onAdd}

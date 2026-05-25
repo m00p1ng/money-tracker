@@ -36,7 +36,7 @@ export function validateDraft(draft: TransactionDraft): string[] {
   if (draft.items.length === 0) {
     errors.push('Add at least one category')
   }
-  if (draft.items.some((item) => item.amount <= 0)) {
+  if (draft.items.some((item) => !Number.isFinite(item.amount))) {
     errors.push('Enter an amount for every category')
   }
 

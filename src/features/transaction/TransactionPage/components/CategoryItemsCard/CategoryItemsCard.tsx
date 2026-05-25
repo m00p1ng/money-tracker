@@ -1,12 +1,13 @@
 import cx from 'classnames'
 
 import { Icon } from '@/components'
-import { formatAmount } from '@/lib'
+import { formatSignedAmount } from '@/lib'
 import type { Category, TransactionItem } from '@/types/domain'
 
 export interface CategoryItemsCardProps {
   items: TransactionItem[]
   focusedIndex: number | null
+  currency: string
   onFocus: (index: number) => void
   onAdd: () => void
   onRemove: (index: number) => void
@@ -14,9 +15,20 @@ export interface CategoryItemsCardProps {
   findCategory: (id: string) => Category | undefined
 }
 
+function formatFocusedAmount(amount: number): string {
+  if (!Number.isFinite(amount)) {
+    return ''
+  }
+
+  return Number.isInteger(amount)
+    ? String(amount)
+    : amount.toFixed(2).replace(/0+$/, '').replace(/\.$/, '')
+}
+
 export function CategoryItemsCard({
   items,
   focusedIndex,
+  currency,
   onFocus,
   onAdd,
   onRemove,
@@ -33,8 +45,8 @@ export function CategoryItemsCard({
           <div
             key={`${item.categoryId}-${index}`}
             className={cx(
-              'flex items-center border-b border-white/[0.04] last:border-b-0',
-              { 'bg-accent/[0.06]': isFocused },
+              'flex items-center border-b border-white/4 last:border-b-0',
+              { 'bg-accent/6': isFocused },
             )}
           >
             <button
@@ -60,7 +72,9 @@ export function CategoryItemsCard({
               className="shrink-0 px-2 py-3 text-sm font-bold text-danger"
               onClick={() => onFocus(index)}
             >
-              {formatAmount(item.amount)}
+              {isFocused
+                ? formatFocusedAmount(item.amount)
+                : formatSignedAmount(item.amount, currency)}
             </button>
 
             {items.length > 1 && (
@@ -86,7 +100,7 @@ export function CategoryItemsCard({
         type="button"
         className={[
           'flex w-full items-center justify-center gap-2',
-          'border-t border-dashed border-white/[0.08] py-3 text-[12px] font-semibold text-accent-light',
+          'border-t border-dashed border-white/8 py-3 text-[12px] font-semibold text-accent-light',
         ].join(' ')}
       >
         <Icon name="fa-plus" className="text-[10px]" /> Add Item

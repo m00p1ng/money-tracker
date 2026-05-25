@@ -9,13 +9,13 @@ const operators = ['+', '-', '×', '÷'] as const
 type Operator = (typeof operators)[number]
 
 export function createCalcState(amount = 0): CalcState {
+  const initialValue = Number.isFinite(amount) && amount !== 0
+    ? String(amount)
+    : ''
+
   return {
-    display: amount > 0
-      ? String(amount)
-      : '',
-    expression: amount > 0
-      ? String(amount)
-      : '',
+    display: initialValue,
+    expression: initialValue,
     result: amount,
     lastKey: null,
   }
@@ -72,6 +72,10 @@ export function pressCalcKey(state: CalcState, key: string): CalcState {
         result: Number(key),
         lastKey: key,
       }
+    }
+    const decimalPlaces = state.display.split('.')[1]?.length ?? 0
+    if (state.display.includes('.') && decimalPlaces >= 2) {
+      return state
     }
     const display = state.display === '0'
       ? key

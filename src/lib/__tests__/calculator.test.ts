@@ -17,6 +17,16 @@ describe('calculator', () => {
     expect(state.result).toBe(12.5)
   })
 
+  it('limits decimal input to two places', () => {
+    let state = createCalcState()
+    for (const key of ['3', '.', '8', '6', '5', '5', '5', '5', '5']) {
+      state = pressCalcKey(state, key)
+    }
+
+    expect(state.display).toBe('3.86')
+    expect(state.result).toBe(3.86)
+  })
+
   it('evaluates expressions with multiplication before addition', () => {
     let state = createCalcState()
     for (const key of ['2', '+', '3', '×', '4', '=']) {
@@ -25,6 +35,17 @@ describe('calculator', () => {
     expect(state.expression).toBe('2 + 3 × 4')
     expect(state.result).toBe(14)
     expect(state.display).toBe('14')
+  })
+
+  it('calculates from a negative starting amount', () => {
+    let state = createCalcState(-6)
+    for (const key of ['-', '2', '=']) {
+      state = pressCalcKey(state, key)
+    }
+
+    expect(state.expression).toBe('-6 - 2')
+    expect(state.result).toBe(-8)
+    expect(state.display).toBe('-8')
   })
 
   it('toggles sign and deletes input', () => {

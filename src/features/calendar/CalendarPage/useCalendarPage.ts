@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
 import {
+  buildTransactionRowDisplay,
   formatAmount,
   formatShortDate,
   toLocalDateKey,
@@ -65,6 +66,7 @@ export function useCalendarPage() {
   const upcomingByMonth = useTransactionStore((state) => state.upcomingByMonth)
   const findCategory = useCategoryStore((state) => state.findById)
   const parentOf = useCategoryStore((state) => state.parentOf)
+  const wallets = useWalletStore((state) => state.items)
   const findWallet = useWalletStore((state) => state.findById)
 
   const monthTransactions = transactionsByMonth(currentYear, currentMonth)
@@ -82,28 +84,14 @@ export function useCalendarPage() {
   }
 
   function makeRealRow(tx: Transaction, secondaryLabel: string): CalendarRowData {
-    const firstItem = tx.items[0]
-    const category = firstItem
-      ? findCategory(firstItem.categoryId)
-      : undefined
-    const amountPrefix = tx.type === 'income'
-      ? '+'
-      : tx.type === 'expense'
-        ? '-'
-        : ''
-
     return {
       key: tx.id,
-      to: `/transaction/${tx.id}`,
-      icon: category?.icon ?? 'fa-ellipsis',
-      primaryLabel: category?.name ?? 'Unknown',
-      secondaryLabel,
-      amount: `${amountPrefix}${formatAmount(firstItem?.amount ?? 0, tx.currency)}`,
-      amountColor: tx.type === 'income'
-        ? 'text-income'
-        : tx.type === 'expense'
-          ? 'text-expense'
-          : 'text-slate-400',
+      ...buildTransactionRowDisplay({
+        transaction: tx,
+        findCategory,
+        wallets,
+        secondaryLabel,
+      }),
     }
   }
 

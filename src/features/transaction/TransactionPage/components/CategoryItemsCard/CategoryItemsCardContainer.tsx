@@ -6,6 +6,7 @@ import { CategoryItemsCard } from './CategoryItemsCard'
 interface CategoryItemsCardContainerProps {
   items: TransactionItem[]
   focusedIndex: number | null
+  currency: string
   onFocus: (index: number) => void
   onAdd: () => void
   onRemove: (index: number) => void

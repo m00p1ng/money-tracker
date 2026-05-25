@@ -1,6 +1,7 @@
 import cx from 'classnames'
 
 import { Icon } from '@/components'
+import { formatAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 interface WalletSelectorRowProps {
@@ -47,7 +48,7 @@ export function WalletSelectorRow({
         <p className="text-sm font-medium">
           {wallet?.name ?? fallbackName}
           {showBalance
-            ? ` · ${wallet?.currency ?? ''} ${wallet?.balance.toFixed(2) ?? '0.00'}`
+            ? ` · ${formatAmount(wallet?.balance ?? 0, wallet?.currency)}`
             : ''}
         </p>
       </div>

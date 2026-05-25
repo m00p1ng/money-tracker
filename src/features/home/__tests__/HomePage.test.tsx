@@ -44,6 +44,15 @@ describe('HomePage', () => {
           isDefault: true,
         },
         {
+          id: 'expense-food-and-drink-food',
+          name: 'Food',
+          type: 'expense',
+          parentId: 'expense-food-and-drink',
+          level: 2,
+          icon: 'fa-burger',
+          isDefault: true,
+        },
+        {
           id: 'income-salary',
           name: 'Salary',
           type: 'income',
@@ -118,6 +127,36 @@ describe('HomePage', () => {
     expect(screen.getByText('Coffee (my note)')).toBeInTheDocument()
     expect(screen.getAllByText('25 Feb')).toHaveLength(2)
     expect(screen.getByText('Transfer (mooping->test)')).toBeInTheDocument()
+  })
+
+  it('groups multiple transaction items into one today row', () => {
+    useTransactionStore.setState({
+      items: [
+        {
+          id: 'tx-multiple-items',
+          type: 'expense',
+          walletId: 'wallet-cash',
+          currency: 'USD',
+          items: [
+            { categoryId: 'expense-food-and-drink-coffee', amount: 10 },
+            { categoryId: 'expense-food-and-drink-food', amount: 20 },
+          ],
+          date: '2026-02-25T08:00:00.000Z',
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    })
+
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Coffee, Food')).toBeInTheDocument()
+    expect(screen.getByText('-$30.00')).toBeInTheDocument()
+    expect(screen.queryByText('Coffee')).not.toBeInTheDocument()
+    expect(screen.queryByText('Food')).not.toBeInTheDocument()
   })
 
   it('shows today income and expense totals when they exist', () => {

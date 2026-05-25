@@ -1,4 +1,4 @@
-import { formatAmount } from '@/lib'
+import { formatSignedAmount } from '@/lib'
 import type {
   TransactionItem,
   TransactionType,
@@ -62,7 +62,7 @@ export function TransactionPrimaryCard({
   const showExchangeRate = currency !== wallet?.currency
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/[0.085] bg-white/[0.08]">
+    <div className="overflow-hidden rounded-2xl border border-white/8.5 bg-white/8">
       <WalletSelectorRow
         ariaLabel="Wallet"
         label="Wallet"
@@ -74,10 +74,11 @@ export function TransactionPrimaryCard({
         onClick={onWalletClick}
       />
 
-      <div className="border-t border-white/[0.05]">
+      <div className="border-t border-white/5">
         <CategoryItemsCardContainer
           items={items}
           focusedIndex={focusedIndex}
+          currency={wallet?.currency ?? currency}
           onFocus={onFocusItem}
           onAdd={onAddCategory}
           onRemove={onRemoveItem}
@@ -86,7 +87,7 @@ export function TransactionPrimaryCard({
       </div>
 
       {showExchangeRate && (
-        <div className="border-t border-white/[0.05]">
+        <div className="border-t border-white/5">
           <ExchangeRateRow
             label="Exchange Rate"
             value={exchangeRate}
@@ -100,8 +101,7 @@ export function TransactionPrimaryCard({
       <div className={`flex items-center justify-between border-t px-4 py-3 ${style.bg} ${style.border}`}>
         <span className="text-[9px] uppercase tracking-[1px] text-white/40">Total</span>
         <span className={`text-xl font-bold ${style.text}`}>
-          {formatAmount(total)}
-          <span className="ml-1.5 text-[10px] font-normal opacity-50">{currency}</span>
+          {formatSignedAmount(total, wallet?.currency ?? currency)}
         </span>
       </div>
     </div>

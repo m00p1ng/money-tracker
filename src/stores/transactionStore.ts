@@ -93,9 +93,11 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
   },
   async update(transaction) {
     await db.transactions.put(transaction)
-    set({ items: sortNewestFirst(get().items.map((item) => (item.id === transaction.id
-      ? transaction
-      : item))) })
+    set({
+      items: sortNewestFirst(get().items.map((item) => (item.id === transaction.id
+        ? transaction
+        : item))),
+    })
   },
   async remove(id) {
     await db.transactions.delete(id)
@@ -108,21 +110,26 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     }
     const updated = { ...tx, cleared: !tx.cleared }
     await db.transactions.update(id, { cleared: updated.cleared })
-    set({ items: get().items.map((item) => (item.id === id
-      ? updated
-      : item)) })
+    set({
+      items: get().items.map((item) => (item.id === id
+        ? updated
+        : item),
+      ),
+    })
   },
   findById(id) {
     return get().items.find((transaction) => transaction.id === id)
   },
   monthlyIncome() {
     return get()
-      .items.filter((transaction) => transaction.type === 'income' && isCurrentMonth(transaction.date))
+      .items
+      .filter((transaction) => transaction.type === 'income' && isCurrentMonth(transaction.date))
       .reduce((sum, transaction) => sum + total(transaction), 0)
   },
   monthlyExpense() {
     return get()
-      .items.filter((transaction) => transaction.type === 'expense' && isCurrentMonth(transaction.date))
+      .items
+      .filter((transaction) => transaction.type === 'expense' && isCurrentMonth(transaction.date))
       .reduce((sum, transaction) => sum + total(transaction), 0)
   },
   todayTransactions() {

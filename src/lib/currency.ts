@@ -26,3 +26,12 @@ export function formatAmount(amount: number, currency = 'THB', locale?: string):
     return `${symbol}${formatted}`
   }
 }
+
+export function formatSignedAmount(amount: number, currency: string): string {
+  const formatted = formatAmount(Math.abs(amount), currency)
+  if (amount < 0) {
+    return `(${formatted})`
+  }
+
+  return formatted
+}

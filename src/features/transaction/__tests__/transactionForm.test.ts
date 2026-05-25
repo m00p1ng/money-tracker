@@ -23,14 +23,14 @@ describe('transactionForm', () => {
     ).toContain('Select a wallet')
   })
 
-  it('rejects drafts with zero amount', () => {
+  it('accepts zero category item amounts', () => {
     expect(
       validateDraft({
         type: 'expense',
         walletId: 'wallet-cash',
         items: [{ categoryId: 'expense-food', amount: 0 }],
       }),
-    ).toContain('Enter an amount for every category')
+    ).toEqual([])
   })
 
   it('accepts valid drafts', () => {
@@ -49,6 +49,16 @@ describe('transactionForm', () => {
         type: 'income',
         walletId: 'wallet-cash',
         items: [{ categoryId: 'income-salary', amount: 500 }],
+      }),
+    ).toEqual([])
+  })
+
+  it('accepts negative category item amounts', () => {
+    expect(
+      validateDraft({
+        type: 'expense',
+        walletId: 'wallet-cash',
+        items: [{ categoryId: 'expense-food', amount: -28 }],
       }),
     ).toEqual([])
   })

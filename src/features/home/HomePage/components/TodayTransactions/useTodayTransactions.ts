@@ -1,4 +1,7 @@
-import { buildTransactionBaseProps, formatAmount } from '@/lib'
+import {
+  buildTransactionRowDisplay,
+  formatAmount,
+} from '@/lib'
 import {
   useCategoryStore,
   useTransactionStore,
@@ -30,34 +33,30 @@ export function useTodayTransactions() {
   const wallets = useWalletStore((state) => state.items)
   const transactions = todayTransactions()
 
-  const rows: TodayTransactionRowData[] = transactions.flatMap((transaction) => {
+  const rows: TodayTransactionRowData[] = transactions.map((transaction) => {
     if (transaction.type === 'transfer') {
       const amount = transaction.items[0]?.amount ?? 0
-      const base = buildTransactionBaseProps(transaction, undefined, wallets)
-
-      return [{
-        key: `${transaction.id}-0`,
-        ...base,
-        amount: formatAmount(amount, transaction.currency),
-        amountColor: 'text-slate-400',
-      }]
-    }
-
-    return transaction.items.map((item, index) => {
-      const category = findCategory(item.categoryId)
-      const base = buildTransactionBaseProps(transaction, category, wallets)
 
       return {
-        key: `${transaction.id}-${index}`,
-        ...base,
-        amount: `${transaction.type === 'income'
-          ? '+'
-          : '-'}${formatAmount(item.amount, transaction.currency)}`,
-        amountColor: transaction.type === 'income'
-          ? 'text-income'
-          : 'text-expense',
+        key: `${transaction.id}-0`,
+        ...buildTransactionRowDisplay({
+          transaction,
+          findCategory,
+          wallets,
+          amount: formatAmount(amount, transaction.currency),
+          amountColor: 'text-slate-400',
+        }),
       }
-    })
+    }
+
+    return {
+      key: transaction.id,
+      ...buildTransactionRowDisplay({
+        transaction,
+        findCategory,
+        wallets,
+      }),
+    }
   })
 
   return {

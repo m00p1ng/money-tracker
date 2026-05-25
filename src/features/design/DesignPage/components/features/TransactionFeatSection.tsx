@@ -54,6 +54,7 @@ export function TransactionFeatSection() {
             { categoryId: 'stub-2', amount: 250 },
           ]}
           focusedIndex={0}
+          currency="USD"
           onFocus={() => {}}
           onAdd={() => {}}
           onRemove={() => {}}

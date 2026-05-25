@@ -101,4 +101,69 @@ describe('useCalendarPage', () => {
     const { result } = renderHook(() => useCalendarPage(), { wrapper })
     expect(result.current.indicatorMap[`${y}-${m}-15`]).toBe('both')
   })
+
+  it('builds completed transaction rows like today transactions', () => {
+    const now = new Date()
+    const y = now.getFullYear()
+    const m = String(now.getMonth() + 1).padStart(2, '0')
+    const selectedDate = `${y}-${m}-10`
+    useCategoryStore.setState({
+      items: [
+        {
+          id: 'expense-food-and-drink',
+          name: 'Food & Drink',
+          type: 'expense',
+          level: 1,
+          icon: 'fa-utensils',
+          isDefault: true,
+        },
+        {
+          id: 'cat1',
+          name: 'Coffee',
+          type: 'expense',
+          parentId: 'expense-food-and-drink',
+          level: 2,
+          icon: 'fa-mug-hot',
+          isDefault: true,
+        },
+        {
+          id: 'cat2',
+          name: 'Food',
+          type: 'expense',
+          parentId: 'expense-food-and-drink',
+          level: 2,
+          icon: 'fa-burger',
+          isDefault: true,
+        },
+      ],
+    })
+    useTransactionStore.setState({
+      items: [
+        makeTx({
+          id: 'tx-multiple-items',
+          date: `${selectedDate}T10:00`,
+          currency: 'USD',
+          note: 'brunch',
+          items: [
+            { categoryId: 'cat1', amount: 10 },
+            { categoryId: 'cat2', amount: 20 },
+          ],
+        }),
+      ],
+    })
+
+    const { result } = renderHook(() => useCalendarPage(), { wrapper })
+    act(() => result.current.onSelectDate(selectedDate))
+
+    expect(result.current.listRows).toEqual([
+      expect.objectContaining({
+        key: 'tx-multiple-items',
+        icon: 'fa-mug-hot',
+        primaryLabel: 'Coffee, Food (brunch)',
+        secondaryLabel: 'Food & Drink',
+        amount: '-$30.00',
+        amountColor: 'text-expense',
+      }),
+    ])
+  })
 })

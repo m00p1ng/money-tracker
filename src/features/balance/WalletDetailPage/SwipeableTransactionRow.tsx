@@ -9,8 +9,15 @@ import { useNavigate } from 'react-router'
 
 import { Icon, TransactionRow } from '@/components'
 import type { RunningWalletRow } from '@/features/balance/balanceCalculations'
-import { buildTransactionBaseProps, formatAmount } from '@/lib'
-import type { Category, Wallet } from '@/types/domain'
+import {
+  buildTransactionRowDisplay,
+  formatAmount,
+  transactionAmountColor,
+} from '@/lib'
+import type {
+  Category,
+  Wallet,
+} from '@/types/domain'
 
 type Props = {
   row: RunningWalletRow
@@ -30,12 +37,7 @@ export function SwipeableTransactionRow({
   const navigate = useNavigate()
   const x = useMotionValue(0)
   const buttonOpacity = useTransform(x, [-72, -20], [1, 0])
-  const isCredit = wallet.type === 'credit_card'
   const { transaction } = row
-  const category = transaction.type !== 'transfer'
-    ? categories.find((c) => c.id === transaction.items[0]?.categoryId)
-    : undefined
-  const base = buildTransactionBaseProps(transaction, category, wallets)
   const isCleared = transaction.cleared ?? false
 
   function handleDragEnd() {
@@ -112,19 +114,15 @@ export function SwipeableTransactionRow({
       >
         <div className="relative">
           <TransactionRow
-            {...base}
-            amount={`${row.amount >= 0
-              ? '+'
-              : '-'}${formatAmount(Math.abs(row.amount), wallet.currency)}`}
-            amountColor={row.amount >= 0
-              ? 'text-income'
-              : 'text-expense'}
-            secondaryAmount={isCredit
-              ? `${formatAmount(row.runningAmount, wallet.currency)} debt`
-              : formatAmount(row.runningAmount, wallet.currency)}
-            secondaryAmountColor={isCredit
-              ? 'text-expense/70'
-              : 'text-white/28'}
+            {...buildTransactionRowDisplay({
+              transaction,
+              findCategory: (categoryId) => categories.find((c) => c.id === categoryId),
+              wallets,
+              amount: formatAmount(Math.abs(row.amount), wallet.currency),
+              amountColor: transactionAmountColor(transaction, row.amount),
+              secondaryAmount: formatAmount(row.runningAmount, wallet.currency),
+              secondaryAmountColor: 'text-white/28',
+            })}
           />
           {isCleared && (
             <Icon
