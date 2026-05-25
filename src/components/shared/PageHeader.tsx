@@ -12,17 +12,17 @@ export function PageHeader({
   rightSlot,
 }: PageHeaderProps) {
   return (
-    <header className="grid grid-cols-[36px_1fr_auto] items-center gap-3">
+    <header className="relative flex items-center">
       <button
         aria-label="Back"
         onClick={onBack}
-        className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-slate-300"
         type="button"
       >
         <Icon name="fa-chevron-left" />
       </button>
-      <h1 className="text-center text-lg font-bold">{title}</h1>
-      {rightSlot ?? <div />}
+      <h1 className="pointer-events-none absolute inset-x-0 text-center text-lg font-bold">{title}</h1>
+      {rightSlot && <div className="ml-auto">{rightSlot}</div>}
     </header>
   )
 }
