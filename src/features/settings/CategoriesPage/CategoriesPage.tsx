@@ -32,6 +32,7 @@ export function CategoriesPage({
           <TypePickerDropdown
             value={activeType}
             onChange={(value) => onChangeType(value as TransactionType)}
+            types={['expense', 'income']}
           />
         }
         onBack={onBack}

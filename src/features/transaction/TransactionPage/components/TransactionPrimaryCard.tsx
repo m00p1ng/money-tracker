@@ -1,5 +1,9 @@
 import { formatAmount } from '@/lib'
-import type { TransactionItem, TransactionType, Wallet } from '@/types/domain'
+import type {
+  TransactionItem,
+  TransactionType,
+  Wallet,
+} from '@/types/domain'
 
 import CategoryItemsCardContainer from './CategoryItemsCard'
 import { ExchangeRateRow } from './ExchangeRateRow'
@@ -21,7 +25,11 @@ interface TransactionPrimaryCardProps {
   onUpdateExchangeRate: (value: string) => void
 }
 
-const totalStyle: Record<'expense' | 'income', { text: string; bg: string; border: string }> = {
+const totalStyle: Record<'expense' | 'income', {
+  text: string
+  bg: string
+  border: string
+}> = {
   expense: {
     text: 'text-danger',
     bg: 'bg-danger/10',

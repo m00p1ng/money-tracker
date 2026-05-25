@@ -4,14 +4,27 @@ import { Icon } from '@/components'
 import type { RepeatConfig } from '@/types/domain'
 
 function formatRepeat(config: RepeatConfig): string {
-  if (config.preset === 'daily') return 'Daily'
-  if (config.preset === '2weeks') return 'Every 2 Weeks'
-  if (config.preset === 'monthly') return 'Monthly'
-  if (config.preset === 'yearly') return 'Yearly'
+  if (config.preset === 'daily') {
+    return 'Daily'
+  }
+  if (config.preset === '2weeks') {
+    return 'Every 2 Weeks'
+  }
+  if (config.preset === 'monthly') {
+    return 'Monthly'
+  }
+  if (config.preset === 'yearly') {
+    return 'Yearly'
+  }
+
   if (config.preset === 'custom' && config.customEvery && config.customUnit) {
-    const unit = config.customEvery === 1 ? config.customUnit : `${config.customUnit}s`
+    const unit = config.customEvery === 1
+      ? config.customUnit
+      : `${config.customUnit}s`
+
     return `Every ${config.customEvery} ${unit}`
   }
+
   return 'Never'
 }
 
@@ -54,7 +67,9 @@ export function RepeatRow({
         <p className="text-xs text-white/35">Repeat</p>
         <p
           className="mt-0.5 text-sm font-semibold"
-          style={isActive ? { color: 'var(--accent-light)' } : undefined}
+          style={isActive
+            ? { color: 'var(--accent-light)' }
+            : undefined}
         >
           {formatRepeat(repeatConfig)}
         </p>

@@ -133,6 +133,11 @@ export function TransactionPage({
     setCalc(createCalcState(items[index]?.amount ?? 0))
   }
 
+  function handleFocusTransferAmount() {
+    onFocusItem(0)
+    setCalc(createCalcState(transferAmount))
+  }
+
   const wallet = wallets.find((w) => w.id === walletId)
 
   return (
@@ -162,8 +167,10 @@ export function TransactionPage({
             toExchangeRate={toExchangeRate}
             defaultRate={defaultRate}
             transferAmount={transferAmount}
+            isAmountFocused={focusedIndex !== null}
             onFromWalletClick={() => setWalletPickerTarget('wallet')}
             onToWalletClick={() => setWalletPickerTarget('toWallet')}
+            onAmountClick={handleFocusTransferAmount}
             onUpdateExchangeRate={onUpdateExchangeRate}
             onUpdateToExchangeRate={onUpdateToExchangeRate}
           />

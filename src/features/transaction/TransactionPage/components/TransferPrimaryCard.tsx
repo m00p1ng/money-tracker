@@ -1,3 +1,5 @@
+import cx from 'classnames'
+
 import { Icon } from '@/components'
 import { formatAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
@@ -13,8 +15,10 @@ interface TransferPrimaryCardProps {
   toExchangeRate: string
   defaultRate: string
   transferAmount: number
+  isAmountFocused: boolean
   onFromWalletClick: () => void
   onToWalletClick: () => void
+  onAmountClick: () => void
   onUpdateExchangeRate: (value: string) => void
   onUpdateToExchangeRate: (value: string) => void
 }
@@ -27,7 +31,13 @@ interface WalletColumnProps {
   onClick: () => void
 }
 
-function WalletColumn({ label, wallet, fallbackName, fallbackColor, onClick }: WalletColumnProps) {
+function WalletColumn({
+  label,
+  wallet,
+  fallbackName,
+  fallbackColor,
+  onClick,
+}: WalletColumnProps) {
   const color = wallet?.color ?? fallbackColor
 
   return (
@@ -64,8 +74,10 @@ export function TransferPrimaryCard({
   toExchangeRate,
   defaultRate,
   transferAmount,
+  isAmountFocused,
   onFromWalletClick,
   onToWalletClick,
+  onAmountClick,
   onUpdateExchangeRate,
   onUpdateToExchangeRate,
 }: TransferPrimaryCardProps) {
@@ -122,13 +134,25 @@ export function TransferPrimaryCard({
         </div>
       )}
 
-      <div className="flex items-center justify-between border-t border-accent/20 bg-accent/10 px-4 py-3">
+      <button
+        type="button"
+        className={cx(
+          'flex w-full items-center justify-between border-t px-4 py-3 transition-colors',
+          isAmountFocused
+            ? 'border-accent/40 bg-accent/20'
+            : 'border-accent/20 bg-accent/10',
+        )}
+        onClick={(e) => {
+          e.stopPropagation()
+          onAmountClick()
+        }}
+      >
         <span className="text-[9px] uppercase tracking-[1px] text-white/40">Amount</span>
         <span className="text-xl font-bold text-accent-light">
           {formatAmount(transferAmount)}
           <span className="ml-1.5 text-[10px] font-normal opacity-50">{currency}</span>
         </span>
-      </div>
+      </button>
     </div>
   )
 }

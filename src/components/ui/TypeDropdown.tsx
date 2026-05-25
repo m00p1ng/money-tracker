@@ -10,7 +10,7 @@ import { Icon } from '@/components'
 
 type TransactionType = 'expense' | 'income' | 'transfer'
 
-const TYPES: { label: string; value: TransactionType }[] = [
+const ALL_TYPES: { label: string; value: TransactionType }[] = [
   { label: 'Expense', value: 'expense' },
   { label: 'Income', value: 'income' },
   { label: 'Transfer', value: 'transfer' },
@@ -20,13 +20,18 @@ interface TypeDropdownProps {
   value: TransactionType
   onChange: (type: TransactionType) => void
   locked?: boolean
+  types?: TransactionType[]
 }
 
 export function TypePickerDropdown({
   value,
   onChange,
   locked = false,
+  types,
 }: TypeDropdownProps) {
+  const TYPES = types
+    ? ALL_TYPES.filter((t) => types.includes(t.value))
+    : ALL_TYPES
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
