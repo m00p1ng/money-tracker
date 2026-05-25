@@ -3,38 +3,27 @@ import {
   useRef,
   useState,
 } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
-const SECTION_IDS = [
-  'colors',
-  'typography',
-  'spacing',
-  'button',
-  'card',
-  'field',
-  'segmented-control',
-  'type-picker',
-  'category-picker',
-  'currency-picker',
-  'date-picker',
-  'repeat-picker',
-  'wallet-picker',
-  'summary-cards',
-  'amount-display',
-  'calculator-keyboard',
-  'category-items-card',
-  'today-transactions',
-  'upcoming-transactions',
-]
+import { NAV_GROUPS } from '../DesignSidebar'
 
 export function useDesignPage() {
   const navigate = useNavigate()
-  const [activeId, setActiveId] = useState(SECTION_IDS[0])
+  const { section = NAV_GROUPS[0].slug } = useParams<{ section: string }>()
   const contentRef = useRef<HTMLDivElement>(null)
+
+  const activeGroup = NAV_GROUPS.find((g) => g.slug === section) ?? NAV_GROUPS[0]
+  const sectionIds = activeGroup.items.map((i) => i.id)
+
+  const [activeId, setActiveId] = useState(sectionIds[0])
+
+  useEffect(() => {
+    setActiveId(sectionIds[0])
+  }, [section]) // reset highlight when switching pages
 
   useEffect(() => {
     const observers: IntersectionObserver[] = []
-    for (const id of SECTION_IDS) {
+    for (const id of sectionIds) {
       const el = document.getElementById(id)
       if (!el) {
         continue
@@ -52,10 +41,11 @@ export function useDesignPage() {
     }
 
     return () => observers.forEach((o) => o.disconnect())
-  }, [])
+  }, [section]) // re-observe when switching pages
 
   return {
     activeId,
+    section,
     contentRef,
     onNavigateBack: () => {
       if (window.history.length > 1) {
