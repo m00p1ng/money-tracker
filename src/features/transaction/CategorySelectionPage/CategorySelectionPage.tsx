@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icon, TypePickerDropdown } from '@/components'
+import { PageHeader } from '@/components/shared/PageHeader'
 import type { Category } from '@/types/domain'
 
 const gridVariants = {
@@ -42,18 +43,10 @@ export function CategorySelectionPage({
 }: CategorySelectionPageProps) {
   return (
     <div className="space-y-4">
-      <header className="relative grid grid-cols-[36px_1fr_36px] items-center gap-3">
-        <button
-          aria-label="Back"
-          onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
-          type="button"
-        >
-          <Icon name="fa-chevron-left" />
-        </button>
-        <TypePickerDropdown value={type} onChange={onTypeChange} locked={isLocked} />
-        <div />
-      </header>
+      <PageHeader
+        title={<TypePickerDropdown value={type} onChange={onTypeChange} locked={isLocked} />}
+        onBack={onBack}
+      />
 
       <AnimatePresence mode="wait">
         <motion.div

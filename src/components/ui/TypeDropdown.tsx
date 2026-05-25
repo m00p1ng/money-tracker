@@ -59,7 +59,7 @@ export function TypePickerDropdown({
         aria-disabled={locked}
       >
         <span className="font-bold">{currentLabel}</span>
-        {!locked && <Icon name="fa-chevron-down" className="text-[11px] text-white/40" />}
+        {!locked && <Icon name="fa-chevron-down" className="text-sm" />}
       </button>
 
       {!locked && (

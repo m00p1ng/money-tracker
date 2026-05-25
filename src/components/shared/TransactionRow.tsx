@@ -29,7 +29,7 @@ export function TransactionRow({
       className={[
         'flex items-center gap-3 rounded-2xl border border-white/6 bg-white/4',
         'px-4 py-3.5 backdrop-blur transition-[background,box-shadow]',
-        'hover:bg-accent/8 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.15)]',
+        'hover:bg-accent/8 hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--accent)_15%,transparent)]',
       ].join(' ')}
       style={{ display: 'flex', transform: 'translateX(0)' }}
     >

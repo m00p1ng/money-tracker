@@ -1,6 +1,5 @@
 import {
   afterEach,
-  beforeEach,
   describe,
   expect,
   it,
@@ -28,7 +27,11 @@ describe('transactionsByMonth', () => {
       items: [
         makeTx({ id: 'tx-1', date: '2026-05-10T10:00' }),
         makeTx({ id: 'tx-2', date: '2026-04-10T10:00' }),
-        makeTx({ id: 'tx-3', date: '2026-05-20T10:00', status: 'paid' }),
+        makeTx({
+          id: 'tx-3',
+          date: '2026-05-20T10:00',
+          status: 'paid',
+        }),
       ],
     })
     const result = useTransactionStore.getState().transactionsByMonth(2026, 4)
@@ -38,8 +41,16 @@ describe('transactionsByMonth', () => {
   it('excludes planned and overdue transactions', () => {
     useTransactionStore.setState({
       items: [
-        makeTx({ id: 'tx-1', date: '2026-05-10T10:00', status: 'planned' }),
-        makeTx({ id: 'tx-2', date: '2026-05-15T10:00', status: 'overdue' }),
+        makeTx({
+          id: 'tx-1',
+          date: '2026-05-10T10:00',
+          status: 'planned',
+        }),
+        makeTx({
+          id: 'tx-2',
+          date: '2026-05-15T10:00',
+          status: 'overdue',
+        }),
         makeTx({ id: 'tx-3', date: '2026-05-20T10:00' }),
       ],
     })
@@ -66,8 +77,16 @@ describe('upcomingByMonth', () => {
   it('returns planned transactions in the given month', () => {
     useTransactionStore.setState({
       items: [
-        makeTx({ id: 'tx-1', date: '2026-05-28T10:00', status: 'planned' }),
-        makeTx({ id: 'tx-2', date: '2026-04-01T10:00', status: 'overdue' }),
+        makeTx({
+          id: 'tx-1',
+          date: '2026-05-28T10:00',
+          status: 'planned',
+        }),
+        makeTx({
+          id: 'tx-2',
+          date: '2026-04-01T10:00',
+          status: 'overdue',
+        }),
         makeTx({ id: 'tx-3', date: '2026-05-10T10:00' }),
       ],
     })
@@ -79,7 +98,11 @@ describe('upcomingByMonth', () => {
   it('includes overdue transactions in the given month', () => {
     useTransactionStore.setState({
       items: [
-        makeTx({ id: 'tx-1', date: '2026-05-01T10:00', status: 'overdue' }),
+        makeTx({
+          id: 'tx-1',
+          date: '2026-05-01T10:00',
+          status: 'overdue',
+        }),
       ],
     })
     const result = useTransactionStore.getState().upcomingByMonth(2026, 4)
@@ -90,7 +113,11 @@ describe('upcomingByMonth', () => {
   it('does NOT include overdue transactions from a different month', () => {
     useTransactionStore.setState({
       items: [
-        makeTx({ id: 'tx-1', date: '2026-04-01T10:00', status: 'overdue' }),
+        makeTx({
+          id: 'tx-1',
+          date: '2026-04-01T10:00',
+          status: 'overdue',
+        }),
       ],
     })
     const result = useTransactionStore.getState().upcomingByMonth(2026, 4)

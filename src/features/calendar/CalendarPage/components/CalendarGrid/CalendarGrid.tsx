@@ -31,11 +31,20 @@ function getDayState(
   today: string,
   indicatorMap: Record<string, DayIndicator>,
 ): DayState {
-  if (dateStr === selectedDate) return 'selected'
-  if (dateStr === today) return 'today'
+  if (dateStr === selectedDate) {
+    return 'selected'
+  }
+  if (dateStr === today) {
+    return 'today'
+  }
   const indicator = indicatorMap[dateStr]
-  if (indicator === 'transaction' || indicator === 'both') return 'transaction'
-  if (indicator === 'upcoming') return 'upcoming'
+  if (indicator === 'transaction' || indicator === 'both') {
+    return 'transaction'
+  }
+  if (indicator === 'upcoming') {
+    return 'upcoming'
+  }
+
   return 'default'
 }
 
@@ -43,11 +52,11 @@ function dayNumClass(state: DayState): string {
   const base = 'flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium'
   switch (state) {
     case 'selected':
-      return `${base} bg-emerald-500 font-bold text-white`
+      return `${base} bg-accent font-bold text-white`
     case 'today':
-      return `${base} border-2 border-emerald-500 font-bold text-white`
+      return `${base} border-2 border-accent font-bold text-white`
     case 'transaction':
-      return `${base} bg-emerald-500/20 text-emerald-400`
+      return `${base} bg-accent/20 text-accent-light`
     case 'upcoming':
       return `${base} bg-amber-500/20 text-amber-400`
     default:
@@ -73,8 +82,11 @@ export function CalendarGrid({
       drag="x"
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={(_, info) => {
-        if (info.offset.x > 50) onPrev()
-        else if (info.offset.x < -50) onNext()
+        if (info.offset.x > 50) {
+          onPrev()
+        } else if (info.offset.x < -50) {
+          onNext()
+        }
       }}
     >
       <div className="mb-1 grid grid-cols-7">
@@ -92,12 +104,15 @@ export function CalendarGrid({
           const day = i + 1
           const dateStr = makeDateKey(year, month, day)
           const state = getDayState(dateStr, selectedDate, today, indicatorMap)
+
           return (
             <button
               key={dateStr}
               type="button"
               aria-label={`Select ${dateStr}`}
-              onClick={() => onSelectDate(dateStr === selectedDate ? null : dateStr)}
+              onClick={() => onSelectDate(dateStr === selectedDate
+                ? null
+                : dateStr)}
               className="flex flex-col items-center py-0.5"
             >
               <span className={dayNumClass(state)}>{day}</span>

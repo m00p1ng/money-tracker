@@ -145,12 +145,14 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
         transaction,
       }))
 
-    const repeatRows: UpcomingTransactionRow[] = projectRepeatOccurrences(get().items, now).map((occurrence) => ({
-      kind: 'virtual-repeat',
-      id: occurrence.id,
-      date: occurrence.occurrenceDate,
-      occurrence,
-    }))
+    const repeatRows: UpcomingTransactionRow[] = projectRepeatOccurrences(get().items, now)
+      .filter((occurrence) => occurrence.occurrenceDate <= tomorrow)
+      .map((occurrence) => ({
+        kind: 'virtual-repeat',
+        id: occurrence.id,
+        date: occurrence.occurrenceDate,
+        occurrence,
+      }))
 
     return [...realRows, ...repeatRows].sort((a, b) => {
       const aOverdue = a.kind === 'real' && a.transaction.status === 'overdue'
@@ -201,6 +203,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
   },
   transactionsByMonth(year, month) {
     const prefix = `${year}-${String(month + 1).padStart(2, '0')}`
+
     return get()
       .items.filter(
         (tx) =>
@@ -232,6 +235,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
         date: occ.occurrenceDate,
         occurrence: occ,
       }))
+
     return [...realRows, ...repeatRows].sort((a, b) =>
       a.date.localeCompare(b.date),
     )

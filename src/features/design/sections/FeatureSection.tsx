@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 
 import { Button } from '@/components'
 import { SwipeableTransactionRow, WalletRow } from '@/features/balance'
-import { CalendarPageView } from '@/features/calendar'
 import { CreditCardStats } from '@/features/balance/WalletDetailPage/components/CreditCardStats'
 import { DateRangeHeader } from '@/features/balance/WalletDetailPage/components/DateRangeHeader'
 import { TransactionRow } from '@/features/balance/WalletDetailPage/components/TransactionRow'
 import { WalletStats } from '@/features/balance/WalletDetailPage/components/WalletStats'
+import { CalendarPageView } from '@/features/calendar'
 import {
   HomeTitle,
   SummaryCards,

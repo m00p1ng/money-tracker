@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { formatAmount, formatHeaderMonthYear, formatShortDate, toLocalDateKey } from '@/lib'
+import {
+  formatAmount,
+  formatShortDate,
+  toLocalDateKey,
+} from '@/lib'
 import {
   useCategoryStore,
   useTransactionStore,
@@ -34,9 +38,18 @@ function badgeLabelFor(day: string): string {
   const tomorrowDate = new Date()
   tomorrowDate.setDate(tomorrowDate.getDate() + 1)
   const tomorrow = toLocalDateKey(tomorrowDate.toISOString())
-  if (day < today) return 'Overdue'
-  if (day === today) return 'Today'
-  if (day === tomorrow) return 'Tomorrow'
+  if (day < today) {
+    return 'Overdue'
+  }
+
+  if (day === today) {
+    return 'Today'
+  }
+
+  if (day === tomorrow) {
+    return 'Tomorrow'
+  }
+
   return day
 }
 
@@ -65,13 +78,22 @@ export function useCalendarPage() {
     indicatorMap[key] = 'transaction'
   }
   for (const row of monthUpcoming) {
-    indicatorMap[row.date] = indicatorMap[row.date] === 'transaction' ? 'both' : 'upcoming'
+    indicatorMap[row.date] = indicatorMap[row.date] === 'transaction'
+      ? 'both'
+      : 'upcoming'
   }
 
   function makeRealRow(tx: Transaction, secondaryLabel: string): CalendarRowData {
     const firstItem = tx.items[0]
-    const category = firstItem ? findCategory(firstItem.categoryId) : undefined
-    const amountPrefix = tx.type === 'income' ? '+' : tx.type === 'expense' ? '-' : ''
+    const category = firstItem
+      ? findCategory(firstItem.categoryId)
+      : undefined
+    const amountPrefix = tx.type === 'income'
+      ? '+'
+      : tx.type === 'expense'
+        ? '-'
+        : ''
+
     return {
       key: tx.id,
       to: `/transaction/${tx.id}`,
@@ -81,16 +103,26 @@ export function useCalendarPage() {
       primaryLabel: category?.name ?? 'Unknown',
       secondaryLabel,
       amount: `${amountPrefix}${formatAmount(firstItem?.amount ?? 0, tx.currency)}`,
-      amountColor: tx.type === 'income' ? 'text-income' : tx.type === 'expense' ? 'text-expense' : 'text-slate-400',
+      amountColor: tx.type === 'income'
+        ? 'text-income'
+        : tx.type === 'expense'
+          ? 'text-expense'
+          : 'text-slate-400',
     }
   }
 
   function makeUpcomingRow(row: UpcomingTransactionRow, secondaryLabel: string): CalendarRowData {
-    const tx = row.kind === 'real' ? row.transaction : row.occurrence.transaction
+    const tx = row.kind === 'real'
+      ? row.transaction
+      : row.occurrence.transaction
     const firstItem = tx.items[0]
-    const category = firstItem ? findCategory(firstItem.categoryId) : undefined
+    const category = firstItem
+      ? findCategory(firstItem.categoryId)
+      : undefined
     const fromWallet = findWallet(tx.walletId)
-    const toWallet = tx.toWalletId ? findWallet(tx.toWalletId) : undefined
+    const toWallet = tx.toWalletId
+      ? findWallet(tx.toWalletId)
+      : undefined
     const primaryLabel =
       tx.type === 'transfer'
         ? `${fromWallet?.name ?? 'Wallet'} → ${toWallet?.name ?? 'Wallet'}`
@@ -99,10 +131,13 @@ export function useCalendarPage() {
       row.kind === 'real'
         ? `/transaction/${tx.id}`
         : `/transaction/repeat/${row.occurrence.sourceId}/${row.occurrence.occurrenceDate}`
+
     return {
       key: row.id,
       to,
-      icon: tx.type === 'transfer' ? 'fa-right-left' : category?.icon ?? 'fa-clock',
+      icon: tx.type === 'transfer'
+        ? 'fa-right-left'
+        : category?.icon ?? 'fa-clock',
       iconBg: `${category?.color ?? '#64748b'}25`,
       iconColor: category?.color ?? '#94a3b8',
       primaryLabel,
@@ -114,39 +149,43 @@ export function useCalendarPage() {
 
   const listRows: CalendarRowData[] = selectedDate
     ? [
-        ...monthTransactions
-          .filter((tx) => toLocalDateKey(tx.date) === selectedDate)
-          .map((tx) => {
-            const category = tx.items[0] ? findCategory(tx.items[0].categoryId) : undefined
-            const parent = category ? parentOf(category) : undefined
-            return makeRealRow(tx, parent?.name ?? tx.type)
-          }),
-        ...monthUpcoming
-          .filter((row) => row.date === selectedDate)
-          .map((row) =>
-            makeUpcomingRow(
-              row,
-              `${badgeLabelFor(row.date)}${row.kind === 'virtual-repeat' ? ' · Repeat' : ''}`,
-            ),
-          ),
-      ]
-    : (() => {
-        const realEntries = monthTransactions.map((tx) => ({
-          dateKey: toLocalDateKey(tx.date),
-          row: makeRealRow(tx, formatShortDate(new Date(`${toLocalDateKey(tx.date)}T00:00`))),
-        }))
-        const upcomingEntries = monthUpcoming.map((row) => ({
-          dateKey: row.date,
-          row: makeUpcomingRow(row, formatShortDate(new Date(`${row.date}T00:00`))),
-        }))
-        return [...realEntries, ...upcomingEntries]
-          .sort((a, b) => b.dateKey.localeCompare(a.dateKey))
-          .map(({ row }) => row)
-      })()
+      ...monthTransactions
+        .filter((tx) => toLocalDateKey(tx.date) === selectedDate)
+        .map((tx) => {
+          const category = tx.items[0]
+            ? findCategory(tx.items[0].categoryId)
+            : undefined
+          const parent = category
+            ? parentOf(category)
+            : undefined
 
-  const listHeader = selectedDate
-    ? formatShortDate(new Date(`${selectedDate}T00:00`))
-    : formatHeaderMonthYear(new Date(currentYear, currentMonth, 1))
+          return makeRealRow(tx, parent?.name ?? tx.type)
+        }),
+      ...monthUpcoming
+        .filter((row) => row.date === selectedDate)
+        .map((row) =>
+          makeUpcomingRow(
+            row,
+            `${badgeLabelFor(row.date)}${row.kind === 'virtual-repeat'
+              ? ' · Repeat'
+              : ''}`,
+          ),
+        ),
+    ]
+    : (() => {
+      const realEntries = monthTransactions.map((tx) => ({
+        dateKey: toLocalDateKey(tx.date),
+        row: makeRealRow(tx, formatShortDate(new Date(`${toLocalDateKey(tx.date)}T00:00`))),
+      }))
+      const upcomingEntries = monthUpcoming.map((row) => ({
+        dateKey: row.date,
+        row: makeUpcomingRow(row, formatShortDate(new Date(`${row.date}T00:00`))),
+      }))
+
+      return [...realEntries, ...upcomingEntries]
+        .sort((a, b) => b.dateKey.localeCompare(a.dateKey))
+        .map(({ row }) => row)
+    })()
 
   function onSelectDate(date: string | null) {
     setSelectedDate(date)
@@ -187,12 +226,11 @@ export function useCalendarPage() {
     selectedDate,
     indicatorMap,
     listRows,
-    listHeader,
     onSelectDate,
     onPrev,
     onNext,
     onAdd,
     onBack,
-    onSearch: () => {},
+    onSearch: () => { },
   }
 }

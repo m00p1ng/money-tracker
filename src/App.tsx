@@ -9,6 +9,7 @@ import {
 import { AppShell } from '@/components'
 import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
 import { BalancePage, WalletDetailPage } from '@/features/balance'
+import { CalendarPage } from '@/features/calendar'
 import { DesignPage } from '@/features/design'
 import { HomePage } from '@/features/home'
 import {
@@ -21,7 +22,6 @@ import {
   WalletFormPage,
   WalletsPage,
 } from '@/features/settings'
-import { CalendarPage } from '@/features/calendar'
 import { CategorySelectionPage, TransactionPage } from '@/features/transaction'
 
 const bottomNavRoutes = ['/', '/balance', '/settings']

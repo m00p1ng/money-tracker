@@ -1,6 +1,5 @@
-import { motion } from 'framer-motion'
-
 import cx from 'classnames'
+import { motion } from 'framer-motion'
 
 interface SwitchField {
   label: string
@@ -42,11 +41,27 @@ export function Switch({
           )}
         />
         <motion.span
-          animate={{ x: checked ? 20 : 2 }}
+          animate={{
+            x: checked
+              ? 20
+              : 2,
+          }}
           className="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow"
           initial={false}
-          transition={{ type: 'spring', stiffness: 300, damping: 25, mass: 0.8 }}
-          whileTap={{ width: 26, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
+          transition={{
+            type: 'spring',
+            stiffness: 300,
+            damping: 25,
+            mass: 0.8,
+          }}
+          whileTap={{
+            width: 26,
+            transition: {
+              type: 'spring',
+              stiffness: 400,
+              damping: 20,
+            },
+          }}
         />
       </span>
     </label>

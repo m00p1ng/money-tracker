@@ -7,7 +7,11 @@ import {
   it,
 } from 'vitest'
 
-import { useCategoryStore, useTransactionStore, useWalletStore } from '@/stores'
+import {
+  useCategoryStore,
+  useTransactionStore,
+  useWalletStore,
+} from '@/stores'
 import type { Transaction } from '@/types/domain'
 
 import { useCalendarPage } from '../CalendarPage/useCalendarPage'
@@ -74,7 +78,9 @@ describe('useCalendarPage', () => {
     const y = now.getFullYear()
     const m = String(now.getMonth() + 1).padStart(2, '0')
     useTransactionStore.setState({
-      items: [makeTx({ id: 'tx-1', date: `${y}-${m}-28T10:00`, status: 'planned' })],
+      items: [makeTx({
+        id: 'tx-1', date: `${y}-${m}-28T10:00`, status: 'planned',
+      })],
     })
     const { result } = renderHook(() => useCalendarPage(), { wrapper })
     expect(result.current.indicatorMap[`${y}-${m}-28`]).toBe('upcoming')
@@ -87,7 +93,9 @@ describe('useCalendarPage', () => {
     useTransactionStore.setState({
       items: [
         makeTx({ id: 'tx-1', date: `${y}-${m}-15T10:00` }),
-        makeTx({ id: 'tx-2', date: `${y}-${m}-15T10:00`, status: 'planned' }),
+        makeTx({
+          id: 'tx-2', date: `${y}-${m}-15T10:00`, status: 'planned',
+        }),
       ],
     })
     const { result } = renderHook(() => useCalendarPage(), { wrapper })

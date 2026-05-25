@@ -1,4 +1,8 @@
-import { Icon, PageHeader, SectionLabel, TransactionRow } from '@/components'
+import {
+  Icon,
+  PageHeader,
+  TransactionRow,
+} from '@/components'
 
 import { CalendarGrid } from './components/CalendarGrid'
 import type { DayIndicator } from './components/CalendarGrid/CalendarGrid'
@@ -16,7 +20,6 @@ type CalendarPageProps = {
   selectedDate: string | null
   indicatorMap: Record<string, DayIndicator>
   listRows: CalendarRowData[]
-  listHeader: string
   onSelectDate: (date: string | null) => void
   onPrev: () => void
   onNext: () => void
@@ -32,7 +35,6 @@ export function CalendarPage({
   selectedDate,
   indicatorMap,
   listRows,
-  listHeader,
   onSelectDate,
   onPrev,
   onNext,
@@ -42,7 +44,7 @@ export function CalendarPage({
 }: CalendarPageProps) {
   return (
     <div className="flex flex-col">
-      <div className="sticky top-0 z-10 space-y-1 bg-transparent px-4 pt-4 pb-2 backdrop-blur">
+      <div className="sticky top-0 z-10 space-y-1 bg-transparent backdrop-blur">
         <PageHeader
           title={`${MONTH_NAMES[currentMonth]} ${currentYear}`}
           onBack={onBack}
@@ -79,13 +81,7 @@ export function CalendarPage({
           onNext={onNext}
         />
       </div>
-      <div className="space-y-2 px-4 pb-6 pt-4">
-        <div className="flex items-center justify-between">
-          <SectionLabel>{listHeader}</SectionLabel>
-          {listRows.length > 0 && (
-            <span className="text-xs text-slate-500">{listRows.length}</span>
-          )}
-        </div>
+      <div className="space-y-2 pt-4">
         {listRows.length === 0
           ? <p className="py-8 text-center text-sm text-slate-500">No transactions</p>
           : (
