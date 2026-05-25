@@ -43,34 +43,18 @@ const tabVariants: Variants = {
 }
 
 function makePageVariants(direction: 'forward' | 'back'): Variants {
-  const enterX = direction === 'back'
-    ? -24
-    : 24
-  const exitX = direction === 'back'
-    ? 24
-    : -24
+  const enterX = direction === 'back' ? '-100%' : '100%'
+  const exitX = direction === 'back' ? '100%' : '-100%'
 
   return {
-    initial: {
-      opacity: 0,
-      x: enterX,
-      scale: 0.98,
-    },
+    initial: { x: enterX },
     animate: {
-      opacity: 1,
       x: 0,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 350,
-        damping: 30,
-      },
+      transition: { type: 'spring', stiffness: 350, damping: 35, mass: 1 },
     },
     exit: {
-      opacity: 0,
       x: exitX,
-      scale: 0.98,
-      transition: { duration: 0.18, ease: 'easeIn' },
+      transition: { type: 'spring', stiffness: 350, damping: 35, mass: 1 },
     },
   }
 }
