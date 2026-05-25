@@ -55,6 +55,9 @@ function useTransactionPageRouting() {
   const seedType = !isEditMode && !isRepeatMaterialization
     ? (searchParams.get('type') ?? 'expense') as TransactionType
     : undefined
+  const seedDate = !isEditMode && !isRepeatMaterialization
+    ? searchParams.get('date') ?? undefined
+    : undefined
 
   return {
     navigate,
@@ -65,6 +68,7 @@ function useTransactionPageRouting() {
     initial,
     seedCategoryId,
     seedType,
+    seedDate,
     repeatDate,
   }
 }
@@ -74,6 +78,7 @@ function useTransactionPageDraft(
   initial: Transaction | undefined,
   seedType: TransactionType | undefined,
   seedCategoryId: string | undefined,
+  seedDate: string | undefined,
   wallets: TransactionPageProps['wallets'],
 ) {
   const draftStore = useTransactionDraftStore()
@@ -96,7 +101,9 @@ function useTransactionPageDraft(
       : null,
     date: initial
       ? toDatetimeLocalValue(new Date(initial.date))
-      : toDatetimeLocalValue(new Date()),
+      : seedDate
+        ? toDatetimeLocalValue(new Date(`${seedDate}T00:00`))
+        : toDatetimeLocalValue(new Date()),
     note: initial?.note ?? '',
     currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
     exchangeRate: String(initial?.exchangeRate ?? ''),
@@ -264,6 +271,7 @@ export function useTransactionPage(): TransactionPageProps {
     initial,
     seedCategoryId,
     seedType,
+    seedDate,
     repeatDate,
   } = useTransactionPageRouting()
 
@@ -280,6 +288,7 @@ export function useTransactionPage(): TransactionPageProps {
     initial,
     seedType,
     seedCategoryId,
+    seedDate,
     wallets,
   )
 
