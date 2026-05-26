@@ -15,7 +15,7 @@ export function HomeFeatSection() {
       </SubSection>
 
       <SubSection id="summary-cards" title="SummaryCards">
-        <SummaryCards income={0} expense={0} />
+        <SummaryCards income={0} expense={0} currency="THB" />
       </SubSection>
 
       <SubSection id="today-transactions" title="TodayTransactions">

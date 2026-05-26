@@ -2,7 +2,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 import { Icon } from '@/components'
-import { formatAmount, formatSignedAmount } from '@/lib'
+import { formatSignedAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 interface SortableWalletRowProps {
@@ -51,9 +51,7 @@ export function SortableWalletRow({
       </div>
       <div className="flex shrink-0 items-center gap-2 text-white/55">
         <span className="text-sm font-semibold">
-          {wallet.type === 'credit_card'
-            ? formatAmount(amount, wallet.currency)
-            : formatSignedAmount(amount, wallet.currency)}
+          {formatSignedAmount(amount, wallet.currency)}
         </span>
         <Icon name="fa-bars" className="text-base text-white/25" />
       </div>

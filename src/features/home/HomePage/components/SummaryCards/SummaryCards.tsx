@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 import { Icon, SectionLabel } from '@/components'
-import { formatAmount } from '@/lib'
+import { formatSignedAmount } from '@/lib'
 
 const containerVariants = {
   hidden: {},
@@ -29,9 +29,14 @@ const cardVariants = {
 type SummaryCardsProps = {
   income: number
   expense: number
+  currency: string
 }
 
-export function SummaryCards({ income, expense }: SummaryCardsProps) {
+export function SummaryCards({
+  income,
+  expense,
+  currency,
+}: SummaryCardsProps) {
   return (
     <div>
       <SectionLabel>This Month</SectionLabel>
@@ -50,7 +55,7 @@ export function SummaryCards({ income, expense }: SummaryCardsProps) {
             <span>Income</span>
           </div>
           <p className="text-xl font-bold text-income">
-            {formatAmount(income)}
+            {formatSignedAmount(income, currency)}
           </p>
         </motion.div>
         <motion.div
@@ -65,7 +70,7 @@ export function SummaryCards({ income, expense }: SummaryCardsProps) {
             <span>Expense</span>
           </div>
           <p className="text-xl font-bold text-expense">
-            {formatAmount(expense)}
+            {formatSignedAmount(expense, currency)}
           </p>
         </motion.div>
       </motion.div>

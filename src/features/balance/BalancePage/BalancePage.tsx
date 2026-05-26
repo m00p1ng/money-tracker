@@ -20,7 +20,7 @@ import {
   ListRow,
   PageHeader,
 } from '@/components'
-import { formatAmount, formatSignedAmount } from '@/lib'
+import { formatSignedAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 import { SortableWalletRow } from './components/SortableWalletRow'
@@ -138,7 +138,17 @@ export function BalancePage({
       </div>
 
       {paymentWallets.length > 0 && (
-        <ListGroup label="Payment Accounts">
+        <ListGroup
+          label="Payment Accounts"
+          trailing={
+            <span className="text-sm tracking-[1.5px] text-white/30">
+              {formatSignedAmount(
+                paymentWallets.reduce((sum, { amount }) => sum + amount, 0),
+                paymentWallets[0].wallet.currency,
+              )}
+            </span>
+          }
+        >
           {isEditMode
             ? (
               <DndContext
@@ -181,7 +191,17 @@ export function BalancePage({
       )}
 
       {creditCards.length > 0 && (
-        <ListGroup label="Credit Cards">
+        <ListGroup
+          label="Credit Cards"
+          trailing={
+            <span className="text-sm tracking-[1.5px] text-white/30">
+              {formatSignedAmount(
+                creditCards.reduce((sum, { amount }) => sum + amount, 0),
+                creditCards[0].wallet.currency,
+              )}
+            </span>
+          }
+        >
           {isEditMode
             ? (
               <DndContext
@@ -213,7 +233,7 @@ export function BalancePage({
                 trailing={
                   <>
                     <span className="text-sm font-semibold text-white/55">
-                      {formatAmount(amount, wallet.currency)}
+                      {formatSignedAmount(amount, wallet.currency)}
                     </span>
                     <Icon name="fa-chevron-right" className="text-base" />
                   </>

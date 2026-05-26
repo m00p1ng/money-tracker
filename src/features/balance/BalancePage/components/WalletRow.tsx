@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 
 import { Card, Icon } from '@/components'
-import { formatAmount, hexToRgba } from '@/lib'
+import { formatSignedAmount, hexToRgba } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 export interface WalletRowProps {
@@ -22,7 +22,7 @@ export function WalletRow({ wallet, amount }: WalletRowProps) {
         <div className="flex-1">
           <p className="text-sm font-semibold">{wallet.name}</p>
           <p className="mt-0.5 text-sm font-semibold text-white/35">
-            {formatAmount(amount, wallet.currency)}
+            {formatSignedAmount(amount, wallet.currency)}
           </p>
         </div>
         <Icon name="fa-chevron-right" className="shrink-0 text-xs text-white/20" />

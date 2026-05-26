@@ -103,8 +103,8 @@ describe('BalancePage', () => {
     expect(screen.getByRole('link', { name: /Cash/i })).toHaveAttribute('href', '/balance/wallet/wallet-cash')
     expect(screen.getByRole('link', { name: /Cash/i })).toHaveClass('border-b', 'px-4', 'py-3.5')
     expect(screen.getByRole('link', { name: /Visa/i })).toHaveAttribute('href', '/balance/wallet/wallet-card')
-    expect(screen.getByText('฿1,234.00')).toBeInTheDocument()
-    expect(screen.getByText('$250.00')).toBeInTheDocument()
+    expect(screen.getAllByText('฿1,234.00').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('$250.00').length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows Edit button in view mode', () => {
