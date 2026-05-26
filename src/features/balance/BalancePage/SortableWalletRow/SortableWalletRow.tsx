@@ -2,15 +2,18 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 import { Icon } from '@/components'
-import { hexToRgba } from '@/lib'
+import { formatAmount, formatSignedAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 interface SortableWalletRowProps {
   wallet: Wallet
+  amount: number
   onEdit: (id: string) => void
 }
 
-export function SortableWalletRow({ wallet, onEdit }: SortableWalletRowProps) {
+export function SortableWalletRow({
+  wallet, amount, onEdit,
+}: SortableWalletRowProps) {
   const {
     attributes,
     listeners,
@@ -32,37 +35,28 @@ export function SortableWalletRow({ wallet, onEdit }: SortableWalletRowProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-1 border-b border-white/5 last:border-b-0"
+      className="flex items-center gap-1 border-b border-white/5 px-4 py-3.5 last:border-b-0 active:bg-white/3"
+      {...attributes}
+      {...listeners}
+      onClick={() => onEdit(wallet.id)}
     >
-      <button
-        type="button"
-        onClick={() => onEdit(wallet.id)}
-        className="flex flex-1 items-center gap-1 px-4 py-3.5 active:bg-white/3"
+      <div
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-sm"
+        style={{ color: '#63758F' }}
       >
-        <div
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-sm"
-          style={{ background: hexToRgba(wallet.color, 0.15), color: wallet.color }}
-        >
-          <Icon name={wallet.icon} style={{ height: 40 }} />
-        </div>
-        <div className="min-w-0 flex-1 text-left">
-          <p className="text-base font-medium">{wallet.name}</p>
-          <p className="mt-0.5 text-sm text-white/35">
-            {wallet.type === 'credit_card'
-              ? 'Credit Card'
-              : 'Payment Account'}
-          </p>
-        </div>
-      </button>
-      <button
-        type="button"
-        className="flex h-12 w-12 shrink-0 items-center justify-center text-white/30 active:text-white/60"
-        aria-label="Drag to reorder"
-        {...attributes}
-        {...listeners}
-      >
-        <Icon name="fa-grip-lines" />
-      </button>
+        <Icon name={wallet.icon} style={{ height: 40 }} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-base font-medium">{wallet.name}</p>
+      </div>
+      <div className="flex shrink-0 items-center gap-2 text-white/55">
+        <span className="text-sm font-semibold">
+          {wallet.type === 'credit_card'
+            ? formatAmount(amount, wallet.currency)
+            : formatSignedAmount(amount, wallet.currency)}
+        </span>
+        <Icon name="fa-bars" className="text-base text-white/25" />
+      </div>
     </div>
   )
 }

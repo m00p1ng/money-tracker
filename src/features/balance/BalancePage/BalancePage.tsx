@@ -75,7 +75,8 @@ export function BalancePage({
     <button
       type="button"
       onClick={onToggleEditMode}
-      className="flex h-9 items-center justify-center rounded-lg px-3 text-sm font-medium text-slate-300 active:bg-white/5"
+      className="flex h-9 items-center justify-center rounded-lg px-3 text-sm
+        font-medium text-slate-300 active:bg-white/5"
     >
       Edit
     </button>
@@ -85,7 +86,8 @@ export function BalancePage({
     <button
       type="button"
       onClick={onToggleEditMode}
-      className="flex h-9 items-center justify-center rounded-lg px-3 text-sm font-semibold text-sky-400 active:bg-white/5"
+      className="flex h-9 items-center justify-center rounded-lg px-3 text-sm font-semibold active:bg-white/5"
+      style={{ color: 'var(--accent-light)' }}
     >
       Done
     </button>
@@ -148,10 +150,11 @@ export function BalancePage({
                   items={paymentWallets.map(({ wallet }) => wallet.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  {paymentWallets.map(({ wallet }) => (
+                  {paymentWallets.map(({ wallet, amount }) => (
                     <SortableWalletRow
                       key={wallet.id}
                       wallet={wallet}
+                      amount={amount}
                       onEdit={onEditWallet}
                     />
                   ))}
@@ -190,10 +193,11 @@ export function BalancePage({
                   items={creditCards.map(({ wallet }) => wallet.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  {creditCards.map(({ wallet }) => (
+                  {creditCards.map(({ wallet, amount }) => (
                     <SortableWalletRow
                       key={wallet.id}
                       wallet={wallet}
+                      amount={amount}
                       onEdit={onEditWallet}
                     />
                   ))}

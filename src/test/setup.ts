@@ -5,6 +5,7 @@ import { vi } from 'vitest'
 
 vi.mock('@dnd-kit/core', async () => {
   const actual = await vi.importActual<typeof import('@dnd-kit/core')>('@dnd-kit/core')
+
   return {
     ...actual,
     DndContext: ({ children }: { children: React.ReactNode }) => React.createElement('div', null, children),
@@ -13,6 +14,7 @@ vi.mock('@dnd-kit/core', async () => {
 
 vi.mock('@dnd-kit/sortable', async () => {
   const actual = await vi.importActual<typeof import('@dnd-kit/sortable')>('@dnd-kit/sortable')
+
   return {
     ...actual,
     SortableContext: ({ children }: { children: React.ReactNode }) => React.createElement('div', null, children),

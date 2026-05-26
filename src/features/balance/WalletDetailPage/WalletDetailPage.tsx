@@ -96,8 +96,7 @@ export function WalletDetailPage({
               type="button"
               aria-label="Add transaction"
               onClick={onAdd}
-              className="grid h-9 w-9 place-items-center rounded-xl text-white"
-              style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))' }}
+              className="grid h-9 w-9 place-items-center rounded-xl text-slate-300 active:bg-white/5"
             >
               <Icon name="fa-plus" />
             </button>

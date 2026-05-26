@@ -169,7 +169,7 @@ describe('BalancePage', () => {
     )
 
     expect(screen.queryByRole('link', { name: /Cash/i })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Drag to reorder' })).toBeInTheDocument()
+    expect(screen.getByText('Cash')).toBeInTheDocument()
   })
 
   it('calls onEditWallet when wallet row tapped in edit mode', async () => {
