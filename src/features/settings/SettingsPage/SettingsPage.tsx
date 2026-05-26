@@ -17,13 +17,11 @@ const THEME_LABELS: Record<string, string> = {
 }
 
 interface SettingsPageProps {
-  categoryCount: number
   currencyCode: string | undefined
   theme: string
 }
 
 export function SettingsPage({
-  categoryCount,
   currencyCode,
   theme,
 }: SettingsPageProps) {
@@ -32,12 +30,6 @@ export function SettingsPage({
       <PageHeader title="Settings" />
 
       <ListGroup label="Wallets & Data">
-        <ListRow
-          icon="fa-tag"
-          label="Categories"
-          sub={`${categoryCount} categories`}
-          to="/settings/categories"
-        />
         <ListRow
           icon="fa-coins"
           label="Currencies"

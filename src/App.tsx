@@ -19,8 +19,6 @@ import { CalendarPage } from '@/features/calendar'
 import { DesignPage } from '@/features/design'
 import { HomePage } from '@/features/home'
 import {
-  CategoriesPage,
-  CategoryFormPage,
   CurrenciesPage,
   CurrencyFormPage,
   SettingsPage,
@@ -59,9 +57,6 @@ export function RoutedApp() {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/balance/wallets/new" element={<WalletFormPage />} />
         <Route path="/balance/wallets/:id" element={<WalletFormPage />} />
-        <Route path="/settings/categories" element={<CategoriesPage />} />
-        <Route path="/settings/categories/new" element={<CategoryFormPage />} />
-        <Route path="/settings/categories/:id" element={<CategoryFormPage />} />
         <Route path="/settings/currencies" element={<CurrenciesPage />} />
         <Route path="/settings/currencies/new" element={<CurrencyFormPage />} />
         <Route path="/settings/currencies/:code" element={<CurrencyFormPage />} />

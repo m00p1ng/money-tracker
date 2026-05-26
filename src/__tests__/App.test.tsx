@@ -153,7 +153,6 @@ describe('App routing', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('link', { name: /Categories/i })).toHaveAttribute('href', '/settings/categories')
     expect(screen.getByRole('link', { name: /Currencies/i })).toHaveAttribute('href', '/settings/currencies')
     expect(screen.getByRole('link', { name: /Theme/i })).toHaveAttribute('href', '/settings/theme')
     expect(screen.getByText('English')).toBeInTheDocument()

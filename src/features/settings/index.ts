@@ -1,7 +1,5 @@
 export { CurrencyRow } from './CurrenciesPage/CurrencyRow'
 export type { CurrencyRowProps } from './CurrenciesPage/CurrencyRow'
-export { default as CategoriesPage } from './CategoriesPage'
-export { default as CategoryFormPage } from './CategoryFormPage'
 export { default as CurrenciesPage } from './CurrenciesPage'
 export { default as CurrencyFormPage } from './CurrencyFormPage'
 export { default as SettingsPage } from './SettingsPage'
