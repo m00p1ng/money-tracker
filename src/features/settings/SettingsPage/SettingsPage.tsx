@@ -63,17 +63,6 @@ export function SettingsPage({
             </div>
           }
         />
-        <ListRow
-          icon="fa-calendar-days"
-          label="Date Format"
-          to="/settings"
-          trailing={
-            <div className="flex items-center gap-2 text-white/25">
-              <span className="text-[15px] font-medium text-white/45">DD MMM YYYY</span>
-              <Icon name="fa-chevron-right" className="text-base" />
-            </div>
-          }
-        />
       </ListGroup>
     </div>
   )
