@@ -63,15 +63,27 @@ export function useDesignPage() {
 
   useEffect(() => {
     const observers: IntersectionObserver[] = []
+    const intersectingIds = new Set<string>()
     for (const id of visibleSectionIds) {
       const el = document.getElementById(id)
       if (!el) {
         continue
       }
       const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveId(id)
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              intersectingIds.add(id)
+            } else {
+              intersectingIds.delete(id)
+            }
+          }
+
+          const firstIntersectingId = visibleSectionIds.find((sectionId) => (
+            intersectingIds.has(sectionId)
+          ))
+          if (firstIntersectingId) {
+            setActiveId(firstIntersectingId)
           }
         },
         { root: contentRef.current, threshold: 0.3 },
