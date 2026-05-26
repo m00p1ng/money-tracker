@@ -30,7 +30,13 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   const [mergeTargetId, setMergeTargetId] = useState<string | null>(null)
   const isLocked = isAddCategory || changingIndex !== null
 
-  const visible = categories.filter((c) => c.type === type && c.parentId === parentId)
+  function sortByPosition(a: Category, b: Category) {
+    return (a.position ?? Infinity) - (b.position ?? Infinity)
+  }
+
+  const visible = categories
+    .filter((c) => c.type === type && c.parentId === parentId)
+    .sort(sortByPosition)
   const parent = parentId
     ? categories.find((c) => c.id === parentId)
     : undefined
@@ -155,5 +161,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     onSelectMergeTarget,
     onConfirmMerge,
     onCancelMerge,
+    onReorder: (ids: string[]) => useCategoryStore.getState().reorder(ids),
+    onReparent: (id: string, newParentId: string) => useCategoryStore.getState().reparent(id, newParentId),
   }
 }
