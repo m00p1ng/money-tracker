@@ -23,7 +23,9 @@ export function SortableWalletRow({ wallet, onEdit }: SortableWalletRowProps) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging
+      ? 0.5
+      : 1,
   }
 
   return (
@@ -46,7 +48,9 @@ export function SortableWalletRow({ wallet, onEdit }: SortableWalletRowProps) {
         <div className="min-w-0 flex-1 text-left">
           <p className="text-base font-medium">{wallet.name}</p>
           <p className="mt-0.5 text-sm text-white/35">
-            {wallet.type === 'credit_card' ? 'Credit Card' : 'Payment Account'}
+            {wallet.type === 'credit_card'
+              ? 'Credit Card'
+              : 'Payment Account'}
           </p>
         </div>
       </button>

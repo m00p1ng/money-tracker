@@ -10,7 +10,11 @@ import {
 import { AppShell } from '@/components'
 import { Background } from '@/components/Background'
 import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
-import { BalancePage, WalletDetailPage, WalletFormPage } from '@/features/balance'
+import {
+  BalancePage,
+  WalletDetailPage,
+  WalletFormPage,
+} from '@/features/balance'
 import { CalendarPage } from '@/features/calendar'
 import { DesignPage } from '@/features/design'
 import { HomePage } from '@/features/home'

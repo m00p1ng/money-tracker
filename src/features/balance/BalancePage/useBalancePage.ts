@@ -13,6 +13,7 @@ import type { BalancePageProps } from './BalancePage'
 function sortByPosition(a: { position?: number }, b: { position?: number }) {
   const pa = a.position ?? Infinity
   const pb = b.position ?? Infinity
+
   return pa - pb
 }
 

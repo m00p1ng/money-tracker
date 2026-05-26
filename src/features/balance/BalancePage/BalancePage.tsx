@@ -1,15 +1,15 @@
 import {
+  closestCenter,
   DndContext,
   PointerSensor,
   TouchSensor,
-  closestCenter,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
 import type { DragEndEvent } from '@dnd-kit/core'
 import {
-  SortableContext,
   arrayMove,
+  SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
@@ -62,7 +62,9 @@ export function BalancePage({
 
   function handleDragEnd(event: DragEndEvent, group: WalletWithAmount[]) {
     const { active, over } = event
-    if (!over || active.id === over.id) return
+    if (!over || active.id === over.id) {
+      return
+    }
     const oldIndex = group.findIndex(({ wallet }) => wallet.id === active.id)
     const newIndex = group.findIndex(({ wallet }) => wallet.id === over.id)
     const newOrder = arrayMove(group, oldIndex, newIndex)
@@ -104,8 +106,12 @@ export function BalancePage({
     <div className="space-y-5">
       <PageHeader
         title="Balance"
-        leftSlot={isEditMode ? addButton : undefined}
-        rightSlot={isEditMode ? doneButton : editButton}
+        leftSlot={isEditMode
+          ? addButton
+          : undefined}
+        rightSlot={isEditMode
+          ? doneButton
+          : editButton}
       />
 
       <div className="space-y-3">

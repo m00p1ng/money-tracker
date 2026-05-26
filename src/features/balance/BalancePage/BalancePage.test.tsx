@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import {
   describe,
@@ -52,6 +53,16 @@ vi.mock('@/components', async () => {
   }
 })
 
+const defaultProps = {
+  assets: 0,
+  debt: 0,
+  isEditMode: false,
+  onToggleEditMode: vi.fn(),
+  onAddWallet: vi.fn(),
+  onEditWallet: vi.fn(),
+  onReorder: vi.fn().mockResolvedValue(undefined),
+}
+
 describe('BalancePage', () => {
   const paymentWallet: Wallet = {
     id: 'wallet-cash',
@@ -78,6 +89,7 @@ describe('BalancePage', () => {
     render(
       <MemoryRouter>
         <BalancePage
+          {...defaultProps}
           paymentWallets={[{ wallet: paymentWallet, amount: 1234 }]}
           creditCards={[{ wallet: creditCard, amount: 250 }]}
           assets={1234}
@@ -95,10 +107,112 @@ describe('BalancePage', () => {
     expect(screen.getByText('$250.00')).toBeInTheDocument()
   })
 
+  it('shows Edit button in view mode', () => {
+    render(
+      <MemoryRouter>
+        <BalancePage
+          {...defaultProps}
+          paymentWallets={[]}
+          creditCards={[]}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Done' })).not.toBeInTheDocument()
+  })
+
+  it('shows Done and Add buttons in edit mode', () => {
+    render(
+      <MemoryRouter>
+        <BalancePage
+          {...defaultProps}
+          paymentWallets={[]}
+          creditCards={[]}
+          isEditMode={true}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('button', { name: 'Done' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Add wallet' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument()
+  })
+
+  it('calls onToggleEditMode when Edit clicked', async () => {
+    const onToggleEditMode = vi.fn()
+    render(
+      <MemoryRouter>
+        <BalancePage
+          {...defaultProps}
+          paymentWallets={[]}
+          creditCards={[]}
+          onToggleEditMode={onToggleEditMode}
+        />
+      </MemoryRouter>,
+    )
+
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+    expect(onToggleEditMode).toHaveBeenCalledOnce()
+  })
+
+  it('shows drag handles in edit mode instead of links', () => {
+    render(
+      <MemoryRouter>
+        <BalancePage
+          {...defaultProps}
+          paymentWallets={[{ wallet: paymentWallet, amount: 1234 }]}
+          creditCards={[]}
+          isEditMode={true}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.queryByRole('link', { name: /Cash/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Drag to reorder' })).toBeInTheDocument()
+  })
+
+  it('calls onEditWallet when wallet row tapped in edit mode', async () => {
+    const onEditWallet = vi.fn()
+    render(
+      <MemoryRouter>
+        <BalancePage
+          {...defaultProps}
+          paymentWallets={[{ wallet: paymentWallet, amount: 1234 }]}
+          creditCards={[]}
+          isEditMode={true}
+          onEditWallet={onEditWallet}
+        />
+      </MemoryRouter>,
+    )
+
+    await userEvent.click(screen.getByText('Cash'))
+    expect(onEditWallet).toHaveBeenCalledWith('wallet-cash')
+  })
+
+  it('calls onAddWallet when Add button tapped in edit mode', async () => {
+    const onAddWallet = vi.fn()
+    render(
+      <MemoryRouter>
+        <BalancePage
+          {...defaultProps}
+          paymentWallets={[]}
+          creditCards={[]}
+          isEditMode={true}
+          onAddWallet={onAddWallet}
+        />
+      </MemoryRouter>,
+    )
+
+    await userEvent.click(screen.getByRole('button', { name: 'Add wallet' }))
+    expect(onAddWallet).toHaveBeenCalledOnce()
+  })
+
   it('uses income and expense colors for asset and debt bars', () => {
     render(
       <MemoryRouter>
         <BalancePage
+          {...defaultProps}
           paymentWallets={[]}
           creditCards={[]}
           assets={1000}
@@ -121,6 +235,7 @@ describe('BalancePage', () => {
     render(
       <MemoryRouter>
         <BalancePage
+          {...defaultProps}
           paymentWallets={[]}
           creditCards={[]}
           assets={1000}
@@ -137,6 +252,7 @@ describe('BalancePage', () => {
     render(
       <MemoryRouter>
         <BalancePage
+          {...defaultProps}
           paymentWallets={[]}
           creditCards={[]}
           assets={250}
@@ -153,6 +269,7 @@ describe('BalancePage', () => {
     render(
       <MemoryRouter>
         <BalancePage
+          {...defaultProps}
           paymentWallets={[]}
           creditCards={[]}
           assets={0}

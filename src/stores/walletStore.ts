@@ -45,7 +45,10 @@ export const useWalletStore = create<WalletStore>((set, get) => ({
     const current = get().items
     const updated: Wallet[] = ids.flatMap((id, index) => {
       const wallet = current.find((w) => w.id === id)
-      if (!wallet) return []
+      if (!wallet) {
+        return []
+      }
+
       return [{ ...wallet, position: index }]
     })
 
