@@ -21,6 +21,7 @@ import type { DateRangePreset } from '@/lib'
 import type {
   Currency,
   RepeatConfig,
+  TransactionType,
   Wallet,
 } from '@/types/domain'
 
@@ -106,7 +107,7 @@ export function UIComponentsSection() {
   const [selectDemo, setSelectDemo] = useState('a')
   const [seg2, setSeg2] = useState<'a' | 'b'>('a')
   const [seg3, setSeg3] = useState<'a' | 'b' | 'c'>('a')
-  const [pickerType, setPickerType] = useState<'expense' | 'income' | 'transfer'>('expense')
+  const [pickerType, setPickerType] = useState<TransactionType>('expense')
 
   const [currencyOpen, setCurrencyOpen] = useState(false)
   const [selectedCurrency, setSelectedCurrency] = useState('USD')

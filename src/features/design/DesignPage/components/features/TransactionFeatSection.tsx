@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { Button } from '@/components'
+import type { TransactionType } from '@/types/domain'
 import {
   CalculatorKeyboard,
   CalculatorKeyboardSheet,
@@ -25,7 +26,7 @@ import {
 } from './stubs'
 
 export function TransactionFeatSection() {
-  const [txType, setTxType] = useState<'expense' | 'income' | 'transfer'>('expense')
+  const [txType, setTxType] = useState<TransactionType>('expense')
   const [cleared, setCleared] = useState(false)
   const [note, setNote] = useState('Lunch with team')
   const [exchangeRate, setExchangeRate] = useState('0.92')

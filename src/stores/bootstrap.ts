@@ -1,4 +1,4 @@
-import { seedDatabase } from '@/db/seed'
+import { ensureSystemCategories, seedDatabase } from '@/db/seed'
 import {
   useCategoryStore,
   useCurrencyStore,
@@ -9,6 +9,7 @@ import {
 
 export async function bootstrapStores(): Promise<void> {
   await seedDatabase()
+  await ensureSystemCategories()
   await Promise.all([
     useWalletStore.getState().load(),
     useCategoryStore.getState().load(),

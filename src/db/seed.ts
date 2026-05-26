@@ -116,6 +116,19 @@ function buildCategories(): Category[] {
   return categories
 }
 
+const BALANCE_ADJUSTMENT_CATEGORY: Category = {
+  id: 'adjustment-balance-adjustment',
+  name: 'Balance Adjustment',
+  type: 'adjustment',
+  level: 1,
+  icon: 'fa-sliders',
+  isDefault: true,
+}
+
+export async function ensureSystemCategories(): Promise<void> {
+  await db.categories.put(BALANCE_ADJUSTMENT_CATEGORY)
+}
+
 export async function seedDatabase(): Promise<void> {
   const walletCount = await db.wallets.count()
   if (walletCount > 0) {
@@ -126,6 +139,6 @@ export async function seedDatabase(): Promise<void> {
     await db.wallets.put(wallet)
     await db.currencies.put(currency)
     await db.settings.put(settings)
-    await db.categories.bulkPut(buildCategories())
+    await db.categories.bulkPut([...buildCategories(), BALANCE_ADJUSTMENT_CATEGORY])
   })
 }

@@ -33,7 +33,10 @@ import {
   PageHeader,
   TypePickerDropdown,
 } from '@/components'
-import type { Category } from '@/types/domain'
+import type {
+  Category,
+  TransactionType,
+} from '@/types/domain'
 
 import { MergeTargetSheet } from './MergeTargetSheet'
 
@@ -88,7 +91,7 @@ export interface CategorySelectionPageProps {
   confirmDeleteId: string | null
   mergeSourceId: string | null
   mergeTargetId: string | null
-  onTypeChange: (newType: 'expense' | 'income' | 'transfer') => void
+  onTypeChange: (newType: TransactionType) => void
   onBack: () => void
   onSelect: (category: Category) => void
   onToggleEditMode: () => void

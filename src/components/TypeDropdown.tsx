@@ -7,8 +7,7 @@ import {
 } from 'react'
 
 import { Icon } from '@/components'
-
-type TransactionType = 'expense' | 'income' | 'transfer'
+import type { TransactionType } from '@/types/domain'
 
 const ALL_TYPES: { label: string; value: TransactionType }[] = [
   { label: 'Expense', value: 'expense' },

@@ -8,7 +8,10 @@ import {
   useTransactionDraftStore,
   useTransactionStore,
 } from '@/stores'
-import type { Category } from '@/types/domain'
+import type {
+  Category,
+  TransactionType,
+} from '@/types/domain'
 
 import type { CategorySelectionPageProps } from './CategorySelectionPage'
 
@@ -80,14 +83,16 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     ? categories.find((c) => c.id === parentId)
     : undefined
 
-  function onTypeChange(newType: 'expense' | 'income' | 'transfer') {
+  function onTypeChange(newType: TransactionType) {
     if (newType === 'transfer') {
       navigate('/transaction/new?type=transfer', { state: { fromCategorySelection: true } })
 
       return
     }
-    setType(newType)
-    setParentId(undefined)
+    if (newType !== 'adjustment') {
+      setType(newType)
+      setParentId(undefined)
+    }
   }
 
   function onBack() {
