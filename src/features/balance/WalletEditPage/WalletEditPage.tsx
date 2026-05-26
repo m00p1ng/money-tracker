@@ -22,6 +22,7 @@ export interface WalletEditPageProps {
   currencies: Currency[]
   error: string | null
   title: string
+  balanceLabel: string
   showDelete: boolean
   typeDisabled: boolean
   onChangeName: (name: string) => void

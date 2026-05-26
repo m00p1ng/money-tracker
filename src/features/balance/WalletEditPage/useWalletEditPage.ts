@@ -1,13 +1,18 @@
 import { useState } from 'react'
 import {
+  useNavigate,
   useParams,
   useSearchParams,
 } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { useFormCrud } from '@/hooks'
+import { walletCurrentAmount } from '@/features/balance/balanceCalculations'
 import { createId } from '@/lib'
-import { useCurrencyStore, useWalletStore } from '@/stores'
+import {
+  useCurrencyStore,
+  useTransactionStore,
+  useWalletStore,
+} from '@/stores'
 import type { Wallet, WalletType } from '@/types/domain'
 
 import type { WalletEditPageProps } from './WalletEditPage'
@@ -21,47 +26,107 @@ export function useWalletEditPage(): WalletEditPageProps | null {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const backNavigate = useBackNavigate()
+  const navigate = useNavigate()
   const currencies = useCurrencyStore((state) => state.items)
-  const existing = useWalletStore((state) => (id
-    ? state.findById(id)
-    : undefined))
+  const existing = useWalletStore((state) => (id ? state.findById(id) : undefined))
   const add = useWalletStore((state) => state.add)
   const update = useWalletStore((state) => state.update)
   const remove = useWalletStore((state) => state.remove)
+  const transactions = useTransactionStore((state) => state.items)
+  const addTransaction = useTransactionStore((state) => state.add)
+
+  const [error, setError] = useState<string | null>(null)
 
   const initialType: WalletType = (searchParams.get('type') as WalletType) || existing?.type || 'payment'
 
-  const [form, setForm] = useState<Wallet>(() => existing ?? {
-    id: createId(),
-    name: '',
-    type: initialType,
-    currency: currencies[0]?.code ?? 'THB',
-    balance: 0,
-    color: '#10b981',
-    icon: initialType === 'credit_card'
-      ? 'fa-credit-card'
-      : 'fa-wallet',
+  const [form, setForm] = useState<Wallet>(() => {
+    if (existing) {
+      return {
+        ...existing,
+        balance: walletCurrentAmount(existing, transactions),
+      }
+    }
+
+    return {
+      id: createId(),
+      name: '',
+      type: initialType,
+      currency: currencies[0]?.code ?? 'THB',
+      balance: 0,
+      color: '#10b981',
+      icon: initialType === 'credit_card' ? 'fa-credit-card' : 'fa-wallet',
+    }
   })
 
-  const {
-    error, onSubmit, onDelete,
-  } = useFormCrud<Wallet>({
-    existing,
-    add,
-    update,
-    remove: (item) => remove(item.id),
-    navigateTo: '/balance',
-    validate: (data) => {
-      if (!data.name.trim()) {
-        return 'Name is required'
-      }
-      if (data.type === 'credit_card' && data.creditLimit !== undefined && data.creditLimit <= 0) {
-        return 'Credit limit must be greater than 0'
-      }
+  function validate(data: Wallet): string | null {
+    if (!data.name.trim()) {
+      return 'Name is required'
+    }
+    if (data.type === 'credit_card' && data.creditLimit !== undefined && data.creditLimit <= 0) {
+      return 'Credit limit must be greater than 0'
+    }
 
-      return null
-    },
-  })
+    return null
+  }
+
+  async function onSubmit() {
+    const msg = validate(form)
+    if (msg) {
+      setError(msg)
+
+      return
+    }
+
+    try {
+      if (existing) {
+        const currentAmount = walletCurrentAmount(existing, useTransactionStore.getState().items)
+        const diff = form.balance - currentAmount
+        await update({ ...form, balance: existing.balance })
+        if (diff !== 0) {
+          await addTransaction({
+            id: createId(),
+            type: 'adjustment',
+            walletId: existing.id,
+            currency: existing.currency,
+            items: [{ categoryId: 'adjustment-balance-adjustment', amount: diff }],
+            date: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            note: 'Balance Adjustment',
+          })
+        }
+      } else {
+        const initialBalance = form.balance
+        await add({ ...form, balance: 0 })
+        if (initialBalance !== 0) {
+          await addTransaction({
+            id: createId(),
+            type: 'adjustment',
+            walletId: form.id,
+            currency: form.currency,
+            items: [{ categoryId: 'adjustment-balance-adjustment', amount: initialBalance }],
+            date: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            note: 'Opening Balance',
+          })
+        }
+      }
+      navigate('/balance')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to save')
+    }
+  }
+
+  async function onDelete() {
+    if (!existing) {
+      return
+    }
+    try {
+      await remove(existing.id)
+      navigate('/balance')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to delete')
+    }
+  }
 
   if (id && !existing) {
     return null
@@ -71,9 +136,8 @@ export function useWalletEditPage(): WalletEditPageProps | null {
     form,
     currencies,
     error,
-    title: existing
-      ? 'Edit Wallet'
-      : 'New Wallet',
+    title: existing ? 'Edit Wallet' : 'New Wallet',
+    balanceLabel: existing ? 'Current Balance' : 'Starting Balance',
     showDelete: Boolean(existing),
     typeDisabled: Boolean(existing),
     onChangeName: (name) => setForm((prev) => ({ ...prev, name })),
@@ -88,7 +152,7 @@ export function useWalletEditPage(): WalletEditPageProps | null {
     onChangeCreditLimit: (creditLimit) => setForm((prev) => ({ ...prev, creditLimit })),
     onChangeReconciliation: (reconciliationEnabled) => setForm((prev) => ({ ...prev, reconciliationEnabled })),
     onBack: () => backNavigate('/balance'),
-    onSubmit: () => onSubmit(form),
+    onSubmit,
     onDelete,
   }
 }
