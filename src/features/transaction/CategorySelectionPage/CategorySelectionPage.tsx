@@ -108,80 +108,84 @@ function SortableCategoryCell({
   }
 
   return (
-    <motion.div
+    <div
       ref={setNodeRef}
       style={style}
       {...(isEditMode
         ? { ...attributes, ...listeners }
         : {})}
-      variants={cellVariants}
       className="relative"
     >
       <motion.div
-        animate={
-          isEditMode && !isDragging
-            ? {
-              rotate: [-1.5, 1.5, -1.5],
-              transition: {
-                repeat: Infinity,
-                duration: 0.45,
-                ease: 'easeInOut',
-                delay: index * 0.06,
-              },
-            }
-            : { rotate: 0 }
-        }
+        variants={cellVariants}
         className="relative"
       >
-        {isEditMode && (
-          <button
-            aria-label={`Remove ${category.name}`}
+        <motion.div
+          animate={
+            isEditMode && !isDragging
+              ? {
+                rotate: [-1.5, 1.5, -1.5],
+                transition: {
+                  repeat: Infinity,
+                  duration: 0.45,
+                  ease: 'easeInOut',
+                  delay: index * 0.06,
+                },
+              }
+              : { rotate: 0 }
+          }
+          className="relative"
+        >
+          {isEditMode && (
+            <button
+              aria-label={`Remove ${category.name}`}
+              type="button"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation(); onRequestDelete(category.id)
+              }}
+              className={[
+                'absolute -left-1.5 -top-1.5 z-10 flex h-[18px] w-[18px]',
+                'items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white',
+              ].join(' ')}
+            >
+              ×
+            </button>
+          )}
+          <motion.button
+            onClick={() => onSelect(category)}
             type="button"
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={(e) => {
-              e.stopPropagation(); onRequestDelete(category.id)
+            animate={isReparentTarget
+              ? { scale: 1.05 }
+              : { scale: 1 }}
+            transition={{
+              type: 'spring', stiffness: 400, damping: 25,
             }}
+            style={
+              isReparentTarget
+                ? {
+                  borderColor: 'rgba(52,211,153,0.6)',
+                  backgroundColor: 'rgba(16,185,129,0.10)',
+                  boxShadow: '0 0 16px rgba(16,185,129,0.35)',
+                }
+                : undefined
+            }
             className={[
-              'absolute -left-1.5 -top-1.5 z-10 flex h-[18px] w-[18px]',
-              'items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white',
+              'flex w-full flex-col items-center gap-3 rounded-2xl',
+              'border px-2 py-3.5',
+              isDragging
+                ? 'border-dashed border-white/20 bg-white/2 opacity-40'
+                : 'border-white/[0.07] bg-white/4',
             ].join(' ')}
           >
-            ×
-          </button>
-        )}
-        <motion.button
-          onClick={() => onSelect(category)}
-          type="button"
-          animate={isReparentTarget
-            ? { scale: 1.05 }
-            : { scale: 1 }}
-          transition={{
-            type: 'spring', stiffness: 400, damping: 25,
-          }}
-          style={
-            isReparentTarget
-              ? {
-                borderColor: 'rgba(52,211,153,0.6)',
-                backgroundColor: 'rgba(16,185,129,0.10)',
-                boxShadow: '0 0 16px rgba(16,185,129,0.35)',
-              }
-              : undefined
-          }
-          className={[
-            'flex w-full flex-col items-center gap-3 rounded-2xl',
-            'border px-2 py-3.5',
-            isDragging
-              ? 'border-dashed border-white/20 bg-white/2 opacity-40'
-              : 'border-white/[0.07] bg-white/4',
-          ].join(' ')}
-        >
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
-            <Icon name={category.icon} />
-          </span>
-          <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
-        </motion.button>
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
+              <Icon name={category.icon} />
+            </span>
+            <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
+          </motion.button>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </div>
   )
 }
 
