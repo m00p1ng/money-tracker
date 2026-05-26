@@ -1,4 +1,4 @@
-export type TransactionType = 'expense' | 'income' | 'transfer'
+export type TransactionType = 'expense' | 'income' | 'transfer' | 'adjustment'
 export type WalletType = 'payment' | 'credit_card'
 export type ThemePreset = 'forest' | 'midnight' | 'ocean' | 'sunset' | 'amber' | 'arctic' | 'sakura' | 'void' | 'jade'
 

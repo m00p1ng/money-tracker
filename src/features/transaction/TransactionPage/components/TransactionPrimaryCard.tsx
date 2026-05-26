@@ -10,7 +10,7 @@ import { ExchangeRateRow } from './ExchangeRateRow'
 import { WalletSelectorRow } from './WalletSelectorRow'
 
 interface TransactionPrimaryCardProps {
-  type: Extract<TransactionType, 'expense' | 'income'>
+  type: Exclude<TransactionType, 'transfer'>
   wallet: Wallet | undefined
   items: TransactionItem[]
   focusedIndex: number | null
@@ -25,11 +25,11 @@ interface TransactionPrimaryCardProps {
   onUpdateExchangeRate: (value: string) => void
 }
 
-const totalStyle: Record<'expense' | 'income', {
+const totalStyle: Partial<Record<Exclude<TransactionType, 'transfer'>, {
   text: string
   bg: string
   border: string
-}> = {
+}>> = {
   expense: {
     text: 'text-danger',
     bg: 'bg-danger/10',
@@ -40,6 +40,12 @@ const totalStyle: Record<'expense' | 'income', {
     bg: 'bg-green-500/10',
     border: 'border-green-500/20',
   },
+}
+
+const DEFAULT_STYLE = {
+  text: 'text-slate-400',
+  bg: 'bg-white/5',
+  border: 'border-white/10',
 }
 
 export function TransactionPrimaryCard({
@@ -58,7 +64,7 @@ export function TransactionPrimaryCard({
   onUpdateExchangeRate,
 }: TransactionPrimaryCardProps) {
   const total = items.reduce((sum, item) => sum + item.amount, 0)
-  const style = totalStyle[type]
+  const style = totalStyle[type] ?? DEFAULT_STYLE
   const showExchangeRate = currency !== wallet?.currency
 
   return (
