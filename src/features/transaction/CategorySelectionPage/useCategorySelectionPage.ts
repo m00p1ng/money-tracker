@@ -36,15 +36,30 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   const [mergeTargetId, setMergeTargetId] = useState<string | null>(null)
   const isLocked = isAddCategory || changingIndex !== null
 
+  const categoriesWithTransactions = useMemo<Set<string>>(() => {
+    const result = new Set<string>()
+    for (const tx of transactions) {
+      for (const item of tx.items) {
+        result.add(item.categoryId)
+      }
+    }
+
+    return result
+  }, [transactions])
+
   const activeThisMonth = useMemo<Set<string>>(() => {
     const active = new Set<string>()
 
     for (const tx of transactions) {
-      if (!isCurrentMonth(tx.date)) continue
+      if (!isCurrentMonth(tx.date)) {
+        continue
+      }
       for (const item of tx.items) {
         let id: string | undefined = item.categoryId
         while (id) {
-          if (active.has(id)) break
+          if (active.has(id)) {
+            break
+          }
           active.add(id)
           id = categories.find((c) => c.id === id)?.parentId
         }
@@ -185,6 +200,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     parent,
     categories,
     activeThisMonth,
+    categoriesWithTransactions,
     confirmDeleteId,
     mergeSourceId,
     mergeTargetId,

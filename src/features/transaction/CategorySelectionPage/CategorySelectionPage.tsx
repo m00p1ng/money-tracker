@@ -84,6 +84,7 @@ export interface CategorySelectionPageProps {
   parent: Category | undefined
   categories: Category[]
   activeThisMonth: Set<string>
+  categoriesWithTransactions: Set<string>
   confirmDeleteId: string | null
   mergeSourceId: string | null
   mergeTargetId: string | null
@@ -295,6 +296,7 @@ export function CategorySelectionPage({
   parent,
   categories,
   activeThisMonth,
+  categoriesWithTransactions,
   confirmDeleteId,
   mergeSourceId,
   mergeTargetId,
@@ -624,6 +626,7 @@ export function CategorySelectionPage({
         isOpen={mergeSourceId !== null && mergeTargetId === null}
         sourceId={mergeSourceId}
         categories={categories}
+        categoriesWithTransactions={categoriesWithTransactions}
         onSelect={onSelectMergeTarget}
         onCancel={onCancelMerge}
       />

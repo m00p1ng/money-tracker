@@ -7,6 +7,7 @@ type MergeTargetSheetProps = {
   isOpen: boolean
   sourceId: string | null
   categories: Category[]
+  categoriesWithTransactions: Set<string>
   onSelect: (targetId: string) => void
   onCancel: () => void
 }
@@ -15,6 +16,7 @@ function buildTree(
   categories: Category[],
   parentId: string | undefined,
   sourceId: string | null,
+  categoriesWithTransactions: Set<string>,
   onSelect: (id: string) => void,
 ): React.ReactNode[] {
   const children = [...categories]
@@ -23,8 +25,8 @@ function buildTree(
 
   return children.flatMap((cat) => {
     const isSource = cat.id === sourceId
-    const hasChildren = categories.some((c) => c.parentId === cat.id)
-    const isDisabled = isSource || hasChildren
+    const hasTransactions = categoriesWithTransactions.has(cat.id)
+    const isDisabled = isSource || hasTransactions
     const indent = (cat.level - 1) * 20
 
     return [
@@ -48,11 +50,11 @@ function buildTree(
         {isSource && (
           <span className="ml-auto text-xs text-white/30">being deleted</span>
         )}
-        {hasChildren && !isSource && (
-          <span className="ml-auto text-xs text-white/30">has subcategories</span>
+        {hasTransactions && !isSource && (
+          <span className="ml-auto text-xs text-white/30">has transactions</span>
         )}
       </button>,
-      ...buildTree(categories, cat.id, sourceId, onSelect),
+      ...buildTree(categories, cat.id, sourceId, categoriesWithTransactions, onSelect),
     ]
   })
 }
@@ -61,6 +63,7 @@ export function MergeTargetSheet({
   isOpen,
   sourceId,
   categories,
+  categoriesWithTransactions,
   onSelect,
   onCancel,
 }: MergeTargetSheetProps) {
@@ -104,7 +107,7 @@ export function MergeTargetSheet({
             </p>
             <div className="mx-5 mb-2.5 h-px bg-white/6" />
             <div className="max-h-72 overflow-y-auto px-2">
-              {buildTree(sameTypeCategories, undefined, sourceId, onSelect)}
+              {buildTree(sameTypeCategories, undefined, sourceId, categoriesWithTransactions, onSelect)}
             </div>
             <div className="mt-3 px-5">
               <button
