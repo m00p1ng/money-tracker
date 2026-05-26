@@ -84,6 +84,12 @@ export function formatDatetimeLocalDisplay(value: string): string {
   return `${displayDateFormatter.format(date)} · ${timePart}`
 }
 
+export function isCurrentMonth(isoDate: string, now = new Date()): boolean {
+  const date = new Date(isoDate)
+
+  return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()
+}
+
 export function toLocalDateKey(isoDate: string): string {
   if (!isoDate.includes('T')) {
     return isoDate.slice(0, 10)

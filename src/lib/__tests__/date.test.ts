@@ -10,6 +10,7 @@ import {
   formatHeaderMonthYear,
   formatHeaderWeekday,
   formatShortDate,
+  isCurrentMonth,
   isTodayInLocalTime,
   monthRangeLabel,
   toDatetimeLocalValue,
@@ -49,5 +50,13 @@ describe('date utilities', () => {
 
   it('formats the header month-year', () => {
     expect(formatHeaderMonthYear(new Date('2026-05-22T09:00:00'))).toBe('May 2026')
+  })
+
+  it('detects a date in the current month', () => {
+    const now = new Date('2026-05-15T12:00:00')
+    expect(isCurrentMonth('2026-05-01', now)).toBe(true)
+    expect(isCurrentMonth('2026-05-31', now)).toBe(true)
+    expect(isCurrentMonth('2026-04-30', now)).toBe(false)
+    expect(isCurrentMonth('2026-06-01', now)).toBe(false)
   })
 })
