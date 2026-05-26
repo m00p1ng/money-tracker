@@ -149,27 +149,37 @@ function SortableCategoryCell({
             ×
           </button>
         )}
-        <button
+        <motion.button
           onClick={() => onSelect(category)}
           type="button"
+          animate={isReparentTarget
+            ? { scale: 1.05 }
+            : { scale: 1 }}
+          transition={{
+            type: 'spring', stiffness: 400, damping: 25,
+          }}
+          style={
+            isReparentTarget
+              ? {
+                borderColor: 'rgba(52,211,153,0.6)',
+                backgroundColor: 'rgba(16,185,129,0.10)',
+                boxShadow: '0 0 16px rgba(16,185,129,0.35)',
+              }
+              : undefined
+          }
           className={[
             'flex w-full flex-col items-center gap-3 rounded-2xl',
             'border px-2 py-3.5',
             isDragging
               ? 'border-dashed border-white/20 bg-white/2 opacity-40'
-              : '',
-            isReparentTarget
-              ? 'border-blue-400/60 bg-blue-400/10'
-              : isDragging
-                ? ''
-                : 'border-white/[0.07] bg-white/4',
+              : 'border-white/[0.07] bg-white/4',
           ].join(' ')}
         >
           <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
             <Icon name={category.icon} />
           </span>
           <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
-        </button>
+        </motion.button>
       </motion.div>
     </motion.div>
   )
