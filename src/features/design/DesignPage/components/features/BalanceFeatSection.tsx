@@ -1,7 +1,7 @@
-import { SwipeableTransactionRow, WalletRow } from '@/features/balance'
+import { SwipeableTransactionRow, WalletSummaryCard } from '@/features/balance'
 import { DateRangeHeader } from '@/features/balance/WalletDetailPage/components/DateRangeHeader'
 
-import { SubSection } from '../sectionHelpers'
+import { SubSection, VariantLabel } from '../sectionHelpers'
 
 import {
   STUB_CATEGORY,
@@ -14,11 +14,24 @@ import {
 export function BalanceFeatSection() {
   return (
     <div className="space-y-8">
-      <SubSection id="wallet-row" title="WalletRow">
-        <div className="space-y-0">
-          <WalletRow wallet={STUB_WALLET_PAYMENT} amount={500} />
-          <WalletRow wallet={STUB_WALLET_CREDIT} amount={1200} />
+      <SubSection id="wallet-summary-card" title="WalletSummaryCard">
+        <div className="rounded-2xl border border-white/6 bg-white/4 p-4">
+          <WalletSummaryCard
+            wallet={STUB_WALLET_PAYMENT}
+            currentAmount={500}
+            clearedAmount={420}
+          />
         </div>
+        <VariantLabel label="Payment Account" />
+
+        <div className="rounded-2xl border border-white/6 bg-white/4 p-4 mt-8">
+          <WalletSummaryCard
+            wallet={STUB_WALLET_CREDIT}
+            currentAmount={-1200}
+            clearedAmount={-800}
+          />
+        </div>
+        <VariantLabel label="Credit Card" />
       </SubSection>
 
       <SubSection id="swipeable-transaction-row" title="SwipeableTransactionRow">

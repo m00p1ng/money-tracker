@@ -5,9 +5,8 @@ import { CalendarFeatSection } from './components/features/CalendarFeatSection'
 import { HomeFeatSection } from './components/features/HomeFeatSection'
 import { SettingsFeatSection } from './components/features/SettingsFeatSection'
 import { TransactionFeatSection } from './components/features/TransactionFeatSection'
-import { SharedComponentsSection } from './components/SharedComponentsSection'
+import { ComponentsSection } from './components/ComponentsSection'
 import { TokensSection } from './components/TokensSection'
-import { UIComponentsSection } from './components/UIComponentsSection'
 
 export type DesignNavItem = {
   id: string
@@ -33,9 +32,9 @@ export const DESIGN_GROUPS = [
     ],
   },
   {
-    slug: 'ui-components',
-    label: 'UI Components',
-    component: UIComponentsSection,
+    slug: 'components',
+    label: 'Components',
+    component: ComponentsSection,
     items: [
       { id: 'button', label: 'Button' },
       { id: 'card', label: 'Card' },
@@ -50,13 +49,6 @@ export const DESIGN_GROUPS = [
       { id: 'switch', label: 'Switch' },
       { id: 'textarea-input', label: 'TextAreaInput' },
       { id: 'form-actions', label: 'FormActions' },
-    ],
-  },
-  {
-    slug: 'shared-components',
-    label: 'Shared Components',
-    component: SharedComponentsSection,
-    items: [
       { id: 'background', label: 'Background' },
       { id: 'section-label', label: 'SectionLabel' },
       { id: 'form-error-message', label: 'FormErrorMessage' },
@@ -87,7 +79,7 @@ export const DESIGN_GROUPS = [
     label: 'Feature — Balance',
     component: BalanceFeatSection,
     items: [
-      { id: 'wallet-row', label: 'WalletRow' },
+      { id: 'wallet-summary-card', label: 'WalletSummaryCard' },
       { id: 'swipeable-transaction-row', label: 'SwipeableTransactionRow' },
       { id: 'date-range-header', label: 'DateRangeHeader' },
     ],

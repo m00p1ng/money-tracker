@@ -43,7 +43,7 @@ describe('DesignSidebar', () => {
     await userEvent.type(search, 'wallet')
 
     expect(screen.getByRole('button', { name: 'WalletPicker' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'WalletRow' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'WalletSummaryCard' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Button' })).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByRole('button', { name: 'WalletPicker' }))
