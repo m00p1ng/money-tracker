@@ -25,29 +25,55 @@ const cellVariants = {
 export interface CategorySelectionPageProps {
   type: 'expense' | 'income'
   isLocked: boolean
+  isEditMode: boolean
   visible: Category[]
   parentId: string | undefined
   parent: Category | undefined
   onTypeChange: (newType: 'expense' | 'income' | 'transfer') => void
   onBack: () => void
   onSelect: (category: Category) => void
+  onToggleEditMode: () => void
 }
 
 export function CategorySelectionPage({
   type,
   isLocked,
+  isEditMode,
   visible,
   parentId,
   parent,
   onTypeChange,
   onBack,
   onSelect,
+  onToggleEditMode,
 }: CategorySelectionPageProps) {
+  const editButton = (
+    <button
+      type="button"
+      onClick={onToggleEditMode}
+      className="flex h-9 items-center justify-center rounded-lg px-3 text-sm font-medium text-slate-300 active:bg-white/5"
+    >
+      Edit
+    </button>
+  )
+
+  const doneButton = (
+    <button
+      type="button"
+      onClick={onToggleEditMode}
+      className="flex h-9 items-center justify-center rounded-lg px-3 text-sm font-semibold active:bg-white/5"
+      style={{ color: 'var(--accent-light)' }}
+    >
+      Done
+    </button>
+  )
+
   return (
     <div className="space-y-4">
       <PageHeader
         title={<TypePickerDropdown value={type} onChange={onTypeChange} locked={isLocked} />}
         onBack={onBack}
+        rightSlot={isEditMode ? doneButton : editButton}
       />
 
       {parent && (

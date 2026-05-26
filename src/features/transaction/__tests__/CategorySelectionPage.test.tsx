@@ -127,6 +127,27 @@ describe('CategorySelectionPage', () => {
   })
 })
 
+describe('CategorySelectionPage edit mode', () => {
+  it('shows Edit button in header', () => {
+    renderPage()
+    expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument()
+  })
+
+  it('shows Done button after clicking Edit', async () => {
+    renderPage()
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+    expect(screen.getByRole('button', { name: 'Done' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument()
+  })
+
+  it('exits edit mode when Done is clicked', async () => {
+    renderPage()
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Done' }))
+    expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument()
+  })
+})
+
 describe('CategorySelectionPage with draft store', () => {
   beforeEach(() => {
     useTransactionDraftStore.getState().init({

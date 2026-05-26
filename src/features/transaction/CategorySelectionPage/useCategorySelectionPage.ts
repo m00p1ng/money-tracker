@@ -24,6 +24,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
 
   const [type, setType] = useState<'expense' | 'income'>(seedType)
   const [parentId, setParentId] = useState<string | undefined>()
+  const [isEditMode, setIsEditMode] = useState(false)
   const isLocked = isAddCategory || changingIndex !== null
 
   const visible = categories.filter((c) => c.type === type && c.parentId === parentId)
@@ -78,11 +79,13 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   return {
     type,
     isLocked,
+    isEditMode,
     visible,
     parentId,
     parent,
     onTypeChange,
     onBack,
     onSelect,
+    onToggleEditMode: () => setIsEditMode((prev) => !prev),
   }
 }
