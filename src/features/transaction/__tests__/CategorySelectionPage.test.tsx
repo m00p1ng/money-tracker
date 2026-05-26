@@ -148,6 +148,28 @@ describe('CategorySelectionPage edit mode', () => {
   })
 })
 
+describe('CategorySelectionPage edit mode — cell tap navigation', () => {
+  it('navigates to edit page when tapping a leaf category in edit mode', async () => {
+    const { unmount } = renderPage()
+    unmount()
+
+    render(
+      <MemoryRouter initialEntries={['/transaction/category']}>
+        <Routes>
+          <Route path="/transaction/category" element={<CategorySelectionPage />} />
+          <Route path="/transaction/category/edit/:id" element={<div data-testid="edit-page" />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+    // drill into Food & Drink first
+    await userEvent.click(screen.getByText('Food & Drink'))
+    // Coffee is a leaf
+    await userEvent.click(screen.getByText('Coffee'))
+    expect(screen.getByTestId('edit-page')).toBeInTheDocument()
+  })
+})
+
 describe('CategorySelectionPage edit mode — close badge + delete', () => {
   it('shows close badge on each category cell in edit mode', async () => {
     renderPage()

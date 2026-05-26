@@ -45,6 +45,7 @@ export interface CategorySelectionPageProps {
   onSelectMergeTarget: (targetId: string) => void
   onConfirmMerge: () => void
   onCancelMerge: () => void
+  onEditParent: () => void
 }
 
 export function CategorySelectionPage({
@@ -68,6 +69,7 @@ export function CategorySelectionPage({
   onSelectMergeTarget,
   onConfirmMerge,
   onCancelMerge,
+  onEditParent,
 }: CategorySelectionPageProps) {
   const editButton = (
     <button
@@ -99,7 +101,14 @@ export function CategorySelectionPage({
       />
 
       {parent && (
-        <div className="flex items-center gap-3 px-1 text-lg font-bold text-slate-100">
+        <div
+          role={isEditMode ? 'button' : undefined}
+          onClick={isEditMode ? onEditParent : undefined}
+          className={[
+            'flex items-center gap-3 px-1 text-lg font-bold text-slate-100',
+            isEditMode ? 'cursor-pointer active:opacity-70' : '',
+          ].join(' ')}
+        >
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl">
             <Icon name={parent.icon} />
           </span>

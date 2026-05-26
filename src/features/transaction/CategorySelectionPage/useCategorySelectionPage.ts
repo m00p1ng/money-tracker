@@ -53,7 +53,23 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     }
   }
 
+  function onEditParent() {
+    if (isEditMode && parentId) {
+      navigate(`/transaction/category/edit/${parentId}`)
+    }
+  }
+
   function onSelect(category: Category) {
+    if (isEditMode) {
+      const hasChildren = categories.some((c) => c.parentId === category.id)
+      if (hasChildren) {
+        setParentId(category.id)
+      } else {
+        navigate(`/transaction/category/edit/${category.id}`)
+      }
+      return
+    }
+
     const hasChildren = categories.some((c) => c.parentId === category.id)
     if (hasChildren) {
       setParentId(category.id)
@@ -132,6 +148,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     onBack,
     onSelect,
     onToggleEditMode: () => setIsEditMode((prev) => !prev),
+    onEditParent,
     onRequestDelete,
     onConfirmDelete,
     onCancelDelete,
