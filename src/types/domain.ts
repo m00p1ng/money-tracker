@@ -44,6 +44,7 @@ export type Wallet = {
   color: string
   icon: string
   reconciliationEnabled?: boolean
+  position?: number
 }
 
 export type Category = {

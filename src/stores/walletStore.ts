@@ -9,6 +9,7 @@ type WalletStore = {
   add: (wallet: Wallet) => Promise<void>
   update: (wallet: Wallet) => Promise<void>
   remove: (id: string) => Promise<void>
+  reorder: (ids: string[]) => Promise<void>
   findById: (id: string) => Wallet | undefined
 }
 
@@ -39,6 +40,19 @@ export const useWalletStore = create<WalletStore>((set, get) => ({
 
     await db.wallets.delete(id)
     set({ items: get().items.filter((wallet) => wallet.id !== id) })
+  },
+  async reorder(ids) {
+    const current = get().items
+    const updated: Wallet[] = ids.flatMap((id, index) => {
+      const wallet = current.find((w) => w.id === id)
+      if (!wallet) return []
+      return [{ ...wallet, position: index }]
+    })
+
+    await db.wallets.bulkPut(updated)
+    set({
+      items: current.map((w) => updated.find((u) => u.id === w.id) ?? w),
+    })
   },
   findById(id) {
     return get().items.find((wallet) => wallet.id === id)
