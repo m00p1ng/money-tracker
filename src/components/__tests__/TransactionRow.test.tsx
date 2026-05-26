@@ -19,7 +19,8 @@ function renderRow(date: string) {
         icon="fa-burger"
         title="Lunch"
         date={date}
-        amount="-$12.00"
+        amount={-12}
+        currency="USD"
         amountColor="text-expense"
       />
     </MemoryRouter>,

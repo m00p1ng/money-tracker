@@ -2,16 +2,18 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 
 import { Icon } from '@/components'
-import { formatShortDate } from '@/lib'
+import { formatShortDate, formatSignedAmount } from '@/lib'
 
 type TransactionRowProps = {
   to: string
   icon: string
   title: string
   date: string | Date
-  amount: string
+  amount: number
+  currency: string
   amountColor: string
-  secondaryAmount?: string
+  secondaryAmount?: number
+  secondaryAmountCurrency?: string
   secondaryAmountColor?: string
 }
 
@@ -31,14 +33,20 @@ export function TransactionRow({
   title,
   date: rawDate,
   amount,
+  currency,
   amountColor,
   secondaryAmount,
+  secondaryAmountCurrency,
   secondaryAmountColor,
 }: TransactionRowProps) {
   const [now] = useState(() => new Date())
   const date = toDate(rawDate)
   const secondaryLabel = formatShortDate(date)
   const showSecondaryClock = date.getTime() > now.getTime()
+  const formattedAmount = formatSignedAmount(amount, currency)
+  const formattedSecondaryAmount = secondaryAmount !== undefined
+    ? formatSignedAmount(secondaryAmount, secondaryAmountCurrency ?? currency)
+    : undefined
 
   return (
     <Link
@@ -69,9 +77,9 @@ export function TransactionRow({
         </span>
       </span>
       <span className="shrink-0 text-right">
-        <span className={`block font-semibold ${amountColor}`}>{amount}</span>
-        {secondaryAmount && (
-          <span className={`block text-xs ${secondaryAmountColor ?? 'text-white/28'}`}>{secondaryAmount}</span>
+        <span className={`block font-semibold ${amountColor}`}>{formattedAmount}</span>
+        {formattedSecondaryAmount && (
+          <span className={`block text-xs ${secondaryAmountColor ?? 'text-white/28'}`}>{formattedSecondaryAmount}</span>
         )}
       </span>
     </Link>

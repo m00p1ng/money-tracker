@@ -28,7 +28,6 @@ export function BalanceFeatSection() {
             amount: 12.5,
             runningAmount: 487.5,
           }}
-          wallet={STUB_WALLET_PAYMENT}
           wallets={[STUB_WALLET_PAYMENT]}
           categories={[STUB_CATEGORY]}
           onToggleCleared={() => {}}

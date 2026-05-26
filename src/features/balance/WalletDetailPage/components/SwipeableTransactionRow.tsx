@@ -11,7 +11,6 @@ import { Icon, TransactionRow } from '@/components'
 import type { RunningWalletRow } from '@/features/balance/balanceCalculations'
 import {
   buildTransactionRowDisplay,
-  formatAmount,
   transactionAmountColor,
 } from '@/lib'
 import type {
@@ -21,7 +20,6 @@ import type {
 
 type Props = {
   row: RunningWalletRow
-  wallet: Wallet
   wallets: Wallet[]
   categories: Category[]
   onToggleCleared: (id: string) => void
@@ -29,7 +27,6 @@ type Props = {
 
 export function SwipeableTransactionRow({
   row,
-  wallet,
   wallets,
   categories,
   onToggleCleared,
@@ -118,9 +115,9 @@ export function SwipeableTransactionRow({
               transaction,
               findCategory: (categoryId) => categories.find((c) => c.id === categoryId),
               wallets,
-              amount: formatAmount(Math.abs(row.amount), wallet.currency),
+              amount: Math.abs(row.amount),
               amountColor: transactionAmountColor(transaction, row.amount),
-              secondaryAmount: formatAmount(row.runningAmount, wallet.currency),
+              secondaryAmount: row.runningAmount,
               secondaryAmountColor: 'text-white/28',
             })}
           />

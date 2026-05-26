@@ -26,7 +26,8 @@ export type TodayTransactionRowData = {
   icon: string
   title: string
   date: string
-  amount: string
+  amount: number
+  currency: string
   amountColor: string
 }
 
@@ -62,6 +63,7 @@ export function TodayTransactions({
               title={row.title}
               date={row.date}
               amount={row.amount}
+              currency={row.currency}
               amountColor={row.amountColor}
             />
           </motion.div>

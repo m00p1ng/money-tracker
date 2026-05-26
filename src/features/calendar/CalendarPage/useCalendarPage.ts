@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router'
 import { useBackNavigate } from '@/context/navigationDirection'
 import {
   buildTransactionRowDisplay,
-  formatAmount,
   toLocalDateKey,
 } from '@/lib'
 import {
@@ -23,7 +22,8 @@ export type CalendarRowData = {
   icon: string
   title: string
   date: string
-  amount: string
+  amount: number
+  currency: string
   amountColor: string
 }
 
@@ -102,7 +102,8 @@ export function useCalendarPage() {
         : category?.icon ?? 'fa-clock',
       title,
       date,
-      amount: formatAmount(firstItem?.amount ?? 0, tx.currency),
+      amount: firstItem?.amount ?? 0,
+      currency: tx.currency,
       amountColor: 'text-amber-400',
     }
   }

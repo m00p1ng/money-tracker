@@ -85,9 +85,11 @@ describe('buildTransactionRowDisplay', () => {
       icon: 'fa-mug-hot',
       title: 'Coffee, Food (brunch)',
       date: '2026-05-25T10:00:00.000Z',
-      amount: '$30.00',
+      amount: 30,
+      currency: 'USD',
       amountColor: 'text-expense',
       secondaryAmount: undefined,
+      secondaryAmountCurrency: undefined,
       secondaryAmountColor: undefined,
     })
   })
@@ -102,18 +104,20 @@ describe('buildTransactionRowDisplay', () => {
       }),
       findCategory,
       wallets,
-      amount: '$50.00',
+      amount: 50,
       amountColor: 'text-income',
-      secondaryAmount: '$150.00',
+      secondaryAmount: 150,
       secondaryAmountColor: 'text-white/28',
     })).toEqual({
       to: '/transaction/tx-transfer',
       icon: 'fa-arrow-right-arrow-left',
       title: 'Transfer (Cash->Bank)',
       date: '2026-05-25T10:00:00.000Z',
-      amount: '$50.00',
+      amount: 50,
+      currency: 'USD',
       amountColor: 'text-income',
-      secondaryAmount: '$150.00',
+      secondaryAmount: 150,
+      secondaryAmountCurrency: undefined,
       secondaryAmountColor: 'text-white/28',
     })
   })

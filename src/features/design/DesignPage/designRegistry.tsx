@@ -90,7 +90,6 @@ export const DESIGN_GROUPS = [
       { id: 'wallet-row', label: 'WalletRow' },
       { id: 'swipeable-transaction-row', label: 'SwipeableTransactionRow' },
       { id: 'date-range-header', label: 'DateRangeHeader' },
-      { id: 'balance-transaction-row', label: 'TransactionRow' },
     ],
   },
   {

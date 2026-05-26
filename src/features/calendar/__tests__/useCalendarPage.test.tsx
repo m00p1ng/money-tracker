@@ -161,7 +161,7 @@ describe('useCalendarPage', () => {
         icon: 'fa-mug-hot',
         title: 'Coffee, Food (brunch)',
         date: selectedDate,
-        amount: '$30.00',
+        amount: 30,
         amountColor: 'text-expense',
       }),
     ])
@@ -203,7 +203,7 @@ describe('useCalendarPage', () => {
         key: 'planned-tx',
         title: 'Coffee',
         date: selectedDate,
-        amount: '$100.00',
+        amount: 100,
         amountColor: 'text-amber-400',
       }),
     ])

@@ -43,7 +43,7 @@ export function useTodayTransactions() {
           transaction,
           findCategory,
           wallets,
-          amount: formatAmount(amount, transaction.currency),
+          amount,
           amountColor: 'text-slate-400',
         }),
       }

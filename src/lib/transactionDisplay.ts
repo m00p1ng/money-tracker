@@ -4,8 +4,6 @@ import type {
   Wallet,
 } from '@/types/domain'
 
-import { formatSignedAmount } from './currency'
-
 export type TransactionBaseProps = {
   to: string
   icon: string
@@ -14,9 +12,11 @@ export type TransactionBaseProps = {
 }
 
 export type TransactionRowDisplay = TransactionBaseProps & {
-  amount: string
+  amount: number
+  currency: string
   amountColor: string
-  secondaryAmount?: string
+  secondaryAmount?: number
+  secondaryAmountCurrency?: string
   secondaryAmountColor?: string
 }
 
@@ -99,9 +99,10 @@ type BuildTransactionRowDisplayOptions = {
   findCategory: (categoryId: string) => Category | undefined
   wallets: Wallet[]
   date?: string
-  amount?: string
+  amount?: number
   amountColor?: string
-  secondaryAmount?: string
+  secondaryAmount?: number
+  secondaryAmountCurrency?: string
   secondaryAmountColor?: string
 }
 
@@ -113,6 +114,7 @@ export function buildTransactionRowDisplay({
   amount,
   amountColor,
   secondaryAmount,
+  secondaryAmountCurrency,
   secondaryAmountColor,
 }: BuildTransactionRowDisplayOptions): TransactionRowDisplay {
   const summary = summarizeTransactionItems(transaction, findCategory)
@@ -124,13 +126,15 @@ export function buildTransactionRowDisplay({
       ? base.title
       : titleWithNote(summary.label, transaction.note),
     date: date ?? base.date,
-    amount: amount ?? formatSignedAmount(summary.amount, transaction.currency),
+    amount: amount ?? summary.amount,
+    currency: transaction.currency,
     amountColor: amountColor ?? (transaction.type === 'income'
       ? 'text-income'
       : transaction.type === 'expense'
         ? 'text-expense'
         : 'text-slate-400'),
     secondaryAmount,
+    secondaryAmountCurrency,
     secondaryAmountColor,
   }
 }

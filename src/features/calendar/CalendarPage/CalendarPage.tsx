@@ -93,6 +93,7 @@ export function CalendarPage({
                   title={row.title}
                   date={row.date}
                   amount={row.amount}
+                  currency={row.currency}
                   amountColor={row.amountColor}
                 />
               ))}

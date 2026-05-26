@@ -10,7 +10,6 @@ import {
 import { isReconciliationEnabled, walletRunningRows } from '@/features/balance/balanceCalculations'
 import {
   buildTransactionRowDisplay,
-  formatSignedAmount,
   getPresetRange,
   transactionAmountColor,
   type DateRange,
@@ -125,7 +124,6 @@ export function WalletDetailPage({
               <SwipeableTransactionRow
                 key={row.transaction.id}
                 row={row}
-                wallet={wallet}
                 wallets={wallets}
                 categories={categories}
                 onToggleCleared={onToggleCleared}
@@ -140,9 +138,9 @@ export function WalletDetailPage({
                   transaction: row.transaction,
                   findCategory: (categoryId) => categories.find((c) => c.id === categoryId),
                   wallets,
-                  amount: formatSignedAmount(Math.abs(row.amount), wallet.currency),
+                  amount: Math.abs(row.amount),
                   amountColor: transactionAmountColor(row.transaction, row.amount),
-                  secondaryAmount: formatSignedAmount(row.runningAmount, wallet.currency),
+                  secondaryAmount: row.runningAmount,
                   secondaryAmountColor: 'text-white/28',
                 })}
               />

@@ -149,7 +149,8 @@ export function SharedComponentsSection() {
             icon="fa-burger"
             title="Food & Drinks"
             date="2026-05-26T12:30:00"
-            amount="-$12.50"
+            amount={-12.50}
+            currency="USD"
             amountColor="text-red-400"
           />
           <TransactionRow
@@ -157,7 +158,8 @@ export function SharedComponentsSection() {
             icon="fa-briefcase"
             title="Salary"
             date="2026-05-25T12:30:00"
-            amount="+$3,200.00"
+            amount={3200}
+            currency="USD"
             amountColor="text-green-400"
           />
         </div>

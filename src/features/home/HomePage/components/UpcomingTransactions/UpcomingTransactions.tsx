@@ -26,7 +26,8 @@ export type UpcomingTransactionRowData = {
   icon: string
   title: string
   date: string
-  amount: string
+  amount: number
+  currency: string
   amountColor: string
 }
 
@@ -51,6 +52,7 @@ export function UpcomingTransactions({ rows }: UpcomingTransactionsProps) {
               title={row.title}
               date={row.date}
               amount={row.amount}
+              currency={row.currency}
               amountColor={row.amountColor}
             />
           </motion.div>
