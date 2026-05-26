@@ -132,7 +132,9 @@ export function buildTransactionRowDisplay({
       ? 'text-income'
       : transaction.type === 'expense'
         ? 'text-expense'
-        : 'text-slate-400'),
+        : transaction.type === 'adjustment'
+          ? (summary.amount >= 0 ? 'text-income' : 'text-expense')
+          : 'text-slate-400'),
     secondaryAmount,
     secondaryAmountCurrency,
     secondaryAmountColor,

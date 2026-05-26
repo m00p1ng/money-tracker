@@ -121,4 +121,35 @@ describe('buildTransactionRowDisplay', () => {
       secondaryAmountColor: 'text-white/28',
     })
   })
+
+  it('uses signed-amount color for adjustment type when no amountColor provided', () => {
+    const adjCategory: Category = {
+      id: 'adjustment-balance-adjustment',
+      name: 'Balance Adjustment',
+      type: 'adjustment',
+      level: 1,
+      icon: 'fa-sliders',
+      isDefault: true,
+    }
+    const localCategories = [...categories, adjCategory]
+    function localFind(id: string) {
+      return localCategories.find((c) => c.id === id)
+    }
+
+    const positive = makeTransaction({
+      type: 'adjustment',
+      items: [{ categoryId: 'adjustment-balance-adjustment', amount: 500 }],
+      note: 'Opening Balance',
+    })
+    const negative = makeTransaction({
+      type: 'adjustment',
+      items: [{ categoryId: 'adjustment-balance-adjustment', amount: -30 }],
+      note: 'Balance Adjustment',
+    })
+
+    expect(buildTransactionRowDisplay({ transaction: positive, findCategory: localFind, wallets }).amountColor)
+      .toBe('text-income')
+    expect(buildTransactionRowDisplay({ transaction: negative, findCategory: localFind, wallets }).amountColor)
+      .toBe('text-expense')
+  })
 })
