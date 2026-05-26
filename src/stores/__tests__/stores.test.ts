@@ -46,7 +46,7 @@ describe('stores', () => {
     await bootstrapStores()
 
     expect(useWalletStore.getState().items).toHaveLength(1)
-    expect(useCategoryStore.getState().items.length).toBe(60)
+    expect(useCategoryStore.getState().items.length).toBe(61)
     expect(useCurrencyStore.getState().items).toHaveLength(1)
     expect(useSettingsStore.getState().settings).toBeDefined()
   })
