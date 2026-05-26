@@ -9,6 +9,9 @@ type CategoryStore = {
   add: (category: Category) => Promise<void>
   update: (category: Category) => Promise<void>
   remove: (id: string) => Promise<void>
+  reorder: (ids: string[]) => Promise<void>
+  mergeAndDelete: (sourceId: string, targetId: string) => Promise<void>
+  reparent: (id: string, newParentId: string) => Promise<void>
   byType: (type: TransactionType) => Category[]
   findById: (id: string) => Category | undefined
   parentOf: (category: Category) => Category | undefined
@@ -93,6 +96,58 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
 
     await db.categories.delete(id)
     set({ items: get().items.filter((category) => category.id !== id) })
+  },
+  async reorder(ids) {
+    const current = get().items
+    const updated: Category[] = ids.flatMap((id, index) => {
+      const cat = current.find((c) => c.id === id)
+      if (!cat) return []
+      return [{ ...cat, position: index }]
+    })
+    await db.categories.bulkPut(updated)
+    set({ items: current.map((c) => updated.find((u) => u.id === c.id) ?? c) })
+  },
+  async mergeAndDelete(sourceId, targetId) {
+    const transactions = await db.transactions.toArray()
+    const affected = transactions.filter((t) =>
+      t.items.some((item) => item.categoryId === sourceId))
+    if (affected.length > 0) {
+      const updated = affected.map((t) => ({
+        ...t,
+        items: t.items.map((item) =>
+          item.categoryId === sourceId
+            ? { ...item, categoryId: targetId }
+            : item),
+      }))
+      await db.transactions.bulkPut(updated)
+    }
+    await db.categories.delete(sourceId)
+    set({ items: get().items.filter((c) => c.id !== sourceId) })
+  },
+  async reparent(id, newParentId) {
+    const items = get().items
+    const category = items.find((c) => c.id === id)
+    const newParent = items.find((c) => c.id === newParentId)
+    if (!category || !newParent) return
+
+    const newLevel = (newParent.level + 1) as Category['level']
+    const levelDelta = newLevel - category.level
+
+    function collectDescendants(parentId: string): Category[] {
+      const children = items.filter((c) => c.parentId === parentId)
+      return children.flatMap((c) => [c, ...collectDescendants(c.id)])
+    }
+
+    const descendants = collectDescendants(id)
+    const updatedRoot = { ...category, parentId: newParentId, level: newLevel }
+    const updatedDescendants = descendants.map((d) => ({
+      ...d,
+      level: Math.min(5, d.level + levelDelta) as Category['level'],
+    }))
+
+    const allUpdated = [updatedRoot, ...updatedDescendants]
+    await db.categories.bulkPut(allUpdated)
+    set({ items: items.map((c) => allUpdated.find((u) => u.id === c.id) ?? c) })
   },
   byType(type) {
     return get().items.filter((category) => category.type === type)
