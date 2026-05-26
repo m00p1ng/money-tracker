@@ -28,7 +28,7 @@ export function useWalletFormPage() {
     add,
     update,
     remove: (item) => remove(item.id),
-    navigateTo: '/settings/wallets',
+    navigateTo: '/balance',
     validate: (form) => {
       if (!form.name.trim()) {
         return 'Name is required'
@@ -46,7 +46,7 @@ export function useWalletFormPage() {
     currencies,
     error,
     initialType,
-    onBack: () => backNavigate('/settings/wallets'),
+    onBack: () => backNavigate('/balance'),
     onSubmit,
     onDelete,
   }

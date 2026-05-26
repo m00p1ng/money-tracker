@@ -188,7 +188,7 @@ describe('App routing', () => {
 
   it('renders wallet new form route', () => {
     render(
-      <MemoryRouter initialEntries={['/settings/wallets/new?type=payment']}>
+      <MemoryRouter initialEntries={['/balance/wallets/new?type=payment']}>
         <RoutedApp />
       </MemoryRouter>,
     )
@@ -222,7 +222,7 @@ describe('App routing', () => {
       }],
     })
     render(
-      <MemoryRouter initialEntries={['/settings/wallets/wallet-cash']}>
+      <MemoryRouter initialEntries={['/balance/wallets/wallet-cash']}>
         <RoutedApp />
       </MemoryRouter>,
     )

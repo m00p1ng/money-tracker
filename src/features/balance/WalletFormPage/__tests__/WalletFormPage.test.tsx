@@ -7,7 +7,7 @@ import {
   vi,
 } from 'vitest'
 
-import { WalletFormPage } from '@/features/settings/WalletFormPage/WalletFormPage'
+import { WalletFormPage } from '@/features/balance/WalletFormPage/WalletFormPage'
 import type { Currency, Wallet } from '@/types/domain'
 
 const currencies: Currency[] = [

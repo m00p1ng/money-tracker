@@ -10,7 +10,7 @@ import {
 import { AppShell } from '@/components'
 import { Background } from '@/components/Background'
 import { NavigationDirectionProvider, useNavigationDirection } from '@/context/navigationDirection'
-import { BalancePage, WalletDetailPage } from '@/features/balance'
+import { BalancePage, WalletDetailPage, WalletFormPage } from '@/features/balance'
 import { CalendarPage } from '@/features/calendar'
 import { DesignPage } from '@/features/design'
 import { HomePage } from '@/features/home'
@@ -21,7 +21,6 @@ import {
   CurrencyFormPage,
   SettingsPage,
   ThemePage,
-  WalletFormPage,
   WalletsPage,
 } from '@/features/settings'
 import { CategorySelectionPage, TransactionPage } from '@/features/transaction'
@@ -56,8 +55,8 @@ export function RoutedApp() {
         <Route path="/balance/wallet/:id" element={<WalletDetailPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/settings/wallets" element={<WalletsPage />} />
-        <Route path="/settings/wallets/new" element={<WalletFormPage />} />
-        <Route path="/settings/wallets/:id" element={<WalletFormPage />} />
+        <Route path="/balance/wallets/new" element={<WalletFormPage />} />
+        <Route path="/balance/wallets/:id" element={<WalletFormPage />} />
         <Route path="/settings/categories" element={<CategoriesPage />} />
         <Route path="/settings/categories/new" element={<CategoryFormPage />} />
         <Route path="/settings/categories/:id" element={<CategoryFormPage />} />
