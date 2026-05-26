@@ -15,6 +15,7 @@ import {
 } from '@/components'
 import { CurrencyPicker } from '@/components/shared/picker/CurrencyPicker'
 import { IconPickerField } from '@/components/shared/picker/IconPickerField'
+import { SelectInput } from '@/components/shared/input/SelectInput'
 import { createId, hexToRgba } from '@/lib'
 import type {
   Currency,
@@ -33,6 +34,16 @@ interface WalletFormPageProps {
 }
 
 const DEFAULT_CURRENCY = 'THB'
+
+const WALLET_TYPE_OPTIONS = [
+  { value: 'payment', label: 'Payment Account' },
+  { value: 'credit_card', label: 'Credit Card' },
+]
+
+const DEFAULT_ICON: Record<string, string> = {
+  payment: 'fa-wallet',
+  credit_card: 'fa-credit-card',
+}
 
 function walletTypeLabel(type: WalletType) {
   return type === 'credit_card'
@@ -75,6 +86,15 @@ export function WalletFormPage({
   }
 
   const reconciliationEnabled = form.reconciliationEnabled ?? false
+
+  function handleTypeChange(type: string) {
+    setForm((prev) => ({
+      ...prev,
+      type: type as WalletType,
+      icon: DEFAULT_ICON[type] ?? prev.icon,
+    }))
+  }
+
   const reconciliationDescription = reconciliationEnabled
     ? 'Included in reconciliation checks'
     : 'Excluded from reconciliation checks'
@@ -103,6 +123,15 @@ export function WalletFormPage({
 
       <Field label="Name">
         <TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+      </Field>
+
+      <Field label="Type">
+        <SelectInput
+          options={WALLET_TYPE_OPTIONS}
+          value={form.type}
+          onChange={handleTypeChange}
+          disabled={Boolean(wallet)}
+        />
       </Field>
 
       <Field label="Currency">

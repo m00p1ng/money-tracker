@@ -70,7 +70,7 @@ describe('WalletFormPage', () => {
 
     expect(screen.getByText('New Wallet')).toBeInTheDocument()
     expect(screen.getByText('New wallet')).toBeInTheDocument()
-    expect(screen.getByText('Payment Account')).toBeInTheDocument()
+    expect(screen.getAllByText('Payment Account').length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText('THB')).toHaveLength(2)
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
@@ -137,5 +137,53 @@ describe('WalletFormPage', () => {
   it('displays error prop when provided', () => {
     renderPage({ error: 'Name is required' })
     expect(screen.getByText('Name is required')).toBeInTheDocument()
+  })
+
+  it('renders a Type selector field', () => {
+    renderPage()
+    expect(screen.getByText('Type')).toBeInTheDocument()
+    expect(screen.getAllByText('Payment Account').length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('type selector is disabled in edit mode', () => {
+    renderPage({ wallet: existingWallet })
+    const typeButton = screen.getAllByRole('button').find(
+      (btn) => btn.textContent?.includes('Credit Card') && btn.closest('[class*="relative"]'),
+    )
+    expect(typeButton).toBeDisabled()
+  })
+
+  it('changing type to credit_card shows credit limit and resets icon', async () => {
+    const { onSubmit } = renderPage({ initialType: 'payment' })
+
+    const typeLabel = screen.getByText('Type').closest('label')!
+    const typeDropdownBtn = typeLabel.querySelector('button[type="button"]') as HTMLElement
+    await userEvent.click(typeDropdownBtn)
+    await userEvent.click(screen.getByText('Credit Card'))
+
+    expect(screen.getByText('Credit Limit')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }))
+    expect(onSubmit.mock.calls[0][0]).toMatchObject({
+      type: 'credit_card',
+      icon: 'fa-credit-card',
+    })
+  })
+
+  it('changing type to payment hides credit limit and resets icon', async () => {
+    const { onSubmit } = renderPage({ initialType: 'credit_card' })
+
+    const typeLabel = screen.getByText('Type').closest('label')!
+    const typeDropdownBtn = typeLabel.querySelector('button[type="button"]') as HTMLElement
+    await userEvent.click(typeDropdownBtn)
+    await userEvent.click(screen.getByText('Payment Account'))
+
+    expect(screen.queryByText('Credit Limit')).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }))
+    expect(onSubmit.mock.calls[0][0]).toMatchObject({
+      type: 'payment',
+      icon: 'fa-wallet',
+    })
   })
 })
