@@ -27,6 +27,7 @@ export interface CategorySelectionPageProps {
   isLocked: boolean
   visible: Category[]
   parentId: string | undefined
+  parent: Category | undefined
   onTypeChange: (newType: 'expense' | 'income' | 'transfer') => void
   onBack: () => void
   onSelect: (category: Category) => void
@@ -37,6 +38,7 @@ export function CategorySelectionPage({
   isLocked,
   visible,
   parentId,
+  parent,
   onTypeChange,
   onBack,
   onSelect,
@@ -47,6 +49,15 @@ export function CategorySelectionPage({
         title={<TypePickerDropdown value={type} onChange={onTypeChange} locked={isLocked} />}
         onBack={onBack}
       />
+
+      {parent && (
+        <div className="flex items-center gap-3 px-1 text-lg font-bold text-slate-100">
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl">
+            <Icon name={parent.icon} />
+          </span>
+          <span>{parent.name}</span>
+        </div>
+      )}
 
       <AnimatePresence mode="wait">
         <motion.div

@@ -80,6 +80,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     isLocked,
     visible,
     parentId,
+    parent,
     onTypeChange,
     onBack,
     onSelect,

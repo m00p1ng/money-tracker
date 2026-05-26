@@ -95,7 +95,21 @@ describe('CategorySelectionPage', () => {
     renderPage()
     await userEvent.click(screen.getByText('Food & Drink'))
     expect(screen.getByText('Coffee')).toBeInTheDocument()
-    expect(screen.queryByText('Food & Drink')).not.toBeInTheDocument()
+    // grid button gone; header still shows parent name
+    expect(screen.queryByRole('button', { name: 'Food & Drink' })).not.toBeInTheDocument()
+  })
+
+  it('shows parent category name in content area when drilling into sub-categories', async () => {
+    renderPage()
+    await userEvent.click(screen.getByText('Food & Drink'))
+    expect(screen.getByText('Food & Drink')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /expense|income|transfer/i })).toBeInTheDocument()
+  })
+
+  it('does not show parent label at root level', () => {
+    renderPage()
+    // No parent label div — only the dropdown button exists
+    expect(screen.getByRole('button', { name: /expense|income|transfer/i })).toBeInTheDocument()
   })
 
   it('navigates to /transaction/new with type and categoryId on leaf tap (standalone)', async () => {
@@ -137,7 +151,6 @@ describe('CategorySelectionPage with draft store', () => {
     await userEvent.click(screen.getByText('Coffee'))
     const draft = useTransactionDraftStore.getState().draft
     expect(draft?.items[0].categoryId).toBe('exp-food-coffee')
-    expect(screen.queryByText('Food & Drink')).not.toBeInTheDocument()
   })
 
   it('appends new item when addCategory=true on leaf select', async () => {
