@@ -107,6 +107,7 @@ interface SortableCategoryCellProps {
   category: Category
   index: number
   isEditMode: boolean
+  isActive: boolean
   isReparentTarget: boolean
   onRequestDelete: (id: string) => void
   onSelect: (category: Category) => void
@@ -116,6 +117,7 @@ function SortableCategoryCell({
   category,
   index,
   isEditMode,
+  isActive,
   isReparentTarget,
   onRequestDelete,
   onSelect,
@@ -195,7 +197,13 @@ function SortableCategoryCell({
                   backgroundColor: 'rgba(16,185,129,0.10)',
                   boxShadow: '0 0 16px rgba(16,185,129,0.35)',
                 }
-                : undefined
+                : isActive
+                  ? {
+                    borderColor: 'rgba(52,211,153,0.5)',
+                    backgroundColor: 'rgba(16,185,129,0.06)',
+                    boxShadow: '0 0 10px rgba(52,211,153,0.2), inset 0 0 8px rgba(52,211,153,0.05)',
+                  }
+                  : undefined
             }
             className={[
               'flex w-full flex-col items-center gap-3 rounded-2xl',
@@ -476,6 +484,7 @@ export function CategorySelectionPage({
               category={category}
               index={index}
               isEditMode={isEditMode}
+              isActive={activeThisMonth.has(category.id)}
               isReparentTarget={reparentTargetId === category.id}
               onRequestDelete={onRequestDelete}
               onSelect={onSelect}
