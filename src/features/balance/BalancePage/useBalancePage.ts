@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
+
 import {
   assetsTotal,
   debtTotal,
@@ -14,8 +17,12 @@ function sortByPosition(a: { position?: number }, b: { position?: number }) {
 }
 
 export function useBalancePage(): BalancePageProps {
+  const [isEditMode, setIsEditMode] = useState(false)
+  const navigate = useNavigate()
   const wallets = useWalletStore((state) => state.items)
   const transactions = useTransactionStore((state) => state.items)
+  const reorder = useWalletStore((state) => state.reorder)
+
   const sorted = [...wallets].sort(sortByPosition)
   const paymentWallets = sorted
     .filter((w) => w.type === 'payment')
@@ -31,5 +38,10 @@ export function useBalancePage(): BalancePageProps {
     creditCards,
     assets,
     debt,
+    isEditMode,
+    onToggleEditMode: () => setIsEditMode((prev) => !prev),
+    onAddWallet: () => navigate('/balance/wallets/new?type=payment'),
+    onEditWallet: (id: string) => navigate(`/balance/wallets/${id}`),
+    onReorder: reorder,
   }
 }
