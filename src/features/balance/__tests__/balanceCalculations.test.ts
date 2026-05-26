@@ -385,4 +385,67 @@ describe('balance calculations', () => {
       expect(isReconciliationEnabled(wallet)).toBe(true)
     })
   })
+
+  describe('adjustment transactions', () => {
+    const wallet: Wallet = {
+      id: 'cash',
+      name: 'Cash',
+      type: 'payment',
+      currency: 'THB',
+      balance: 0,
+      color: '#10b981',
+      icon: 'fa-wallet',
+    }
+
+    it('adds signed adjustment amount directly to wallet balance', () => {
+      const opening: Transaction = {
+        id: 'adj-1',
+        type: 'adjustment',
+        walletId: 'cash',
+        currency: 'THB',
+        items: [{ categoryId: 'adjustment-balance-adjustment', amount: 500 }],
+        date: '2026-05-27T00:00:00.000Z',
+        createdAt: '2026-05-27T00:00:00.000Z',
+        note: 'Opening Balance',
+      }
+      expect(walletCurrentAmount(wallet, [opening])).toBe(500)
+    })
+
+    it('subtracts negative adjustment amount from wallet balance', () => {
+      const adjustment: Transaction = {
+        id: 'adj-2',
+        type: 'adjustment',
+        walletId: 'cash',
+        currency: 'THB',
+        items: [{ categoryId: 'adjustment-balance-adjustment', amount: -30 }],
+        date: '2026-05-27T00:00:00.000Z',
+        createdAt: '2026-05-27T00:00:00.000Z',
+        note: 'Balance Adjustment',
+      }
+      const walletWith100: Wallet = { ...wallet, balance: 100 }
+      expect(walletCurrentAmount(walletWith100, [adjustment])).toBe(70)
+    })
+
+    it('does not flip sign for credit card wallet', () => {
+      const creditCard: Wallet = {
+        id: 'cc',
+        name: 'Visa',
+        type: 'credit_card',
+        currency: 'THB',
+        balance: 0,
+        color: '#ef4444',
+        icon: 'fa-credit-card',
+      }
+      const adjustment: Transaction = {
+        id: 'adj-3',
+        type: 'adjustment',
+        walletId: 'cc',
+        currency: 'THB',
+        items: [{ categoryId: 'adjustment-balance-adjustment', amount: 200 }],
+        date: '2026-05-27T00:00:00.000Z',
+        createdAt: '2026-05-27T00:00:00.000Z',
+      }
+      expect(walletCurrentAmount(creditCard, [adjustment])).toBe(200)
+    })
+  })
 })

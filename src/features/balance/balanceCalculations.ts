@@ -25,6 +25,9 @@ export function amountInWalletCurrency(transaction: Transaction, wallet: Wallet)
 
 export function signedWalletAmount(wallet: Wallet, transaction: Transaction): number {
   const amount = amountInWalletCurrency(transaction, wallet)
+  if (transaction.type === 'adjustment') {
+    return amount
+  }
   if (transaction.type === 'transfer') {
     let signedAmount = 0
     if (transaction.walletId === wallet.id) {
