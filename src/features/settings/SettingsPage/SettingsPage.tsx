@@ -2,6 +2,7 @@ import {
   Icon,
   ListGroup,
   ListRow,
+  PageHeader,
 } from '@/components'
 
 const THEME_LABELS: Record<string, string> = {
@@ -16,33 +17,21 @@ const THEME_LABELS: Record<string, string> = {
 }
 
 interface SettingsPageProps {
-  walletCount: number
   categoryCount: number
   currencyCode: string | undefined
   theme: string
 }
 
 export function SettingsPage({
-  walletCount,
   categoryCount,
   currencyCode,
   theme,
 }: SettingsPageProps) {
   return (
     <div className="space-y-5">
-      <header>
-        <h1 className="text-2xl font-semibold">Settings</h1>
-      </header>
+      <PageHeader title="Settings" />
 
       <ListGroup label="Wallets & Data">
-        <ListRow
-          icon="fa-wallet"
-          label="Wallets"
-          sub={`${walletCount} account${walletCount !== 1
-            ? 's'
-            : ''}`}
-          to="/settings/wallets"
-        />
         <ListRow
           icon="fa-tag"
           label="Categories"

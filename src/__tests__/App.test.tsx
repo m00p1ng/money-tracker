@@ -153,7 +153,6 @@ describe('App routing', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('link', { name: /Wallets/i })).toHaveAttribute('href', '/settings/wallets')
     expect(screen.getByRole('link', { name: /Categories/i })).toHaveAttribute('href', '/settings/categories')
     expect(screen.getByRole('link', { name: /Currencies/i })).toHaveAttribute('href', '/settings/currencies')
     expect(screen.getByRole('link', { name: /Theme/i })).toHaveAttribute('href', '/settings/theme')
@@ -170,20 +169,6 @@ describe('App routing', () => {
 
     expect(screen.getByRole('heading', { name: 'Wallet not found' })).toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: 'Primary' })).not.toBeInTheDocument()
-  })
-
-  it('renders wallet management routes', () => {
-    render(
-      <MemoryRouter initialEntries={['/settings/wallets']}>
-        <RoutedApp />
-      </MemoryRouter>,
-    )
-
-    expect(screen.getByRole('heading', { name: 'Wallets' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Add Payment Account/i }))
-      .toHaveAttribute('href', '/settings/wallets/new?type=payment')
-    expect(screen.getByRole('link', { name: /Add Credit Card/i }))
-      .toHaveAttribute('href', '/settings/wallets/new?type=credit_card')
   })
 
   it('renders wallet new form route', () => {
