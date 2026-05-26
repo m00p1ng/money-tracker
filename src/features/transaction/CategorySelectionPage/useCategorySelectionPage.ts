@@ -25,6 +25,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   const [type, setType] = useState<'expense' | 'income'>(seedType)
   const [parentId, setParentId] = useState<string | undefined>()
   const [isEditMode, setIsEditMode] = useState(false)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
   const isLocked = isAddCategory || changingIndex !== null
 
   const visible = categories.filter((c) => c.type === type && c.parentId === parentId)
@@ -76,6 +77,20 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     navigate(`/transaction/new?type=${type}&categoryId=${category.id}`, { state: { fromCategorySelection: true } })
   }
 
+  function onRequestDelete(categoryId: string) {
+    setConfirmDeleteId(categoryId)
+  }
+
+  async function onConfirmDelete() {
+    if (!confirmDeleteId) return
+    await useCategoryStore.getState().remove(confirmDeleteId)
+    setConfirmDeleteId(null)
+  }
+
+  function onCancelDelete() {
+    setConfirmDeleteId(null)
+  }
+
   return {
     type,
     isLocked,
@@ -83,9 +98,14 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     visible,
     parentId,
     parent,
+    categories,
+    confirmDeleteId,
     onTypeChange,
     onBack,
     onSelect,
     onToggleEditMode: () => setIsEditMode((prev) => !prev),
+    onRequestDelete,
+    onConfirmDelete,
+    onCancelDelete,
   }
 }

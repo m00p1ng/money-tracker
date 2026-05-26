@@ -148,6 +148,23 @@ describe('CategorySelectionPage edit mode', () => {
   })
 })
 
+describe('CategorySelectionPage edit mode — close badge + delete', () => {
+  it('shows close badge on each category cell in edit mode', async () => {
+    renderPage()
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+    const closeBtns = screen.getAllByRole('button', { name: /remove/i })
+    expect(closeBtns.length).toBeGreaterThan(0)
+  })
+
+  it('opens confirm sheet when close badge tapped on category with no transactions', async () => {
+    renderPage()
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+    const [firstClose] = screen.getAllByRole('button', { name: /remove/i })
+    await userEvent.click(firstClose)
+    expect(screen.getByRole('heading', { name: /delete/i })).toBeInTheDocument()
+  })
+})
+
 describe('CategorySelectionPage with draft store', () => {
   beforeEach(() => {
     useTransactionDraftStore.getState().init({

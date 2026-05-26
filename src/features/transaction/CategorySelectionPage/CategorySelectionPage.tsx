@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { Icon, TypePickerDropdown } from '@/components'
+import { ConfirmSheet, Icon, TypePickerDropdown } from '@/components'
 import { PageHeader } from '@/components/shared/PageHeader'
 import type { Category } from '@/types/domain'
 
@@ -29,10 +29,15 @@ export interface CategorySelectionPageProps {
   visible: Category[]
   parentId: string | undefined
   parent: Category | undefined
+  categories: Category[]
+  confirmDeleteId: string | null
   onTypeChange: (newType: 'expense' | 'income' | 'transfer') => void
   onBack: () => void
   onSelect: (category: Category) => void
   onToggleEditMode: () => void
+  onRequestDelete: (id: string) => void
+  onConfirmDelete: () => void
+  onCancelDelete: () => void
 }
 
 export function CategorySelectionPage({
@@ -42,10 +47,15 @@ export function CategorySelectionPage({
   visible,
   parentId,
   parent,
+  categories,
+  confirmDeleteId,
   onTypeChange,
   onBack,
   onSelect,
   onToggleEditMode,
+  onRequestDelete,
+  onConfirmDelete,
+  onCancelDelete,
 }: CategorySelectionPageProps) {
   const editButton = (
     <button
@@ -99,25 +109,46 @@ export function CategorySelectionPage({
           className="grid grid-cols-3 gap-2.5"
         >
           {visible.map((category) => (
-            <motion.button
+            <motion.div
               key={category.id}
               variants={cellVariants}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => onSelect(category)}
-              type="button"
-              className={[
-                'flex flex-col items-center gap-3 rounded-2xl',
-                'border border-white/[0.07] bg-white/4 px-2 py-3.5',
-              ].join(' ')}
+              className="relative"
             >
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
-                <Icon name={category.icon} />
-              </span>
-              <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
-            </motion.button>
+              {isEditMode && (
+                <button
+                  aria-label={`Remove ${category.name}`}
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); onRequestDelete(category.id) }}
+                  className="absolute -left-1.5 -top-1.5 z-10 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white"
+                >
+                  ×
+                </button>
+              )}
+              <button
+                onClick={() => onSelect(category)}
+                type="button"
+                className={[
+                  'flex w-full flex-col items-center gap-3 rounded-2xl',
+                  'border border-white/[0.07] bg-white/4 px-2 py-3.5',
+                ].join(' ')}
+              >
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
+                  <Icon name={category.icon} />
+                </span>
+                <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
+              </button>
+            </motion.div>
           ))}
         </motion.div>
       </AnimatePresence>
+
+      <ConfirmSheet
+        isOpen={confirmDeleteId !== null}
+        title={`Delete "${categories.find(c => c.id === confirmDeleteId)?.name ?? ''}"?`}
+        primaryLabel="Delete"
+        onPrimary={onConfirmDelete}
+        onCancel={onCancelDelete}
+      />
     </div>
   )
 }
