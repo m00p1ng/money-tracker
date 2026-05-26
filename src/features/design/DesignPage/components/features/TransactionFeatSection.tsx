@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import { Button } from '@/components'
-import type { TransactionType } from '@/types/domain'
 import {
   CalculatorKeyboard,
   CalculatorKeyboardSheet,
@@ -14,6 +13,7 @@ import {
   TransactionHeader,
   WalletSelectorRow,
 } from '@/features/transaction'
+import type { TransactionType } from '@/types/domain'
 
 import { SubSection, VariantLabel } from '../sectionHelpers'
 

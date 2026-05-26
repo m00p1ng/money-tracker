@@ -47,7 +47,7 @@ export function useCalendarPage() {
   const wallets = useWalletStore((state) => state.items)
   const findWallet = useWalletStore((state) => state.findById)
 
-  const monthTransactions = transactionsByMonth(currentYear, currentMonth)
+  const monthTransactions = transactionsByMonth(currentYear, currentMonth).filter((tx) => tx.type !== 'adjustment')
   const monthUpcoming = upcomingByMonth(currentYear, currentMonth)
 
   const indicatorMap: Record<string, DayIndicator> = {}

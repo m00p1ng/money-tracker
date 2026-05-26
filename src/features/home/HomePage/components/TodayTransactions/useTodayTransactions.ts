@@ -31,7 +31,7 @@ export function useTodayTransactions() {
   const todayTransactions = useTransactionStore((state) => state.todayTransactions)
   const findCategory = useCategoryStore((state) => state.findById)
   const wallets = useWalletStore((state) => state.items)
-  const transactions = todayTransactions()
+  const transactions = todayTransactions().filter((tx) => tx.type !== 'adjustment')
 
   const rows: TodayTransactionRowData[] = transactions.map((transaction) => {
     if (transaction.type === 'transfer') {
