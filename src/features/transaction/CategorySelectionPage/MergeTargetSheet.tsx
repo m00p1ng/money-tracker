@@ -23,17 +23,19 @@ function buildTree(
 
   return children.flatMap((cat) => {
     const isSource = cat.id === sourceId
+    const hasChildren = categories.some((c) => c.parentId === cat.id)
+    const isDisabled = isSource || hasChildren
     const indent = (cat.level - 1) * 20
 
     return [
       <button
         key={cat.id}
         type="button"
-        disabled={isSource}
-        onClick={() => !isSource && onSelect(cat.id)}
+        disabled={isDisabled}
+        onClick={() => !isDisabled && onSelect(cat.id)}
         className={[
           'flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left active:bg-white/5',
-          isSource
+          isDisabled
             ? 'cursor-not-allowed opacity-30'
             : '',
         ].join(' ')}
@@ -45,6 +47,9 @@ function buildTree(
         <span className="text-sm font-semibold text-slate-100">{cat.name}</span>
         {isSource && (
           <span className="ml-auto text-xs text-white/30">being deleted</span>
+        )}
+        {hasChildren && !isSource && (
+          <span className="ml-auto text-xs text-white/30">has subcategories</span>
         )}
       </button>,
       ...buildTree(categories, cat.id, sourceId, onSelect),
