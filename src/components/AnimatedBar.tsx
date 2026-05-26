@@ -28,7 +28,7 @@ export function AnimatedBar({
 
   return (
     <div
-      className="relative h-8 overflow-hidden border border-white/5"
+      className="relative h-8 overflow-hidden border border-white/5 rounded-md"
       style={{ background: textColor }}
     >
       <span

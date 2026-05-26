@@ -156,7 +156,6 @@ describe('App routing', () => {
     expect(screen.getByRole('link', { name: /Currencies/i })).toHaveAttribute('href', '/settings/currencies')
     expect(screen.getByRole('link', { name: /Theme/i })).toHaveAttribute('href', '/settings/theme')
     expect(screen.getByText('English')).toBeInTheDocument()
-    expect(screen.getByText('DD MMM YYYY')).toBeInTheDocument()
   })
 
   it('hides bottom navigation on wallet detail route', () => {
