@@ -13,9 +13,9 @@ import {
   Switch,
   TextInput,
 } from '@/components'
+import { SelectInput } from '@/components/shared/input/SelectInput'
 import { CurrencyPicker } from '@/components/shared/picker/CurrencyPicker'
 import { IconPickerField } from '@/components/shared/picker/IconPickerField'
-import { SelectInput } from '@/components/shared/input/SelectInput'
 import { createId, hexToRgba } from '@/lib'
 import type {
   Currency,

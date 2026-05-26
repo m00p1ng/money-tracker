@@ -172,10 +172,10 @@ function SortableCategoryCell({
               }}
               className={[
                 'absolute -left-1.5 -top-1.5 z-10 flex h-[18px] w-[18px]',
-                'items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white',
+                'items-center justify-center rounded-full bg-red-500 text-white',
               ].join(' ')}
             >
-              ×
+              <Icon name="fa-xmark" className="text-[10px]" />
             </button>
           )}
           <motion.button

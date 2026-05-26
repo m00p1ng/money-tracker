@@ -40,9 +40,9 @@ export function useCategoryEditPage(): CategoryEditPageProps | null {
     return null
   }
 
-  async function onSubmit() {
+  async function onBack() {
     if (!name.trim()) {
-      setError('Name is required')
+      backNavigate(-1)
 
       return
     }
@@ -85,7 +85,6 @@ export function useCategoryEditPage(): CategoryEditPageProps | null {
     error,
     onChangeName: setName,
     onChangeIcon: setIcon,
-    onBack: () => backNavigate(-1),
-    onSubmit,
+    onBack,
   }
 }
