@@ -7,6 +7,7 @@ import {
   Button,
   FormErrorMessage,
   Icon,
+  IconPicker,
   ListGroup,
   ListRow,
   PageHeader,
@@ -14,10 +15,9 @@ import {
   SelectorSheet,
   TransactionRow,
   WheelPicker,
+  type SelectorOption,
 } from '@/components'
-import type { SelectorOption } from '@/components'
 import { Background } from '@/components/Background'
-import { IconPicker } from '@/components/shared/picker/IconPicker'
 
 interface SubSectionProps {
   id: string

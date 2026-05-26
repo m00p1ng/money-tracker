@@ -1,9 +1,8 @@
 import { SwipeableTransactionRow, WalletRow } from '@/features/balance'
-import { CreditCardStats } from '@/features/balance/WalletDetailPage/components/CreditCardStats'
 import { DateRangeHeader } from '@/features/balance/WalletDetailPage/components/DateRangeHeader'
 import { TransactionRow } from '@/features/balance/WalletDetailPage/components/TransactionRow'
 
-import { SubSection, VariantLabel } from '../sectionHelpers'
+import { SubSection } from '../sectionHelpers'
 
 import {
   STUB_CATEGORY,
@@ -44,23 +43,6 @@ export function BalanceFeatSection() {
           onClickStart={() => {}}
           onClickEnd={() => {}}
           onOpenPreset={() => {}}
-        />
-      </SubSection>
-
-      <SubSection id="credit-card-stats" title="CreditCardStats">
-        <VariantLabel label="without reconciliation" />
-        <CreditCardStats
-          wallet={STUB_WALLET_CREDIT}
-          currentAmount={1200}
-          clearedAmount={0}
-          reconciliation={false}
-        />
-        <VariantLabel label="with reconciliation" />
-        <CreditCardStats
-          wallet={STUB_WALLET_CREDIT}
-          currentAmount={1200}
-          clearedAmount={800}
-          reconciliation={true}
         />
       </SubSection>
 

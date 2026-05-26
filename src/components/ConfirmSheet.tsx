@@ -1,5 +1,5 @@
-import { BottomSheet } from '@/components/shared/BottomSheet'
-import { Button } from '@/components/shared/Button'
+import { BottomSheet } from '@/components/BottomSheet'
+import { Button } from '@/components/Button'
 
 type ConfirmSheetProps = {
   isOpen: boolean

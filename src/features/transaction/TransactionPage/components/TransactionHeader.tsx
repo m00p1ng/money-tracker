@@ -1,5 +1,4 @@
-import { TypePickerDropdown } from '@/components'
-import { PageHeader } from '@/components/shared/PageHeader'
+import { PageHeader, TypePickerDropdown } from '@/components'
 import type { TransactionType } from '@/types/domain'
 
 interface TransactionHeaderProps {

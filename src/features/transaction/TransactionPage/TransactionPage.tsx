@@ -1,8 +1,7 @@
 import cx from 'classnames'
 import { useState } from 'react'
 
-import { Button } from '@/components'
-import { ConfirmSheet } from '@/components/shared/ConfirmSheet'
+import { Button, ConfirmSheet } from '@/components'
 import { createCalcState, pressCalcKey } from '@/lib'
 import type {
   Currency,

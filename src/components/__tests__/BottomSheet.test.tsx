@@ -7,7 +7,7 @@ import {
   vi,
 } from 'vitest'
 
-import { BottomSheet } from '@/components/shared/BottomSheet'
+import { BottomSheet } from '@/components'
 
 describe('BottomSheet', () => {
   it('calls onClose when the backdrop is clicked', async () => {

@@ -1,17 +1,17 @@
 import { FormEvent, useState } from 'react'
 
 import {
+  CurrencyPicker,
   Field,
   FormActions,
   FormErrorMessage,
   Icon,
   IconPicker,
   PageHeader,
+  SelectInput,
   Switch,
   TextInput,
 } from '@/components'
-import { SelectInput } from '@/components/shared/input/SelectInput'
-import { CurrencyPicker } from '@/components/shared/picker/CurrencyPicker'
 import type {
   Currency,
   Wallet,

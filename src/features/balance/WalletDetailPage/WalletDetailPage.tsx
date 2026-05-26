@@ -19,10 +19,10 @@ import type {
 } from '@/types/domain'
 
 import {
-  CreditCardStats,
   DateRangeHeader,
   SwipeableTransactionRow,
   TransactionRow,
+  WalletSummaryCard,
 } from './components'
 
 export type WalletDetailPageProps = {
@@ -65,7 +65,6 @@ export function WalletDetailPage({
   }
 
   const rows = walletRunningRows(wallet, transactions, range)
-  const isCredit = wallet.type === 'credit_card'
   const reconciliation = isReconciliationEnabled(wallet)
 
   function handlePresetSelect(preset: DateRangePreset) {
@@ -100,21 +99,20 @@ export function WalletDetailPage({
         )}
       />
 
+      {reconciliation && (
+        <WalletSummaryCard
+          wallet={wallet}
+          currentAmount={currentAmount}
+          clearedAmount={clearedAmount}
+        />
+      )}
+
       <DateRangeHeader
         range={range}
         onClickStart={() => setStartPickerOpen(true)}
         onClickEnd={() => setEndPickerOpen(true)}
         onOpenPreset={() => setPresetSheetOpen(true)}
       />
-
-      {isCredit && wallet.creditLimit && (
-        <CreditCardStats
-          wallet={wallet}
-          currentAmount={currentAmount}
-          clearedAmount={clearedAmount}
-          reconciliation={reconciliation}
-        />
-      )}
 
       <section>
         {rows.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No transactions</p>}

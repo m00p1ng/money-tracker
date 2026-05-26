@@ -30,9 +30,9 @@ import {
 import {
   ConfirmSheet,
   Icon,
+  PageHeader,
   TypePickerDropdown,
 } from '@/components'
-import { PageHeader } from '@/components/shared/PageHeader'
 import type { Category } from '@/types/domain'
 
 import { MergeTargetSheet } from './MergeTargetSheet'
@@ -216,9 +216,11 @@ function SortableCategoryCell({
           >
             <span
               className="grid h-11 w-11 place-items-center rounded-xl text-xl text-slate-50"
-              style={{ background: isActive
-                ? 'rgba(16,185,129,0.2)'
-                : 'rgba(255,255,255,0.1)' }}
+              style={{
+                background: isActive
+                  ? 'rgba(16,185,129,0.2)'
+                  : 'rgba(255,255,255,0.1)',
+              }}
             >
               <Icon name={category.icon} />
             </span>
@@ -520,9 +522,11 @@ export function CategorySelectionPage({
             >
               <span
                 className="grid h-11 w-11 place-items-center rounded-xl text-xl text-slate-50"
-                style={{ background: activeThisMonth.has(category.id)
-                  ? 'rgba(16,185,129,0.2)'
-                  : 'rgba(255,255,255,0.1)' }}
+                style={{
+                  background: activeThisMonth.has(category.id)
+                    ? 'rgba(16,185,129,0.2)'
+                    : 'rgba(255,255,255,0.1)',
+                }}
               >
                 <Icon name={category.icon} />
               </span>
