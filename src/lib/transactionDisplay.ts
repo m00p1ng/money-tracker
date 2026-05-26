@@ -5,13 +5,12 @@ import type {
 } from '@/types/domain'
 
 import { formatSignedAmount } from './currency'
-import { formatShortDate } from './date'
 
 export type TransactionBaseProps = {
   to: string
   icon: string
-  primaryLabel: string
-  secondaryLabel: string
+  title: string
+  date: string
 }
 
 export type TransactionRowDisplay = TransactionBaseProps & {
@@ -70,7 +69,7 @@ export function buildTransactionBaseProps(
   wallets: Wallet[],
 ): TransactionBaseProps {
   const to = `/transaction/${transaction.id}`
-  const secondaryLabel = formatShortDate(new Date(transaction.date))
+  const date = transaction.date
 
   if (transaction.type === 'transfer') {
     const fromWallet = wallets.find((w) => w.id === transaction.walletId)
@@ -79,19 +78,19 @@ export function buildTransactionBaseProps(
     return {
       to,
       icon: 'fa-arrow-right-arrow-left',
-      primaryLabel: titleWithNote(
+      title: titleWithNote(
         `Transfer (${fromWallet?.name ?? '—'}->${toWallet?.name ?? '—'})`,
         transaction.note,
       ),
-      secondaryLabel,
+      date,
     }
   }
 
   return {
     to,
     icon: category?.icon ?? 'fa-ellipsis',
-    primaryLabel: titleWithNote(category?.name ?? 'Unknown', transaction.note),
-    secondaryLabel,
+    title: titleWithNote(category?.name ?? 'Unknown', transaction.note),
+    date,
   }
 }
 
@@ -99,7 +98,7 @@ type BuildTransactionRowDisplayOptions = {
   transaction: Transaction
   findCategory: (categoryId: string) => Category | undefined
   wallets: Wallet[]
-  secondaryLabel?: string
+  date?: string
   amount?: string
   amountColor?: string
   secondaryAmount?: string
@@ -110,7 +109,7 @@ export function buildTransactionRowDisplay({
   transaction,
   findCategory,
   wallets,
-  secondaryLabel,
+  date,
   amount,
   amountColor,
   secondaryAmount,
@@ -121,10 +120,10 @@ export function buildTransactionRowDisplay({
 
   return {
     ...base,
-    primaryLabel: transaction.type === 'transfer'
-      ? base.primaryLabel
+    title: transaction.type === 'transfer'
+      ? base.title
       : titleWithNote(summary.label, transaction.note),
-    secondaryLabel: secondaryLabel ?? base.secondaryLabel,
+    date: date ?? base.date,
     amount: amount ?? formatSignedAmount(summary.amount, transaction.currency),
     amountColor: amountColor ?? (transaction.type === 'income'
       ? 'text-income'

@@ -5,7 +5,6 @@ import { useBackNavigate } from '@/context/navigationDirection'
 import {
   buildTransactionRowDisplay,
   formatAmount,
-  formatShortDate,
   toLocalDateKey,
 } from '@/lib'
 import {
@@ -22,34 +21,14 @@ export type CalendarRowData = {
   key: string
   to: string
   icon: string
-  primaryLabel: string
-  secondaryLabel: string
+  title: string
+  date: string
   amount: string
   amountColor: string
 }
 
 function todayDateKey(): string {
   return toLocalDateKey(new Date().toISOString())
-}
-
-function badgeLabelFor(day: string): string {
-  const today = todayDateKey()
-  const tomorrowDate = new Date()
-  tomorrowDate.setDate(tomorrowDate.getDate() + 1)
-  const tomorrow = toLocalDateKey(tomorrowDate.toISOString())
-  if (day < today) {
-    return 'Overdue'
-  }
-
-  if (day === today) {
-    return 'Today'
-  }
-
-  if (day === tomorrow) {
-    return 'Tomorrow'
-  }
-
-  return day
 }
 
 export function useCalendarPage() {
@@ -65,7 +44,6 @@ export function useCalendarPage() {
   const transactionsByMonth = useTransactionStore((state) => state.transactionsByMonth)
   const upcomingByMonth = useTransactionStore((state) => state.upcomingByMonth)
   const findCategory = useCategoryStore((state) => state.findById)
-  const parentOf = useCategoryStore((state) => state.parentOf)
   const wallets = useWalletStore((state) => state.items)
   const findWallet = useWalletStore((state) => state.findById)
 
@@ -83,19 +61,19 @@ export function useCalendarPage() {
       : 'upcoming'
   }
 
-  function makeRealRow(tx: Transaction, secondaryLabel: string): CalendarRowData {
+  function makeRealRow(tx: Transaction, date: string): CalendarRowData {
     return {
       key: tx.id,
       ...buildTransactionRowDisplay({
         transaction: tx,
         findCategory,
         wallets,
-        secondaryLabel,
+        date,
       }),
     }
   }
 
-  function makeUpcomingRow(row: UpcomingTransactionRow, secondaryLabel: string): CalendarRowData {
+  function makeUpcomingRow(row: UpcomingTransactionRow, date: string): CalendarRowData {
     const tx = row.kind === 'real'
       ? row.transaction
       : row.occurrence.transaction
@@ -107,7 +85,7 @@ export function useCalendarPage() {
     const toWallet = tx.toWalletId
       ? findWallet(tx.toWalletId)
       : undefined
-    const primaryLabel =
+    const title =
       tx.type === 'transfer'
         ? `${fromWallet?.name ?? 'Wallet'} → ${toWallet?.name ?? 'Wallet'}`
         : category?.name ?? 'Transaction'
@@ -122,8 +100,8 @@ export function useCalendarPage() {
       icon: tx.type === 'transfer'
         ? 'fa-right-left'
         : category?.icon ?? 'fa-clock',
-      primaryLabel,
-      secondaryLabel,
+      title,
+      date,
       amount: formatAmount(firstItem?.amount ?? 0, tx.currency),
       amountColor: 'text-amber-400',
     }
@@ -133,35 +111,27 @@ export function useCalendarPage() {
     ? [
       ...monthTransactions
         .filter((tx) => toLocalDateKey(tx.date) === selectedDate)
-        .map((tx) => {
-          const category = tx.items[0]
-            ? findCategory(tx.items[0].categoryId)
-            : undefined
-          const parent = category
-            ? parentOf(category)
-            : undefined
-
-          return makeRealRow(tx, parent?.name ?? tx.type)
-        }),
+        .map((tx) => makeRealRow(
+          tx,
+          selectedDate,
+        )),
       ...monthUpcoming
         .filter((row) => row.date === selectedDate)
         .map((row) =>
           makeUpcomingRow(
             row,
-            `${badgeLabelFor(row.date)}${row.kind === 'virtual-repeat'
-              ? ' · Repeat'
-              : ''}`,
+            row.date,
           ),
         ),
     ]
     : (() => {
       const realEntries = monthTransactions.map((tx) => ({
         dateKey: toLocalDateKey(tx.date),
-        row: makeRealRow(tx, formatShortDate(new Date(`${toLocalDateKey(tx.date)}T00:00`))),
+        row: makeRealRow(tx, toLocalDateKey(tx.date)),
       }))
       const upcomingEntries = monthUpcoming.map((row) => ({
         dateKey: row.date,
-        row: makeUpcomingRow(row, formatShortDate(new Date(`${row.date}T00:00`))),
+        row: makeUpcomingRow(row, row.date),
       }))
 
       return [...realEntries, ...upcomingEntries]

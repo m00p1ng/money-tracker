@@ -179,7 +179,7 @@ describe('HomePage', () => {
       ],
     })
 
-    render(
+    const { container } = render(
       <MemoryRouter>
         <HomePage />
       </MemoryRouter>,
@@ -188,6 +188,7 @@ describe('HomePage', () => {
     expect(screen.getByText('Upcoming')).toBeInTheDocument()
     expect(screen.getByText('Coffee, Food (brunch)')).toBeInTheDocument()
     expect(screen.getByText('26 Feb')).toBeInTheDocument()
+    expect(container.querySelector('[data-icon="clock"]')).toBeInTheDocument()
     expect(screen.getAllByText('$30.00').length).toBeGreaterThan(0)
   })
 

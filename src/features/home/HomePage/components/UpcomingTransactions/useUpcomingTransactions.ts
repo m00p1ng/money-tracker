@@ -1,7 +1,4 @@
-import {
-  buildTransactionRowDisplay,
-  formatShortDate,
-} from '@/lib'
+import { buildTransactionRowDisplay } from '@/lib'
 import {
   useCategoryStore,
   useTransactionStore,
@@ -9,12 +6,6 @@ import {
 } from '@/stores'
 
 import type { UpcomingTransactionRowData } from './UpcomingTransactions'
-
-function dateLabelFor(day: string): string {
-  const [year, month, date] = day.split('-').map(Number)
-
-  return formatShortDate(new Date(year, month - 1, date))
-}
 
 export function useUpcomingTransactions() {
   const upcomingTransactions = useTransactionStore((state) => state.upcomingTransactions)
@@ -30,9 +21,6 @@ export function useUpcomingTransactions() {
       row.kind === 'real'
         ? `/transaction/${transaction.id}`
         : `/transaction/repeat/${row.occurrence.sourceId}/${row.occurrence.occurrenceDate}`
-    const secondaryLabel = `${dateLabelFor(row.date)}${row.kind === 'virtual-repeat'
-      ? ' · Repeat'
-      : ''}`
 
     return {
       id: row.id,
@@ -40,7 +28,7 @@ export function useUpcomingTransactions() {
         transaction,
         findCategory,
         wallets,
-        secondaryLabel,
+        date: row.date,
       }),
       to,
     }

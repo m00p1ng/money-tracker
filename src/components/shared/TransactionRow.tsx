@@ -1,28 +1,45 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
 
 import { Icon } from '@/components'
+import { formatShortDate } from '@/lib'
 
 type TransactionRowProps = {
   to: string
   icon: string
-  primaryLabel: string
-  secondaryLabel: string
+  title: string
+  date: string | Date
   amount: string
   amountColor: string
   secondaryAmount?: string
   secondaryAmountColor?: string
 }
 
+function toDate(value: string | Date): Date {
+  if (value instanceof Date) {
+    return value
+  }
+
+  return /^\d{4}-\d{2}-\d{2}$/.test(value)
+    ? new Date(`${value}T00:00`)
+    : new Date(value)
+}
+
 export function TransactionRow({
   to,
   icon,
-  primaryLabel,
-  secondaryLabel,
+  title,
+  date: rawDate,
   amount,
   amountColor,
   secondaryAmount,
   secondaryAmountColor,
 }: TransactionRowProps) {
+  const [now] = useState(() => new Date())
+  const date = toDate(rawDate)
+  const secondaryLabel = formatShortDate(date)
+  const showSecondaryClock = date.getTime() > now.getTime()
+
   return (
     <Link
       to={to}
@@ -40,8 +57,16 @@ export function TransactionRow({
         <Icon name={icon} style={{ height: 40 }} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate font-medium">{primaryLabel}</span>
-        <span className="block truncate text-sm text-slate-500">{secondaryLabel}</span>
+        <span className="block truncate font-medium">{title}</span>
+        <span className="flex items-center gap-1 truncate text-sm text-slate-500">
+          {showSecondaryClock && (
+            <Icon
+              name="fa-clock"
+              className="h-3 w-3 shrink-0"
+            />
+          )}
+          <span className="truncate">{secondaryLabel}</span>
+        </span>
       </span>
       <span className="shrink-0 text-right">
         <span className={`block font-semibold ${amountColor}`}>{amount}</span>

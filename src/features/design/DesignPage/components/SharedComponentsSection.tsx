@@ -148,16 +148,16 @@ export function SharedComponentsSection() {
           <TransactionRow
             to="#"
             icon="fa-burger"
-            primaryLabel="Food & Drinks"
-            secondaryLabel="Today, 12:30"
+            title="Food & Drinks"
+            date="2026-05-26T12:30:00"
             amount="-$12.50"
             amountColor="text-red-400"
           />
           <TransactionRow
             to="#"
             icon="fa-briefcase"
-            primaryLabel="Salary"
-            secondaryLabel="Yesterday"
+            title="Salary"
+            date="2026-05-25T12:30:00"
             amount="+$3,200.00"
             amountColor="text-green-400"
           />

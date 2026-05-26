@@ -159,10 +159,52 @@ describe('useCalendarPage', () => {
       expect.objectContaining({
         key: 'tx-multiple-items',
         icon: 'fa-mug-hot',
-        primaryLabel: 'Coffee, Food (brunch)',
-        secondaryLabel: 'Food & Drink',
+        title: 'Coffee, Food (brunch)',
+        date: selectedDate,
         amount: '$30.00',
         amountColor: 'text-expense',
+      }),
+    ])
+  })
+
+  it('shows short date for selected upcoming transaction rows', () => {
+    const now = new Date()
+    const y = now.getFullYear()
+    const m = String(now.getMonth() + 1).padStart(2, '0')
+    const selectedDate = `${y}-${m}-28`
+    useCategoryStore.setState({
+      items: [
+        {
+          id: 'cat1',
+          name: 'Coffee',
+          type: 'expense',
+          level: 1,
+          icon: 'fa-mug-hot',
+          isDefault: true,
+        },
+      ],
+    })
+    useTransactionStore.setState({
+      items: [
+        makeTx({
+          id: 'planned-tx',
+          date: `${selectedDate}T10:00`,
+          status: 'planned',
+          currency: 'USD',
+        }),
+      ],
+    })
+
+    const { result } = renderHook(() => useCalendarPage(), { wrapper })
+    act(() => result.current.onSelectDate(selectedDate))
+
+    expect(result.current.listRows).toEqual([
+      expect.objectContaining({
+        key: 'planned-tx',
+        title: 'Coffee',
+        date: selectedDate,
+        amount: '$100.00',
+        amountColor: 'text-amber-400',
       }),
     ])
   })
