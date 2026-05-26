@@ -19,11 +19,13 @@ import type {
   Wallet,
 } from '@/types/domain'
 
-import { CreditCardStats } from './components/CreditCardStats'
-import { DateRangeHeader } from './components/DateRangeHeader'
-import { TransactionRow } from './components/TransactionRow'
-import { WalletStats } from './components/WalletStats'
-import { SwipeableTransactionRow } from './SwipeableTransactionRow'
+import {
+  CreditCardStats,
+  DateRangeHeader,
+  SwipeableTransactionRow,
+  TransactionRow,
+  WalletStats,
+} from './components'
 
 export type WalletDetailPageProps = {
   wallet: Wallet | undefined

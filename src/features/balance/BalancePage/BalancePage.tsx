@@ -23,7 +23,7 @@ import {
 import { formatAmount, formatSignedAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
-import { SortableWalletRow } from './SortableWalletRow'
+import { SortableWalletRow } from './components/SortableWalletRow'
 
 export type WalletWithAmount = {
   wallet: Wallet;
