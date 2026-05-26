@@ -12,7 +12,12 @@ export function SubSection({
   children,
 }: SubSectionProps) {
   return (
-    <section id={id} className="scroll-mt-8">
+    <section
+      id={id}
+      className="scroll-mt-8"
+      data-design-section
+      data-design-section-label={title}
+    >
       <h3 className="mb-3 text-base font-semibold text-white/70">{title}</h3>
       {children}
       <hr className="mt-6 border-white/6" />

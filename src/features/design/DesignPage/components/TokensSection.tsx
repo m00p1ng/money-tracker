@@ -72,7 +72,12 @@ function SectionHeading({
   description,
 }: SectionHeadingProps) {
   return (
-    <div id={id} className="mb-4 scroll-mt-8">
+    <div
+      id={id}
+      className="mb-4 scroll-mt-8"
+      data-design-section
+      data-design-section-label={title}
+    >
       <h2 className="text-lg font-bold">{title}</h2>
       <p className="text-sm text-white/40">{description}</p>
     </div>

@@ -3,32 +3,15 @@ import { Navigate } from 'react-router'
 
 import { Icon } from '@/components'
 
+import { DesignSidebar } from './components'
 import {
-  BalanceFeatSection,
-  CalendarFeatSection,
-  DesignSidebar,
-  HomeFeatSection,
-  SettingsFeatSection,
-  SharedComponentsSection,
-  TokensSection,
-  TransactionFeatSection,
-  UIComponentsSection,
-} from './components'
-import { NAV_GROUPS } from './designNavigation'
-
-const SECTION_COMPONENTS: Record<string, React.ComponentType> = {
-  'tokens': TokensSection,
-  'ui-components': UIComponentsSection,
-  'shared-components': SharedComponentsSection,
-  'feature-home': HomeFeatSection,
-  'feature-balance': BalanceFeatSection,
-  'feature-transaction': TransactionFeatSection,
-  'feature-calendar': CalendarFeatSection,
-  'feature-settings': SettingsFeatSection,
-}
+  getDesignGroup,
+  type DesignNavItem,
+} from './designRegistry'
 
 type DesignPageProps = {
   activeId: string
+  activeItems?: readonly DesignNavItem[]
   section: string
   contentRef: React.RefObject<HTMLDivElement | null>
   onNavigateBack: () => void
@@ -36,18 +19,20 @@ type DesignPageProps = {
 
 export function DesignPage({
   activeId,
+  activeItems,
   section,
   contentRef,
   onNavigateBack,
 }: DesignPageProps) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const SectionComponent = SECTION_COMPONENTS[section]
+  const activeGroup = getDesignGroup(section)
 
-  if (!SectionComponent) {
+  if (!activeGroup) {
     return <Navigate to="/design/tokens" replace />
   }
 
-  const groupLabel = NAV_GROUPS.find((g) => g.slug === section)?.label ?? 'Design System'
+  const SectionComponent = activeGroup.component
+  const groupLabel = activeGroup.label
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-(--bg) text-slate-50">
@@ -81,6 +66,7 @@ export function DesignPage({
       <div className="flex min-h-0 flex-1">
         <DesignSidebar
           activeId={activeId}
+          activeItems={activeItems}
           isOpen={menuOpen}
           onClose={() => setMenuOpen(false)}
         />

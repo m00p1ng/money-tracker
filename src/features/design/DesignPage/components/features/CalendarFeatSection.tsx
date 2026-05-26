@@ -1,15 +1,15 @@
-import { CalendarPageView } from '@/features/calendar'
+import { CalendarGrid } from '@/features/calendar/CalendarPage/components/CalendarGrid'
 
 import { SubSection, VariantLabel } from '../sectionHelpers'
 
 export function CalendarFeatSection() {
   return (
     <div className="space-y-8">
-      <SubSection id="calendar-page" title="CalendarPage">
-        <div className="overflow-hidden rounded-2xl border border-white/10">
-          <CalendarPageView
-            currentYear={2026}
-            currentMonth={4}
+      <SubSection id="calendar-grid" title="CalendarGrid">
+        <div className="overflow-hidden rounded-2xl border border-white/10 p-3">
+          <CalendarGrid
+            year={2026}
+            month={4}
             today="2026-05-25"
             selectedDate="2026-05-25"
             indicatorMap={{
@@ -19,23 +19,9 @@ export function CalendarFeatSection() {
               '2026-05-25': 'transaction',
               '2026-05-28': 'upcoming',
             }}
-            listRows={[
-              {
-                key: 'demo-1',
-                to: '#',
-                icon: 'fa-utensils',
-                primaryLabel: 'Food & Drink',
-                secondaryLabel: 'Lifestyle',
-                amount: '-฿120.00',
-                amountColor: 'text-expense',
-              },
-            ]}
             onSelectDate={() => {}}
             onPrev={() => {}}
             onNext={() => {}}
-            onAdd={() => {}}
-            onBack={() => {}}
-            onSearch={() => {}}
           />
         </div>
         <VariantLabel label="Default (today selected)" />

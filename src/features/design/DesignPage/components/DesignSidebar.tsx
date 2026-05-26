@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router'
 import { Icon } from '@/components'
 
 import { NAV_GROUPS } from '../designNavigation'
+import type { DesignNavItem } from '../designRegistry'
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -16,15 +17,18 @@ function scrollTo(id: string) {
 
 interface DesignSidebarProps {
   activeId: string
+  activeItems?: readonly DesignNavItem[]
   isOpen?: boolean
   onClose?: () => void
 }
 
 function SidebarContent({
   activeId,
+  activeItems,
   onItemClick,
 }: {
   activeId: string
+  activeItems?: readonly DesignNavItem[]
   onItemClick: (groupSlug: string, itemId: string) => void
 }) {
   const { section } = useParams<{ section: string }>()
@@ -33,8 +37,15 @@ function SidebarContent({
   const [search, setSearch] = useState('')
   const normalizedSearch = search.trim().toLowerCase()
 
+  const navGroups = NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.slug === section && activeItems
+      ? activeItems
+      : group.items,
+  }))
+
   const visibleGroups = normalizedSearch
-    ? NAV_GROUPS.map((group) => {
+    ? navGroups.map((group) => {
       const groupMatches = group.label.toLowerCase().includes(normalizedSearch)
 
       return {
@@ -44,7 +55,7 @@ function SidebarContent({
           : group.items.filter((item) => item.label.toLowerCase().includes(normalizedSearch)),
       }
     }).filter((group) => group.items.length > 0)
-    : NAV_GROUPS.map((group) => ({
+    : navGroups.map((group) => ({
       ...group,
       items: group.slug === section
         ? group.items
@@ -131,7 +142,7 @@ function SidebarContent({
 }
 
 export function DesignSidebar({
-  activeId, isOpen = false, onClose,
+  activeId, activeItems, isOpen = false, onClose,
 }: DesignSidebarProps) {
   const navigate = useNavigate()
   const { section } = useParams<{ section: string }>()
@@ -156,7 +167,11 @@ export function DesignSidebar({
           'border-r border-white/8 bg-white/2 px-3 py-4 md:flex',
         ].join(' ')}
       >
-        <SidebarContent activeId={activeId} onItemClick={handleItemClick} />
+        <SidebarContent
+          activeId={activeId}
+          activeItems={activeItems}
+          onItemClick={handleItemClick}
+        />
       </nav>
 
       {/* mobile drawer */}
@@ -182,7 +197,11 @@ export function DesignSidebar({
               : '-translate-x-full',
           )}
         >
-          <SidebarContent activeId={activeId} onItemClick={handleItemClick} />
+          <SidebarContent
+            activeId={activeId}
+            activeItems={activeItems}
+            onItemClick={handleItemClick}
+          />
         </nav>
       </div>
     </>

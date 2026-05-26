@@ -60,4 +60,32 @@ describe('DesignSidebar', () => {
     expect(screen.getByText('No matches')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Colors' })).not.toBeInTheDocument()
   })
+
+  it('shows CalendarGrid in the calendar feature section', () => {
+    renderSidebar('feature-calendar')
+
+    expect(screen.getByRole('button', { name: 'CalendarGrid' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'CalendarPage' })).not.toBeInTheDocument()
+  })
+
+  it('uses live section items for the active route', () => {
+    render(
+      <MemoryRouter initialEntries={['/design/feature-calendar']}>
+        <Routes>
+          <Route
+            path="/design/:section"
+            element={(
+              <DesignSidebar
+                activeId="dynamic-section"
+                activeItems={[{ id: 'dynamic-section', label: 'DynamicSection' }]}
+              />
+            )}
+          />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('button', { name: 'DynamicSection' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'CalendarGrid' })).not.toBeInTheDocument()
+  })
 })
