@@ -1,13 +1,11 @@
 import { SwipeableTransactionRow, WalletRow } from '@/features/balance'
 import { DateRangeHeader } from '@/features/balance/WalletDetailPage/components/DateRangeHeader'
-import { TransactionRow } from '@/features/balance/WalletDetailPage/components/TransactionRow'
 
 import { SubSection } from '../sectionHelpers'
 
 import {
   STUB_CATEGORY,
   STUB_RANGE,
-  STUB_RUNNING_ROW,
   STUB_TRANSACTION,
   STUB_WALLET_CREDIT,
   STUB_WALLET_PAYMENT,
@@ -43,15 +41,6 @@ export function BalanceFeatSection() {
           onClickStart={() => {}}
           onClickEnd={() => {}}
           onOpenPreset={() => {}}
-        />
-      </SubSection>
-
-      <SubSection id="balance-transaction-row" title="TransactionRow">
-        <TransactionRow
-          row={STUB_RUNNING_ROW}
-          wallet={STUB_WALLET_PAYMENT}
-          wallets={[STUB_WALLET_PAYMENT]}
-          categories={[STUB_CATEGORY]}
         />
       </SubSection>
     </div>

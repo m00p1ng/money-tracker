@@ -5,10 +5,14 @@ import {
   DateRangePresetPicker,
   Icon,
   PageHeader,
+  TransactionRow,
 } from '@/components'
 import { isReconciliationEnabled, walletRunningRows } from '@/features/balance/balanceCalculations'
 import {
+  buildTransactionRowDisplay,
+  formatSignedAmount,
   getPresetRange,
+  transactionAmountColor,
   type DateRange,
   type DateRangePreset,
 } from '@/lib'
@@ -21,7 +25,6 @@ import type {
 import {
   DateRangeHeader,
   SwipeableTransactionRow,
-  TransactionRow,
   WalletSummaryCard,
 } from './components'
 
@@ -131,13 +134,19 @@ export function WalletDetailPage({
           }
 
           return (
-            <TransactionRow
-              key={row.transaction.id}
-              row={row}
-              wallet={wallet}
-              wallets={wallets}
-              categories={categories}
-            />
+            <div className="mb-2">
+              <TransactionRow
+                {...buildTransactionRowDisplay({
+                  transaction: row.transaction,
+                  findCategory: (categoryId) => categories.find((c) => c.id === categoryId),
+                  wallets,
+                  amount: formatSignedAmount(Math.abs(row.amount), wallet.currency),
+                  amountColor: transactionAmountColor(row.transaction, row.amount),
+                  secondaryAmount: formatSignedAmount(row.runningAmount, wallet.currency),
+                  secondaryAmountColor: 'text-white/28',
+                })}
+              />
+            </div>
           )
         })}
       </section>

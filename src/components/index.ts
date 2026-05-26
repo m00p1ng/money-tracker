@@ -1,6 +1,6 @@
 export { Icon } from './Icon'
 export { AppShell } from './AppShell'
-export { BottomNavContainer as BottomNav } from './BottomNav/BottomNavContainer'
+export { default as BottomNav } from './BottomNav'
 
 export * from './input'
 export * from './picker'

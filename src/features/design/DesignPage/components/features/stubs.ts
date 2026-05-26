@@ -46,12 +46,6 @@ export const STUB_TRANSACTION: Transaction = {
   cleared: false,
 }
 
-export const STUB_RUNNING_ROW = {
-  transaction: STUB_TRANSACTION,
-  amount: -12.5,
-  runningAmount: 487.5,
-}
-
 export const STUB_RANGE = { start: '2026-05-01', end: '2026-05-31' }
 
 export const STUB_REPEAT_NEVER: RepeatConfig = { preset: 'never' }
