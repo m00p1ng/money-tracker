@@ -261,9 +261,6 @@ function useTransactionDeleteHandler(
     if (!existing) {
       return
     }
-    if (!window.confirm('Delete this transaction?')) {
-      return
-    }
     await remove(existing.id)
     clearDraft()
     navigate('/')

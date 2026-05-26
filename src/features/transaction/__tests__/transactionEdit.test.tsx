@@ -130,7 +130,6 @@ describe('TransactionPage edit mode', () => {
 
   it('shows confirm dialog and removes transaction on delete', async () => {
     const user = userEvent.setup()
-    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
     const removeSpy = vi.spyOn(useTransactionStore.getState(), 'remove').mockResolvedValue(undefined)
 
     render(
@@ -144,17 +143,17 @@ describe('TransactionPage edit mode', () => {
     const deleteButton = screen.getByRole('button', { name: 'Delete transaction' })
     await user.click(deleteButton)
 
-    expect(confirmSpy).toHaveBeenCalledWith('Delete this transaction?')
+    const confirmButton = await screen.findByRole('button', { name: 'Delete' })
+    await user.click(confirmButton)
+
     expect(removeSpy).toHaveBeenCalledTimes(1)
     expect(removeSpy).toHaveBeenCalledWith('tx-1')
 
-    confirmSpy.mockRestore()
     removeSpy.mockRestore()
   })
 
   it('does not remove transaction when confirm is cancelled', async () => {
     const user = userEvent.setup()
-    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false)
     const removeSpy = vi.spyOn(useTransactionStore.getState(), 'remove')
 
     render(
@@ -168,10 +167,11 @@ describe('TransactionPage edit mode', () => {
     const deleteButton = await screen.findByRole('button', { name: 'Delete transaction' })
     await user.click(deleteButton)
 
-    expect(confirmSpy).toHaveBeenCalledWith('Delete this transaction?')
+    const cancelButton = await screen.findByRole('button', { name: 'Cancel' })
+    await user.click(cancelButton)
+
     expect(removeSpy).not.toHaveBeenCalled()
 
-    confirmSpy.mockRestore()
     removeSpy.mockRestore()
   })
 

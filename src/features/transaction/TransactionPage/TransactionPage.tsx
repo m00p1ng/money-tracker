@@ -2,6 +2,7 @@ import cx from 'classnames'
 import { useState } from 'react'
 
 import { Button } from '@/components'
+import { ConfirmSheet } from '@/components/shared/ConfirmSheet'
 import { createCalcState, pressCalcKey } from '@/lib'
 import type {
   Currency,
@@ -111,6 +112,7 @@ export function TransactionPage({
   const [isRepeatPickerOpen, setRepeatPickerOpen] = useState(false)
   const [isCurrencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [isDatePickerOpen, setDatePickerOpen] = useState(false)
+  const [isDeleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
 
   function handlePress(key: string) {
     if (focusedIndex === null) {
@@ -213,12 +215,25 @@ export function TransactionPage({
           aria-label="Delete transaction"
           variant="danger"
           fullWidth
-          onClick={onDelete}
+          onClick={() => setDeleteConfirmOpen(true)}
           type="button"
         >
           Delete
         </Button>
       )}
+
+      <ConfirmSheet
+        isOpen={isDeleteConfirmOpen}
+        title="Delete Transaction"
+        description="This action cannot be undone."
+        primaryLabel="Delete"
+        primaryVariant="danger"
+        onPrimary={async () => {
+          setDeleteConfirmOpen(false)
+          await onDelete()
+        }}
+        onCancel={() => setDeleteConfirmOpen(false)}
+      />
 
       <TransactionSheets
         date={date}

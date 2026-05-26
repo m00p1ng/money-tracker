@@ -109,7 +109,6 @@ export const DESIGN_GROUPS = [
       { id: 'reconciliation-row', label: 'ReconciliationRow' },
       { id: 'repeat-row', label: 'RepeatRow' },
       { id: 'calculator-keyboard-sheet', label: 'CalculatorKeyboardSheet' },
-      { id: 'transaction-sheets', label: 'TransactionSheets' },
     ],
   },
   {

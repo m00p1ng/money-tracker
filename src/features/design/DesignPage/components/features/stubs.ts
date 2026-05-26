@@ -1,6 +1,5 @@
 import type {
   Category,
-  Currency,
   RepeatConfig,
   Transaction,
   Wallet,
@@ -54,22 +53,6 @@ export const STUB_RUNNING_ROW = {
 }
 
 export const STUB_RANGE = { start: '2026-05-01', end: '2026-05-31' }
-
-export const STUB_CURRENCY_USD: Currency = {
-  code: 'USD',
-  symbol: '$',
-  name: 'US Dollar',
-  isBase: true,
-  rate: 1,
-}
-
-export const STUB_CURRENCY_EUR: Currency = {
-  code: 'EUR',
-  symbol: '€',
-  name: 'Euro',
-  isBase: false,
-  rate: 0.92,
-}
 
 export const STUB_REPEAT_NEVER: RepeatConfig = { preset: 'never' }
 export const STUB_REPEAT_DAILY: RepeatConfig = { preset: 'daily' }

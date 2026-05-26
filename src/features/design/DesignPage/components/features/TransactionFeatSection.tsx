@@ -11,21 +11,16 @@ import {
   ReconciliationRow,
   RepeatRow,
   TransactionHeader,
-  TransactionSheets,
   WalletSelectorRow,
 } from '@/features/transaction'
-import type { RepeatConfig } from '@/types/domain'
 
 import { SubSection, VariantLabel } from '../sectionHelpers'
 
 import {
-  STUB_CURRENCY_EUR,
-  STUB_CURRENCY_USD,
   STUB_DATE_FUTURE,
   STUB_DATE_PAST,
   STUB_REPEAT_DAILY,
   STUB_REPEAT_NEVER,
-  STUB_WALLET_CREDIT,
   STUB_WALLET_PAYMENT,
 } from './stubs'
 
@@ -35,11 +30,6 @@ export function TransactionFeatSection() {
   const [note, setNote] = useState('Lunch with team')
   const [exchangeRate, setExchangeRate] = useState('0.92')
   const [calcSheetOpen, setCalcSheetOpen] = useState(false)
-  const [txSheetsDateOpen, setTxSheetsDateOpen] = useState(false)
-  const [txSheetsDate, setTxSheetsDate] = useState(new Date().toISOString())
-  const [txSheetsWallet, setTxSheetsWallet] = useState('w1')
-  const [txSheetsCurrency, setTxSheetsCurrency] = useState('USD')
-  const [txSheetsRepeat, setTxSheetsRepeat] = useState<RepeatConfig>({ preset: 'never' })
 
   return (
     <div className="space-y-8">
@@ -172,40 +162,6 @@ export function TransactionFeatSection() {
               }
             }}
           />
-        </div>
-      </SubSection>
-
-      <SubSection id="transaction-sheets" title="TransactionSheets">
-        <div className="space-y-3">
-          <Button variant="ghost" onClick={() => setTxSheetsDateOpen(true)}>
-            Open DatePicker via TransactionSheets
-          </Button>
-          <TransactionSheets
-            date={txSheetsDate}
-            walletPickerTarget={null}
-            isRepeatPickerOpen={false}
-            isCurrencyPickerOpen={false}
-            isDatePickerOpen={txSheetsDateOpen}
-            wallets={[STUB_WALLET_PAYMENT, STUB_WALLET_CREDIT]}
-            currencies={[STUB_CURRENCY_USD, STUB_CURRENCY_EUR]}
-            walletId={txSheetsWallet}
-            toWalletId={undefined}
-            currency={txSheetsCurrency}
-            repeatConfig={txSheetsRepeat}
-            onUpdateDate={(d) => {
-              setTxSheetsDate(d.toISOString())
-              setTxSheetsDateOpen(false)
-            }}
-            onUpdateWallet={setTxSheetsWallet}
-            onUpdateToWallet={() => {}}
-            onUpdateCurrency={setTxSheetsCurrency}
-            onUpdateRepeatConfig={setTxSheetsRepeat}
-            onCloseWalletPicker={() => {}}
-            onCloseCurrencyPicker={() => {}}
-            onCloseDatePicker={() => setTxSheetsDateOpen(false)}
-            onCloseRepeatPicker={() => {}}
-          />
-          <VariantLabel label="date picker sheet" />
         </div>
       </SubSection>
     </div>
