@@ -33,7 +33,9 @@ function buildTree(
         onClick={() => !isSource && onSelect(cat.id)}
         className={[
           'flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left active:bg-white/5',
-          isSource ? 'cursor-not-allowed opacity-30' : '',
+          isSource
+            ? 'cursor-not-allowed opacity-30'
+            : '',
         ].join(' ')}
         style={{ paddingLeft: `${12 + indent}px` }}
       >
@@ -77,11 +79,16 @@ export function MergeTargetSheet({
           />
           <motion.div
             key="sheet"
-            className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-107.5 rounded-t-3xl border-t border-white/8 bg-(--bg) pb-8"
+            className={[
+              'fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-107.5',
+              'rounded-t-3xl border-t border-white/8 bg-(--bg) pb-8',
+            ].join(' ')}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            transition={{ type: 'spring', stiffness: 400, damping: 38 }}
+            transition={{
+              type: 'spring', stiffness: 400, damping: 38,
+            }}
           >
             <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-white/15" />
             <h3 className="px-5 pb-2 pt-3.5 text-center text-base font-bold">
@@ -98,7 +105,10 @@ export function MergeTargetSheet({
               <button
                 type="button"
                 onClick={onCancel}
-                className="w-full rounded-xl bg-white/5 py-3.5 text-center text-sm font-semibold text-white/60 active:bg-white/8"
+                className={[
+                  'w-full rounded-xl bg-white/5 py-3.5 text-center',
+                  'text-sm font-semibold text-white/60 active:bg-white/8',
+                ].join(' ')}
               >
                 Cancel
               </button>
