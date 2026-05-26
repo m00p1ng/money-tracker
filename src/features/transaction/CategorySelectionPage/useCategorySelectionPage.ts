@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { useCategoryStore, useTransactionDraftStore } from '@/stores'
+import { useCategoryStore, useTransactionDraftStore, useTransactionStore } from '@/stores'
 import type { Category } from '@/types/domain'
 
 import type { CategorySelectionPageProps } from './CategorySelectionPage'
@@ -26,6 +26,8 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   const [parentId, setParentId] = useState<string | undefined>()
   const [isEditMode, setIsEditMode] = useState(false)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [mergeSourceId, setMergeSourceId] = useState<string | null>(null)
+  const [mergeTargetId, setMergeTargetId] = useState<string | null>(null)
   const isLocked = isAddCategory || changingIndex !== null
 
   const visible = categories.filter((c) => c.type === type && c.parentId === parentId)
@@ -78,7 +80,14 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   }
 
   function onRequestDelete(categoryId: string) {
-    setConfirmDeleteId(categoryId)
+    const transactions = useTransactionStore.getState().items
+    const hasTransactions = transactions.some((t) =>
+      t.items.some((item) => item.categoryId === categoryId))
+    if (hasTransactions) {
+      setMergeSourceId(categoryId)
+    } else {
+      setConfirmDeleteId(categoryId)
+    }
   }
 
   async function onConfirmDelete() {
@@ -91,6 +100,23 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     setConfirmDeleteId(null)
   }
 
+  function onSelectMergeTarget(targetId: string) {
+    setMergeTargetId(targetId)
+  }
+
+  async function onConfirmMerge() {
+    if (!mergeSourceId || !mergeTargetId) return
+    await useCategoryStore.getState().mergeAndDelete(mergeSourceId, mergeTargetId)
+    await useTransactionStore.getState().load()
+    setMergeSourceId(null)
+    setMergeTargetId(null)
+  }
+
+  function onCancelMerge() {
+    setMergeSourceId(null)
+    setMergeTargetId(null)
+  }
+
   return {
     type,
     isLocked,
@@ -100,6 +126,8 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     parent,
     categories,
     confirmDeleteId,
+    mergeSourceId,
+    mergeTargetId,
     onTypeChange,
     onBack,
     onSelect,
@@ -107,5 +135,8 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     onRequestDelete,
     onConfirmDelete,
     onCancelDelete,
+    onSelectMergeTarget,
+    onConfirmMerge,
+    onCancelMerge,
   }
 }

@@ -4,6 +4,8 @@ import { ConfirmSheet, Icon, TypePickerDropdown } from '@/components'
 import { PageHeader } from '@/components/shared/PageHeader'
 import type { Category } from '@/types/domain'
 
+import { MergeTargetSheet } from './MergeTargetSheet'
+
 const gridVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.04 } },
@@ -31,6 +33,8 @@ export interface CategorySelectionPageProps {
   parent: Category | undefined
   categories: Category[]
   confirmDeleteId: string | null
+  mergeSourceId: string | null
+  mergeTargetId: string | null
   onTypeChange: (newType: 'expense' | 'income' | 'transfer') => void
   onBack: () => void
   onSelect: (category: Category) => void
@@ -38,6 +42,9 @@ export interface CategorySelectionPageProps {
   onRequestDelete: (id: string) => void
   onConfirmDelete: () => void
   onCancelDelete: () => void
+  onSelectMergeTarget: (targetId: string) => void
+  onConfirmMerge: () => void
+  onCancelMerge: () => void
 }
 
 export function CategorySelectionPage({
@@ -49,6 +56,8 @@ export function CategorySelectionPage({
   parent,
   categories,
   confirmDeleteId,
+  mergeSourceId,
+  mergeTargetId,
   onTypeChange,
   onBack,
   onSelect,
@@ -56,6 +65,9 @@ export function CategorySelectionPage({
   onRequestDelete,
   onConfirmDelete,
   onCancelDelete,
+  onSelectMergeTarget,
+  onConfirmMerge,
+  onCancelMerge,
 }: CategorySelectionPageProps) {
   const editButton = (
     <button
@@ -148,6 +160,23 @@ export function CategorySelectionPage({
         primaryLabel="Delete"
         onPrimary={onConfirmDelete}
         onCancel={onCancelDelete}
+      />
+
+      <MergeTargetSheet
+        isOpen={mergeSourceId !== null && mergeTargetId === null}
+        sourceId={mergeSourceId}
+        categories={categories}
+        onSelect={onSelectMergeTarget}
+        onCancel={onCancelMerge}
+      />
+
+      <ConfirmSheet
+        isOpen={mergeTargetId !== null}
+        title={`Merge "${categories.find(c => c.id === mergeSourceId)?.name ?? ''}" into "${categories.find(c => c.id === mergeTargetId)?.name ?? ''}"?`}
+        description="All transactions will be moved and the category will be deleted."
+        primaryLabel="Merge & Delete"
+        onPrimary={onConfirmMerge}
+        onCancel={onCancelMerge}
       />
     </div>
   )
