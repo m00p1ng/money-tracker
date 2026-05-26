@@ -1,11 +1,11 @@
 import type React from 'react'
 
+import { ComponentsSection } from './components/ComponentsSection'
 import { BalanceFeatSection } from './components/features/BalanceFeatSection'
 import { CalendarFeatSection } from './components/features/CalendarFeatSection'
 import { HomeFeatSection } from './components/features/HomeFeatSection'
 import { SettingsFeatSection } from './components/features/SettingsFeatSection'
 import { TransactionFeatSection } from './components/features/TransactionFeatSection'
-import { ComponentsSection } from './components/ComponentsSection'
 import { TokensSection } from './components/TokensSection'
 
 export type DesignNavItem = {

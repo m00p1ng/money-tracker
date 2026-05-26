@@ -1,11 +1,15 @@
+import { useState } from 'react'
+
 import type { DateRangePreset } from '@/lib'
 
-import { SelectorSheet, type SelectorOption } from './SelectorSheet'
+import { BottomSheet } from '../BottomSheet'
+import { Button } from '../Button'
+import { WheelPicker } from '../WheelPicker'
 
-const PRESETS: SelectorOption<DateRangePreset>[] = [
-  { label: 'Last 7d', value: 'last-7d' },
-  { label: 'Last 30d', value: 'last-30d' },
-  { label: 'Last 90d', value: 'last-90d' },
+const PRESETS: Array<{ label: string; value: DateRangePreset }> = [
+  { label: 'Last 7 Day', value: 'last-7d' },
+  { label: 'Last 30 Day', value: 'last-30d' },
+  { label: 'Last 90 Day', value: 'last-90d' },
   { label: 'This Month', value: 'this-month' },
   { label: 'Last Month', value: 'last-month' },
   { label: 'This Year', value: 'this-year' },
@@ -25,17 +29,40 @@ export function DateRangePresetPicker({
   onSelect,
   onClose,
 }: DateRangePresetPickerProps) {
+  const [draftPreset, setDraftPreset] = useState<DateRangePreset>(value)
+
   return (
-    <SelectorSheet
+    <BottomSheet
       isOpen={isOpen}
-      title="Date Range"
-      options={PRESETS}
-      value={value}
-      onSelect={(preset) => {
-        onSelect(preset)
-        onClose()
-      }}
       onClose={onClose}
-    />
+      title="Date Range"
+    >
+      <div className="mx-4 mt-3">
+        <WheelPicker
+          columns={[
+            {
+              name: 'preset',
+              options: PRESETS,
+            },
+          ]}
+          value={{ preset: draftPreset }}
+          onChange={(next) => setDraftPreset(next.preset as DateRangePreset)}
+        />
+      </div>
+
+      <div className="mt-4 px-4">
+        <Button
+          variant="accent"
+          fullWidth
+          type="button"
+          onClick={() => {
+            onSelect(draftPreset)
+            onClose()
+          }}
+        >
+          Confirm
+        </Button>
+      </div>
+    </BottomSheet>
   )
 }

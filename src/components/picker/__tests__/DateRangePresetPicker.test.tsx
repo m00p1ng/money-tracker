@@ -1,5 +1,10 @@
-import { render, screen } from '@testing-library/react'
+import {
+  fireEvent,
+  render,
+  screen,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import type { ReactNode } from 'react'
 import {
   describe,
   expect,
@@ -14,6 +19,34 @@ import {
   SelectorSheet,
   WalletPicker,
 } from '@/components'
+
+vi.mock('@ncdai/react-wheel-picker', () => ({
+  WheelPickerWrapper: ({ children }: { children: ReactNode }) => (
+    <div data-testid="wheel-picker">{children}</div>
+  ),
+  WheelPicker: ({
+    value,
+    onValueChange,
+    options,
+  }: {
+    value: string
+    onValueChange: (value: string) => void
+    options: Array<{ value: string; label: ReactNode }>
+  }) => (
+    <div>
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          aria-pressed={option.value === value}
+          onClick={() => onValueChange(option.value)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  ),
+}))
 
 describe('preset pickers', () => {
   it('renders selector sheet leading content and descriptions', async () => {
@@ -52,7 +85,7 @@ describe('preset pickers', () => {
     expect(onSelect).toHaveBeenCalledWith('bank')
   })
 
-  it('selects and closes DateRangePresetPicker immediately', async () => {
+  it('confirms DateRangePresetPicker wheel selection before closing', async () => {
     const onSelect = vi.fn()
     const onClose = vi.fn()
 
@@ -65,7 +98,15 @@ describe('preset pickers', () => {
       />,
     )
 
-    await userEvent.click(screen.getByRole('button', { name: 'Last 30d' }))
+    expect(screen.getByTestId('wheel-picker')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Last 7 Day' })).toHaveAttribute('aria-pressed', 'true')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Last 30 Day' }))
+
+    expect(onSelect).not.toHaveBeenCalled()
+    expect(onClose).not.toHaveBeenCalled()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm' }))
 
     expect(onSelect).toHaveBeenCalledWith('last-30d')
     expect(onClose).toHaveBeenCalledTimes(1)

@@ -10,7 +10,7 @@ type WheelPickerOption = string | {
 
 export type WheelPickerColumn = {
   name: string
-  label: string
+  label?: string
   options: WheelPickerOption[]
   capitalize?: boolean
 }
