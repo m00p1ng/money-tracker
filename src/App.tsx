@@ -13,7 +13,7 @@ import { NavigationDirectionProvider, useNavigationDirection } from '@/context/n
 import {
   BalancePage,
   WalletDetailPage,
-  WalletFormPage,
+  WalletEditPage,
 } from '@/features/balance'
 import { CalendarPage } from '@/features/calendar'
 import { DesignPage } from '@/features/design'
@@ -59,8 +59,8 @@ export function RoutedApp() {
         <Route path="/balance" element={<BalancePage />} />
         <Route path="/balance/wallet/:id" element={<WalletDetailPage />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/balance/wallets/new" element={<WalletFormPage />} />
-        <Route path="/balance/wallets/:id" element={<WalletFormPage />} />
+        <Route path="/balance/wallets/new" element={<WalletEditPage />} />
+        <Route path="/balance/wallets/:id" element={<WalletEditPage />} />
         <Route path="/settings/currencies" element={<CurrenciesPage />} />
         <Route path="/settings/currencies/new" element={<CurrencyFormPage />} />
         <Route path="/settings/currencies/:code" element={<CurrencyFormPage />} />

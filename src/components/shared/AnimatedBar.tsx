@@ -28,17 +28,17 @@ export function AnimatedBar({
 
   return (
     <div
-      className="relative h-11 overflow-hidden rounded-xl border border-white/5"
+      className="relative h-8 overflow-hidden border border-white/5"
       style={{ background: textColor }}
     >
       <span
-        className="absolute inset-0 flex items-center px-4 text-base font-bold"
+        className="absolute inset-0 flex items-center px-4 text-sm font-semibold"
         style={{ color: colorTo, whiteSpace: 'nowrap' }}
       >
         {label}
       </span>
       <motion.div
-        className="absolute inset-y-0 left-0 overflow-hidden rounded-xl"
+        className="absolute inset-y-0 left-0 overflow-hidden"
         style={{
           background: `linear-gradient(to right, ${colorFrom}, ${colorTo})`,
         }}
@@ -52,7 +52,7 @@ export function AnimatedBar({
         }}
       >
         <span
-          className="flex h-full items-center px-4 text-base font-bold"
+          className="flex h-full items-center px-4 text-sm font-semibold"
           style={{
             color: textColor,
             minWidth: 'max-content',

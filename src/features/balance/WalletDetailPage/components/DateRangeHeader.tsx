@@ -22,7 +22,7 @@ export function DateRangeHeader({
   onOpenPreset,
 }: DateRangeHeaderProps) {
   return (
-    <div className="mb-2 flex items-stretch overflow-hidden rounded-2xl border border-white/[0.085] bg-white/[0.08]">
+    <div className="mb-2 flex items-stretch overflow-hidden rounded-2xl border border-white/8.5 bg-white/8">
       <button
         type="button"
         aria-label="Begin"

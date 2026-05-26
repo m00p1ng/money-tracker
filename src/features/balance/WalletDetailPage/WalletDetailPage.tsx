@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import {
-  Card,
   DatePicker,
   DateRangePresetPicker,
   Icon,
@@ -24,7 +23,6 @@ import {
   DateRangeHeader,
   SwipeableTransactionRow,
   TransactionRow,
-  WalletStats,
 } from './components'
 
 export type WalletDetailPageProps = {
@@ -70,10 +68,6 @@ export function WalletDetailPage({
   const isCredit = wallet.type === 'credit_card'
   const reconciliation = isReconciliationEnabled(wallet)
 
-  const totalExpenses = rows
-    .filter((row) => row.amount < 0)
-    .reduce((sum, row) => sum + Math.abs(row.amount), 0)
-
   function handlePresetSelect(preset: DateRangePreset) {
     setRange(getPresetRange(preset))
     setPresetSheetOpen(false)
@@ -113,27 +107,17 @@ export function WalletDetailPage({
         onOpenPreset={() => setPresetSheetOpen(true)}
       />
 
-      {isCredit && wallet.creditLimit
-        ? (
-          <CreditCardStats
-            wallet={wallet}
-            currentAmount={currentAmount}
-            clearedAmount={clearedAmount}
-            reconciliation={reconciliation}
-          />
-        )
-        : (
-          <WalletStats
-            wallet={wallet}
-            currentAmount={currentAmount}
-            clearedAmount={clearedAmount}
-            totalExpenses={totalExpenses}
-            reconciliation={reconciliation}
-          />
-        )}
+      {isCredit && wallet.creditLimit && (
+        <CreditCardStats
+          wallet={wallet}
+          currentAmount={currentAmount}
+          clearedAmount={clearedAmount}
+          reconciliation={reconciliation}
+        />
+      )}
 
       <section>
-        {rows.length === 0 && <Card className="text-sm text-slate-400">No transactions in this range.</Card>}
+        {rows.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No transactions</p>}
         {rows.map((row) => {
           if (reconciliation) {
             return (

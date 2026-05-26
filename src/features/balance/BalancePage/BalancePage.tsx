@@ -116,7 +116,7 @@ export function BalancePage({
           : editButton}
       />
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         <AnimatedBar
           value={assets}
           maxValue={maxBarValue}

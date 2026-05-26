@@ -3,9 +3,10 @@ import { useState } from 'react'
 import {
   FormErrorMessage,
   Icon,
+  IconPicker,
   PageHeader,
+  TextInput,
 } from '@/components'
-import { IconPicker } from '@/components/shared/picker/IconPicker'
 import type { Category } from '@/types/domain'
 
 export type CategoryEditPageProps = {
@@ -44,15 +45,11 @@ export function CategoryEditPage({
         >
           <Icon name={form.icon} />
         </button>
-        <input
+        <TextInput
           type="text"
           value={form.name}
           onChange={(e) => onChangeName(e.target.value)}
           placeholder="Category name"
-          className={[
-            'min-w-0 flex-1 bg-transparent text-2xl font-bold',
-            'text-slate-50 outline-none placeholder:text-slate-500',
-          ].join(' ')}
         />
       </div>
 
