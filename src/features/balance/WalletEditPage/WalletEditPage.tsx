@@ -76,7 +76,7 @@ export function WalletEditPage({
     <form className="space-y-5" onSubmit={handleSubmit}>
       <PageHeader title={title} onBack={onBack} />
 
-      <div className="flex items-center gap-3 rounded-xl bg-white/3 p-3">
+      <div className="flex items-center gap-3">
         <button
           type="button"
           aria-label="Change icon"

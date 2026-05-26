@@ -1,6 +1,7 @@
 import cx from 'classnames'
 import { useState } from 'react'
 
+import { Button } from '@/components'
 import { createCalcState, pressCalcKey } from '@/lib'
 import type {
   Currency,
@@ -208,14 +209,15 @@ export function TransactionPage({
       />
 
       {isEditMode && (
-        <button
+        <Button
           aria-label="Delete transaction"
-          className="w-full rounded-xl border border-danger/20 bg-danger/[0.07] py-3 text-sm font-semibold text-danger"
+          variant="danger"
+          fullWidth
           onClick={onDelete}
           type="button"
         >
           Delete
-        </button>
+        </Button>
       )}
 
       <TransactionSheets

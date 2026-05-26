@@ -1,13 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { useMemo } from 'react'
 
 import { Icon } from '@/components'
+import { useTransactionStore } from '@/stores'
 import type { Category } from '@/types/domain'
 
 type MergeTargetSheetProps = {
   isOpen: boolean
   sourceId: string | null
   categories: Category[]
-  categoriesWithTransactions: Set<string>
   onSelect: (targetId: string) => void
   onCancel: () => void
 }
@@ -63,10 +64,21 @@ export function MergeTargetSheet({
   isOpen,
   sourceId,
   categories,
-  categoriesWithTransactions,
   onSelect,
   onCancel,
 }: MergeTargetSheetProps) {
+  const transactions = useTransactionStore((state) => state.items)
+  const categoriesWithTransactions = useMemo(() => {
+    const result = new Set<string>()
+    for (const tx of transactions) {
+      for (const item of tx.items) {
+        result.add(item.categoryId)
+      }
+    }
+
+    return result
+  }, [transactions])
+
   const sourceCategory = categories.find((c) => c.id === sourceId)
   const sameTypeCategories = categories.filter(
     (c) => c.type === sourceCategory?.type,
