@@ -1,5 +1,9 @@
 import { act, renderHook } from '@testing-library/react'
-import { MemoryRouter, Route, Routes } from 'react-router'
+import {
+  MemoryRouter,
+  Route,
+  Routes,
+} from 'react-router'
 import {
   afterEach,
   describe,
@@ -12,7 +16,11 @@ import {
   useTransactionStore,
   useWalletStore,
 } from '@/stores'
-import type { Currency, Transaction, Wallet } from '@/types/domain'
+import type {
+  Currency,
+  Transaction,
+  Wallet,
+} from '@/types/domain'
 
 import { useWalletEditPage } from '../useWalletEditPage'
 
@@ -85,7 +93,7 @@ describe('useWalletEditPage', () => {
     expect(txs).toHaveLength(1)
     expect(txs[0].type).toBe('adjustment')
     expect(txs[0].items[0].amount).toBe(500)
-    expect(txs[0].note).toBe('Opening Balance')
+    expect(txs[0].items[0].categoryId).toBe('adjustment-opening-balance')
     expect(txs[0].walletId).toBe(wallets[0].id)
   })
 
@@ -113,7 +121,7 @@ describe('useWalletEditPage', () => {
       type: 'adjustment',
       walletId: existingWallet.id,
       currency: 'THB',
-      items: [{ categoryId: 'adjustment-balance-adjustment', amount: 100 }],
+      items: [{ categoryId: 'adjustment-opening-balance', amount: 100 }],
       date: '2026-05-01T00:00:00.000Z',
       createdAt: '2026-05-01T00:00:00.000Z',
     }
@@ -134,7 +142,7 @@ describe('useWalletEditPage', () => {
     })
 
     const txs = useTransactionStore.getState().items
-    const adjTxs = txs.filter((t) => t.note === 'Balance Adjustment')
+    const adjTxs = txs.filter((t) => t.items[0]?.categoryId === 'adjustment-balance-adjustment')
     expect(adjTxs).toHaveLength(1)
     expect(adjTxs[0].type).toBe('adjustment')
     expect(adjTxs[0].items[0].amount).toBe(-30)

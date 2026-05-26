@@ -28,7 +28,9 @@ export function useWalletEditPage(): WalletEditPageProps | null {
   const backNavigate = useBackNavigate()
   const navigate = useNavigate()
   const currencies = useCurrencyStore((state) => state.items)
-  const existing = useWalletStore((state) => (id ? state.findById(id) : undefined))
+  const existing = useWalletStore((state) => (id
+    ? state.findById(id)
+    : undefined))
   const add = useWalletStore((state) => state.add)
   const update = useWalletStore((state) => state.update)
   const remove = useWalletStore((state) => state.remove)
@@ -54,7 +56,9 @@ export function useWalletEditPage(): WalletEditPageProps | null {
       currency: currencies[0]?.code ?? 'THB',
       balance: 0,
       color: '#10b981',
-      icon: initialType === 'credit_card' ? 'fa-credit-card' : 'fa-wallet',
+      icon: initialType === 'credit_card'
+        ? 'fa-credit-card'
+        : 'fa-wallet',
     }
   })
 
@@ -91,7 +95,6 @@ export function useWalletEditPage(): WalletEditPageProps | null {
             items: [{ categoryId: 'adjustment-balance-adjustment', amount: diff }],
             date: new Date().toISOString(),
             createdAt: new Date().toISOString(),
-            note: 'Balance Adjustment',
           })
         }
       } else {
@@ -103,16 +106,17 @@ export function useWalletEditPage(): WalletEditPageProps | null {
             type: 'adjustment',
             walletId: form.id,
             currency: form.currency,
-            items: [{ categoryId: 'adjustment-balance-adjustment', amount: initialBalance }],
+            items: [{ categoryId: 'adjustment-opening-balance', amount: initialBalance }],
             date: new Date().toISOString(),
             createdAt: new Date().toISOString(),
-            note: 'Opening Balance',
           })
         }
       }
       navigate('/balance')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to save')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to save')
     }
   }
 
@@ -124,7 +128,9 @@ export function useWalletEditPage(): WalletEditPageProps | null {
       await remove(existing.id)
       navigate('/balance')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to delete')
+      setError(err instanceof Error
+        ? err.message
+        : 'Unable to delete')
     }
   }
 
@@ -136,8 +142,12 @@ export function useWalletEditPage(): WalletEditPageProps | null {
     form,
     currencies,
     error,
-    title: existing ? 'Edit Wallet' : 'New Wallet',
-    balanceLabel: existing ? 'Current Balance' : 'Starting Balance',
+    title: existing
+      ? 'Edit Wallet'
+      : 'New Wallet',
+    balanceLabel: existing
+      ? 'Current Balance'
+      : 'Starting Balance',
     showDelete: Boolean(existing),
     typeDisabled: Boolean(existing),
     onChangeName: (name) => setForm((prev) => ({ ...prev, name })),

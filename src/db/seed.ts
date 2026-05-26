@@ -116,6 +116,15 @@ function buildCategories(): Category[] {
   return categories
 }
 
+const OPENING_BALANCE_CATEGORY: Category = {
+  id: 'adjustment-opening-balance',
+  name: 'Opening Balance',
+  type: 'adjustment',
+  level: 1,
+  icon: 'fa-sliders',
+  isDefault: true,
+}
+
 const BALANCE_ADJUSTMENT_CATEGORY: Category = {
   id: 'adjustment-balance-adjustment',
   name: 'Balance Adjustment',
@@ -126,7 +135,7 @@ const BALANCE_ADJUSTMENT_CATEGORY: Category = {
 }
 
 export async function ensureSystemCategories(): Promise<void> {
-  await db.categories.put(BALANCE_ADJUSTMENT_CATEGORY)
+  await db.categories.bulkPut([OPENING_BALANCE_CATEGORY, BALANCE_ADJUSTMENT_CATEGORY])
 }
 
 export async function seedDatabase(): Promise<void> {
@@ -139,6 +148,6 @@ export async function seedDatabase(): Promise<void> {
     await db.wallets.put(wallet)
     await db.currencies.put(currency)
     await db.settings.put(settings)
-    await db.categories.bulkPut([...buildCategories(), BALANCE_ADJUSTMENT_CATEGORY])
+    await db.categories.bulkPut([...buildCategories(), OPENING_BALANCE_CATEGORY, BALANCE_ADJUSTMENT_CATEGORY])
   })
 }
