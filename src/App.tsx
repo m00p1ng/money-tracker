@@ -24,7 +24,11 @@ import {
   SettingsPage,
   ThemePage,
 } from '@/features/settings'
-import { CategoryEditPage, CategorySelectionPage, TransactionPage } from '@/features/transaction'
+import {
+  CategoryEditPage,
+  CategorySelectionPage,
+  TransactionPage,
+} from '@/features/transaction'
 
 const bottomNavRoutes = ['/', '/balance', '/settings']
 
@@ -62,6 +66,7 @@ export function RoutedApp() {
         <Route path="/settings/currencies/:code" element={<CurrencyFormPage />} />
         <Route path="/settings/theme" element={<ThemePage />} />
         <Route path="/transaction/category" element={<CategorySelectionPage />} />
+        <Route path="/transaction/category/new" element={<CategoryEditPage />} />
         <Route path="/transaction/category/edit/:id" element={<CategoryEditPage />} />
         <Route path="/transaction/new" element={<TransactionPage />} />
         <Route path="/transaction/repeat/:sourceId/:date" element={<TransactionPage />} />

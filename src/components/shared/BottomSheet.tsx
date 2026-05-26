@@ -17,9 +17,11 @@ export function BottomSheet({
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div
+          <motion.button
             key="backdrop"
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            aria-label="Close bottom sheet"
+            className="fixed inset-0 z-40 border-0 bg-black/60 p-0 backdrop-blur-sm"
+            type="button"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

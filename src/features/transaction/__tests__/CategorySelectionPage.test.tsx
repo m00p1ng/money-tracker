@@ -1,4 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import {
+  render,
+  screen,
+  within,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {
   MemoryRouter,
@@ -12,6 +16,7 @@ import {
   it,
 } from 'vitest'
 
+import CategoryEditPage from '@/features/transaction/CategoryEditPage'
 import CategorySelectionPage from '@/features/transaction/CategorySelectionPage'
 import { useCategoryStore, useTransactionDraftStore } from '@/stores'
 
@@ -51,6 +56,7 @@ function renderPage(search = '') {
     <MemoryRouter initialEntries={[`/transaction/category${search}`]}>
       <Routes>
         <Route path="/transaction/category" element={<CategorySelectionPage />} />
+        <Route path="/transaction/category/new" element={<CategoryEditPage />} />
         <Route path="/transaction/new" element={<div data-testid="tx-page" />} />
       </Routes>
     </MemoryRouter>,
@@ -145,6 +151,40 @@ describe('CategorySelectionPage edit mode', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
     await userEvent.click(screen.getByRole('button', { name: 'Done' }))
     expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument()
+  })
+
+  it('shows Add Category card button only in edit mode', async () => {
+    renderPage()
+    expect(screen.queryByRole('button', { name: 'Add Category' })).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+
+    expect(screen.getByRole('button', { name: 'Add Category' })).toBeInTheDocument()
+  })
+
+  it('places Add Category after existing categories in edit mode', async () => {
+    renderPage()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+
+    const grid = document.querySelector('.grid-cols-3')
+    expect(grid).toBeInTheDocument()
+    const gridButtons = within(grid as HTMLElement)
+      .getAllByRole('button')
+      .filter((button) => !button.getAttribute('aria-label')?.startsWith('Remove '))
+    expect(gridButtons.map((button) => button.textContent)).toEqual([
+      'Food & Drink',
+      'Add Category',
+    ])
+  })
+
+  it('opens the new category form when Add Category is tapped in edit mode', async () => {
+    renderPage()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Add Category' }))
+
+    expect(screen.getByRole('heading', { name: 'New Category' })).toBeInTheDocument()
   })
 })
 

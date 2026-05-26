@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { useCategoryStore, useTransactionDraftStore, useTransactionStore } from '@/stores'
+import {
+  useCategoryStore,
+  useTransactionDraftStore,
+  useTransactionStore,
+} from '@/stores'
 import type { Category } from '@/types/domain'
 
 import type { CategorySelectionPageProps } from './CategorySelectionPage'
@@ -65,6 +69,14 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     }
   }
 
+  function onAddCategory() {
+    const params = new URLSearchParams({ type })
+    if (parentId) {
+      params.set('parentId', parentId)
+    }
+    navigate(`/transaction/category/new?${params.toString()}`)
+  }
+
   function onSelect(category: Category) {
     if (isEditMode) {
       const hasChildren = categories.some((c) => c.parentId === category.id)
@@ -73,6 +85,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
       } else {
         navigate(`/transaction/category/edit/${category.id}`)
       }
+
       return
     }
 
@@ -113,7 +126,9 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   }
 
   async function onConfirmDelete() {
-    if (!confirmDeleteId) return
+    if (!confirmDeleteId) {
+      return
+    }
     await useCategoryStore.getState().remove(confirmDeleteId)
     setConfirmDeleteId(null)
   }
@@ -127,7 +142,9 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   }
 
   async function onConfirmMerge() {
-    if (!mergeSourceId || !mergeTargetId) return
+    if (!mergeSourceId || !mergeTargetId) {
+      return
+    }
     await useCategoryStore.getState().mergeAndDelete(mergeSourceId, mergeTargetId)
     await useTransactionStore.getState().load()
     setMergeSourceId(null)
@@ -155,6 +172,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     onSelect,
     onToggleEditMode: () => setIsEditMode((prev) => !prev),
     onEditParent,
+    onAddCategory,
     onRequestDelete,
     onConfirmDelete,
     onCancelDelete,
@@ -162,6 +180,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     onConfirmMerge,
     onCancelMerge,
     onReorder: (ids: string[]) => useCategoryStore.getState().reorder(ids),
-    onReparent: (id: string, newParentId: string) => useCategoryStore.getState().reparent(id, newParentId),
+    onReparent: (id: string, newParentId: string | undefined) =>
+      useCategoryStore.getState().reparent(id, newParentId),
   }
 }

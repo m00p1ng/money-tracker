@@ -2,6 +2,7 @@ import { type FormEvent } from 'react'
 
 import {
   Field,
+  FormErrorMessage,
   Icon,
   PageHeader,
 } from '@/components'
@@ -11,6 +12,8 @@ import type { Category } from '@/types/domain'
 
 export type CategoryEditPageProps = {
   form: Pick<Category, 'name' | 'icon'>
+  title: string
+  error: string | null
   onChangeName: (name: string) => void
   onChangeIcon: (icon: string) => void
   onBack: () => void
@@ -19,6 +22,8 @@ export type CategoryEditPageProps = {
 
 export function CategoryEditPage({
   form,
+  title,
+  error,
   onChangeName,
   onChangeIcon,
   onBack,
@@ -31,7 +36,7 @@ export function CategoryEditPage({
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
-      <PageHeader title="Edit Category" onBack={onBack} />
+      <PageHeader title={title} onBack={onBack} />
 
       <div className="flex items-center gap-3 rounded-xl bg-white/3 p-3">
         <div className={[
@@ -55,6 +60,8 @@ export function CategoryEditPage({
       <Field label="Icon">
         <IconPickerField value={form.icon} onChange={onChangeIcon} />
       </Field>
+
+      <FormErrorMessage error={error} />
 
       <div className="px-0">
         <button

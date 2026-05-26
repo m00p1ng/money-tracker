@@ -4,6 +4,7 @@ import {
   DragOverlay,
   PointerSensor,
   TouchSensor,
+  useDroppable,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
@@ -36,6 +37,15 @@ import type { Category } from '@/types/domain'
 
 import { MergeTargetSheet } from './MergeTargetSheet'
 
+const PARENT_DROP_ID = '__category-parent-drop__'
+
+type RectLike = {
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
 const gridVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.04 } },
@@ -52,6 +62,17 @@ const cellVariants = {
       damping: 28,
     },
   },
+}
+
+function rectsOverlap(first: RectLike | null | undefined, second: RectLike | null | undefined) {
+  if (!first || !second) {
+    return false
+  }
+
+  return first.left < second.right
+    && first.right > second.left
+    && first.top < second.bottom
+    && first.bottom > second.top
 }
 
 export interface CategorySelectionPageProps {
@@ -76,8 +97,9 @@ export interface CategorySelectionPageProps {
   onConfirmMerge: () => void
   onCancelMerge: () => void
   onEditParent: () => void
+  onAddCategory: () => void
   onReorder: (ids: string[]) => void
-  onReparent: (id: string, newParentId: string) => void
+  onReparent: (id: string, newParentId: string | undefined) => void
 }
 
 interface SortableCategoryCellProps {
@@ -193,6 +215,63 @@ function SortableCategoryCell({
   )
 }
 
+interface ParentCategoryHeaderProps {
+  parent: Category
+  isEditMode: boolean
+  isPromoteTarget: boolean
+  onEditParent: () => void
+}
+
+function ParentCategoryHeader({
+  parent,
+  isEditMode,
+  isPromoteTarget,
+  onEditParent,
+}: ParentCategoryHeaderProps) {
+  const { setNodeRef } = useDroppable({ id: PARENT_DROP_ID })
+
+  return (
+    <motion.div
+      ref={isEditMode
+        ? setNodeRef
+        : undefined}
+      role={isEditMode
+        ? 'button'
+        : undefined}
+      onClick={isEditMode
+        ? onEditParent
+        : undefined}
+      animate={isPromoteTarget
+        ? { scale: 1.02 }
+        : { scale: 1 }}
+      transition={{
+        type: 'spring', stiffness: 400, damping: 25,
+      }}
+      style={
+        isPromoteTarget
+          ? {
+            borderColor: 'rgba(52,211,153,0.6)',
+            backgroundColor: 'rgba(16,185,129,0.10)',
+            boxShadow: '0 0 16px rgba(16,185,129,0.35)',
+          }
+          : undefined
+      }
+      className={[
+        'flex items-center gap-3 rounded-2xl border border-transparent px-1 py-1',
+        'text-lg font-bold text-slate-100',
+        isEditMode
+          ? 'cursor-pointer active:opacity-70'
+          : '',
+      ].join(' ')}
+    >
+      <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl">
+        <Icon name={parent.icon} />
+      </span>
+      <span>{parent.name}</span>
+    </motion.div>
+  )
+}
+
 export function CategorySelectionPage({
   type,
   isLocked,
@@ -215,6 +294,7 @@ export function CategorySelectionPage({
   onConfirmMerge,
   onCancelMerge,
   onEditParent,
+  onAddCategory,
   onReorder,
   onReparent,
 }: CategorySelectionPageProps) {
@@ -248,17 +328,42 @@ export function CategorySelectionPage({
     setReparentTargetId(null)
   }
 
+  function hasChildCategories(categoryId: string) {
+    return categories.some((category) => category.parentId === categoryId)
+  }
+
+  function clearPendingReparent() {
+    if (lingerTimerRef.current !== null) {
+      clearTimeout(lingerTimerRef.current)
+      lingerTimerRef.current = null
+    }
+    hoveredIdRef.current = null
+    reparentTargetIdRef.current = null
+    setReparentTargetId(null)
+  }
+
   function handleDragOver(event: DragOverEvent) {
     const { active, over } = event
 
-    if (!over || over.id === active.id) {
-      if (lingerTimerRef.current !== null) {
-        clearTimeout(lingerTimerRef.current)
-        lingerTimerRef.current = null
+    if (hasChildCategories(active.id as string)) {
+      clearPendingReparent()
+
+      return
+    }
+
+    if (!over || over.id === active.id || over.id === PARENT_DROP_ID) {
+      clearPendingReparent()
+
+      if (over?.id === PARENT_DROP_ID) {
+        reparentTargetIdRef.current = PARENT_DROP_ID
+        setReparentTargetId(PARENT_DROP_ID)
       }
-      hoveredIdRef.current = null
-      reparentTargetIdRef.current = null
-      setReparentTargetId(null)
+
+      return
+    }
+
+    if (!rectsOverlap(active.rect.current.translated, over.rect)) {
+      clearPendingReparent()
 
       return
     }
@@ -298,7 +403,19 @@ export function CategorySelectionPage({
       return
     }
 
+    if (over.id === PARENT_DROP_ID && parent) {
+      if (hasChildCategories(active.id as string)) {
+        return
+      }
+      onReparent(active.id as string, parent.parentId)
+
+      return
+    }
+
     if (pendingReparent && pendingReparent !== active.id) {
+      if (hasChildCategories(active.id as string)) {
+        return
+      }
       onReparent(active.id as string, pendingReparent)
 
       return
@@ -378,6 +495,25 @@ export function CategorySelectionPage({
             </motion.button>
           )
       ))}
+      {isEditMode && (
+        <motion.button
+          key="add-category"
+          variants={cellVariants}
+          whileTap={{ scale: 0.96 }}
+          onClick={onAddCategory}
+          type="button"
+          className={[
+            'flex flex-col items-center gap-3 rounded-2xl border border-dashed',
+            'border-white/[0.12] bg-white/3 px-2 py-3.5 text-accent-light',
+            'active:bg-white/5',
+          ].join(' ')}
+        >
+          <span className="grid h-11 w-11 place-items-center rounded-xl bg-accent/10 text-xl">
+            <Icon name="fa-plus" />
+          </span>
+          <span className="text-center text-[12px] font-semibold leading-tight">Add Category</span>
+        </motion.button>
+      )}
     </motion.div>
   )
 
@@ -391,60 +527,60 @@ export function CategorySelectionPage({
           : editButton}
       />
 
-      {parent && (
-        <div
-          role={isEditMode
-            ? 'button'
-            : undefined}
-          onClick={isEditMode
-            ? onEditParent
-            : undefined}
-          className={[
-            'flex items-center gap-3 px-1 text-lg font-bold text-slate-100',
-            isEditMode
-              ? 'cursor-pointer active:opacity-70'
-              : '',
-          ].join(' ')}
-        >
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl">
-            <Icon name={parent.icon} />
-          </span>
-          <span>{parent.name}</span>
-        </div>
-      )}
-
-      <AnimatePresence mode="wait">
-        {isEditMode
-          ? (
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragStart={handleDragStart}
-              onDragOver={handleDragOver}
-              onDragEnd={handleDragEnd}
-            >
+      {isEditMode
+        ? (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+          >
+            {parent && (
+              <ParentCategoryHeader
+                parent={parent}
+                isEditMode={isEditMode}
+                isPromoteTarget={reparentTargetId === PARENT_DROP_ID}
+                onEditParent={onEditParent}
+              />
+            )}
+            <AnimatePresence mode="wait">
               <SortableContext items={visible.map((c) => c.id)} strategy={rectSortingStrategy}>
                 {grid}
               </SortableContext>
-              <DragOverlay>
-                {activeCategory && (
-                  <div className={[
-                    'flex flex-col items-center gap-3 rounded-2xl border',
-                    'border-blue-400/40 bg-slate-800/90 px-2 py-3.5 opacity-90 shadow-xl',
-                  ].join(' ')}>
-                    <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
-                      <Icon name={activeCategory.icon} />
-                    </span>
-                    <span className="text-center text-[12px] font-semibold leading-tight">
-                      {activeCategory.name}
-                    </span>
-                  </div>
-                )}
-              </DragOverlay>
-            </DndContext>
-          )
-          : grid}
-      </AnimatePresence>
+            </AnimatePresence>
+            <DragOverlay>
+              {activeCategory && (
+                <div className={[
+                  'flex flex-col items-center gap-3 rounded-2xl border',
+                  'border-blue-400/40 bg-slate-800/90 px-2 py-3.5 opacity-90 shadow-xl',
+                ].join(' ')}>
+                  <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
+                    <Icon name={activeCategory.icon} />
+                  </span>
+                  <span className="text-center text-[12px] font-semibold leading-tight">
+                    {activeCategory.name}
+                  </span>
+                </div>
+              )}
+            </DragOverlay>
+          </DndContext>
+        )
+        : (
+          <>
+            {parent && (
+              <ParentCategoryHeader
+                parent={parent}
+                isEditMode={isEditMode}
+                isPromoteTarget={false}
+                onEditParent={onEditParent}
+              />
+            )}
+            <AnimatePresence mode="wait">
+              {grid}
+            </AnimatePresence>
+          </>
+        )}
 
       <ConfirmSheet
         isOpen={confirmDeleteId !== null}

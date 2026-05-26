@@ -76,13 +76,19 @@ describe('categoryStore.reparent', () => {
     expect(transport?.level).toBe(2)
   })
 
-  it('updates descendant levels recursively', async () => {
+  it('does not move a category that has child categories under another parent', async () => {
     await useCategoryStore.getState().reparent('food', 'transport')
-    // food becomes level 2 under transport
-    // food-snacks and food-dinner should become level 3
     const items = useCategoryStore.getState().items
-    expect(items.find((c) => c.id === 'food')?.level).toBe(2)
-    expect(items.find((c) => c.id === 'food-snacks')?.level).toBe(3)
-    expect(items.find((c) => c.id === 'food-dinner')?.level).toBe(3)
+    expect(items.find((c) => c.id === 'food')?.parentId).toBeUndefined()
+    expect(items.find((c) => c.id === 'food')?.level).toBe(1)
+    expect(items.find((c) => c.id === 'food-snacks')?.level).toBe(2)
+  })
+
+  it('moves a child to root when new parent is undefined', async () => {
+    await useCategoryStore.getState().reparent('food-snacks', undefined)
+    const items = useCategoryStore.getState().items
+    const snacks = items.find((c) => c.id === 'food-snacks')
+    expect(snacks?.parentId).toBeUndefined()
+    expect(snacks?.level).toBe(1)
   })
 })
