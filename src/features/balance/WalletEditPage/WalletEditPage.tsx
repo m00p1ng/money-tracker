@@ -47,6 +47,7 @@ export function WalletEditPage({
   currencies,
   error,
   title,
+  balanceLabel,
   showDelete,
   typeDisabled,
   onChangeName,
@@ -140,7 +141,7 @@ export function WalletEditPage({
         onClose={() => setCurrencyPickerOpen(false)}
       />
 
-      <Field label="Starting Balance">
+      <Field label={balanceLabel}>
         <TextInput
           type="number"
           value={form.balance}

@@ -73,6 +73,7 @@ function renderPage(props: Partial<React.ComponentProps<typeof WalletEditPage>> 
 
   render(
     <WalletEditPage
+      balanceLabel="Starting Balance"
       currencies={currencies}
       error={null}
       form={paymentForm}
@@ -201,5 +202,10 @@ describe('WalletEditPage', () => {
     await userEvent.type(screen.getByRole('textbox'), 'My Wallet')
 
     expect(onChangeName).toHaveBeenCalled()
+  })
+
+  it('renders balanceLabel prop as the field label', () => {
+    renderPage({ balanceLabel: 'Current Balance' })
+    expect(screen.getByText('Current Balance')).toBeInTheDocument()
   })
 })
