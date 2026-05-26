@@ -213,7 +213,12 @@ function SortableCategoryCell({
                 : 'border-white/[0.07] bg-white/4',
             ].join(' ')}
           >
-            <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
+            <span
+              className="grid h-11 w-11 place-items-center rounded-xl text-xl text-slate-50"
+              style={{ background: isActive
+                ? 'rgba(16,185,129,0.2)'
+                : 'rgba(255,255,255,0.1)' }}
+            >
               <Icon name={category.icon} />
             </span>
             <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
@@ -508,7 +513,12 @@ export function CategorySelectionPage({
               }
               className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/4 px-2 py-3.5"
             >
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
+              <span
+                className="grid h-11 w-11 place-items-center rounded-xl text-xl text-slate-50"
+                style={{ background: activeThisMonth.has(category.id)
+                  ? 'rgba(16,185,129,0.2)'
+                  : 'rgba(255,255,255,0.1)' }}
+              >
                 <Icon name={category.icon} />
               </span>
               <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
