@@ -29,25 +29,29 @@ export function SettingsPage({
     <div className="space-y-5">
       <PageHeader title="Settings" />
 
-      <ListGroup label="Wallets & Data">
+      <ListGroup label="General">
         <ListRow
           icon="fa-coins"
           label="Currencies"
-          sub={currencyCode || undefined}
           to="/settings/currencies"
+          trailing={
+            <div className="flex items-center gap-2 text-white/25">
+              <span className="text-[15px] font-medium text-white/45">{currencyCode}</span>
+              <Icon name="fa-chevron-right" className="text-base" />
+            </div>
+          }
         />
-      </ListGroup>
-
-      <ListGroup label="Appearance">
         <ListRow
           icon="fa-palette"
           label="Theme"
-          sub={THEME_LABELS[theme]}
           to="/settings/theme"
+          trailing={
+            <div className="flex items-center gap-2 text-white/25">
+              <span className="text-[15px] font-medium text-white/45">{THEME_LABELS[theme]}</span>
+              <Icon name="fa-chevron-right" className="text-base" />
+            </div>
+          }
         />
-      </ListGroup>
-
-      <ListGroup label="General">
         <ListRow
           icon="fa-earth-asia"
           label="Language"
