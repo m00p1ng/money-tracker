@@ -84,6 +84,7 @@ export interface CategorySelectionPageProps {
   parent: Category | undefined
   categories: Category[]
   activeThisMonth: Set<string>
+  categoriesWithTransactions: Set<string>
   confirmDeleteId: string | null
   mergeSourceId: string | null
   mergeTargetId: string | null
@@ -295,6 +296,7 @@ export function CategorySelectionPage({
   parent,
   categories,
   activeThisMonth,
+  categoriesWithTransactions,
   confirmDeleteId,
   mergeSourceId,
   mergeTargetId,
@@ -429,6 +431,9 @@ export function CategorySelectionPage({
 
     if (pendingReparent && pendingReparent !== active.id) {
       if (hasChildCategories(active.id as string)) {
+        return
+      }
+      if (categoriesWithTransactions.has(pendingReparent)) {
         return
       }
       onReparent(active.id as string, pendingReparent)
