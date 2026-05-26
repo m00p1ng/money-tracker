@@ -20,7 +20,11 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import {
   ConfirmSheet,
@@ -216,6 +220,17 @@ export function CategorySelectionPage({
 }: CategorySelectionPageProps) {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [reparentTargetId, setReparentTargetId] = useState<string | null>(null)
+  const reparentTargetIdRef = useRef<string | null>(null)
+  const hoveredIdRef = useRef<string | null>(null)
+  const lingerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (lingerTimerRef.current !== null) {
+        clearTimeout(lingerTimerRef.current)
+      }
+    }
+  }, [])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -224,52 +239,71 @@ export function CategorySelectionPage({
 
   function handleDragStart(event: DragStartEvent) {
     setActiveId(event.active.id as string)
+    if (lingerTimerRef.current !== null) {
+      clearTimeout(lingerTimerRef.current)
+      lingerTimerRef.current = null
+    }
+    hoveredIdRef.current = null
+    reparentTargetIdRef.current = null
     setReparentTargetId(null)
   }
 
   function handleDragOver(event: DragOverEvent) {
     const { active, over } = event
+
     if (!over || over.id === active.id) {
+      if (lingerTimerRef.current !== null) {
+        clearTimeout(lingerTimerRef.current)
+        lingerTimerRef.current = null
+      }
+      hoveredIdRef.current = null
+      reparentTargetIdRef.current = null
       setReparentTargetId(null)
 
       return
     }
-    const activeRect = active.rect.current.translated
-    const overRect = over.rect
-    if (activeRect && overRect) {
-      const overCenterX = overRect.left + overRect.width / 2
-      const overCenterY = overRect.top + overRect.height / 2
-      const activeCenterX = activeRect.left + activeRect.width / 2
-      const activeCenterY = activeRect.top + activeRect.height / 2
-      const dx = Math.abs(activeCenterX - overCenterX)
-      const dy = Math.abs(activeCenterY - overCenterY)
-      if (dx < overRect.width * 0.35 && dy < overRect.height * 0.35) {
-        setReparentTargetId(over.id as string)
 
-        return
+    if (over.id !== hoveredIdRef.current) {
+      hoveredIdRef.current = over.id as string
+      if (lingerTimerRef.current !== null) {
+        clearTimeout(lingerTimerRef.current)
+        lingerTimerRef.current = null
       }
+      reparentTargetIdRef.current = null
+      setReparentTargetId(null)
+
+      lingerTimerRef.current = setTimeout(() => {
+        lingerTimerRef.current = null
+        reparentTargetIdRef.current = over.id as string
+        setReparentTargetId(over.id as string)
+      }, 400)
     }
-    setReparentTargetId(null)
   }
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
     setActiveId(null)
 
-    if (!over || active.id === over.id) {
-      setReparentTargetId(null)
-
-      return
+    if (lingerTimerRef.current !== null) {
+      clearTimeout(lingerTimerRef.current)
+      lingerTimerRef.current = null
     }
+    hoveredIdRef.current = null
 
-    if (reparentTargetId && reparentTargetId !== active.id) {
-      onReparent(active.id as string, reparentTargetId)
-      setReparentTargetId(null)
-
-      return
-    }
-
+    const pendingReparent = reparentTargetIdRef.current
+    reparentTargetIdRef.current = null
     setReparentTargetId(null)
+
+    if (!over || active.id === over.id) {
+      return
+    }
+
+    if (pendingReparent && pendingReparent !== active.id) {
+      onReparent(active.id as string, pendingReparent)
+
+      return
+    }
+
     const oldIndex = visible.findIndex((c) => c.id === active.id)
     const newIndex = visible.findIndex((c) => c.id === over.id)
     if (oldIndex !== newIndex) {
