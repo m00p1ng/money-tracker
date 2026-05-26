@@ -55,6 +55,7 @@ export type Category = {
   level: 1 | 2 | 3 | 4 | 5
   icon: string
   isDefault: boolean
+  position?: number
 }
 
 export type Currency = {

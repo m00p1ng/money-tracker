@@ -58,6 +58,8 @@ function slug(value: string): string {
 
 function buildCategories(): Category[] {
   const categories: Category[] = []
+  let expensePosition = 0
+  let incomePosition = 0
 
   for (const [name, icon, children] of expenseRoots) {
     const rootId = `expense-${slug(name)}`
@@ -68,7 +70,9 @@ function buildCategories(): Category[] {
       level: 1,
       icon,
       isDefault: true,
+      position: expensePosition++,
     })
+    let childPosition = 0
     for (const child of children) {
       categories.push({
         id: `${rootId}-${slug(child)}`,
@@ -78,6 +82,7 @@ function buildCategories(): Category[] {
         level: 2,
         icon,
         isDefault: true,
+        position: childPosition++,
       })
     }
   }
@@ -91,7 +96,9 @@ function buildCategories(): Category[] {
       level: 1,
       icon,
       isDefault: true,
+      position: incomePosition++,
     })
+    let childPosition = 0
     for (const child of children) {
       categories.push({
         id: `${rootId}-${slug(child)}`,
@@ -101,6 +108,7 @@ function buildCategories(): Category[] {
         level: 2,
         icon,
         isDefault: true,
+        position: childPosition++,
       })
     }
   }
