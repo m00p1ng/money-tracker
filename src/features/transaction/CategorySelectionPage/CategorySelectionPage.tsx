@@ -7,7 +7,11 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import type { DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core'
+import type {
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+} from '@dnd-kit/core'
 import {
   arrayMove,
   rectSortingStrategy,
@@ -18,7 +22,11 @@ import { CSS } from '@dnd-kit/utilities'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 
-import { ConfirmSheet, Icon, TypePickerDropdown } from '@/components'
+import {
+  ConfirmSheet,
+  Icon,
+  TypePickerDropdown,
+} from '@/components'
 import { PageHeader } from '@/components/shared/PageHeader'
 import type { Category } from '@/types/domain'
 
@@ -70,6 +78,7 @@ export interface CategorySelectionPageProps {
 
 interface SortableCategoryCellProps {
   category: Category
+  index: number
   isEditMode: boolean
   isReparentTarget: boolean
   onRequestDelete: (id: string) => void
@@ -78,6 +87,7 @@ interface SortableCategoryCellProps {
 
 function SortableCategoryCell({
   category,
+  index,
   isEditMode,
   isReparentTarget,
   onRequestDelete,
@@ -101,38 +111,66 @@ function SortableCategoryCell({
     <motion.div
       ref={setNodeRef}
       style={style}
-      {...(isEditMode ? { ...attributes, ...listeners } : {})}
+      {...(isEditMode
+        ? { ...attributes, ...listeners }
+        : {})}
       variants={cellVariants}
       className="relative"
     >
-      {isEditMode && (
-        <button
-          aria-label={`Remove ${category.name}`}
-          type="button"
-          onPointerDown={(e) => e.stopPropagation()}
-          onClick={(e) => { e.stopPropagation(); onRequestDelete(category.id) }}
-          className="absolute -left-1.5 -top-1.5 z-10 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white"
-        >
-          ×
-        </button>
-      )}
-      <button
-        onClick={() => onSelect(category)}
-        type="button"
-        className={[
-          'flex w-full flex-col items-center gap-3 rounded-2xl',
-          'border px-2 py-3.5',
-          isDragging ? 'border-dashed border-white/20 bg-white/2 opacity-40' : '',
-          isReparentTarget
-            ? 'border-blue-400/60 bg-blue-400/10'
-            : isDragging ? '' : 'border-white/[0.07] bg-white/4',
-        ].join(' ')}
+      <motion.div
+        animate={
+          isEditMode && !isDragging
+            ? {
+              rotate: [-1.5, 1.5, -1.5],
+              transition: {
+                repeat: Infinity,
+                duration: 0.45,
+                ease: 'easeInOut',
+                delay: index * 0.06,
+              },
+            }
+            : { rotate: 0 }
+        }
+        className="relative"
       >
-        <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
-          <Icon name={category.icon} />
-        </span>
-        <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
-      </button>
+        {isEditMode && (
+          <button
+            aria-label={`Remove ${category.name}`}
+            type="button"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation(); onRequestDelete(category.id)
+            }}
+            className={[
+              'absolute -left-1.5 -top-1.5 z-10 flex h-[18px] w-[18px]',
+              'items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white',
+            ].join(' ')}
+          >
+            ×
+          </button>
+        )}
+        <button
+          onClick={() => onSelect(category)}
+          type="button"
+          className={[
+            'flex w-full flex-col items-center gap-3 rounded-2xl',
+            'border px-2 py-3.5',
+            isDragging
+              ? 'border-dashed border-white/20 bg-white/2 opacity-40'
+              : '',
+            isReparentTarget
+              ? 'border-blue-400/60 bg-blue-400/10'
+              : isDragging
+                ? ''
+                : 'border-white/[0.07] bg-white/4',
+          ].join(' ')}
+        >
+          <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
+            <Icon name={category.icon} />
+          </span>
+          <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
+        </button>
+      </motion.div>
     </motion.div>
   )
 }
@@ -179,6 +217,7 @@ export function CategorySelectionPage({
     const { active, over } = event
     if (!over || over.id === active.id) {
       setReparentTargetId(null)
+
       return
     }
     const activeRect = active.rect.current.translated
@@ -192,6 +231,7 @@ export function CategorySelectionPage({
       const dy = Math.abs(activeCenterY - overCenterY)
       if (dx < overRect.width * 0.35 && dy < overRect.height * 0.35) {
         setReparentTargetId(over.id as string)
+
         return
       }
     }
@@ -204,12 +244,14 @@ export function CategorySelectionPage({
 
     if (!over || active.id === over.id) {
       setReparentTargetId(null)
+
       return
     }
 
     if (reparentTargetId && reparentTargetId !== active.id) {
       onReparent(active.id as string, reparentTargetId)
       setReparentTargetId(null)
+
       return
     }
 
@@ -228,7 +270,10 @@ export function CategorySelectionPage({
     <button
       type="button"
       onClick={onToggleEditMode}
-      className="flex h-9 items-center justify-center rounded-lg px-3 text-sm font-medium text-slate-300 active:bg-white/5"
+      className={[
+        'flex h-9 items-center justify-center rounded-lg px-3',
+        'text-sm font-medium text-slate-300 active:bg-white/5',
+      ].join(' ')}
     >
       Edit
     </button>
@@ -251,15 +296,18 @@ export function CategorySelectionPage({
       variants={gridVariants}
       initial="hidden"
       animate="visible"
-      exit={{ opacity: 0, x: -16, transition: { duration: 0.15 } }}
+      exit={{
+        opacity: 0, x: -16, transition: { duration: 0.15 },
+      }}
       className="grid grid-cols-3 gap-2.5"
     >
-      {visible.map((category) => (
+      {visible.map((category, index) => (
         isEditMode
           ? (
             <SortableCategoryCell
               key={category.id}
               category={category}
+              index={index}
               isEditMode={isEditMode}
               isReparentTarget={reparentTargetId === category.id}
               onRequestDelete={onRequestDelete}
@@ -290,16 +338,24 @@ export function CategorySelectionPage({
       <PageHeader
         title={<TypePickerDropdown value={type} onChange={onTypeChange} locked={isLocked} />}
         onBack={onBack}
-        rightSlot={isEditMode ? doneButton : editButton}
+        rightSlot={isEditMode
+          ? doneButton
+          : editButton}
       />
 
       {parent && (
         <div
-          role={isEditMode ? 'button' : undefined}
-          onClick={isEditMode ? onEditParent : undefined}
+          role={isEditMode
+            ? 'button'
+            : undefined}
+          onClick={isEditMode
+            ? onEditParent
+            : undefined}
           className={[
             'flex items-center gap-3 px-1 text-lg font-bold text-slate-100',
-            isEditMode ? 'cursor-pointer active:opacity-70' : '',
+            isEditMode
+              ? 'cursor-pointer active:opacity-70'
+              : '',
           ].join(' ')}
         >
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl">
@@ -324,7 +380,10 @@ export function CategorySelectionPage({
               </SortableContext>
               <DragOverlay>
                 {activeCategory && (
-                  <div className="flex flex-col items-center gap-3 rounded-2xl border border-blue-400/40 bg-slate-800/90 px-2 py-3.5 opacity-90 shadow-xl">
+                  <div className={[
+                    'flex flex-col items-center gap-3 rounded-2xl border',
+                    'border-blue-400/40 bg-slate-800/90 px-2 py-3.5 opacity-90 shadow-xl',
+                  ].join(' ')}>
                     <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
                       <Icon name={activeCategory.icon} />
                     </span>
@@ -341,7 +400,7 @@ export function CategorySelectionPage({
 
       <ConfirmSheet
         isOpen={confirmDeleteId !== null}
-        title={`Delete "${categories.find(c => c.id === confirmDeleteId)?.name ?? ''}"?`}
+        title={`Delete "${categories.find((c) => c.id === confirmDeleteId)?.name ?? ''}"?`}
         primaryLabel="Delete"
         onPrimary={onConfirmDelete}
         onCancel={onCancelDelete}
@@ -357,7 +416,7 @@ export function CategorySelectionPage({
 
       <ConfirmSheet
         isOpen={mergeTargetId !== null}
-        title={`Merge "${categories.find(c => c.id === mergeSourceId)?.name ?? ''}" into "${categories.find(c => c.id === mergeTargetId)?.name ?? ''}"?`}
+        title={`Merge "${categories.find((c) => c.id === mergeSourceId)?.name ?? ''}" into "${categories.find((c) => c.id === mergeTargetId)?.name ?? ''}"?`}
         description="All transactions will be moved and the category will be deleted."
         primaryLabel="Merge & Delete"
         onPrimary={onConfirmMerge}
