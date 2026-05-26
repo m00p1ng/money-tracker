@@ -83,6 +83,7 @@ export interface CategorySelectionPageProps {
   parentId: string | undefined
   parent: Category | undefined
   categories: Category[]
+  activeThisMonth: Set<string>
   confirmDeleteId: string | null
   mergeSourceId: string | null
   mergeTargetId: string | null

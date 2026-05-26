@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
+import { isCurrentMonth } from '@/lib'
 import {
   useCategoryStore,
   useTransactionDraftStore,
@@ -16,6 +17,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   const backNavigate = useBackNavigate()
   const [searchParams] = useSearchParams()
   const categories = useCategoryStore((state) => state.items)
+  const transactions = useTransactionStore((state) => state.items)
   const updateDraft = useTransactionDraftStore((state) => state.update)
   const draft = useTransactionDraftStore((state) => state.draft)
 
@@ -33,6 +35,24 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
   const [mergeSourceId, setMergeSourceId] = useState<string | null>(null)
   const [mergeTargetId, setMergeTargetId] = useState<string | null>(null)
   const isLocked = isAddCategory || changingIndex !== null
+
+  const activeThisMonth = useMemo<Set<string>>(() => {
+    const active = new Set<string>()
+
+    for (const tx of transactions) {
+      if (!isCurrentMonth(tx.date)) continue
+      for (const item of tx.items) {
+        let id: string | undefined = item.categoryId
+        while (id) {
+          if (active.has(id)) break
+          active.add(id)
+          id = categories.find((c) => c.id === id)?.parentId
+        }
+      }
+    }
+
+    return active
+  }, [transactions, categories])
 
   function sortByPosition(a: Category, b: Category) {
     return (a.position ?? Infinity) - (b.position ?? Infinity)
@@ -164,6 +184,7 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     parentId,
     parent,
     categories,
+    activeThisMonth,
     confirmDeleteId,
     mergeSourceId,
     mergeTargetId,
