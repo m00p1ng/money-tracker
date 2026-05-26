@@ -100,6 +100,7 @@ function renderEditPage(overrides: Partial<CategorySelectionPageProps> = {}) {
     parentId: undefined,
     parent: undefined,
     categories,
+    activeThisMonth: new Set<string>(),
     confirmDeleteId: null,
     mergeSourceId: null,
     mergeTargetId: null,

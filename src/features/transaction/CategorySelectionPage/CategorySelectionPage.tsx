@@ -281,6 +281,7 @@ export function CategorySelectionPage({
   parentId,
   parent,
   categories,
+  activeThisMonth,
   confirmDeleteId,
   mergeSourceId,
   mergeTargetId,
@@ -487,6 +488,15 @@ export function CategorySelectionPage({
               whileTap={{ scale: 0.96 }}
               onClick={() => onSelect(category)}
               type="button"
+              style={
+                activeThisMonth.has(category.id)
+                  ? {
+                    borderColor: 'rgba(52,211,153,0.5)',
+                    backgroundColor: 'rgba(16,185,129,0.06)',
+                    boxShadow: '0 0 10px rgba(52,211,153,0.2), inset 0 0 8px rgba(52,211,153,0.05)',
+                  }
+                  : undefined
+              }
               className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/4 px-2 py-3.5"
             >
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
