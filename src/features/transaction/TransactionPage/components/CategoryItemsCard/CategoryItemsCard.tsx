@@ -99,11 +99,11 @@ export function CategoryItemsCard({
         onClick={onAdd}
         type="button"
         className={[
-          'flex w-full items-center justify-center gap-2',
-          'border-t border-dashed border-white/8 py-3 text-[12px] font-semibold text-accent-light',
+          'flex w-full items-center justify-end',
+          'border-t border-dashed border-white/8 px-4 py-3 text-accent-light',
         ].join(' ')}
       >
-        <Icon name="fa-plus" className="text-[10px]" /> Add Item
+        <Icon name="fa-plus" className="text-[10px]" />
       </button>
     </>
   )
