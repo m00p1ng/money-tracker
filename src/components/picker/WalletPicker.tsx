@@ -1,3 +1,5 @@
+import partition from 'lodash/partition'
+
 import { Icon } from '@/components'
 import type { Wallet } from '@/types/domain'
 
@@ -38,8 +40,7 @@ export function WalletPicker({
   onSelect,
   onClose,
 }: WalletPickerProps) {
-  const payment = wallets.filter((w) => w.type === 'payment')
-  const credit = wallets.filter((w) => w.type === 'credit_card')
+  const [payment, credit] = partition(wallets, (wallet) => wallet.type === 'payment')
 
   const sections: SelectorSection<string>[] = []
   if (payment.length > 0) {

@@ -1,3 +1,4 @@
+import keyBy from 'lodash/keyBy'
 import { create } from 'zustand'
 
 import { db } from '@/db/schema'
@@ -44,18 +45,20 @@ export const useWalletStore = create<WalletStore>((set, get) => ({
   },
   async reorder(ids) {
     const current = get().items
+    const currentById = keyBy(current, 'id')
     const updated: Wallet[] = ids.flatMap((id, index) => {
-      const wallet = current.find((w) => w.id === id)
+      const wallet = currentById[id]
       if (!wallet) {
         return []
       }
 
       return [{ ...wallet, position: index }]
     })
+    const updatedById = keyBy(updated, 'id')
 
     await db.wallets.bulkPut(updated)
     set({
-      items: current.map((w) => updated.find((u) => u.id === w.id) ?? w),
+      items: current.map((wallet) => updatedById[wallet.id] ?? wallet),
     })
   },
   async applyDelta(id, delta) {

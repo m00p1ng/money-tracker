@@ -1,3 +1,4 @@
+import sortBy from 'lodash/sortBy'
 import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
@@ -77,13 +78,10 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     return active
   }, [transactions, categories])
 
-  function sortByPosition(a: Category, b: Category) {
-    return (a.position ?? Infinity) - (b.position ?? Infinity)
-  }
-
-  const visible = categories
-    .filter((c) => c.type === type && c.parentId === parentId)
-    .sort(sortByPosition)
+  const visible = sortBy(
+    categories.filter((c) => c.type === type && c.parentId === parentId),
+    (category) => category.position ?? Infinity,
+  )
   const parent = parentId
     ? categories.find((c) => c.id === parentId)
     : undefined

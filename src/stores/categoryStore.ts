@@ -1,3 +1,4 @@
+import keyBy from 'lodash/keyBy'
 import { create } from 'zustand'
 
 import { db } from '@/db/schema'
@@ -99,16 +100,18 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
   },
   async reorder(ids) {
     const current = get().items
+    const currentById = keyBy(current, 'id')
     const updated: Category[] = ids.flatMap((id, index) => {
-      const cat = current.find((c) => c.id === id)
+      const cat = currentById[id]
       if (!cat) {
         return []
       }
 
       return [{ ...cat, position: index }]
     })
+    const updatedById = keyBy(updated, 'id')
     await db.categories.bulkPut(updated)
-    set({ items: current.map((c) => updated.find((u) => u.id === c.id) ?? c) })
+    set({ items: current.map((category) => updatedById[category.id] ?? category) })
   },
   async mergeAndDelete(sourceId, targetId) {
     const transactions = await db.transactions.toArray()

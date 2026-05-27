@@ -1,3 +1,4 @@
+import sortBy from 'lodash/sortBy'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -9,20 +10,13 @@ import { useWalletStore } from '@/stores'
 
 import type { BalancePageProps } from './BalancePage'
 
-function sortByPosition(a: { position?: number }, b: { position?: number }) {
-  const pa = a.position ?? Infinity
-  const pb = b.position ?? Infinity
-
-  return pa - pb
-}
-
 export function useBalancePage(): BalancePageProps {
   const [isEditMode, setIsEditMode] = useState(false)
   const navigate = useNavigate()
   const wallets = useWalletStore((state) => state.items)
   const reorder = useWalletStore((state) => state.reorder)
 
-  const sorted = [...wallets].sort(sortByPosition)
+  const sorted = sortBy(wallets, (wallet) => wallet.position ?? Infinity)
   const paymentWallets = sorted
     .filter((w) => w.type === 'payment')
     .map((wallet) => ({ wallet, amount: wallet.balance }))

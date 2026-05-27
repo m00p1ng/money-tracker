@@ -81,7 +81,7 @@ export function debtTotal(wallets: Wallet[]): number {
 
 export function walletRunningRows(wallet: Wallet, transactions: Transaction[], range: DateRange): RunningWalletRow[] {
   const allWalletTxns = walletTransactions(wallet.id, transactions)
-  const totalAllTxns = allWalletTxns.reduce((sum, tx) => sum + signedWalletAmount(wallet, tx), 0)
+  const totalAllTxns = sumBy(allWalletTxns, (transaction) => signedWalletAmount(wallet, transaction))
   let runningAmount = wallet.balance - totalAllTxns
 
   return allWalletTxns
@@ -101,12 +101,13 @@ export function walletRunningRows(wallet: Wallet, transactions: Transaction[], r
 
 export function walletClearedAmount(wallet: Wallet, transactions: Transaction[]): number {
   const allWalletTxns = walletTransactions(wallet.id, transactions)
-  const totalAllTxns = allWalletTxns.reduce((sum, t) => sum + signedWalletAmount(wallet, t), 0)
+  const totalAllTxns = sumBy(allWalletTxns, (transaction) => signedWalletAmount(wallet, transaction))
   const startingBalance = wallet.balance - totalAllTxns
 
-  return allWalletTxns
-    .filter((t) => t.cleared && t.type !== 'transfer')
-    .reduce((sum, t) => sum + signedWalletAmount(wallet, t), startingBalance)
+  return startingBalance + sumBy(
+    allWalletTxns.filter((transaction) => transaction.cleared && transaction.type !== 'transfer'),
+    (transaction) => signedWalletAmount(wallet, transaction),
+  )
 }
 
 export function isReconciliationEnabled(wallet: Wallet): boolean {

@@ -12,6 +12,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
+import sumBy from 'lodash/sumBy'
 
 import {
   AnimatedBar,
@@ -143,7 +144,7 @@ export function BalancePage({
           trailing={
             <span className="text-sm tracking-[1.5px] text-white/30">
               {formatSignedAmount(
-                paymentWallets.reduce((sum, { amount }) => sum + amount, 0),
+                sumBy(paymentWallets, 'amount'),
                 paymentWallets[0].wallet.currency,
               )}
             </span>
@@ -196,7 +197,7 @@ export function BalancePage({
           trailing={
             <span className="text-sm tracking-[1.5px] text-white/30">
               {formatSignedAmount(
-                creditCards.reduce((sum, { amount }) => sum + amount, 0),
+                sumBy(creditCards, 'amount'),
                 creditCards[0].wallet.currency,
               )}
             </span>

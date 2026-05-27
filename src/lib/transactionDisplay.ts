@@ -1,3 +1,5 @@
+import sumBy from 'lodash/sumBy'
+
 import type {
   Category,
   Transaction,
@@ -42,7 +44,7 @@ export function summarizeTransactionItems(
   const names = categories.map((category) => category?.name ?? 'Unknown')
 
   return {
-    amount: transaction.items.reduce((sum, item) => sum + item.amount, 0),
+    amount: sumBy(transaction.items, 'amount'),
     category: categories[0],
     label: names.length > 0
       ? names.join(', ')

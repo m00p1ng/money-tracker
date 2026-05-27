@@ -1,3 +1,5 @@
+import sumBy from 'lodash/sumBy'
+
 import { ExchangeRateRow } from '@/components'
 import { formatSignedAmount } from '@/lib'
 import type { TransactionItem, Wallet } from '@/types/domain'
@@ -34,7 +36,7 @@ export function TransactionPrimaryCard({
   onAddCategory,
   onUpdateExchangeRate,
 }: TransactionPrimaryCardProps) {
-  const total = items.reduce((sum, item) => sum + item.amount, 0)
+  const total = sumBy(items, 'amount')
   const showExchangeRate = currency !== wallet?.currency
 
   return (

@@ -1,3 +1,4 @@
+import sumBy from 'lodash/sumBy'
 import { create } from 'zustand'
 
 import { db } from '@/db/schema'
@@ -48,7 +49,7 @@ function normalizeTransaction(
 }
 
 function total(transaction: Transaction): number {
-  return transaction.items.reduce((sum, item) => sum + item.amount, 0)
+  return sumBy(transaction.items, 'amount')
 }
 
 function isCurrentMonth(isoDate: string, now = new Date()): boolean {

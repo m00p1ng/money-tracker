@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import sortBy from 'lodash/sortBy'
 import { useMemo } from 'react'
 
 import { Icon } from '@/components'
@@ -20,9 +21,10 @@ function buildTree(
   categoriesWithTransactions: Set<string>,
   onSelect: (id: string) => void,
 ): React.ReactNode[] {
-  const children = [...categories]
-    .filter((c) => c.parentId === parentId)
-    .sort((a, b) => (a.position ?? Infinity) - (b.position ?? Infinity))
+  const children = sortBy(
+    categories.filter((c) => c.parentId === parentId),
+    (category) => category.position ?? Infinity,
+  )
 
   return children.flatMap((cat) => {
     const isSource = cat.id === sourceId
