@@ -36,8 +36,8 @@ export function TransactionDetailsCard({
 }: TransactionDetailsCardProps) {
   return (
     <div className={[
-      'divide-y divide-white/[0.05] overflow-hidden',
-      'rounded-2xl border border-white/[0.07] bg-white/[0.04]',
+      'divide-y divide-white/5 overflow-hidden',
+      'rounded-2xl border border-white/[0.07] bg-white/4',
     ].join(' ')}>
       <DateTimeRow
         date={date}

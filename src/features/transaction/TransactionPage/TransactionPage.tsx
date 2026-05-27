@@ -182,7 +182,6 @@ export function TransactionPage({
         )
         : (
           <TransactionPrimaryCard
-            type={type}
             wallet={wallet}
             items={items}
             focusedIndex={focusedIndex}

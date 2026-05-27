@@ -25,7 +25,7 @@ export function WalletSelectorRow({
     <button
       aria-label={ariaLabel}
       className={cx(
-        'flex w-full items-center gap-1 px-4 py-3 text-left',
+        'flex w-full items-center gap-1 px-2 py-2 text-left',
         variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
       )}
       onClick={onClick}

@@ -80,8 +80,8 @@ export function TransferPrimaryCard({
   const showToExchangeRate = currency !== toWallet?.currency
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/[0.085] bg-white/[0.08]">
-      <div className="flex items-stretch border-b border-white/[0.05]">
+    <div className="overflow-hidden rounded-2xl border border-white/8.5 bg-white/8">
+      <div className="flex items-stretch border-b border-white/5">
         <WalletColumn
           label="From"
           wallet={fromWallet}

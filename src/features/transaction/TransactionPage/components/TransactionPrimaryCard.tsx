@@ -1,16 +1,11 @@
 import { formatSignedAmount } from '@/lib'
-import type {
-  TransactionItem,
-  TransactionType,
-  Wallet,
-} from '@/types/domain'
+import type { TransactionItem, Wallet } from '@/types/domain'
 
-import CategoryItemsCardContainer from './CategoryItemsCard'
+import CategoryItemsCard from './CategoryItemsCard'
 import { ExchangeRateRow } from './ExchangeRateRow'
 import { WalletSelectorRow } from './WalletSelectorRow'
 
 interface TransactionPrimaryCardProps {
-  type: Exclude<TransactionType, 'transfer'>
   wallet: Wallet | undefined
   items: TransactionItem[]
   focusedIndex: number | null
@@ -25,31 +20,7 @@ interface TransactionPrimaryCardProps {
   onUpdateExchangeRate: (value: string) => void
 }
 
-const totalStyle: Partial<Record<Exclude<TransactionType, 'transfer'>, {
-  text: string
-  bg: string
-  border: string
-}>> = {
-  expense: {
-    text: 'text-danger',
-    bg: 'bg-danger/10',
-    border: 'border-danger/20',
-  },
-  income: {
-    text: 'text-green-500',
-    bg: 'bg-green-500/10',
-    border: 'border-green-500/20',
-  },
-}
-
-const DEFAULT_STYLE = {
-  text: 'text-slate-400',
-  bg: 'bg-white/5',
-  border: 'border-white/10',
-}
-
 export function TransactionPrimaryCard({
-  type,
   wallet,
   items,
   focusedIndex,
@@ -64,7 +35,6 @@ export function TransactionPrimaryCard({
   onUpdateExchangeRate,
 }: TransactionPrimaryCardProps) {
   const total = items.reduce((sum, item) => sum + item.amount, 0)
-  const style = totalStyle[type] ?? DEFAULT_STYLE
   const showExchangeRate = currency !== wallet?.currency
 
   return (
@@ -79,7 +49,7 @@ export function TransactionPrimaryCard({
       />
 
       <div className="border-t border-white/5">
-        <CategoryItemsCardContainer
+        <CategoryItemsCard
           items={items}
           focusedIndex={focusedIndex}
           currency={wallet?.currency ?? currency}
@@ -102,8 +72,11 @@ export function TransactionPrimaryCard({
         </div>
       )}
 
-      <div className={`flex items-center justify-end border-t px-4 py-3 ${style.bg} ${style.border}`}>
-        <span className={`text-xl font-bold ${style.text}`}>
+      <div className="flex items-center justify-between border-t border-white/20 pl-5 pr-3 py-2">
+        <span className="text-lg font-bold">
+          Total
+        </span>
+        <span className="text-lg font-bold">
           {formatSignedAmount(total, wallet?.currency ?? currency)}
         </span>
       </div>

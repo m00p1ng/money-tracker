@@ -52,11 +52,13 @@ Status does **not** auto-update when the user changes the date — the user cont
 
 ### Visual design
 
-| Status | Color | Icon | Label |
-|--------|-------|------|-------|
-| `paid` | green (`#4ade80`) | `fa-circle-check` | Paid |
-| `overdue` | red (`text-danger`) | `fa-circle-exclamation` | Overdue |
-| `planned` | amber (`#fbbf24`) | `fa-clock` | Planned |
+Text-only badges — no icons.
+
+| Status | Color | Label |
+|--------|-------|-------|
+| `paid` | green (`#4ade80`) | Paid |
+| `overdue` | red (`text-danger`) | Overdue |
+| `planned` | amber (`#fbbf24`) | Planned |
 
 Badge replaces the existing "Planned" badge in `DateTimeRow`.
 
