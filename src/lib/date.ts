@@ -73,8 +73,8 @@ export function toDatetimeLocalValue(date: Date): string {
 
 const displayDateFormatter = new Intl.DateTimeFormat('en-GB', {
   day: '2-digit',
-  month: 'short',
-  year: 'numeric',
+  month: '2-digit',
+  year: '2-digit',
 })
 
 export function formatDatetimeLocalDisplay(value: string): string {

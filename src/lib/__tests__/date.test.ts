@@ -5,6 +5,7 @@ import {
 } from 'vitest'
 
 import {
+  formatDatetimeLocalDisplay,
   formatHeaderDate,
   formatHeaderDay,
   formatHeaderMonthYear,
@@ -50,6 +51,10 @@ describe('date utilities', () => {
 
   it('formats the header month-year', () => {
     expect(formatHeaderMonthYear(new Date('2026-05-22T09:00:00'))).toBe('May 2026')
+  })
+
+  it('formats datetime-local value for display', () => {
+    expect(formatDatetimeLocalDisplay('2026-05-27T14:38')).toBe('27/05/26 · 14:38')
   })
 
   it('detects a date in the current month', () => {
