@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import type {
   RepeatConfig,
   TransactionItem,
+  TransactionStatus,
   TransactionType,
 } from '@/types/domain'
 
@@ -21,6 +22,7 @@ export type TransactionDraft = {
   repeatConfig: RepeatConfig
   transferAmount: number
   cleared: boolean
+  status: TransactionStatus
 }
 
 type TransactionDraftStore = {

@@ -7,6 +7,7 @@ import type {
   Currency,
   RepeatConfig,
   TransactionItem,
+  TransactionStatus,
   TransactionType,
   Wallet,
 } from '@/types/domain'
@@ -37,7 +38,8 @@ export interface TransactionPageProps {
   wallets: Wallet[]
   currencies: Currency[]
   isEditMode: boolean
-  isPlanned: boolean
+  status: TransactionStatus
+  onToggleStatus: () => void
   defaultRate: string
   cleared: boolean
   walletReconciliationEnabled: boolean
@@ -80,7 +82,8 @@ export function TransactionPage({
   wallets,
   currencies,
   isEditMode,
-  isPlanned,
+  status,
+  onToggleStatus,
   defaultRate,
   cleared,
   walletReconciliationEnabled,
@@ -197,12 +200,13 @@ export function TransactionPage({
 
       <TransactionDetailsCard
         date={date}
-        isPlanned={isPlanned}
+        status={status}
         walletReconciliationEnabled={type !== 'transfer' && walletReconciliationEnabled}
         cleared={cleared}
         repeatConfig={repeatConfig}
         note={note}
         onUpdateDate={() => setDatePickerOpen(true)}
+        onToggleStatus={onToggleStatus}
         onToggleCleared={onToggleCleared}
         onUpdateRepeatConfig={() => setRepeatPickerOpen(true)}
         onUpdateNote={onUpdateNote}
