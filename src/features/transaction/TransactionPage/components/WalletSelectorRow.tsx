@@ -6,7 +6,6 @@ import type { Wallet } from '@/types/domain'
 
 interface WalletSelectorRowProps {
   ariaLabel: string
-  label: string
   wallet: Wallet | undefined
   fallbackName: string
   fallbackColor: string
@@ -17,7 +16,6 @@ interface WalletSelectorRowProps {
 
 export function WalletSelectorRow({
   ariaLabel,
-  label,
   wallet,
   fallbackName,
   fallbackColor,
@@ -31,21 +29,20 @@ export function WalletSelectorRow({
     <button
       aria-label={ariaLabel}
       className={cx(
-        'flex w-full items-center gap-3 px-4 py-3 text-left',
+        'flex w-full items-center gap-1 px-4 py-3 text-left',
         variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
       )}
       onClick={onClick}
       type="button"
     >
       <div
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs"
         style={{ background: `${color}25`, color }}
       >
         <Icon name={wallet?.icon ?? 'fa-wallet'} />
       </div>
-      <div className="flex-1">
-        <p className="text-xs text-white/35">{label}</p>
-        <p className="text-sm font-medium">
+      <div className="min-w-0 flex-1 px-1">
+        <p className="truncate font-medium">
           {wallet?.name ?? fallbackName}
           {showBalance
             ? ` · ${formatAmount(wallet?.balance ?? 0, wallet?.currency)}`

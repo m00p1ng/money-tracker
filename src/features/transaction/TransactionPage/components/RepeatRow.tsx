@@ -45,7 +45,7 @@ export function RepeatRow({
     <button
       aria-label="Repeat"
       className={cx(
-        'flex w-full items-center gap-3 px-4 py-3 text-left',
+        'flex w-full items-center gap-1 px-4 py-3 text-left',
         variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
       )}
       style={variant === 'standalone' && isActive
@@ -55,7 +55,7 @@ export function RepeatRow({
       type="button"
     >
       <div
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs"
         style={{
           background: 'color-mix(in srgb, var(--accent) 15%, transparent)',
           color: 'var(--accent-light)',
@@ -63,13 +63,10 @@ export function RepeatRow({
       >
         <Icon name="fa-rotate" />
       </div>
-      <div className="flex-1">
-        <p className="text-xs text-white/35">Repeat</p>
+      <div className="min-w-0 flex-1 px-1">
         <p
-          className="mt-0.5 text-sm font-semibold"
-          style={isActive
-            ? { color: 'var(--accent-light)' }
-            : undefined}
+          className="font-semibold"
+          style={isActive ? { color: 'var(--accent-light)' } : undefined}
         >
           {formatRepeat(repeatConfig)}
         </p>

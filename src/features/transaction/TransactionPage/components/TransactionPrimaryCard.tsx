@@ -71,7 +71,6 @@ export function TransactionPrimaryCard({
     <div className="overflow-hidden rounded-2xl border border-white/8.5 bg-white/8">
       <WalletSelectorRow
         ariaLabel="Wallet"
-        label="Wallet"
         wallet={wallet}
         fallbackName="Cash"
         fallbackColor="#38bdf8"
@@ -104,8 +103,7 @@ export function TransactionPrimaryCard({
         </div>
       )}
 
-      <div className={`flex items-center justify-between border-t px-4 py-3 ${style.bg} ${style.border}`}>
-        <span className="text-[9px] uppercase tracking-[1px] text-white/40">Total</span>
+      <div className={`flex items-center justify-end border-t px-4 py-3 ${style.bg} ${style.border}`}>
         <span className={`text-xl font-bold ${style.text}`}>
           {formatSignedAmount(total, wallet?.currency ?? currency)}
         </span>

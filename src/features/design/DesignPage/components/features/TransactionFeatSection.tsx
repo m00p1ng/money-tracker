@@ -88,7 +88,6 @@ export function TransactionFeatSection() {
           <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
             <WalletSelectorRow
               ariaLabel="Select wallet"
-              label="Wallet"
               wallet={STUB_WALLET_PAYMENT}
               fallbackName="Select wallet"
               fallbackColor="#6c47ff"
@@ -99,7 +98,6 @@ export function TransactionFeatSection() {
           <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
             <WalletSelectorRow
               ariaLabel="Select wallet"
-              label="Wallet"
               wallet={STUB_WALLET_PAYMENT}
               fallbackName="Select wallet"
               fallbackColor="#6c47ff"
