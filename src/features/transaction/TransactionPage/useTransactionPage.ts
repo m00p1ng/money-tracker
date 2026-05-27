@@ -386,7 +386,14 @@ export function useTransactionPage(): TransactionPageProps {
     onUpdateCurrency: (code: string) => updateDraft({ currency: code }),
     onFocusItem: (index: number) => updateDraft({ focusedIndex: index }),
     onRemoveItem: (index: number) => updateDraft({ items: items.filter((_, i) => i !== index) }),
-    onChangeCategory: (index: number) => navigate(`/transaction/category?changingIndex=${index}&type=${type}`),
+    onChangeCategory: (index: number) => {
+      const categoryId = items[index]?.categoryId
+      const params = new URLSearchParams({ changingIndex: String(index), type })
+      if (categoryId) {
+        params.set('currentCategoryId', categoryId)
+      }
+      navigate(`/transaction/category?${params.toString()}`)
+    },
     onAddCategory: () => navigate(`/transaction/category?addCategory=true&type=${type}`),
     onPressCalcKey: (_key: string, result: number) => type === 'transfer'
       ? updateDraft({ transferAmount: result })

@@ -25,14 +25,14 @@ export function WalletSelectorRow({
     <button
       aria-label={ariaLabel}
       className={cx(
-        'flex w-full items-center gap-1 px-2 py-2 text-left',
+        'flex w-full items-center gap-1 px-4 py-2 text-left',
         variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
       )}
       onClick={onClick}
       type="button"
     >
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ color: '#63758F' }}>
-        <Icon name={wallet?.icon ?? 'fa-wallet'} style={{ height: 40 }} />
+      <span className="grid h-10 w-10 shrink-0 place-items-center text-lg" style={{ color: '#63758F' }}>
+        <Icon name={wallet?.icon ?? 'fa-wallet'} />
       </span>
       <div className="min-w-0 flex-1 px-1">
         <p className="truncate font-medium">

@@ -178,7 +178,7 @@ function SortableCategoryCell({
                 e.stopPropagation(); onRequestDelete(category.id)
               }}
               className={[
-                'absolute -left-1.5 -top-1.5 z-10 flex h-[18px] w-[18px]',
+                'absolute -left-1.5 -top-1.5 z-10 flex h-4.5 w-4.5',
                 'items-center justify-center rounded-full bg-red-500 text-white',
               ].join(' ')}
             >
@@ -197,15 +197,15 @@ function SortableCategoryCell({
             style={
               isReparentTarget
                 ? {
-                  borderColor: 'rgba(52,211,153,0.6)',
-                  backgroundColor: 'rgba(16,185,129,0.10)',
-                  boxShadow: '0 0 16px rgba(16,185,129,0.35)',
+                  borderColor: 'color-mix(in srgb, var(--accent) 60%, transparent)',
+                  backgroundColor: 'color-mix(in srgb, var(--accent) 10%, transparent)',
+                  boxShadow: '0 0 16px color-mix(in srgb, var(--accent) 35%, transparent)',
                 }
                 : isActive
                   ? {
-                    borderColor: 'rgba(52,211,153,0.5)',
-                    backgroundColor: 'rgba(16,185,129,0.06)',
-                    boxShadow: '0 0 10px rgba(52,211,153,0.2), inset 0 0 8px rgba(52,211,153,0.05)',
+                    borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)',
+                    backgroundColor: 'color-mix(in srgb, var(--accent) 6%, transparent)',
+                    boxShadow: '0 0 10px color-mix(in srgb, var(--accent) 20%, transparent), inset 0 0 8px color-mix(in srgb, var(--accent) 5%, transparent)',
                   }
                   : undefined
             }
@@ -221,7 +221,7 @@ function SortableCategoryCell({
               className="grid h-11 w-11 place-items-center rounded-xl text-xl text-slate-50"
               style={{
                 background: isActive
-                  ? 'rgba(16,185,129,0.2)'
+                  ? 'color-mix(in srgb, var(--accent) 20%, transparent)'
                   : 'rgba(255,255,255,0.1)',
               }}
             >
@@ -270,9 +270,9 @@ function ParentCategoryHeader({
       style={
         isPromoteTarget
           ? {
-            borderColor: 'rgba(52,211,153,0.6)',
-            backgroundColor: 'rgba(16,185,129,0.10)',
-            boxShadow: '0 0 16px rgba(16,185,129,0.35)',
+            borderColor: 'color-mix(in srgb, var(--accent) 60%, transparent)',
+            backgroundColor: 'color-mix(in srgb, var(--accent) 10%, transparent)',
+            boxShadow: '0 0 16px color-mix(in srgb, var(--accent) 35%, transparent)',
           }
           : undefined
       }
@@ -515,9 +515,9 @@ export function CategorySelectionPage({
               style={
                 activeThisMonth.has(category.id)
                   ? {
-                    borderColor: 'rgba(52,211,153,0.5)',
-                    backgroundColor: 'rgba(16,185,129,0.06)',
-                    boxShadow: '0 0 10px rgba(52,211,153,0.2), inset 0 0 8px rgba(52,211,153,0.05)',
+                    borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)',
+                    backgroundColor: 'color-mix(in srgb, var(--accent) 6%, transparent)',
+                    boxShadow: '0 0 10px color-mix(in srgb, var(--accent) 20%, transparent), inset 0 0 8px color-mix(in srgb, var(--accent) 5%, transparent)',
                   }
                   : undefined
               }
@@ -527,7 +527,7 @@ export function CategorySelectionPage({
                 className="grid h-11 w-11 place-items-center rounded-xl text-xl text-slate-50"
                 style={{
                   background: activeThisMonth.has(category.id)
-                    ? 'rgba(16,185,129,0.2)'
+                    ? 'color-mix(in srgb, var(--accent) 20%, transparent)'
                     : 'rgba(255,255,255,0.1)',
                 }}
               >
@@ -546,7 +546,7 @@ export function CategorySelectionPage({
           type="button"
           className={[
             'flex flex-col items-center gap-3 rounded-2xl border border-dashed',
-            'border-white/[0.12] bg-white/3 px-2 py-3.5 text-accent-light',
+            'border-white/12 bg-white/3 px-2 py-3.5 text-accent-light',
             'active:bg-white/5',
           ].join(' ')}
         >
@@ -595,7 +595,7 @@ export function CategorySelectionPage({
               {activeCategory && (
                 <div className={[
                   'flex flex-col items-center gap-3 rounded-2xl border',
-                  'border-blue-400/40 bg-slate-800/90 px-2 py-3.5 opacity-90 shadow-xl',
+                  'border-(--accent)/40 bg-slate-800/90 px-2 py-3.5 opacity-90 shadow-xl',
                 ].join(' ')}>
                   <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-xl text-slate-50">
                     <Icon name={activeCategory.icon} />

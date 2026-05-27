@@ -30,9 +30,14 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
     : null
   const isAddCategory = searchParams.get('addCategory') === 'true'
   const seedType = (searchParams.get('type') ?? 'expense') as 'expense' | 'income'
+  const currentCategoryId = searchParams.get('currentCategoryId') ?? undefined
+
+  const initialParentId = currentCategoryId
+    ? categories.find((c) => c.id === currentCategoryId)?.parentId
+    : undefined
 
   const [type, setType] = useState<'expense' | 'income'>(seedType)
-  const [parentId, setParentId] = useState<string | undefined>()
+  const [parentId, setParentId] = useState<string | undefined>(initialParentId)
   const [isEditMode, setIsEditMode] = useState(false)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
   const [mergeSourceId, setMergeSourceId] = useState<string | null>(null)
@@ -142,9 +147,10 @@ export function useCategorySelectionPage(): CategorySelectionPageProps {
           i === changingIndex
             ? { ...item, categoryId: category.id }
             : item)
-        updateDraft({ items: newItems })
+        updateDraft({ items: newItems, focusedIndex: changingIndex })
       } else {
-        updateDraft({ items: [...draft.items, { categoryId: category.id, amount: 0 }] })
+        const newIndex = draft.items.length
+        updateDraft({ items: [...draft.items, { categoryId: category.id, amount: 0 }], focusedIndex: newIndex })
       }
       backNavigate(-1)
 

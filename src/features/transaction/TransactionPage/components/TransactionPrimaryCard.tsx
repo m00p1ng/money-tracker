@@ -72,7 +72,7 @@ export function TransactionPrimaryCard({
         </div>
       )}
 
-      <div className="flex items-center justify-between border-t border-white/20 pl-5 pr-3 py-2">
+      <div className="flex items-center justify-between border-t border-white/20 pl-6 px-4 py-2">
         <span className="text-lg font-bold">
           Total
         </span>
