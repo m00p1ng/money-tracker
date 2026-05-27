@@ -55,12 +55,7 @@ export function CategoryItemsCard({
               className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3"
               onClick={() => onChangeCategory(index)}
             >
-              <div className={[
-                'flex h-8 w-8 shrink-0 items-center justify-center',
-                'rounded-[9px] bg-accent/15 text-sm text-accent-light',
-              ].join(' ')}>
-                <Icon name={category?.icon ?? 'fa-ellipsis'} />
-              </div>
+              <Icon name={category?.icon ?? 'fa-ellipsis'} className="shrink-0 text-sm text-accent-light" />
               <div className="min-w-0 text-left">
                 <p className="truncate text-sm font-semibold">{category?.name ?? 'Unknown'}</p>
                 <p className="truncate text-xs text-white/30">{parent?.name ?? ''}</p>

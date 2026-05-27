@@ -35,12 +35,7 @@ export function WalletSelectorRow({
       onClick={onClick}
       type="button"
     >
-      <div
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs"
-        style={{ background: `${color}25`, color }}
-      >
-        <Icon name={wallet?.icon ?? 'fa-wallet'} />
-      </div>
+      <Icon name={wallet?.icon ?? 'fa-wallet'} className="shrink-0 text-sm" style={{ color }} />
       <div className="min-w-0 flex-1 px-1">
         <p className="truncate font-medium">
           {wallet?.name ?? fallbackName}
