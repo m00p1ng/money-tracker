@@ -1,12 +1,13 @@
 import cx from 'classnames'
 
 import { Icon } from '@/components'
-import { formatAmount } from '@/lib'
+import { formatSignedAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 interface WalletSelectorRowProps {
   ariaLabel: string
   wallet: Wallet | undefined
+  currency: string
   fallbackName: string
   showBalance?: boolean
   variant?: 'standalone' | 'flat'
@@ -16,6 +17,7 @@ interface WalletSelectorRowProps {
 export function WalletSelectorRow({
   ariaLabel,
   wallet,
+  currency,
   fallbackName,
   showBalance = false,
   variant = 'standalone',
@@ -38,7 +40,7 @@ export function WalletSelectorRow({
         <p className="truncate font-medium">
           {wallet?.name ?? fallbackName}
           {showBalance
-            ? ` · ${formatAmount(wallet?.balance ?? 0, wallet?.currency)}`
+            ? ` · ${formatSignedAmount(wallet?.balance ?? 0, wallet?.currency ?? currency)}`
             : ''}
         </p>
       </div>

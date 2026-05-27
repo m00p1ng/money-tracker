@@ -44,6 +44,7 @@ export function TransactionPrimaryCard({
       <WalletSelectorRow
         ariaLabel="Wallet"
         wallet={wallet}
+        currency={currency}
         fallbackName="Cash"
         showBalance
         variant="flat"

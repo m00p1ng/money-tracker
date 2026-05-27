@@ -57,6 +57,7 @@ export function TransactionFeatSection() {
             <WalletSelectorRow
               ariaLabel="Select wallet"
               wallet={STUB_WALLET_PAYMENT}
+              currency="USD"
               fallbackName="Select wallet"
               onClick={() => {}}
             />
@@ -66,6 +67,7 @@ export function TransactionFeatSection() {
             <WalletSelectorRow
               ariaLabel="Select wallet"
               wallet={STUB_WALLET_PAYMENT}
+              currency="USD"
               fallbackName="Select wallet"
               showBalance
               onClick={() => {}}

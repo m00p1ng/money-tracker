@@ -174,13 +174,21 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
   monthlyIncome() {
     return get()
       .items
-      .filter((transaction) => transaction.type === 'income' && isCurrentMonth(transaction.date))
+      .filter((transaction) =>
+        transaction.type === 'income' &&
+        transaction.paid === true &&
+        isCurrentMonth(transaction.date),
+      )
       .reduce((sum, transaction) => sum + total(transaction), 0)
   },
   monthlyExpense() {
     return get()
       .items
-      .filter((transaction) => transaction.type === 'expense' && isCurrentMonth(transaction.date))
+      .filter((transaction) =>
+        transaction.type === 'expense' &&
+        transaction.paid === true &&
+        isCurrentMonth(transaction.date),
+      )
       .reduce((sum, transaction) => sum + total(transaction), 0)
   },
   todayTransactions() {

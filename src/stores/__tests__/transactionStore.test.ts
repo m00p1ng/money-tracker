@@ -3,6 +3,7 @@ import {
   describe,
   expect,
   it,
+  vi,
 } from 'vitest'
 
 import { useTransactionStore } from '@/stores'
@@ -68,6 +69,58 @@ describe('transactionsByMonth', () => {
     const result = useTransactionStore.getState().transactionsByMonth(2026, 4)
     expect(result[0].id).toBe('tx-2')
     expect(result[1].id).toBe('tx-1')
+  })
+})
+
+describe('monthly summary totals', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+    useTransactionStore.setState({ items: [] })
+  })
+
+  it('counts only transactions explicitly marked paid', () => {
+    vi.setSystemTime(new Date('2026-05-28T12:00:00.000Z'))
+    useTransactionStore.setState({
+      items: [
+        makeTx({
+          id: 'income-paid',
+          type: 'income',
+          date: '2026-05-10T10:00',
+          paid: true,
+          items: [{ categoryId: 'income-salary', amount: 100 }],
+        }),
+        makeTx({
+          id: 'income-unpaid',
+          type: 'income',
+          date: '2026-05-11T10:00',
+          paid: false,
+          items: [{ categoryId: 'income-salary', amount: 50 }],
+        }),
+        makeTx({
+          id: 'expense-paid',
+          type: 'expense',
+          date: '2026-05-12T10:00',
+          paid: true,
+          items: [{ categoryId: 'expense-food', amount: 30 }],
+        }),
+        makeTx({
+          id: 'expense-unpaid',
+          type: 'expense',
+          date: '2026-05-13T10:00',
+          paid: false,
+          items: [{ categoryId: 'expense-food', amount: 20 }],
+        }),
+        makeTx({
+          id: 'expense-without-paid',
+          type: 'expense',
+          date: '2026-05-14T10:00',
+          items: [{ categoryId: 'expense-food', amount: 10 }],
+        }),
+      ],
+    })
+
+    expect(useTransactionStore.getState().monthlyIncome()).toBe(100)
+    expect(useTransactionStore.getState().monthlyExpense()).toBe(30)
   })
 })
 
