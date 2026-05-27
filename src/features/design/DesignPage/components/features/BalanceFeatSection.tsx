@@ -1,11 +1,9 @@
 import { SwipeableTransactionRow, WalletSummaryCard } from '@/features/balance'
-import { DateRangeHeader } from '@/features/balance/WalletDetailPage/components/DateRangeHeader'
 
 import { SubSection, VariantLabel } from '../sectionHelpers'
 
 import {
   STUB_CATEGORY,
-  STUB_RANGE,
   STUB_TRANSACTION,
   STUB_WALLET_CREDIT,
   STUB_WALLET_PAYMENT,
@@ -47,14 +45,6 @@ export function BalanceFeatSection() {
         />
       </SubSection>
 
-      <SubSection id="date-range-header" title="DateRangeHeader">
-        <DateRangeHeader
-          range={STUB_RANGE}
-          onClickStart={() => {}}
-          onClickEnd={() => {}}
-          onOpenPreset={() => {}}
-        />
-      </SubSection>
     </div>
   )
 }

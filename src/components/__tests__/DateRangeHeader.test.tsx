@@ -7,7 +7,7 @@ import {
   vi,
 } from 'vitest'
 
-import { DateRangeHeader } from '../DateRangeHeader'
+import { DateRangeHeader } from '@/components'
 
 const range = { start: '2026-05-01', end: '2026-05-31' }
 

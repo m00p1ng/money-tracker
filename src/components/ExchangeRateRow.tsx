@@ -20,7 +20,7 @@ export function ExchangeRateRow({
   return (
     <div className={cx(
       'flex items-center gap-1 px-4 py-3',
-      variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/[0.04]',
+      variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
     )}>
       <div className={[
         'flex h-10 w-10 shrink-0 items-center justify-center',

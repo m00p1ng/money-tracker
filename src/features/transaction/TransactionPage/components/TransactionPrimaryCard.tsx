@@ -1,8 +1,8 @@
+import { ExchangeRateRow } from '@/components'
 import { formatSignedAmount } from '@/lib'
 import type { TransactionItem, Wallet } from '@/types/domain'
 
 import CategoryItemsCard from './CategoryItemsCard'
-import { ExchangeRateRow } from './ExchangeRateRow'
 import { WalletSelectorRow } from './WalletSelectorRow'
 
 interface TransactionPrimaryCardProps {

@@ -1,7 +1,6 @@
+import { DateTimeRow, NoteField } from '@/components'
 import type { RepeatConfig, TransactionStatus } from '@/types/domain'
 
-import { DateTimeRow } from './DateTimeRow'
-import { NoteField } from './NoteField'
 import { ReconciliationRow } from './ReconciliationRow'
 import { RepeatRow } from './RepeatRow'
 

@@ -5,10 +5,15 @@ import {
   AnimatedBar,
   BottomSheet,
   Button,
+  CalculatorKeyboard,
+  CalculatorKeyboardSheet,
   Card,
   CurrencyPicker,
+  DateRangeHeader,
   DateRangePresetPicker,
   DateTimePicker,
+  DateTimeRow,
+  ExchangeRateRow,
   Field,
   FormActions,
   FormErrorMessage,
@@ -16,6 +21,7 @@ import {
   IconPicker,
   ListGroup,
   ListRow,
+  NoteField,
   PageHeader,
   RepeatPicker,
   SectionLabel,
@@ -26,7 +32,7 @@ import {
   TextAreaInput,
   TextInput,
   TransactionRow,
-  TypePickerDropdown,
+  TransactionTypeDropdown,
   WalletPicker,
   WheelPicker,
   type SelectorOption,
@@ -129,7 +135,11 @@ function VariantLabel({ label }: { label: string }) {
   return <p className="mt-2 text-center text-xs text-white/30">{label}</p>
 }
 
-function UIComponentDemos() {
+const STUB_DATE_PAST = new Date(Date.now() - 86400000).toISOString()
+const STUB_DATE_FUTURE = new Date(Date.now() + 86400000).toISOString()
+const STUB_RANGE = { start: '2026-05-01', end: '2026-05-31' }
+
+export function ComponentsSection() {
   const [selectDemo, setSelectDemo] = useState('a')
   const [seg2, setSeg2] = useState<'a' | 'b'>('a')
   const [seg3, setSeg3] = useState<'a' | 'b' | 'c'>('a')
@@ -153,10 +163,18 @@ function UIComponentDemos() {
   const [switchChecked, setSwitchChecked] = useState(false)
   const [switchWithDesc, setSwitchWithDesc] = useState(true)
 
-  return (
-    <div className="space-y-10">
-      <h2 className="text-lg font-bold">UI Components</h2>
+  const [iconPickerOpen, setIconPickerOpen] = useState(false)
+  const [iconValue, setIconValue] = useState('fa-utensils')
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const [pickerValue, setPickerValue] = useState<Record<string, string>>({ hour: '08', minute: '00' })
+  const [selectorOpen, setSelectorOpen] = useState(false)
+  const [selectorValue, setSelectorValue] = useState<'usd' | 'eur' | 'thb'>('usd')
+  const [note, setNote] = useState('Lunch with team')
+  const [exchangeRate, setExchangeRate] = useState('0.92')
+  const [calcSheetOpen, setCalcSheetOpen] = useState(false)
 
+  return (
+    <div className="space-y-8">
       <SubSection id="button" title="Button">
         <div className="flex flex-wrap items-start gap-6">
           <div><Button variant="accent">Accent</Button><VariantLabel label="accent" /></div>
@@ -233,9 +251,9 @@ function UIComponentDemos() {
         </div>
       </SubSection>
 
-      <SubSection id="type-picker" title="TypePickerDropdown">
+      <SubSection id="type-picker" title="TransactionTypeDropdown">
         <div className="max-w-xs rounded-xl border border-white/8 bg-white/3 p-4">
-          <TypePickerDropdown value={pickerType} onChange={setPickerType} />
+          <TransactionTypeDropdown value={pickerType} onChange={setPickerType} />
           <VariantLabel label={`current: ${pickerType}`} />
         </div>
       </SubSection>
@@ -364,21 +382,6 @@ function UIComponentDemos() {
           </div>
         </div>
       </SubSection>
-    </div>
-  )
-}
-
-function SharedComponentDemos() {
-  const [iconPickerOpen, setIconPickerOpen] = useState(false)
-  const [iconValue, setIconValue] = useState('fa-utensils')
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const [pickerValue, setPickerValue] = useState<Record<string, string>>({ hour: '08', minute: '00' })
-  const [selectorOpen, setSelectorOpen] = useState(false)
-  const [selectorValue, setSelectorValue] = useState<'usd' | 'eur' | 'thb'>('usd')
-
-  return (
-    <div className="space-y-10">
-      <h2 className="text-lg font-bold">Shared Components</h2>
 
       <SubSection id="background" title="Background">
         <div className="rounded-2xl border border-white/6 bg-white/4 px-4 py-3 text-sm text-white/50">
@@ -568,15 +571,65 @@ function SharedComponentDemos() {
           />
         </div>
       </SubSection>
-    </div>
-  )
-}
 
-export function ComponentsSection() {
-  return (
-    <div className="space-y-12">
-      <UIComponentDemos />
-      <SharedComponentDemos />
+      <SubSection id="date-range-header" title="DateRangeHeader">
+        <DateRangeHeader
+          range={STUB_RANGE}
+          onClickStart={() => { }}
+          onClickEnd={() => { }}
+          onOpenPreset={() => { }}
+        />
+      </SubSection>
+
+      <SubSection id="date-time-row" title="DateTimeRow">
+        <div className="space-y-2">
+          <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+            <DateTimeRow date={STUB_DATE_PAST} status="paid" onClick={() => { }} onToggleStatus={() => { }} />
+          </div>
+          <VariantLabel label="paid" />
+          <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+            <DateTimeRow date={STUB_DATE_PAST} status="overdue" onClick={() => { }} onToggleStatus={() => { }} />
+          </div>
+          <VariantLabel label="overdue" />
+          <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+            <DateTimeRow date={STUB_DATE_FUTURE} status="planned" onClick={() => { }} onToggleStatus={() => { }} />
+          </div>
+          <VariantLabel label="planned" />
+        </div>
+      </SubSection>
+
+      <SubSection id="note-field" title="NoteField">
+        <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+          <NoteField note={note} onUpdateNote={setNote} onFocusNoteField={() => { }} />
+        </div>
+      </SubSection>
+
+      <SubSection id="exchange-rate-row" title="ExchangeRateRow">
+        <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+          <ExchangeRateRow
+            label="USD → EUR"
+            value={exchangeRate}
+            defaultRate="0.92"
+            onChange={setExchangeRate}
+          />
+        </div>
+      </SubSection>
+
+      <SubSection id="calculator-keyboard" title="CalculatorKeyboard">
+        <CalculatorKeyboard onPress={() => { }} onDismiss={() => { }} />
+      </SubSection>
+
+      <SubSection id="calculator-keyboard-sheet" title="CalculatorKeyboardSheet">
+        <div className="space-y-3">
+          <Button variant="ghost" onClick={() => setCalcSheetOpen(true)}>
+            Open CalculatorKeyboardSheet
+          </Button>
+          <CalculatorKeyboardSheet
+            isOpen={calcSheetOpen}
+            onPress={() => { }}
+          />
+        </div>
+      </SubSection>
     </div>
   )
 }

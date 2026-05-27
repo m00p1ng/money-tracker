@@ -40,7 +40,7 @@ export const DESIGN_GROUPS = [
       { id: 'card', label: 'Card' },
       { id: 'field', label: 'Field' },
       { id: 'segmented-control', label: 'SegmentedControl' },
-      { id: 'type-picker', label: 'TypePickerDropdown' },
+      { id: 'type-picker', label: 'TransactionTypeDropdown' },
       { id: 'currency-picker', label: 'CurrencyPicker' },
       { id: 'date-time-picker', label: 'DateTimePicker' },
       { id: 'repeat-picker', label: 'RepeatPicker' },
@@ -61,6 +61,12 @@ export const DESIGN_GROUPS = [
       { id: 'bottom-sheet', label: 'BottomSheet' },
       { id: 'icon-picker', label: 'IconPicker' },
       { id: 'selector-sheet', label: 'SelectorSheet' },
+      { id: 'date-range-header', label: 'DateRangeHeader' },
+      { id: 'date-time-row', label: 'DateTimeRow' },
+      { id: 'note-field', label: 'NoteField' },
+      { id: 'exchange-rate-row', label: 'ExchangeRateRow' },
+      { id: 'calculator-keyboard', label: 'CalculatorKeyboard' },
+      { id: 'calculator-keyboard-sheet', label: 'CalculatorKeyboardSheet' },
     ],
   },
   {
@@ -81,7 +87,6 @@ export const DESIGN_GROUPS = [
     items: [
       { id: 'wallet-summary-card', label: 'WalletSummaryCard' },
       { id: 'swipeable-transaction-row', label: 'SwipeableTransactionRow' },
-      { id: 'date-range-header', label: 'DateRangeHeader' },
     ],
   },
   {
@@ -89,16 +94,11 @@ export const DESIGN_GROUPS = [
     label: 'Feature — Transaction',
     component: TransactionFeatSection,
     items: [
-      { id: 'calculator-keyboard', label: 'CalculatorKeyboard' },
       { id: 'category-items-card', label: 'CategoryItemsCard' },
       { id: 'transaction-header', label: 'TransactionHeader' },
-      { id: 'date-time-row', label: 'DateTimeRow' },
       { id: 'wallet-selector-row', label: 'WalletSelectorRow' },
-      { id: 'note-field', label: 'NoteField' },
-      { id: 'exchange-rate-row', label: 'ExchangeRateRow' },
       { id: 'reconciliation-row', label: 'ReconciliationRow' },
       { id: 'repeat-row', label: 'RepeatRow' },
-      { id: 'calculator-keyboard-sheet', label: 'CalculatorKeyboardSheet' },
     ],
   },
   {

@@ -1,10 +1,8 @@
 import cx from 'classnames'
 
-import { Icon } from '@/components'
+import { ExchangeRateRow, Icon } from '@/components'
 import { formatAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
-
-import { ExchangeRateRow } from './ExchangeRateRow'
 
 interface TransferPrimaryCardProps {
   wallets: Wallet[]

@@ -15,19 +15,19 @@ const ALL_TYPES: { label: string; value: TransactionType }[] = [
   { label: 'Transfer', value: 'transfer' },
 ]
 
-interface TypeDropdownProps {
+interface TransactionTypeDropdownProps {
   value: TransactionType
   onChange: (type: TransactionType) => void
   locked?: boolean
   types?: TransactionType[]
 }
 
-export function TypePickerDropdown({
+export function TransactionTypeDropdown({
   value,
   onChange,
   locked = false,
   types,
-}: TypeDropdownProps) {
+}: TransactionTypeDropdownProps) {
   const TYPES = types
     ? ALL_TYPES.filter((t) => types.includes(t.value))
     : ALL_TYPES

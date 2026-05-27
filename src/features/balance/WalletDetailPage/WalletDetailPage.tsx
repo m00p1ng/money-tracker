@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import {
   DatePicker,
+  DateRangeHeader,
   DateRangePresetPicker,
   Icon,
   PageHeader,
@@ -23,7 +24,6 @@ import type {
 } from '@/types/domain'
 
 import {
-  DateRangeHeader,
   SwipeableTransactionRow,
   WalletSummaryCard,
 } from './components'

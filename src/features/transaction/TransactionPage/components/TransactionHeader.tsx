@@ -1,4 +1,4 @@
-import { PageHeader, TypePickerDropdown } from '@/components'
+import { PageHeader, TransactionTypeDropdown } from '@/components'
 import type { TransactionType } from '@/types/domain'
 
 interface TransactionHeaderProps {
@@ -17,7 +17,7 @@ export function TransactionHeader({
   return (
     <PageHeader
       title={
-        <TypePickerDropdown
+        <TransactionTypeDropdown
           value={type}
           onChange={(value) => onChangeType(value as TransactionType)}
         />

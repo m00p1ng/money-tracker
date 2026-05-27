@@ -31,7 +31,7 @@ import {
   ConfirmSheet,
   Icon,
   PageHeader,
-  TypePickerDropdown,
+  TransactionTypeDropdown,
 } from '@/components'
 import type {
   Category,
@@ -568,7 +568,7 @@ export function CategorySelectionPage({
   return (
     <div className="space-y-4">
       <PageHeader
-        title={<TypePickerDropdown value={type} onChange={onTypeChange} locked={isLocked} />}
+        title={<TransactionTypeDropdown value={type} onChange={onTypeChange} locked={isLocked} />}
         onBack={onBack}
         rightSlot={isEditMode
           ? doneButton
