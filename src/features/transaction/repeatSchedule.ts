@@ -16,7 +16,7 @@ type DateParts = {
 type ValidCustomRepeat = RepeatConfig & {
   preset: 'custom'
   customEvery: number
-  customUnit: 'day' | 'month' | 'year'
+  customUnit: 'day' | 'week' | 'month' | 'year'
 }
 
 function localDateString(value: string): string {
@@ -113,12 +113,15 @@ function addMonths(value: string, months: number): string {
 }
 
 function isValidCustomRepeat(repeat: RepeatConfig): repeat is ValidCustomRepeat {
+  const validUnits: Array<NonNullable<RepeatConfig['customUnit']>> = ['day', 'week', 'month', 'year']
+
   return (
     repeat.preset === 'custom' &&
     Number.isInteger(repeat.customEvery) &&
     repeat.customEvery !== undefined &&
     repeat.customEvery > 0 &&
-    (repeat.customUnit === 'day' || repeat.customUnit === 'month' || repeat.customUnit === 'year')
+    repeat.customUnit !== undefined &&
+    validUnits.includes(repeat.customUnit)
   )
 }
 
@@ -144,6 +147,9 @@ export function nextRepeatDate(day: string, repeat: RepeatConfig): string {
 
   if (repeat.customUnit === 'day') {
     return addDays(day, repeat.customEvery)
+  }
+  if (repeat.customUnit === 'week') {
+    return addDays(day, repeat.customEvery * 7)
   }
   if (repeat.customUnit === 'month') {
     return addMonths(day, repeat.customEvery)

@@ -49,7 +49,6 @@ const settings: Settings = {
   id: 'default',
   theme: 'forest',
   language: 'en',
-  dateFormat: 'DD MMM YYYY',
 }
 
 function slug(value: string): string {

@@ -205,7 +205,10 @@ function SortableCategoryCell({
                   ? {
                     borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)',
                     backgroundColor: 'color-mix(in srgb, var(--accent) 6%, transparent)',
-                    boxShadow: '0 0 10px color-mix(in srgb, var(--accent) 20%, transparent), inset 0 0 8px color-mix(in srgb, var(--accent) 5%, transparent)',
+                    boxShadow: [
+                      '0 0 10px color-mix(in srgb, var(--accent) 20%, transparent)',
+                      'inset 0 0 8px color-mix(in srgb, var(--accent) 5%, transparent)',
+                    ].join(', '),
                   }
                   : undefined
             }
@@ -517,7 +520,10 @@ export function CategorySelectionPage({
                   ? {
                     borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)',
                     backgroundColor: 'color-mix(in srgb, var(--accent) 6%, transparent)',
-                    boxShadow: '0 0 10px color-mix(in srgb, var(--accent) 20%, transparent), inset 0 0 8px color-mix(in srgb, var(--accent) 5%, transparent)',
+                    boxShadow: [
+                      '0 0 10px color-mix(in srgb, var(--accent) 20%, transparent)',
+                      'inset 0 0 8px color-mix(in srgb, var(--accent) 5%, transparent)',
+                    ].join(', '),
                   }
                   : undefined
               }

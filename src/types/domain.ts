@@ -7,7 +7,7 @@ export type RepeatPreset = 'never' | 'daily' | 'weekly' | '2weeks' | 'monthly' |
 export type RepeatConfig = {
   preset: RepeatPreset
   customEvery?: number
-  customUnit?: 'day' | 'month' | 'year'
+  customUnit?: 'day' | 'week' | 'month' | 'year'
 }
 
 export type TransactionItem = {
@@ -70,5 +70,4 @@ export type Settings = {
   id: string
   theme: ThemePreset
   language: 'en'
-  dateFormat: 'DD MMM YYYY'
 }
