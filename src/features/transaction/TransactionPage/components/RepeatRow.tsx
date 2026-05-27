@@ -54,23 +54,17 @@ export function RepeatRow({
       onClick={onClick}
       type="button"
     >
-      <div
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs"
-        style={{
-          background: 'color-mix(in srgb, var(--accent) 15%, transparent)',
-          color: 'var(--accent-light)',
-        }}
-      >
-        <Icon name="fa-rotate" />
-      </div>
       <div className="min-w-0 flex-1 px-1">
-        <p
-          className="font-semibold"
-          style={isActive ? { color: 'var(--accent-light)' } : undefined}
-        >
-          {formatRepeat(repeatConfig)}
-        </p>
+        <p className="font-semibold">Repeat</p>
       </div>
+      <span
+        className="shrink-0 text-sm"
+        style={isActive
+          ? { color: 'var(--accent-light)' }
+          : { color: 'rgba(255,255,255,0.4)' }}
+      >
+        {formatRepeat(repeatConfig)}
+      </span>
       <Icon name="fa-chevron-right" className="text-white/20 text-sm" />
     </button>
   )
