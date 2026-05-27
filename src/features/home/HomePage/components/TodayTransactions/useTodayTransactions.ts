@@ -1,3 +1,4 @@
+import { isTransactionPaid } from '@/features/transaction/transactionForm'
 import {
   buildTransactionRowDisplay,
   formatAmount,
@@ -31,7 +32,9 @@ export function useTodayTransactions() {
   const todayTransactions = useTransactionStore((state) => state.todayTransactions)
   const findCategory = useCategoryStore((state) => state.findById)
   const wallets = useWalletStore((state) => state.items)
-  const transactions = todayTransactions().filter((tx) => tx.type !== 'adjustment')
+  const transactions = todayTransactions()
+    .filter((tx) => tx.type !== 'adjustment')
+    .filter(isTransactionPaid)
 
   const rows: TodayTransactionRowData[] = transactions.map((transaction) => {
     if (transaction.type === 'transfer') {

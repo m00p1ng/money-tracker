@@ -29,10 +29,9 @@ describe('transactionDraftStore', () => {
       toExchangeRate: '',
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
-      adjustmentTargetBalance: 0,
-      adjustmentBaseBalance: 0,
+      adjustmentAmount: 0,
       cleared: false,
-      markedPaid: true,
+      paid: true,
     })
     expect(useTransactionDraftStore.getState().draft?.type).toBe('expense')
     expect(useTransactionDraftStore.getState().draft?.walletId).toBe('w1')
@@ -51,10 +50,9 @@ describe('transactionDraftStore', () => {
       toExchangeRate: '',
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
-      adjustmentTargetBalance: 0,
-      adjustmentBaseBalance: 0,
+      adjustmentAmount: 0,
       cleared: false,
-      markedPaid: true,
+      paid: true,
     })
     useTransactionDraftStore.getState().update({ note: 'coffee' })
     expect(useTransactionDraftStore.getState().draft?.note).toBe('coffee')
@@ -79,10 +77,9 @@ describe('transactionDraftStore', () => {
       toExchangeRate: '',
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
-      adjustmentTargetBalance: 0,
-      adjustmentBaseBalance: 0,
+      adjustmentAmount: 0,
       cleared: false,
-      markedPaid: true,
+      paid: true,
     })
     useTransactionDraftStore.getState().clear()
     expect(useTransactionDraftStore.getState().draft).toBeNull()

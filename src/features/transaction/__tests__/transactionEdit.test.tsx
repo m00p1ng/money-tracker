@@ -426,7 +426,7 @@ describe('TransactionPage adjustment mode', () => {
         items: [{ categoryId: 'adjustment-balance-adjustment', amount: 500 }],
         date: new Date().toISOString(),
         createdAt: new Date().toISOString(),
-        status: 'paid',
+        paid: true,
       }],
     })
 

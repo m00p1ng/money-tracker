@@ -76,10 +76,10 @@ export function validateExchangeRate(value: string | undefined): string | undefi
 
 export function deriveTransactionStatus(input: {
   date: string
-  markedPaid?: boolean
+  paid?: boolean
   now?: Date
 }): TransactionStatus {
-  if (input.markedPaid ?? true) {
+  if (input.paid ?? true) {
     return 'paid'
   }
 
@@ -89,6 +89,31 @@ export function deriveTransactionStatus(input: {
   return transactionDate > now
     ? 'planned'
     : 'overdue'
+}
+
+export function isTransactionPaid(
+  transaction: Pick<Transaction, 'paid'> & { status?: TransactionStatus },
+): boolean {
+  if (typeof transaction.paid === 'boolean') {
+    return transaction.paid
+  }
+
+  if (transaction.status) {
+    return transaction.status === 'paid'
+  }
+
+  return true
+}
+
+export function deriveStoredTransactionStatus(
+  transaction: Pick<Transaction, 'date' | 'paid'> & { status?: TransactionStatus },
+  now?: Date,
+): TransactionStatus {
+  return deriveTransactionStatus({
+    date: transaction.date,
+    paid: isTransactionPaid(transaction),
+    now,
+  })
 }
 
 export function buildTransaction(input: {
@@ -104,17 +129,13 @@ export function buildTransaction(input: {
   toExchangeRate?: number
   date: string
   note?: string
-  markedPaid?: boolean
+  paid?: boolean
   repeat?: RepeatConfig
   cleared?: boolean
   now: string
   createId: () => string
 }): Transaction {
-  const status = deriveTransactionStatus({
-    date: input.date,
-    markedPaid: input.markedPaid,
-    now: new Date(input.now),
-  })
+  const paid = input.paid ?? true
   const items = input.type === 'transfer'
     ? [{ categoryId: 'transfer', amount: input.transferAmount ?? 0 }]
     : input.type === 'adjustment'
@@ -138,11 +159,11 @@ export function buildTransaction(input: {
     note: input.note?.trim() || undefined,
     createdAt: input.now,
     ...transferFields,
-    status,
-    repeat: status === 'paid'
+    paid,
+    repeat: paid
       ? undefined
       : input.repeat,
-    cleared: status === 'paid'
+    cleared: paid
       ? (input.cleared ?? false)
       : false,
   }

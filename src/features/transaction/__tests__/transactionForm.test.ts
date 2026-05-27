@@ -141,7 +141,8 @@ describe('transactionForm', () => {
       createId: () => 'tx-generated',
     })
     expect(transaction.id).toBe('tx-generated')
-    expect(transaction.status).toBe('paid')
+    expect(transaction.paid).toBe(true)
+    expect(transaction).not.toHaveProperty('status')
   })
 
   it('trims note and falls back to undefined when empty', () => {
@@ -181,7 +182,7 @@ describe('transactionForm', () => {
       transferAmount: 25,
       items: [],
       date: '2026-05-24T10:00',
-      markedPaid: false,
+      paid: false,
       repeat: { preset: 'monthly' },
       now: '2026-05-23T10:00:00.000Z',
       createId: () => 'tx-transfer',
@@ -195,10 +196,11 @@ describe('transactionForm', () => {
       currency: 'USD',
       exchangeRate: 36.1234,
       toExchangeRate: 1,
-      status: 'planned',
+      paid: false,
       repeat: { preset: 'monthly' },
       items: [{ categoryId: 'transfer', amount: 25 }],
     })
+    expect(transaction).not.toHaveProperty('status')
   })
 
   it('accepts adjustment draft with only walletId (no items needed)', () => {
@@ -229,13 +231,14 @@ describe('transactionForm', () => {
       transferAmount: 25,
       items: [],
       date: '2026-05-24T10:00',
-      markedPaid: true,
+      paid: true,
       repeat: { preset: 'monthly' },
       now: '2026-05-23T10:00:00.000Z',
       createId: () => 'tx-paid-transfer',
     })
 
-    expect(transaction.status).toBe('paid')
+    expect(transaction.paid).toBe(true)
     expect(transaction.repeat).toBeUndefined()
+    expect(transaction).not.toHaveProperty('status')
   })
 })

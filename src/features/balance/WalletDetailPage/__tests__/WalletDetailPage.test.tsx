@@ -181,4 +181,57 @@ describe('WalletDetailPage', () => {
 
     expect(primaryAmountElement('฿30.00')).toHaveClass('text-expense')
   })
+
+  it('shows only paid transactions', () => {
+    vi.setSystemTime(new Date('2026-05-26T12:00:00.000Z'))
+    const categories: Category[] = [
+      {
+        id: 'coffee',
+        name: 'Coffee',
+        type: 'expense',
+        level: 1,
+        icon: 'fa-mug-hot',
+        isDefault: true,
+      },
+      {
+        id: 'food',
+        name: 'Food',
+        type: 'expense',
+        level: 1,
+        icon: 'fa-burger',
+        isDefault: true,
+      },
+    ]
+
+    renderPage({
+      categories,
+      transactions: [
+        {
+          id: 'tx-paid',
+          type: 'expense',
+          walletId: wallet.id,
+          currency: 'THB',
+          paid: true,
+          items: [{ categoryId: 'coffee', amount: 10 }],
+          date: '2026-05-25T10:00:00.000Z',
+          createdAt: '2026-05-25T10:00:00.000Z',
+        },
+        {
+          id: 'tx-overdue',
+          type: 'expense',
+          walletId: wallet.id,
+          currency: 'THB',
+          paid: false,
+          items: [{ categoryId: 'food', amount: 20 }],
+          date: '2026-05-25T11:00:00.000Z',
+          createdAt: '2026-05-25T11:00:00.000Z',
+        },
+      ],
+    })
+
+    expect(screen.getByText('Coffee')).toBeInTheDocument()
+    expect(screen.queryByText('Food')).not.toBeInTheDocument()
+    expect(primaryAmountElement('฿10.00')).toBeInTheDocument()
+    expect(screen.queryByText('฿20.00')).not.toBeInTheDocument()
+  })
 })

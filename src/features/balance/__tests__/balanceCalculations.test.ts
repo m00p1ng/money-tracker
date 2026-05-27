@@ -16,13 +16,16 @@ import {
 } from '@/features/balance/balanceCalculations'
 import type { Transaction, Wallet } from '@/types/domain'
 
+// wallet.balance represents the current balance (already includes all transactions)
+// cash: started at 1000, expense -100, income +500 → current 1400
+// card: started at 0, card-expense +750 debt, card-payment -250 debt → current debt 500
 const wallets: Wallet[] = [
   {
     id: 'cash',
     name: 'Cash',
     type: 'payment',
     currency: 'THB',
-    balance: 1000,
+    balance: 1400,
     color: '#10b981',
     icon: 'fa-wallet',
   },
@@ -31,7 +34,7 @@ const wallets: Wallet[] = [
     name: 'Card',
     type: 'credit_card',
     currency: 'THB',
-    balance: 0,
+    balance: 500,
     creditLimit: 5000,
     color: '#ef4444',
     icon: 'fa-credit-card',
@@ -95,16 +98,28 @@ describe('balance calculations', () => {
     }
 
     expect(amountInWalletCurrency(transaction, wallets[0])).toBe(361.234)
-    expect(walletCurrentAmount(wallets[0], [transaction])).toBeCloseTo(638.766)
+    // wallet.balance is maintained incrementally: 1000 - 361.234 = 638.766
+    const cashAfterUsdExpense: Wallet = { ...wallets[0], balance: 638.766 }
+    expect(walletCurrentAmount(cashAfterUsdExpense, [transaction])).toBeCloseTo(638.766)
   })
 
   it('applies same-currency transfer amounts to source and destination wallets', () => {
-    const savingsWallet: Wallet = {
+    // wallet.balance = current balance after the transfer
+    const cashAfterTransfer: Wallet = {
+      id: 'cash',
+      name: 'Cash',
+      type: 'payment',
+      currency: 'THB',
+      balance: 700,
+      color: '#10b981',
+      icon: 'fa-wallet',
+    }
+    const savingsAfterTransfer: Wallet = {
       id: 'savings',
       name: 'Savings',
       type: 'payment',
       currency: 'THB',
-      balance: 200,
+      balance: 500,
       color: '#0ea5e9',
       icon: 'fa-piggy-bank',
     }
@@ -128,18 +143,19 @@ describe('balance calculations', () => {
       createdAt: '2026-05-05T08:00:00.000Z',
     }
 
-    expect(walletCurrentAmount(wallets[0], [transaction])).toBe(700)
-    expect(walletCurrentAmount(savingsWallet, [transaction])).toBe(500)
+    expect(walletCurrentAmount(cashAfterTransfer, [transaction])).toBe(700)
+    expect(walletCurrentAmount(savingsAfterTransfer, [transaction])).toBe(500)
     expect(walletCurrentAmount(unrelatedWallet, [transaction])).toBe(100)
   })
 
   it('uses toExchangeRate for transfer destination wallet conversion', () => {
-    const usdWallet: Wallet = {
+    // wallet.balance = current (100 initial + 27.5 from transfer = 127.5)
+    const usdWalletAfterTransfer: Wallet = {
       id: 'usd-cash',
       name: 'USD Cash',
       type: 'payment',
       currency: 'USD',
-      balance: 100,
+      balance: 127.5,
       color: '#22c55e',
       icon: 'fa-dollar-sign',
     }
@@ -156,12 +172,14 @@ describe('balance calculations', () => {
       createdAt: '2026-05-05T08:00:00.000Z',
     }
 
-    expect(amountInWalletCurrency(transaction, usdWallet)).toBe(27.5)
-    expect(walletCurrentAmount(usdWallet, [transaction])).toBe(127.5)
+    expect(amountInWalletCurrency(transaction, usdWalletAfterTransfer)).toBe(27.5)
+    expect(walletCurrentAmount(usdWalletAfterTransfer, [transaction])).toBe(127.5)
   })
 
   it('reduces credit card debt when cash transfers to a card', () => {
-    const cardWithDebt: Wallet = { ...wallets[1], balance: 500 }
+    // cash: 1000 - 200 = 800; card: 500 debt - 200 = 300 debt
+    const cashAfter: Wallet = { ...wallets[0], balance: 800 }
+    const cardAfter: Wallet = { ...wallets[1], balance: 300 }
     const transaction: Transaction = {
       id: 'cash-to-card',
       type: 'transfer',
@@ -173,12 +191,14 @@ describe('balance calculations', () => {
       createdAt: '2026-05-05T08:00:00.000Z',
     }
 
-    expect(walletCurrentAmount(wallets[0], [transaction])).toBe(800)
-    expect(walletCurrentAmount(cardWithDebt, [transaction])).toBe(300)
+    expect(walletCurrentAmount(cashAfter, [transaction])).toBe(800)
+    expect(walletCurrentAmount(cardAfter, [transaction])).toBe(300)
   })
 
   it('increases credit card debt when transferring a cash advance to payment wallet', () => {
-    const cardWithDebt: Wallet = { ...wallets[1], balance: 500 }
+    // card: 500 + 200 = 700 debt; cash: 1000 + 200 = 1200
+    const cardAfter: Wallet = { ...wallets[1], balance: 700 }
+    const cashAfter: Wallet = { ...wallets[0], balance: 1200 }
     const transaction: Transaction = {
       id: 'card-to-cash',
       type: 'transfer',
@@ -190,8 +210,8 @@ describe('balance calculations', () => {
       createdAt: '2026-05-05T08:00:00.000Z',
     }
 
-    expect(walletCurrentAmount(cardWithDebt, [transaction])).toBe(700)
-    expect(walletCurrentAmount(wallets[0], [transaction])).toBe(1200)
+    expect(walletCurrentAmount(cardAfter, [transaction])).toBe(700)
+    expect(walletCurrentAmount(cashAfter, [transaction])).toBe(1200)
   })
 
   it('calculates credit card current debt as positive owed amount', () => {
@@ -245,6 +265,7 @@ describe('balance calculations', () => {
   })
 
   it('returns newest-first running payment balances computed oldest-to-newest', () => {
+    // wallets[0].balance = 1400 (current); startingBalance = 1400 - (-100+500) = 1000
     expect(
       walletRunningRows(wallets[0], transactions, { start: '2026-05-01', end: '2026-05-31' })
         .map((row) => [row.transaction.id, row.runningAmount]),
@@ -275,20 +296,25 @@ describe('balance calculations', () => {
         createdAt: '2026-05-02T08:00:00.000Z',
       },
     ]
+    // wallet.balance = current after both txns: 1000 - 100 + 50 = 950
+    // startingBalance = 950 - (-100+50) = 1000; prior: 900; range-income: 950
+    const cashAfter: Wallet = { ...wallets[0], balance: 950 }
 
     expect(
-      walletRunningRows(wallets[0], history, { start: '2026-05-01', end: '2026-05-31' })
+      walletRunningRows(cashAfter, history, { start: '2026-05-01', end: '2026-05-31' })
         .map((row) => [row.transaction.id, row.runningAmount]),
     ).toEqual([['range-income', 950]])
   })
 
   it('counts only cleared transactions for cleared balance', () => {
+    // wallet.balance = current after both txns: 1000 - 200 - 100 = 700
+    // startingBalance = 700 - (-200-100) = 1000; cleared: 1000-200 = 800
     const wallet: Wallet = {
       id: 'cash',
       name: 'Cash',
       type: 'payment',
       currency: 'THB',
-      balance: 1000,
+      balance: 700,
       color: '#10b981',
       icon: 'fa-wallet',
     }
@@ -314,17 +340,17 @@ describe('balance calculations', () => {
         cleared: false,
       },
     ]
-    // book: 1000 - 200 - 100 = 700; cleared: 1000 - 200 = 800
     expect(walletClearedAmount(wallet, txns)).toBe(800)
   })
 
-  it('returns wallet.balance when no transactions are cleared', () => {
+  it('returns starting balance when no transactions are cleared', () => {
+    // wallet.balance = current: 500 - 100 = 400; startingBalance = 400+100 = 500
     const wallet: Wallet = {
       id: 'cash',
       name: 'Cash',
       type: 'payment',
       currency: 'THB',
-      balance: 500,
+      balance: 400,
       color: '#10b981',
       icon: 'fa-wallet',
     }
@@ -387,17 +413,17 @@ describe('balance calculations', () => {
   })
 
   describe('adjustment transactions', () => {
-    const wallet: Wallet = {
-      id: 'cash',
-      name: 'Cash',
-      type: 'payment',
-      currency: 'THB',
-      balance: 0,
-      color: '#10b981',
-      icon: 'fa-wallet',
-    }
-
     it('adds signed adjustment amount directly to wallet balance', () => {
+      // wallet.balance = current after opening adj of 500
+      const wallet: Wallet = {
+        id: 'cash',
+        name: 'Cash',
+        type: 'payment',
+        currency: 'THB',
+        balance: 500,
+        color: '#10b981',
+        icon: 'fa-wallet',
+      }
       const opening: Transaction = {
         id: 'adj-1',
         type: 'adjustment',
@@ -412,6 +438,7 @@ describe('balance calculations', () => {
     })
 
     it('subtracts negative adjustment amount from wallet balance', () => {
+      // wallet.balance = current: 100 + (-30) = 70
       const adjustment: Transaction = {
         id: 'adj-2',
         type: 'adjustment',
@@ -422,17 +449,26 @@ describe('balance calculations', () => {
         createdAt: '2026-05-27T00:00:00.000Z',
         note: 'Balance Adjustment',
       }
-      const walletWith100: Wallet = { ...wallet, balance: 100 }
-      expect(walletCurrentAmount(walletWith100, [adjustment])).toBe(70)
+      const walletWith70: Wallet = {
+        id: 'cash',
+        name: 'Cash',
+        type: 'payment',
+        currency: 'THB',
+        balance: 70,
+        color: '#10b981',
+        icon: 'fa-wallet',
+      }
+      expect(walletCurrentAmount(walletWith70, [adjustment])).toBe(70)
     })
 
     it('does not flip sign for credit card wallet', () => {
+      // wallet.balance = current after adj of 200
       const creditCard: Wallet = {
         id: 'cc',
         name: 'Visa',
         type: 'credit_card',
         currency: 'THB',
-        balance: 0,
+        balance: 200,
         color: '#ef4444',
         icon: 'fa-credit-card',
       }

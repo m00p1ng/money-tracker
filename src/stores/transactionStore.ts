@@ -1,13 +1,51 @@
 import { create } from 'zustand'
 
 import { db } from '@/db/schema'
+import { signedWalletAmount } from '@/features/balance/balanceCalculations'
 import {
   materializeRepeatOccurrence as buildRepeatOccurrence,
   projectRepeatOccurrences,
   type VirtualRepeatOccurrence,
 } from '@/features/transaction'
+import {
+  deriveStoredTransactionStatus,
+  isTransactionPaid,
+} from '@/features/transaction/transactionForm'
 import { isTodayInLocalTime } from '@/lib'
-import type { Transaction } from '@/types/domain'
+import type { Transaction, TransactionStatus } from '@/types/domain'
+
+import { useWalletStore } from './walletStore'
+
+async function applyWalletDeltas(transaction: Transaction, multiplier: 1 | -1): Promise<void> {
+  if (!isTransactionPaid(transaction)) {
+    return
+  }
+
+  const { items: wallets, applyDelta } = useWalletStore.getState()
+  const walletIds = new Set([transaction.walletId])
+  if (transaction.type === 'transfer' && transaction.toWalletId) {
+    walletIds.add(transaction.toWalletId)
+  }
+
+  for (const walletId of walletIds) {
+    const wallet = wallets.find((w) => w.id === walletId)
+    if (wallet) {
+      await applyDelta(walletId, signedWalletAmount(wallet, transaction) * multiplier)
+    }
+  }
+}
+
+function normalizeTransaction(
+  transaction: Transaction & { status?: TransactionStatus },
+): Transaction {
+  const normalized: Transaction & { status?: TransactionStatus } = {
+    ...transaction,
+    paid: isTransactionPaid(transaction),
+  }
+  delete normalized.status
+
+  return normalized
+}
 
 function total(transaction: Transaction): number {
   return transaction.items.reduce((sum, item) => sum + item.amount, 0)
@@ -84,24 +122,36 @@ type TransactionStore = {
 export const useTransactionStore = create<TransactionStore>((set, get) => ({
   items: [],
   async load() {
-    const items = await db.transactions.orderBy('date').reverse().toArray()
+    const items = (await db.transactions.orderBy('date').reverse().toArray()).map(normalizeTransaction)
     set({ items })
   },
   async add(transaction) {
-    await db.transactions.put(transaction)
-    set({ items: sortNewestFirst([transaction, ...get().items]) })
+    const normalized = normalizeTransaction(transaction)
+    await db.transactions.put(normalized)
+    set({ items: sortNewestFirst([normalized, ...get().items]) })
+    await applyWalletDeltas(normalized, 1)
   },
   async update(transaction) {
-    await db.transactions.put(transaction)
+    const old = get().items.find((item) => item.id === transaction.id)
+    const normalized = normalizeTransaction(transaction)
+    await db.transactions.put(normalized)
     set({
       items: sortNewestFirst(get().items.map((item) => (item.id === transaction.id
-        ? transaction
+        ? normalized
         : item))),
     })
+    if (old) {
+      await applyWalletDeltas(old, -1)
+    }
+    await applyWalletDeltas(normalized, 1)
   },
   async remove(id) {
+    const transaction = get().items.find((item) => item.id === id)
     await db.transactions.delete(id)
-    set({ items: get().items.filter((transaction) => transaction.id !== id) })
+    set({ items: get().items.filter((item) => item.id !== id) })
+    if (transaction) {
+      await applyWalletDeltas(transaction, -1)
+    }
   },
   async toggleCleared(id) {
     const tx = get().items.find((item) => item.id === id)
@@ -142,8 +192,9 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     const realRows: UpcomingTransactionRow[] = get()
       .items.filter((transaction) => {
         const date = localDateString(transaction.date)
+        const status = deriveStoredTransactionStatus(transaction, now)
 
-        return transaction.status === 'overdue' || (transaction.status === 'planned' && date <= tomorrow)
+        return status === 'overdue' || (status === 'planned' && date <= tomorrow)
       })
       .map((transaction) => ({
         kind: 'real',
@@ -162,8 +213,8 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
       }))
 
     return [...realRows, ...repeatRows].sort((a, b) => {
-      const aOverdue = a.kind === 'real' && a.transaction.status === 'overdue'
-      const bOverdue = b.kind === 'real' && b.transaction.status === 'overdue'
+      const aOverdue = a.kind === 'real' && deriveStoredTransactionStatus(a.transaction, now) === 'overdue'
+      const bOverdue = b.kind === 'real' && deriveStoredTransactionStatus(b.transaction, now) === 'overdue'
       if (aOverdue && !bOverdue) {
         return -1
       }
@@ -205,6 +256,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     const transaction = buildRepeatOccurrence(source, occurrenceDate, createId, now)
     await db.transactions.put(transaction)
     set({ items: sortNewestFirst([transaction, ...get().items]) })
+    await applyWalletDeltas(transaction, 1)
 
     return transaction
   },
@@ -215,8 +267,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
       .items.filter(
         (tx) =>
           localDateString(tx.date).startsWith(prefix) &&
-          tx.status !== 'planned' &&
-          tx.status !== 'overdue',
+          isTransactionPaid(tx),
       )
       .sort((a, b) => b.date.localeCompare(a.date))
   },
@@ -225,7 +276,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
     const realRows: UpcomingTransactionRow[] = get()
       .items.filter(
         (tx) =>
-          (tx.status === 'planned' || tx.status === 'overdue') &&
+          !isTransactionPaid(tx) &&
           localDateString(tx.date).startsWith(prefix),
       )
       .map((tx) => ({

@@ -20,7 +20,7 @@ function transaction(overrides: Partial<Transaction> = {}): Transaction {
     items: [{ categoryId: 'expense-rent', amount: 15000 }],
     date: '2026-01-31T08:45:00.000Z',
     createdAt: '2026-01-01T00:00:00.000Z',
-    status: 'planned',
+    paid: false,
     ...overrides,
   }
 }
@@ -68,7 +68,7 @@ describe('repeatSchedule', () => {
     const materialized = transaction({
       id: 'tx-rent-feb',
       date: '2026-02-28T08:45:00.000Z',
-      status: 'paid',
+      paid: true,
       repeatSourceId: 'tx-rent',
       repeatOccurrenceDate: '2026-02-28',
     })
@@ -117,7 +117,7 @@ describe('repeatSchedule', () => {
 
     expect(materialized).toMatchObject({
       id: 'tx-rent-mar',
-      status: 'paid',
+      paid: true,
       repeatSourceId: 'tx-rent',
       repeatOccurrenceDate: '2026-03-31',
       createdAt: '2026-03-31T09:00:00.000Z',
@@ -146,7 +146,7 @@ describe('repeatSchedule', () => {
     expect(materialized).toMatchObject({
       id: 'tx-rent-mar',
       date: isoWithLocalTime(sourceDate, occurrenceDate),
-      status: 'paid',
+      paid: true,
       repeatSourceId: 'tx-rent',
       repeatOccurrenceDate: occurrenceDate,
       createdAt: '2026-03-01T09:00:00.000Z',
@@ -172,7 +172,7 @@ describe('repeatSchedule', () => {
 
   it('does not project paid transactions with stale repeat configs', () => {
     const paidSource = transaction({
-      status: 'paid',
+      paid: true,
       repeat: { preset: 'monthly' },
     })
 

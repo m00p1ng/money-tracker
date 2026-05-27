@@ -16,19 +16,19 @@ describe('transaction status helpers', () => {
   it('derives paid when marked paid', () => {
     expect(deriveTransactionStatus({
       date: '2026-05-24T10:00',
-      markedPaid: true,
+      paid: true,
       now,
     })).toBe('paid')
   })
 
-  it('defaults to paid when markedPaid is omitted', () => {
+  it('defaults to paid when paid is omitted', () => {
     expect(deriveTransactionStatus({ date: '2026-05-24T10:00', now })).toBe('paid')
   })
 
   it('derives planned for unpaid future transactions', () => {
     expect(deriveTransactionStatus({
       date: '2026-05-24T10:00',
-      markedPaid: false,
+      paid: false,
       now,
     })).toBe('planned')
   })
@@ -36,12 +36,12 @@ describe('transaction status helpers', () => {
   it('derives overdue for unpaid current or past transactions', () => {
     expect(deriveTransactionStatus({
       date: '2026-05-23T10:00:00.000Z',
-      markedPaid: false,
+      paid: false,
       now,
     })).toBe('overdue')
     expect(deriveTransactionStatus({
       date: '2026-05-22T10:00',
-      markedPaid: false,
+      paid: false,
       now,
     })).toBe('overdue')
   })

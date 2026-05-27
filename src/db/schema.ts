@@ -24,6 +24,20 @@ export class MoneyTrackerDb extends Dexie {
       currencies: 'code',
       settings: 'id',
     })
+    this.version(2).stores({
+      transactions: 'id, type, walletId, date, paid',
+      wallets: 'id',
+      categories: 'id, parentId, type',
+      currencies: 'code',
+      settings: 'id',
+    }).upgrade((tx) =>
+      tx.table('transactions').toCollection().modify((transaction) => {
+        transaction.paid = typeof transaction.paid === 'boolean'
+          ? transaction.paid
+          : transaction.status === undefined || transaction.status === 'paid'
+        delete transaction.status
+      }),
+    )
   }
 }
 

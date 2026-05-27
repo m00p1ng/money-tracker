@@ -79,7 +79,7 @@ describe('useCalendarPage', () => {
     const m = String(now.getMonth() + 1).padStart(2, '0')
     useTransactionStore.setState({
       items: [makeTx({
-        id: 'tx-1', date: `${y}-${m}-28T10:00`, status: 'planned',
+        id: 'tx-1', date: `${y}-${m}-28T10:00`, paid: false,
       })],
     })
     const { result } = renderHook(() => useCalendarPage(), { wrapper })
@@ -94,7 +94,7 @@ describe('useCalendarPage', () => {
       items: [
         makeTx({ id: 'tx-1', date: `${y}-${m}-15T10:00` }),
         makeTx({
-          id: 'tx-2', date: `${y}-${m}-15T10:00`, status: 'planned',
+          id: 'tx-2', date: `${y}-${m}-15T10:00`, paid: false,
         }),
       ],
     })
@@ -189,7 +189,7 @@ describe('useCalendarPage', () => {
         makeTx({
           id: 'planned-tx',
           date: `${selectedDate}T10:00`,
-          status: 'planned',
+          paid: false,
           currency: 'USD',
         }),
       ],

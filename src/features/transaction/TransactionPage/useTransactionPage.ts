@@ -129,7 +129,7 @@ function useTransactionPageDraft(
         ? initial.items[0]?.amount ?? 0
         : 0,
       cleared: existing?.cleared ?? false,
-      markedPaid: existing?.status === 'paid' || existing?.status === undefined,
+      paid: existing?.paid ?? true,
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -155,7 +155,7 @@ type UseTransactionSaveHandlerOptions = {
   wallet: Wallet | undefined
   wallets: Wallet[]
   defaultRate: string
-  markedPaid: boolean
+  paid: boolean
   isRepeatMaterialization: boolean
   repeatDate: string | undefined
   existing: Transaction | undefined
@@ -171,7 +171,7 @@ function useTransactionSaveHandler({
   wallet,
   wallets,
   defaultRate,
-  markedPaid,
+  paid,
   isRepeatMaterialization,
   repeatDate,
   existing,
@@ -223,9 +223,9 @@ function useTransactionSaveHandler({
       return
     }
 
-    const effectiveMarkedPaid = isRepeatMaterialization
+    const effectivePaid = isRepeatMaterialization
       ? true
-      : markedPaid
+      : paid
     const transaction = buildTransaction({
       id: existing?.id,
       type,
@@ -244,7 +244,7 @@ function useTransactionSaveHandler({
       date: isRepeatMaterialization && repeatDate
         ? `${repeatDate}T00:00`
         : date,
-      markedPaid: effectiveMarkedPaid,
+      paid: effectivePaid,
       repeat: repeatConfig.preset === 'never'
         ? undefined
         : repeatConfig,
@@ -330,14 +330,14 @@ export function useTransactionPage(): TransactionPageProps {
     transferAmount,
     adjustmentAmount,
     cleared,
-    markedPaid,
+    paid,
   } = draft
 
   const selectedCurrency = currencies.find((item) => item.code === currency)
   const defaultRate = selectedCurrency?.rate
     ? String(selectedCurrency.rate)
     : ''
-  const status = deriveTransactionStatus({ date, markedPaid })
+  const status = deriveTransactionStatus({ date, paid })
   const wallet = wallets.find((item) => item.id === walletId)
   const walletReconciliationEnabled = wallet
     ? isReconciliationEnabled(wallet)
@@ -348,7 +348,7 @@ export function useTransactionPage(): TransactionPageProps {
     wallet,
     wallets,
     defaultRate,
-    markedPaid,
+    paid,
     isRepeatMaterialization,
     repeatDate,
     existing,
@@ -379,7 +379,7 @@ export function useTransactionPage(): TransactionPageProps {
     currencies,
     isEditMode,
     status,
-    onToggleStatus: () => updateDraft({ markedPaid: !markedPaid }),
+    onToggleStatus: () => updateDraft({ paid: !paid }),
     defaultRate,
     cleared,
     walletReconciliationEnabled,

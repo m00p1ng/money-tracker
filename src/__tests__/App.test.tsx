@@ -235,7 +235,7 @@ describe('App routing', () => {
         currency: 'THB',
         items: [{ categoryId: 'expense-food-and-drink-coffee', amount: 28 }],
         date: '2026-05-22T10:00:00.000Z',
-        status: 'overdue',
+        paid: false,
         createdAt: '2026-05-22T10:00:00.000Z',
       }],
     })

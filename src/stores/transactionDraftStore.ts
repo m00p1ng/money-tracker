@@ -22,7 +22,7 @@ export type TransactionDraft = {
   transferAmount: number
   adjustmentAmount: number
   cleared: boolean
-  markedPaid: boolean
+  paid: boolean
 }
 
 type TransactionDraftStore = {

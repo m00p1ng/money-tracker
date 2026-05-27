@@ -27,7 +27,7 @@ export type Transaction = {
   toWalletId?: string
   exchangeRate?: number
   toExchangeRate?: number
-  status?: TransactionStatus
+  paid?: boolean
   cleared?: boolean
   repeat?: RepeatConfig
   repeatSourceId?: string

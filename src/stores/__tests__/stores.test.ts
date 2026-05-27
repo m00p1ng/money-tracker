@@ -79,7 +79,7 @@ describe('stores', () => {
       transaction({
         id: 'tx-rent',
         date: '2026-01-31T08:45:00.000Z',
-        status: 'planned',
+        paid: false,
         repeat: { preset: 'monthly' },
       }),
     )
@@ -90,7 +90,7 @@ describe('stores', () => {
 
     expect(materialized).toMatchObject({
       id: 'tx-rent-feb',
-      status: 'paid',
+      paid: true,
       repeatSourceId: 'tx-rent',
       repeatOccurrenceDate: '2026-02-28',
       createdAt: '2026-02-28T09:00:00.000Z',
@@ -119,42 +119,42 @@ describe('stores', () => {
       transaction({
         id: 'planned-today',
         date: '2026-02-10',
-        status: 'planned',
+        paid: false,
       }),
     )
     await useTransactionStore.getState().add(
       transaction({
         id: 'planned-tomorrow',
         date: '2026-02-11',
-        status: 'planned',
+        paid: false,
       }),
     )
     await useTransactionStore.getState().add(
       transaction({
         id: 'planned-too-late',
         date: '2026-02-12',
-        status: 'planned',
+        paid: false,
       }),
     )
     await useTransactionStore.getState().add(
       transaction({
         id: 'overdue-newer',
         date: '2026-02-09',
-        status: 'overdue',
+        paid: false,
       }),
     )
     await useTransactionStore.getState().add(
       transaction({
         id: 'overdue-older',
         date: '2026-02-01',
-        status: 'overdue',
+        paid: false,
       }),
     )
     await useTransactionStore.getState().add(
       transaction({
         id: 'repeat-source',
         date: '2026-02-10',
-        status: 'planned',
+        paid: false,
         repeat: { preset: 'daily' },
       }),
     )

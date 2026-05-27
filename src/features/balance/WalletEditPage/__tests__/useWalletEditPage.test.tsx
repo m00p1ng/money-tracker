@@ -86,7 +86,7 @@ describe('useWalletEditPage', () => {
 
     const wallets = useWalletStore.getState().items
     expect(wallets).toHaveLength(1)
-    expect(wallets[0].balance).toBe(0)
+    expect(wallets[0].balance).toBe(500)
     expect(wallets[0].name).toBe('My Wallet')
 
     const txs = useTransactionStore.getState().items
@@ -113,7 +113,9 @@ describe('useWalletEditPage', () => {
   })
 
   it('creates diff adjustment transaction when editing wallet balance', async () => {
-    useWalletStore.setState({ items: [existingWallet] })
+    // wallet.balance = 100 (current, after opening adjustment of 100)
+    const walletWithBalance: Wallet = { ...existingWallet, balance: 100 }
+    useWalletStore.setState({ items: [walletWithBalance] })
     useCurrencyStore.setState({ items: [currency] })
 
     const openingTx: Transaction = {
@@ -130,7 +132,7 @@ describe('useWalletEditPage', () => {
     const { result } = renderHook(() => useWalletEditPage(), { wrapper: wrapperEdit })
 
     expect(result.current).not.toBeNull()
-    // form.balance should be initialized to walletCurrentAmount = 0 + 100 = 100
+    // form.balance initialized to walletCurrentAmount = wallet.balance = 100
     expect(result.current!.form.balance).toBe(100)
 
     await act(async () => {

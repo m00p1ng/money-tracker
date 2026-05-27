@@ -1,5 +1,7 @@
 import type { RepeatConfig, Transaction } from '@/types/domain'
 
+import { deriveStoredTransactionStatus } from './transactionForm'
+
 export type VirtualRepeatOccurrence = {
   id: string
   sourceId: string
@@ -193,7 +195,7 @@ export function projectRepeatOccurrences(transactions: Transaction[], now = new 
   const occurrences: VirtualRepeatOccurrence[] = []
 
   for (const source of transactions) {
-    if (source.status !== 'planned' && source.status !== 'overdue') {
+    if (deriveStoredTransactionStatus(source, now) === 'paid') {
       continue
     }
     if (!shouldProjectRepeat(source.repeat)) {
@@ -267,7 +269,7 @@ export function materializeRepeatOccurrence(
     ...transaction,
     id: createId(),
     date: replaceDate(source.date, occurrenceDate),
-    status: 'paid',
+    paid: true,
     repeatSourceId: source.id,
     repeatOccurrenceDate: occurrenceDate,
     createdAt: now,

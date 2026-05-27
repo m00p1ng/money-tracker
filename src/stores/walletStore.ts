@@ -10,6 +10,7 @@ type WalletStore = {
   update: (wallet: Wallet) => Promise<void>
   remove: (id: string) => Promise<void>
   reorder: (ids: string[]) => Promise<void>
+  applyDelta: (id: string, delta: number) => Promise<void>
   findById: (id: string) => Wallet | undefined
 }
 
@@ -56,6 +57,17 @@ export const useWalletStore = create<WalletStore>((set, get) => ({
     set({
       items: current.map((w) => updated.find((u) => u.id === w.id) ?? w),
     })
+  },
+  async applyDelta(id, delta) {
+    const wallet = get().items.find((item) => item.id === id)
+    if (!wallet) {
+      return
+    }
+    const updated = { ...wallet, balance: wallet.balance + delta }
+    await db.wallets.put(updated)
+    set({ items: get().items.map((item) => (item.id === id
+      ? updated
+      : item)) })
   },
   findById(id) {
     return get().items.find((wallet) => wallet.id === id)

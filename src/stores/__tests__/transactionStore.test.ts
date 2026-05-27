@@ -30,7 +30,7 @@ describe('transactionsByMonth', () => {
         makeTx({
           id: 'tx-3',
           date: '2026-05-20T10:00',
-          status: 'paid',
+          paid: true,
         }),
       ],
     })
@@ -38,18 +38,18 @@ describe('transactionsByMonth', () => {
     expect(result.map((t) => t.id).sort()).toEqual(['tx-1', 'tx-3'])
   })
 
-  it('excludes planned and overdue transactions', () => {
+  it('excludes unpaid transactions from completed month results', () => {
     useTransactionStore.setState({
       items: [
         makeTx({
           id: 'tx-1',
           date: '2026-05-10T10:00',
-          status: 'planned',
+          paid: false,
         }),
         makeTx({
           id: 'tx-2',
           date: '2026-05-15T10:00',
-          status: 'overdue',
+          paid: false,
         }),
         makeTx({ id: 'tx-3', date: '2026-05-20T10:00' }),
       ],
@@ -74,18 +74,18 @@ describe('transactionsByMonth', () => {
 describe('upcomingByMonth', () => {
   afterEach(() => useTransactionStore.setState({ items: [] }))
 
-  it('returns planned transactions in the given month', () => {
+  it('returns unpaid future transactions in the given month', () => {
     useTransactionStore.setState({
       items: [
         makeTx({
           id: 'tx-1',
           date: '2026-05-28T10:00',
-          status: 'planned',
+          paid: false,
         }),
         makeTx({
           id: 'tx-2',
           date: '2026-04-01T10:00',
-          status: 'overdue',
+          paid: false,
         }),
         makeTx({ id: 'tx-3', date: '2026-05-10T10:00' }),
       ],
@@ -95,13 +95,13 @@ describe('upcomingByMonth', () => {
     expect(result[0].id).toBe('tx-1')
   })
 
-  it('includes overdue transactions in the given month', () => {
+  it('includes unpaid past transactions in the given month', () => {
     useTransactionStore.setState({
       items: [
         makeTx({
           id: 'tx-1',
           date: '2026-05-01T10:00',
-          status: 'overdue',
+          paid: false,
         }),
       ],
     })
@@ -110,13 +110,13 @@ describe('upcomingByMonth', () => {
     expect(result[0].id).toBe('tx-1')
   })
 
-  it('does NOT include overdue transactions from a different month', () => {
+  it('does NOT include unpaid past transactions from a different month', () => {
     useTransactionStore.setState({
       items: [
         makeTx({
           id: 'tx-1',
           date: '2026-04-01T10:00',
-          status: 'overdue',
+          paid: false,
         }),
       ],
     })

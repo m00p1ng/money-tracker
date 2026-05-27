@@ -10,6 +10,7 @@ import {
 } from 'vitest'
 
 import { HomePage } from '@/features/home'
+import TodayTransactionsContainer from '@/features/home/HomePage/components/TodayTransactions'
 import {
   formatHeaderDay,
   formatHeaderMonthYear,
@@ -167,7 +168,7 @@ describe('HomePage', () => {
           type: 'expense',
           walletId: 'wallet-cash',
           currency: 'USD',
-          status: 'planned',
+          paid: false,
           items: [
             { categoryId: 'expense-food-and-drink-coffee', amount: 10 },
             { categoryId: 'expense-food-and-drink-food', amount: 20 },
@@ -224,6 +225,46 @@ describe('HomePage', () => {
 
     expect(screen.getByText('Total Expenses: $12.00')).toBeInTheDocument()
     expect(screen.getByText('Total Income: $20.00')).toBeInTheDocument()
+  })
+
+  it('shows only paid transactions in today transactions and totals', () => {
+    useTransactionStore.setState({
+      items: [
+        {
+          id: 'tx-paid',
+          type: 'expense',
+          walletId: 'wallet-cash',
+          currency: 'USD',
+          paid: true,
+          items: [{ categoryId: 'expense-food-and-drink-coffee', amount: 12 }],
+          date: '2026-02-25T08:00:00.000Z',
+          createdAt: new Date().toISOString(),
+          note: 'paid coffee',
+        },
+        {
+          id: 'tx-planned',
+          type: 'expense',
+          walletId: 'wallet-cash',
+          currency: 'USD',
+          paid: false,
+          items: [{ categoryId: 'expense-food-and-drink-food', amount: 20 }],
+          date: '2026-02-25T09:00:00.000Z',
+          createdAt: new Date().toISOString(),
+          note: 'planned lunch',
+        },
+      ],
+    })
+
+    render(
+      <MemoryRouter>
+        <TodayTransactionsContainer />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Coffee (paid coffee)')).toBeInTheDocument()
+    expect(screen.queryByText('Food (planned lunch)')).not.toBeInTheDocument()
+    expect(screen.getByText('Total Expenses: $12.00')).toBeInTheDocument()
+    expect(screen.queryByText('Total Expenses: $32.00')).not.toBeInTheDocument()
   })
 
   it('shows empty state when there are no transactions today', () => {

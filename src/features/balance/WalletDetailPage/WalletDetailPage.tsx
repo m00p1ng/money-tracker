@@ -10,6 +10,7 @@ import {
   TransactionRow,
 } from '@/components'
 import { isReconciliationEnabled, walletRunningRows } from '@/features/balance/balanceCalculations'
+import { isTransactionPaid } from '@/features/transaction/transactionForm'
 import {
   buildTransactionRowDisplay,
   getPresetRange,
@@ -41,6 +42,10 @@ export type WalletDetailPageProps = {
   onToggleCleared: (id: string) => void
 }
 
+function isPaidTransaction(transaction: Transaction): boolean {
+  return isTransactionPaid(transaction)
+}
+
 export function WalletDetailPage({
   wallet,
   wallets,
@@ -68,7 +73,7 @@ export function WalletDetailPage({
     )
   }
 
-  const allRows = walletRunningRows(wallet, transactions, range)
+  const allRows = walletRunningRows(wallet, transactions.filter(isPaidTransaction), range)
   const reconciliation = isReconciliationEnabled(wallet)
   const rows = reconciliation && filter === 'not-cleared'
     ? allRows.filter((row) => !row.transaction.cleared)
