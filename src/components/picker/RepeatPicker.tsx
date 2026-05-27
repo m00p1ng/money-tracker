@@ -5,6 +5,7 @@ import { SelectorSheet, type SelectorOption } from './SelectorSheet'
 const PRESETS: SelectorOption<RepeatPreset>[] = [
   { label: 'Never', value: 'never' },
   { label: 'Daily', value: 'daily' },
+  { label: 'Weekly', value: 'weekly' },
   { label: 'Every 2 Weeks', value: '2weeks' },
   { label: 'Monthly', value: 'monthly' },
   { label: 'Yearly', value: 'yearly' },

@@ -292,7 +292,9 @@ export function useTransactionPage(): TransactionPageProps {
   const remove = useTransactionStore((state) => state.remove)
 
   const {
-    draft, updateDraft, clearDraft,
+    draft,
+    updateDraft,
+    clearDraft,
   } = useTransactionPageDraft(
     existing,
     initial,

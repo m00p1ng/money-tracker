@@ -27,10 +27,10 @@ export function ListRow({
       {left
         ?? (
           <div
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-sm"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-lg"
             style={{ color: '#63758F' }}
           >
-            <Icon name={icon ?? ''} style={{ height: 40 }} />
+            <Icon name={icon ?? ''} />
           </div>
         )}
       <div className="flex-1 min-w-0">

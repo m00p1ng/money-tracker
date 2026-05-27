@@ -126,6 +126,9 @@ export function nextRepeatDate(day: string, repeat: RepeatConfig): string {
   if (repeat.preset === 'daily') {
     return addDays(day, 1)
   }
+  if (repeat.preset === 'weekly') {
+    return addDays(day, 7)
+  }
   if (repeat.preset === '2weeks') {
     return addDays(day, 14)
   }
