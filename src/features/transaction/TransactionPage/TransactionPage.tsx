@@ -17,6 +17,7 @@ import type {
 } from '@/types/domain'
 
 import {
+  AdjustmentPrimaryCard,
   TransactionDetailsCard,
   TransactionHeader,
   TransactionPrimaryCard,
@@ -38,6 +39,7 @@ export interface TransactionPageProps {
   toExchangeRate: string
   repeatConfig: RepeatConfig
   transferAmount: number
+  adjustmentTargetBalance: number
   wallets: Wallet[]
   currencies: Currency[]
   isEditMode: boolean
@@ -63,6 +65,7 @@ export interface TransactionPageProps {
   onPressCalcKey: (key: string, currentCalcResult: number) => void
   onOpenCurrencyPicker: () => void
   onToggleCleared: () => void
+  onFocusAdjustmentAmount: () => void
   onSave: () => Promise<void>
   onBack: () => void
   onDelete: () => Promise<void>
@@ -82,6 +85,7 @@ export function TransactionPage({
   toExchangeRate,
   repeatConfig,
   transferAmount,
+  adjustmentTargetBalance,
   wallets,
   currencies,
   isEditMode,
@@ -107,6 +111,7 @@ export function TransactionPage({
   onPressCalcKey,
   onOpenCurrencyPicker,
   onToggleCleared,
+  onFocusAdjustmentAmount,
   onSave,
   onBack,
   onDelete,
@@ -146,7 +151,65 @@ export function TransactionPage({
     setCalc(createCalcState(transferAmount))
   }
 
+  function handleFocusAdjustmentAmount() {
+    onFocusAdjustmentAmount()
+    setCalc(createCalcState(adjustmentTargetBalance))
+  }
+
   const wallet = wallets.find((w) => w.id === walletId)
+
+  function renderPrimaryCard() {
+    if (type === 'adjustment') {
+      return (
+        <AdjustmentPrimaryCard
+          wallet={wallet}
+          targetBalance={adjustmentTargetBalance}
+          currency={currency}
+          isAmountFocused={focusedIndex !== null}
+          onWalletClick={() => setWalletPickerTarget('wallet')}
+          onAmountClick={handleFocusAdjustmentAmount}
+        />
+      )
+    }
+
+    if (type === 'transfer') {
+      return (
+        <TransferPrimaryCard
+          wallets={wallets}
+          walletId={walletId}
+          toWalletId={toWalletId}
+          currency={currency}
+          exchangeRate={exchangeRate}
+          toExchangeRate={toExchangeRate}
+          defaultRate={defaultRate}
+          transferAmount={transferAmount}
+          isAmountFocused={focusedIndex !== null}
+          onFromWalletClick={() => setWalletPickerTarget('wallet')}
+          onToWalletClick={() => setWalletPickerTarget('toWallet')}
+          onAmountClick={handleFocusTransferAmount}
+          onUpdateExchangeRate={onUpdateExchangeRate}
+          onUpdateToExchangeRate={onUpdateToExchangeRate}
+        />
+      )
+    }
+
+    return (
+      <TransactionPrimaryCard
+        wallet={wallet}
+        items={items}
+        focusedIndex={focusedIndex}
+        currency={currency}
+        exchangeRate={exchangeRate}
+        defaultRate={defaultRate}
+        onWalletClick={() => setWalletPickerTarget('wallet')}
+        onFocusItem={handleFocusItem}
+        onRemoveItem={onRemoveItem}
+        onChangeCategory={onChangeCategory}
+        onAddCategory={onAddCategory}
+        onUpdateExchangeRate={onUpdateExchangeRate}
+      />
+    )
+  }
 
   return (
     <div
@@ -164,46 +227,12 @@ export function TransactionPage({
         onSave={onSave}
       />
 
-      {type === 'transfer'
-        ? (
-          <TransferPrimaryCard
-            wallets={wallets}
-            walletId={walletId}
-            toWalletId={toWalletId}
-            currency={currency}
-            exchangeRate={exchangeRate}
-            toExchangeRate={toExchangeRate}
-            defaultRate={defaultRate}
-            transferAmount={transferAmount}
-            isAmountFocused={focusedIndex !== null}
-            onFromWalletClick={() => setWalletPickerTarget('wallet')}
-            onToWalletClick={() => setWalletPickerTarget('toWallet')}
-            onAmountClick={handleFocusTransferAmount}
-            onUpdateExchangeRate={onUpdateExchangeRate}
-            onUpdateToExchangeRate={onUpdateToExchangeRate}
-          />
-        )
-        : (
-          <TransactionPrimaryCard
-            wallet={wallet}
-            items={items}
-            focusedIndex={focusedIndex}
-            currency={currency}
-            exchangeRate={exchangeRate}
-            defaultRate={defaultRate}
-            onWalletClick={() => setWalletPickerTarget('wallet')}
-            onFocusItem={handleFocusItem}
-            onRemoveItem={onRemoveItem}
-            onChangeCategory={onChangeCategory}
-            onAddCategory={onAddCategory}
-            onUpdateExchangeRate={onUpdateExchangeRate}
-          />
-        )}
+      {renderPrimaryCard()}
 
       <TransactionDetailsCard
         date={date}
         status={status}
-        walletReconciliationEnabled={type !== 'transfer' && walletReconciliationEnabled}
+        walletReconciliationEnabled={type !== 'transfer' && type !== 'adjustment' && walletReconciliationEnabled}
         cleared={cleared}
         repeatConfig={repeatConfig}
         note={note}
