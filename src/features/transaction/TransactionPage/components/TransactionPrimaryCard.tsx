@@ -73,7 +73,6 @@ export function TransactionPrimaryCard({
         ariaLabel="Wallet"
         wallet={wallet}
         fallbackName="Cash"
-        fallbackColor="#38bdf8"
         showBalance
         variant="flat"
         onClick={onWalletClick}

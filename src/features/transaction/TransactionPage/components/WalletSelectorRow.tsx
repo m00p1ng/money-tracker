@@ -8,7 +8,6 @@ interface WalletSelectorRowProps {
   ariaLabel: string
   wallet: Wallet | undefined
   fallbackName: string
-  fallbackColor: string
   showBalance?: boolean
   variant?: 'standalone' | 'flat'
   onClick: () => void
@@ -18,13 +17,10 @@ export function WalletSelectorRow({
   ariaLabel,
   wallet,
   fallbackName,
-  fallbackColor,
   showBalance = false,
   variant = 'standalone',
   onClick,
 }: WalletSelectorRowProps) {
-  const color = wallet?.color ?? fallbackColor
-
   return (
     <button
       aria-label={ariaLabel}
@@ -35,7 +31,9 @@ export function WalletSelectorRow({
       onClick={onClick}
       type="button"
     >
-      <Icon name={wallet?.icon ?? 'fa-wallet'} className="shrink-0 text-sm" style={{ color }} />
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ color: '#63758F' }}>
+        <Icon name={wallet?.icon ?? 'fa-wallet'} style={{ height: 40 }} />
+      </span>
       <div className="min-w-0 flex-1 px-1">
         <p className="truncate font-medium">
           {wallet?.name ?? fallbackName}

@@ -90,7 +90,6 @@ export function TransactionFeatSection() {
               ariaLabel="Select wallet"
               wallet={STUB_WALLET_PAYMENT}
               fallbackName="Select wallet"
-              fallbackColor="#6c47ff"
               onClick={() => {}}
             />
           </div>
@@ -100,7 +99,6 @@ export function TransactionFeatSection() {
               ariaLabel="Select wallet"
               wallet={STUB_WALLET_PAYMENT}
               fallbackName="Select wallet"
-              fallbackColor="#6c47ff"
               showBalance
               onClick={() => {}}
             />

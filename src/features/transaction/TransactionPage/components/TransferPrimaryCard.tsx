@@ -27,7 +27,6 @@ interface WalletColumnProps {
   label: string
   wallet: Wallet | undefined
   fallbackName: string
-  fallbackColor: string
   onClick: () => void
 }
 
@@ -35,11 +34,8 @@ function WalletColumn({
   label,
   wallet,
   fallbackName,
-  fallbackColor,
   onClick,
 }: WalletColumnProps) {
-  const color = wallet?.color ?? fallbackColor
-
   return (
     <button
       type="button"
@@ -47,12 +43,9 @@ function WalletColumn({
       onClick={onClick}
     >
       <p className="text-[9px] uppercase tracking-[1.5px] text-white/35">{label}</p>
-      <div
-        className="flex h-9 w-9 items-center justify-center rounded-xl text-xs"
-        style={{ background: `${color}25`, color }}
-      >
-        <Icon name={wallet?.icon ?? 'fa-wallet'} />
-      </div>
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ color: '#63758F' }}>
+        <Icon name={wallet?.icon ?? 'fa-wallet'} style={{ height: 40 }} />
+      </span>
       <div>
         <p className="text-sm font-bold">{wallet?.name ?? fallbackName}</p>
         {wallet && (
@@ -93,7 +86,6 @@ export function TransferPrimaryCard({
           label="From"
           wallet={fromWallet}
           fallbackName="Cash"
-          fallbackColor="#38bdf8"
           onClick={onFromWalletClick}
         />
 
@@ -105,7 +97,6 @@ export function TransferPrimaryCard({
           label="To"
           wallet={toWallet}
           fallbackName="Select wallet"
-          fallbackColor="#a855f7"
           onClick={onToWalletClick}
         />
       </div>
