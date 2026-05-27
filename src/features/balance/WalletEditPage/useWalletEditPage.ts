@@ -6,7 +6,6 @@ import {
 } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { walletCurrentAmount } from '@/features/balance/balanceCalculations'
 import { createId } from '@/lib'
 import {
   useCurrencyStore,
@@ -34,7 +33,6 @@ export function useWalletEditPage(): WalletEditPageProps | null {
   const add = useWalletStore((state) => state.add)
   const update = useWalletStore((state) => state.update)
   const remove = useWalletStore((state) => state.remove)
-  const transactions = useTransactionStore((state) => state.items)
   const addTransaction = useTransactionStore((state) => state.add)
 
   const [error, setError] = useState<string | null>(null)
@@ -45,7 +43,7 @@ export function useWalletEditPage(): WalletEditPageProps | null {
     if (existing) {
       return {
         ...existing,
-        balance: walletCurrentAmount(existing, transactions),
+        balance: existing.balance,
       }
     }
 
@@ -83,7 +81,7 @@ export function useWalletEditPage(): WalletEditPageProps | null {
 
     try {
       if (existing) {
-        const currentAmount = walletCurrentAmount(existing, useTransactionStore.getState().items)
+        const currentAmount = existing.balance
         const diff = form.balance - currentAmount
         await update({ ...form, balance: existing.balance })
         if (diff !== 0) {

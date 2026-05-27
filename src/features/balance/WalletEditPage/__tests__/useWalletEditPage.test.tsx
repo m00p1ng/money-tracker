@@ -132,7 +132,7 @@ describe('useWalletEditPage', () => {
     const { result } = renderHook(() => useWalletEditPage(), { wrapper: wrapperEdit })
 
     expect(result.current).not.toBeNull()
-    // form.balance initialized to walletCurrentAmount = wallet.balance = 100
+    // form.balance initialized to wallet.balance = 100
     expect(result.current!.form.balance).toBe(100)
 
     await act(async () => {

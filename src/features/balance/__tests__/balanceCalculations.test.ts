@@ -9,8 +9,8 @@ import {
   assetsTotal,
   debtTotal,
   isReconciliationEnabled,
+  signedWalletAmount,
   walletClearedAmount,
-  walletCurrentAmount,
   walletRunningRows,
   walletTransactions,
 } from '@/features/balance/balanceCalculations'
@@ -81,10 +81,6 @@ const transactions: Transaction[] = [
 ]
 
 describe('balance calculations', () => {
-  it('calculates payment wallet current balance', () => {
-    expect(walletCurrentAmount(wallets[0], transactions)).toBe(1400)
-  })
-
   it('converts foreign currency expenses into wallet currency', () => {
     const transaction: Transaction = {
       id: 'usd-expense',
@@ -98,13 +94,9 @@ describe('balance calculations', () => {
     }
 
     expect(amountInWalletCurrency(transaction, wallets[0])).toBe(361.234)
-    // wallet.balance is maintained incrementally: 1000 - 361.234 = 638.766
-    const cashAfterUsdExpense: Wallet = { ...wallets[0], balance: 638.766 }
-    expect(walletCurrentAmount(cashAfterUsdExpense, [transaction])).toBeCloseTo(638.766)
   })
 
   it('applies same-currency transfer amounts to source and destination wallets', () => {
-    // wallet.balance = current balance after the transfer
     const cashAfterTransfer: Wallet = {
       id: 'cash',
       name: 'Cash',
@@ -143,9 +135,9 @@ describe('balance calculations', () => {
       createdAt: '2026-05-05T08:00:00.000Z',
     }
 
-    expect(walletCurrentAmount(cashAfterTransfer, [transaction])).toBe(700)
-    expect(walletCurrentAmount(savingsAfterTransfer, [transaction])).toBe(500)
-    expect(walletCurrentAmount(unrelatedWallet, [transaction])).toBe(100)
+    expect(signedWalletAmount(cashAfterTransfer, transaction)).toBe(-300)
+    expect(signedWalletAmount(savingsAfterTransfer, transaction)).toBe(300)
+    expect(signedWalletAmount(unrelatedWallet, transaction)).toBe(0)
   })
 
   it('uses toExchangeRate for transfer destination wallet conversion', () => {
@@ -173,7 +165,6 @@ describe('balance calculations', () => {
     }
 
     expect(amountInWalletCurrency(transaction, usdWalletAfterTransfer)).toBe(27.5)
-    expect(walletCurrentAmount(usdWalletAfterTransfer, [transaction])).toBe(127.5)
   })
 
   it('reduces credit card debt when cash transfers to a card', () => {
@@ -191,8 +182,8 @@ describe('balance calculations', () => {
       createdAt: '2026-05-05T08:00:00.000Z',
     }
 
-    expect(walletCurrentAmount(cashAfter, [transaction])).toBe(800)
-    expect(walletCurrentAmount(cardAfter, [transaction])).toBe(300)
+    expect(signedWalletAmount(cashAfter, transaction)).toBe(-200)
+    expect(signedWalletAmount(cardAfter, transaction)).toBe(-200)
   })
 
   it('increases credit card debt when transferring a cash advance to payment wallet', () => {
@@ -210,21 +201,13 @@ describe('balance calculations', () => {
       createdAt: '2026-05-05T08:00:00.000Z',
     }
 
-    expect(walletCurrentAmount(cardAfter, [transaction])).toBe(700)
-    expect(walletCurrentAmount(cashAfter, [transaction])).toBe(1200)
-  })
-
-  it('calculates credit card current debt as positive owed amount', () => {
-    expect(walletCurrentAmount(wallets[1], transactions)).toBe(500)
-  })
-
-  it('keeps credit card expense and payment debt behavior', () => {
-    expect(walletCurrentAmount(wallets[1], transactions)).toBe(500)
+    expect(signedWalletAmount(cardAfter, transaction)).toBe(200)
+    expect(signedWalletAmount(cashAfter, transaction)).toBe(200)
   })
 
   it('calculates total assets and debt', () => {
-    expect(assetsTotal(wallets, transactions)).toBe(1400)
-    expect(debtTotal(wallets, transactions)).toBe(500)
+    expect(assetsTotal(wallets)).toBe(1400)
+    expect(debtTotal(wallets)).toBe(500)
   })
 
   it('filters transactions by wallet and date range', () => {
@@ -434,7 +417,7 @@ describe('balance calculations', () => {
         createdAt: '2026-05-27T00:00:00.000Z',
         note: 'Opening Balance',
       }
-      expect(walletCurrentAmount(wallet, [opening])).toBe(500)
+      expect(signedWalletAmount(wallet, opening)).toBe(500)
     })
 
     it('subtracts negative adjustment amount from wallet balance', () => {
@@ -458,7 +441,7 @@ describe('balance calculations', () => {
         color: '#10b981',
         icon: 'fa-wallet',
       }
-      expect(walletCurrentAmount(walletWith70, [adjustment])).toBe(70)
+      expect(signedWalletAmount(walletWith70, adjustment)).toBe(-30)
     })
 
     it('does not flip sign for credit card wallet', () => {
@@ -481,7 +464,7 @@ describe('balance calculations', () => {
         date: '2026-05-27T00:00:00.000Z',
         createdAt: '2026-05-27T00:00:00.000Z',
       }
-      expect(walletCurrentAmount(creditCard, [adjustment])).toBe(200)
+      expect(signedWalletAmount(creditCard, adjustment)).toBe(200)
     })
   })
 })

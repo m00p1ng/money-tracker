@@ -4,9 +4,8 @@ import { useNavigate } from 'react-router'
 import {
   assetsTotal,
   debtTotal,
-  walletCurrentAmount,
 } from '@/features/balance/balanceCalculations'
-import { useTransactionStore, useWalletStore } from '@/stores'
+import { useWalletStore } from '@/stores'
 
 import type { BalancePageProps } from './BalancePage'
 
@@ -21,18 +20,17 @@ export function useBalancePage(): BalancePageProps {
   const [isEditMode, setIsEditMode] = useState(false)
   const navigate = useNavigate()
   const wallets = useWalletStore((state) => state.items)
-  const transactions = useTransactionStore((state) => state.items)
   const reorder = useWalletStore((state) => state.reorder)
 
   const sorted = [...wallets].sort(sortByPosition)
   const paymentWallets = sorted
     .filter((w) => w.type === 'payment')
-    .map((wallet) => ({ wallet, amount: walletCurrentAmount(wallet, transactions) }))
+    .map((wallet) => ({ wallet, amount: wallet.balance }))
   const creditCards = sorted
     .filter((w) => w.type === 'credit_card')
-    .map((wallet) => ({ wallet, amount: walletCurrentAmount(wallet, transactions) }))
-  const assets = assetsTotal(wallets, transactions)
-  const debt = debtTotal(wallets, transactions)
+    .map((wallet) => ({ wallet, amount: wallet.balance }))
+  const assets = assetsTotal(wallets)
+  const debt = debtTotal(wallets)
 
   return {
     paymentWallets,

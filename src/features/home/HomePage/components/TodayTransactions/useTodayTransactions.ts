@@ -1,3 +1,5 @@
+import sumBy from 'lodash/sumBy'
+
 import { isTransactionPaid } from '@/features/transaction/transactionForm'
 import {
   buildTransactionRowDisplay,
@@ -18,10 +20,7 @@ function totalFor(
   type: TotalType,
 ): string | undefined {
   const matching = transactions.filter((transaction) => transaction.type === type)
-  const total = matching.reduce(
-    (sum, transaction) => sum + transaction.items.reduce((itemSum, item) => itemSum + item.amount, 0),
-    0,
-  )
+  const total = sumBy(matching, (transaction) => sumBy(transaction.items, 'amount'))
 
   return total > 0
     ? formatAmount(total, matching[0]?.currency)

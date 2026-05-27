@@ -1,3 +1,5 @@
+import sumBy from 'lodash/sumBy'
+
 import { isWithinDateRange, type DateRange } from '@/lib'
 import type { Transaction, Wallet } from '@/types/domain'
 
@@ -8,7 +10,7 @@ export type RunningWalletRow = {
 }
 
 export function transactionTotal(transaction: Transaction): number {
-  return transaction.items.reduce((sum, item) => sum + item.amount, 0)
+  return sumBy(transaction.items, 'amount')
 }
 
 export function amountInWalletCurrency(transaction: Transaction, wallet: Wallet): number {
@@ -63,22 +65,18 @@ export function walletTransactions(walletId: string, transactions: Transaction[]
     .sort((a, b) => a.date.localeCompare(b.date))
 }
 
-export function walletCurrentAmount(wallet: Wallet, transactions: Transaction[]): number {
-  void transactions
-
-  return wallet.balance
+export function assetsTotal(wallets: Wallet[]): number {
+  return sumBy(wallets, (wallet) => wallet.type === 'payment'
+    ? wallet.balance
+    : 0,
+  )
 }
 
-export function assetsTotal(wallets: Wallet[], transactions: Transaction[]): number {
-  return wallets
-    .filter((wallet) => wallet.type === 'payment')
-    .reduce((sum, wallet) => sum + walletCurrentAmount(wallet, transactions), 0)
-}
-
-export function debtTotal(wallets: Wallet[], transactions: Transaction[]): number {
-  return wallets
-    .filter((wallet) => wallet.type === 'credit_card')
-    .reduce((sum, wallet) => sum + walletCurrentAmount(wallet, transactions), 0)
+export function debtTotal(wallets: Wallet[]): number {
+  return sumBy(wallets, (wallet) => wallet.type === 'credit_card'
+    ? wallet.balance
+    : 0,
+  )
 }
 
 export function walletRunningRows(wallet: Wallet, transactions: Transaction[], range: DateRange): RunningWalletRow[] {
