@@ -10,6 +10,7 @@ import { useBackNavigate } from '@/context/navigationDirection'
 import { isReconciliationEnabled } from '@/features/balance'
 import {
   buildTransaction,
+  deriveTransactionStatus,
   validateDraft,
   validateExchangeRate,
 } from '@/features/transaction/transactionForm'
@@ -23,7 +24,6 @@ import {
 import type {
   RepeatConfig,
   Transaction,
-  TransactionStatus,
   TransactionType,
   Wallet,
 } from '@/types/domain'
@@ -98,41 +98,34 @@ function useTransactionPageDraft(
   const queryWallet = wallets.find((wallet) => wallet.id === seedWalletId)
   const initialWalletId = initial?.walletId ?? queryWallet?.id ?? wallets[0]?.id ?? 'wallet-cash'
 
-  const initialDraft = useMemo(() => {
-    const date = initial
+  const initialDraft = useMemo(() => ({
+    id: existing?.id,
+    type: initialType,
+    walletId: initialWalletId,
+    toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
+    items: initial?.items ?? (seedCategoryId
+      ? [{ categoryId: seedCategoryId, amount: 0 }]
+      : []),
+    focusedIndex: seedCategoryId
+      ? 0
+      : null,
+    date: initial
       ? toDatetimeLocalValue(new Date(initial.date))
       : seedDate
         ? toDatetimeLocalValue(new Date(`${seedDate}T00:00`))
-        : toDatetimeLocalValue(new Date())
-
-    const initialStatus: TransactionStatus = existing?.status
-      ?? (new Date(date) > new Date() ? 'planned' : 'paid')
-
-    return {
-      id: existing?.id,
-      type: initialType,
-      walletId: initialWalletId,
-      toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
-      items: initial?.items ?? (seedCategoryId
-        ? [{ categoryId: seedCategoryId, amount: 0 }]
-        : []),
-      focusedIndex: seedCategoryId
-        ? 0
-        : null,
-      date,
-      note: initial?.note ?? '',
-      currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
-      exchangeRate: String(initial?.exchangeRate ?? ''),
-      toExchangeRate: String(initial?.toExchangeRate ?? ''),
-      repeatConfig: initial?.repeat ?? { preset: 'never' },
-      transferAmount: initial?.type === 'transfer'
-        ? initial.items[0]?.amount ?? 0
-        : 0,
-      cleared: existing?.cleared ?? false,
-      status: initialStatus,
-    }
+        : toDatetimeLocalValue(new Date()),
+    note: initial?.note ?? '',
+    currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
+    exchangeRate: String(initial?.exchangeRate ?? ''),
+    toExchangeRate: String(initial?.toExchangeRate ?? ''),
+    repeatConfig: initial?.repeat ?? { preset: 'never' },
+    transferAmount: initial?.type === 'transfer'
+      ? initial.items[0]?.amount ?? 0
+      : 0,
+    cleared: existing?.cleared ?? false,
+    markedPaid: existing?.status === 'paid' || existing?.status === undefined,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }), [])
 
   useEffect(() => {
     if (!draftStore.draft) {
@@ -155,7 +148,7 @@ type UseTransactionSaveHandlerOptions = {
   wallet: Wallet | undefined
   wallets: Wallet[]
   defaultRate: string
-  status: TransactionStatus
+  markedPaid: boolean
   isRepeatMaterialization: boolean
   repeatDate: string | undefined
   existing: Transaction | undefined
@@ -171,7 +164,7 @@ function useTransactionSaveHandler({
   wallet,
   wallets,
   defaultRate,
-  status,
+  markedPaid,
   isRepeatMaterialization,
   repeatDate,
   existing,
@@ -221,7 +214,9 @@ function useTransactionSaveHandler({
 
       return
     }
-    const effectiveStatus = isRepeatMaterialization ? 'paid' : status
+    const effectiveMarkedPaid = isRepeatMaterialization
+      ? true
+      : markedPaid
     const transaction = buildTransaction({
       id: existing?.id,
       type,
@@ -239,7 +234,7 @@ function useTransactionSaveHandler({
       date: isRepeatMaterialization && repeatDate
         ? `${repeatDate}T00:00`
         : date,
-      status: effectiveStatus,
+      markedPaid: effectiveMarkedPaid,
       repeat: repeatConfig.preset === 'never'
         ? undefined
         : repeatConfig,
@@ -322,13 +317,14 @@ export function useTransactionPage(): TransactionPageProps {
     repeatConfig,
     transferAmount,
     cleared,
-    status,
+    markedPaid,
   } = draft
 
   const selectedCurrency = currencies.find((item) => item.code === currency)
   const defaultRate = selectedCurrency?.rate
     ? String(selectedCurrency.rate)
     : ''
+  const status = deriveTransactionStatus({ date, markedPaid })
   const wallet = wallets.find((item) => item.id === walletId)
   const walletReconciliationEnabled = wallet
     ? isReconciliationEnabled(wallet)
@@ -339,7 +335,7 @@ export function useTransactionPage(): TransactionPageProps {
     wallet,
     wallets,
     defaultRate,
-    status,
+    markedPaid,
     isRepeatMaterialization,
     repeatDate,
     existing,
@@ -369,15 +365,7 @@ export function useTransactionPage(): TransactionPageProps {
     currencies,
     isEditMode,
     status,
-    onToggleStatus: () => {
-      const now = new Date()
-      const txDate = new Date(date)
-      updateDraft({
-        status: status === 'paid'
-          ? txDate < now ? 'overdue' : 'planned'
-          : 'paid',
-      })
-    },
+    onToggleStatus: () => updateDraft({ markedPaid: !markedPaid }),
     defaultRate,
     cleared,
     walletReconciliationEnabled,

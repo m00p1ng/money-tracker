@@ -242,7 +242,7 @@ describe('CategorySelectionPage with draft store', () => {
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
       cleared: false,
-      status: 'paid',
+      markedPaid: true,
     })
   })
 
