@@ -5,6 +5,7 @@ import {
   DateRangePresetPicker,
   Icon,
   PageHeader,
+  SegmentedControl,
   TransactionRow,
 } from '@/components'
 import { isReconciliationEnabled, walletRunningRows } from '@/features/balance/balanceCalculations'
@@ -53,6 +54,7 @@ export function WalletDetailPage({
   onToggleCleared,
 }: WalletDetailPageProps) {
   const [range, setRange] = useState<DateRange>(getPresetRange('this-month'))
+  const [filter, setFilter] = useState<'all' | 'not-cleared'>('all')
   const [isPresetSheetOpen, setPresetSheetOpen] = useState(false)
   const [isStartPickerOpen, setStartPickerOpen] = useState(false)
   const [isEndPickerOpen, setEndPickerOpen] = useState(false)
@@ -66,8 +68,11 @@ export function WalletDetailPage({
     )
   }
 
-  const rows = walletRunningRows(wallet, transactions, range)
+  const allRows = walletRunningRows(wallet, transactions, range)
   const reconciliation = isReconciliationEnabled(wallet)
+  const rows = reconciliation && filter === 'not-cleared'
+    ? allRows.filter((row) => !row.transaction.cleared)
+    : allRows
 
   function handlePresetSelect(preset: DateRangePreset) {
     setRange(getPresetRange(preset))
@@ -115,6 +120,17 @@ export function WalletDetailPage({
         onClickEnd={() => setEndPickerOpen(true)}
         onOpenPreset={() => setPresetSheetOpen(true)}
       />
+
+      {reconciliation && (
+        <SegmentedControl
+          value={filter}
+          segments={[
+            { label: 'All', value: 'all' },
+            { label: 'Not Cleared', value: 'not-cleared' },
+          ]}
+          onChange={setFilter}
+        />
+      )}
 
       <section>
         {rows.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No transactions</p>}
