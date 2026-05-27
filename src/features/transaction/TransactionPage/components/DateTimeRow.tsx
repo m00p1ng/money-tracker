@@ -1,6 +1,5 @@
 import cx from 'classnames'
 
-import { Icon } from '@/components'
 import { formatDatetimeLocalDisplay } from '@/lib'
 import type { TransactionStatus } from '@/types/domain'
 
@@ -43,24 +42,20 @@ export function DateTimeRow({
   const badge = statusBadgeStyle[status]
 
   return (
-    <button
-      aria-label="Date & Time"
+    <div
       className={cx(
         'flex w-full items-center gap-1 px-4 py-3 text-left',
         variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
       )}
-      onClick={onClick}
-      type="button"
     >
-      <span className={[
-        'flex h-10 w-10 shrink-0 items-center justify-center',
-        'rounded-xl bg-accent/15 text-accent text-xs',
-      ].join(' ')}>
-        <Icon name="fa-calendar" />
-      </span>
-      <span className="min-w-0 flex-1 px-1">
-        <span className="block font-medium">{formatDatetimeLocalDisplay(date)}</span>
-      </span>
+      <button
+        aria-label="Date & Time"
+        className="min-w-0 flex-1 px-1 text-left"
+        onClick={onClick}
+        type="button"
+      >
+        <span className={cx('block font-medium', badge.text)}>{formatDatetimeLocalDisplay(date)}</span>
+      </button>
       <button
         type="button"
         aria-label={`Status: ${badge.label}`}
@@ -77,6 +72,6 @@ export function DateTimeRow({
       >
         {badge.label}
       </button>
-    </button>
+    </div>
   )
 }
