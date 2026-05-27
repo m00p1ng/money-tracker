@@ -18,6 +18,7 @@ export function SortableWalletRow({
     attributes,
     listeners,
     setNodeRef,
+    setActivatorNodeRef,
     transform,
     transition,
     isDragging,
@@ -37,7 +38,6 @@ export function SortableWalletRow({
       style={style}
       className="flex items-center gap-1 border-b border-white/5 px-4 py-3.5 last:border-b-0 active:bg-white/3"
       {...attributes}
-      {...listeners}
       onClick={() => onEdit(wallet.id)}
     >
       <div
@@ -53,7 +53,16 @@ export function SortableWalletRow({
         <span className="text-sm font-semibold">
           {formatSignedAmount(amount, wallet.currency)}
         </span>
-        <Icon name="fa-bars" className="text-base text-white/25" />
+        <button
+          ref={setActivatorNodeRef}
+          type="button"
+          aria-label="Drag to reorder"
+          className="touch-none p-1"
+          onClick={(e) => e.stopPropagation()}
+          {...listeners}
+        >
+          <Icon name="fa-bars" className="text-base text-white/25" />
+        </button>
       </div>
     </div>
   )

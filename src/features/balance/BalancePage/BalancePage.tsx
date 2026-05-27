@@ -1,7 +1,7 @@
 import {
   closestCenter,
   DndContext,
-  PointerSensor,
+  MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -56,8 +56,8 @@ export function BalancePage({
   const maxBarValue = Math.max(assets, debt)
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } }),
+    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 10 } }),
   )
 
   function handleDragEnd(event: DragEndEvent, group: WalletWithAmount[]) {
