@@ -1,4 +1,4 @@
-import type { RepeatConfig } from '@/types/domain'
+import type { RepeatConfig, TransactionStatus } from '@/types/domain'
 
 import { DateTimeRow } from './DateTimeRow'
 import { NoteField } from './NoteField'
@@ -7,12 +7,13 @@ import { RepeatRow } from './RepeatRow'
 
 interface TransactionDetailsCardProps {
   date: string
-  isPlanned: boolean
+  status: TransactionStatus
   walletReconciliationEnabled: boolean
   cleared: boolean
   repeatConfig: RepeatConfig
   note: string
   onUpdateDate: () => void
+  onToggleStatus: () => void
   onToggleCleared: () => void
   onUpdateRepeatConfig: () => void
   onUpdateNote: (value: string) => void
@@ -21,41 +22,45 @@ interface TransactionDetailsCardProps {
 
 export function TransactionDetailsCard({
   date,
-  isPlanned,
+  status,
   walletReconciliationEnabled,
   cleared,
   repeatConfig,
   note,
   onUpdateDate,
+  onToggleStatus,
   onToggleCleared,
   onUpdateRepeatConfig,
   onUpdateNote,
   onFocusNoteField,
 }: TransactionDetailsCardProps) {
   return (
-    <div>
-      <p className="mb-1.5 px-0.5 text-[9px] uppercase tracking-[1.5px] text-white/20">Details</p>
-      <div className={[
-        'divide-y divide-white/[0.05] overflow-hidden',
-        'rounded-2xl border border-white/[0.07] bg-white/[0.04]',
-      ].join(' ')}>
-        <DateTimeRow date={date} isPlanned={isPlanned} variant="flat" onClick={onUpdateDate} />
+    <div className={[
+      'divide-y divide-white/[0.05] overflow-hidden',
+      'rounded-2xl border border-white/[0.07] bg-white/[0.04]',
+    ].join(' ')}>
+      <DateTimeRow
+        date={date}
+        status={status}
+        variant="flat"
+        onClick={onUpdateDate}
+        onToggleStatus={onToggleStatus}
+      />
 
-        {!isPlanned && walletReconciliationEnabled && (
-          <ReconciliationRow cleared={cleared} variant="flat" onToggle={onToggleCleared} />
-        )}
+      {status === 'paid' && walletReconciliationEnabled && (
+        <ReconciliationRow cleared={cleared} variant="flat" onToggle={onToggleCleared} />
+      )}
 
-        {isPlanned && (
-          <RepeatRow repeatConfig={repeatConfig} variant="flat" onClick={onUpdateRepeatConfig} />
-        )}
+      {status !== 'paid' && (
+        <RepeatRow repeatConfig={repeatConfig} variant="flat" onClick={onUpdateRepeatConfig} />
+      )}
 
-        <NoteField
-          note={note}
-          variant="flat"
-          onUpdateNote={onUpdateNote}
-          onFocusNoteField={onFocusNoteField}
-        />
-      </div>
+      <NoteField
+        note={note}
+        variant="flat"
+        onUpdateNote={onUpdateNote}
+        onFocusNoteField={onFocusNoteField}
+      />
     </div>
   )
 }

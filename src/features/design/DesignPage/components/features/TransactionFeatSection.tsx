@@ -69,13 +69,17 @@ export function TransactionFeatSection() {
       <SubSection id="date-time-row" title="DateTimeRow">
         <div className="space-y-2">
           <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
-            <DateTimeRow date={STUB_DATE_PAST} isPlanned={false} onClick={() => {}} />
+            <DateTimeRow date={STUB_DATE_PAST} status="paid" onClick={() => {}} onToggleStatus={() => {}} />
           </div>
-          <VariantLabel label="past date (normal)" />
+          <VariantLabel label="paid" />
           <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
-            <DateTimeRow date={STUB_DATE_FUTURE} isPlanned={true} onClick={() => {}} />
+            <DateTimeRow date={STUB_DATE_PAST} status="overdue" onClick={() => {}} onToggleStatus={() => {}} />
           </div>
-          <VariantLabel label="future date (planned badge)" />
+          <VariantLabel label="overdue" />
+          <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
+            <DateTimeRow date={STUB_DATE_FUTURE} status="planned" onClick={() => {}} onToggleStatus={() => {}} />
+          </div>
+          <VariantLabel label="planned" />
         </div>
       </SubSection>
 
@@ -84,7 +88,6 @@ export function TransactionFeatSection() {
           <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
             <WalletSelectorRow
               ariaLabel="Select wallet"
-              label="Wallet"
               wallet={STUB_WALLET_PAYMENT}
               fallbackName="Select wallet"
               fallbackColor="#6c47ff"
@@ -95,7 +98,6 @@ export function TransactionFeatSection() {
           <div className="overflow-hidden rounded-2xl border border-white/6 bg-white/4">
             <WalletSelectorRow
               ariaLabel="Select wallet"
-              label="Wallet"
               wallet={STUB_WALLET_PAYMENT}
               fallbackName="Select wallet"
               fallbackColor="#6c47ff"

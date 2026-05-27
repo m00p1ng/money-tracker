@@ -99,17 +99,13 @@ export function buildTransaction(input: {
   toExchangeRate?: number
   date: string
   note?: string
-  markedPaid?: boolean
+  status?: TransactionStatus
   repeat?: RepeatConfig
   cleared?: boolean
   now: string
   createId: () => string
 }): Transaction {
-  const status = deriveTransactionStatus({
-    date: input.date,
-    markedPaid: input.markedPaid,
-    now: new Date(input.now),
-  })
+  const status = input.status ?? 'paid'
   const items = input.type === 'transfer'
     ? [{ categoryId: 'transfer', amount: input.transferAmount ?? 0 }]
     : input.items
