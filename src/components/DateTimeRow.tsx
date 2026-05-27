@@ -7,6 +7,7 @@ interface DateTimeRowProps {
   date: string
   status: TransactionStatus
   variant?: 'standalone' | 'flat'
+  showStatus?: boolean
   onClick: () => void
   onToggleStatus: () => void
 }
@@ -36,6 +37,7 @@ export function DateTimeRow({
   date,
   status,
   variant = 'standalone',
+  showStatus = true,
   onClick,
   onToggleStatus,
 }: DateTimeRowProps) {
@@ -54,24 +56,30 @@ export function DateTimeRow({
         onClick={onClick}
         type="button"
       >
-        <span className={cx('block font-medium', badge.text)}>{formatDatetimeLocalDisplay(date)}</span>
+        <span className={cx('block font-medium', showStatus
+          ? badge.text
+          : 'text-white')}>
+          {formatDatetimeLocalDisplay(date)}
+        </span>
       </button>
-      <button
-        type="button"
-        aria-label={`Status: ${badge.label}`}
-        className={cx(
-          'shrink-0 rounded-lg border px-2.5 py-1 text-sm font-bold',
-          badge.border,
-          badge.bg,
-          badge.text,
-        )}
-        onClick={(e) => {
-          e.stopPropagation()
-          onToggleStatus()
-        }}
-      >
-        {badge.label}
-      </button>
+      {showStatus && (
+        <button
+          type="button"
+          aria-label={`Status: ${badge.label}`}
+          className={cx(
+            'shrink-0 rounded-lg border px-2.5 py-1 text-sm font-bold',
+            badge.border,
+            badge.bg,
+            badge.text,
+          )}
+          onClick={(e) => {
+            e.stopPropagation()
+            onToggleStatus()
+          }}
+        >
+          {badge.label}
+        </button>
+      )}
     </div>
   )
 }

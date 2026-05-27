@@ -1,7 +1,7 @@
 import cx from 'classnames'
 
 import { Icon } from '@/components'
-import { formatSignedAmount } from '@/lib'
+import { formatFocusedAmount, formatSignedAmount } from '@/lib'
 import type { Category, TransactionItem } from '@/types/domain'
 
 export interface CategoryItemsCardProps {
@@ -13,16 +13,6 @@ export interface CategoryItemsCardProps {
   onRemove: (index: number) => void
   onChangeCategory: (index: number) => void
   findCategory: (id: string) => Category | undefined
-}
-
-function formatFocusedAmount(amount: number): string {
-  if (!Number.isFinite(amount)) {
-    return ''
-  }
-
-  return Number.isInteger(amount)
-    ? String(amount)
-    : amount.toFixed(2).replace(/0+$/, '').replace(/\.$/, '')
 }
 
 export function CategoryItemsCard({

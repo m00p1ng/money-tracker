@@ -100,7 +100,7 @@ export function TransferPrimaryCard({
       </div>
 
       {showFromExchangeRate && (
-        <div className="border-b border-white/[0.05]">
+        <div className="border-b border-white/5">
           <ExchangeRateRow
             label="Exchange Rate"
             value={exchangeRate}
@@ -112,7 +112,7 @@ export function TransferPrimaryCard({
       )}
 
       {showToExchangeRate && (
-        <div className="border-b border-white/[0.05]">
+        <div className="border-b border-white/5">
           <ExchangeRateRow
             label="Destination Exchange Rate"
             value={toExchangeRate}

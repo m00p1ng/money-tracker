@@ -7,7 +7,7 @@ import {
 } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { isReconciliationEnabled, walletCurrentAmount } from '@/features/balance'
+import { isReconciliationEnabled } from '@/features/balance'
 import {
   buildTransaction,
   deriveTransactionStatus,
@@ -89,7 +89,6 @@ function useTransactionPageDraft(
   seedDate: string | undefined,
   seedWalletId: string | undefined,
   wallets: TransactionPageProps['wallets'],
-  allTransactions: Transaction[],
 ) {
   const draftStore = useTransactionDraftStore()
   const updateDraft = draftStore.update
@@ -100,21 +99,6 @@ function useTransactionPageDraft(
   const initialWalletId = initial?.walletId ?? queryWallet?.id ?? wallets[0]?.id ?? 'wallet-cash'
 
   const initialDraft = useMemo(() => {
-    const wallet = wallets.find((w) => w.id === initialWalletId)
-    const currentBalance = wallet
-      ? walletCurrentAmount(wallet, allTransactions)
-      : 0
-
-    const existingDelta = initial?.type === 'adjustment'
-      ? (initial.items[0]?.amount ?? 0)
-      : 0
-
-    const adjustmentBaseBalance = initial?.type === 'adjustment'
-      ? currentBalance - existingDelta
-      : currentBalance
-
-    const adjustmentTargetBalance = currentBalance
-
     return {
       id: existing?.id,
       type: initialType,
@@ -141,8 +125,9 @@ function useTransactionPageDraft(
       transferAmount: initial?.type === 'transfer'
         ? initial.items[0]?.amount ?? 0
         : 0,
-      adjustmentTargetBalance,
-      adjustmentBaseBalance,
+      adjustmentAmount: initial?.type === 'adjustment'
+        ? initial.items[0]?.amount ?? 0
+        : 0,
       cleared: existing?.cleared ?? false,
       markedPaid: existing?.status === 'paid' || existing?.status === undefined,
     }
@@ -203,8 +188,7 @@ function useTransactionSaveHandler({
       toWalletId,
       items,
       transferAmount,
-      adjustmentTargetBalance,
-      adjustmentBaseBalance,
+      adjustmentAmount,
       currency,
       exchangeRate,
       toExchangeRate,
@@ -239,10 +223,6 @@ function useTransactionSaveHandler({
       return
     }
 
-    const adjustmentItems = type === 'adjustment'
-      ? [{ categoryId: 'adjustment-balance-adjustment', amount: adjustmentTargetBalance - adjustmentBaseBalance }]
-      : items
-
     const effectiveMarkedPaid = isRepeatMaterialization
       ? true
       : markedPaid
@@ -252,8 +232,9 @@ function useTransactionSaveHandler({
       walletId,
       toWalletId,
       currency,
-      items: adjustmentItems,
+      items,
       transferAmount,
+      adjustmentAmount,
       exchangeRate: currency !== wallet?.currency
         ? Number(exchangeRate || defaultRate)
         : undefined,
@@ -316,7 +297,6 @@ export function useTransactionPage(): TransactionPageProps {
 
   const wallets = useWalletStore((state) => state.items)
   const currencies = useCurrencyStore((state) => state.items)
-  const allTransactions = useTransactionStore((state) => state.items)
   const add = useTransactionStore((state) => state.add)
   const update = useTransactionStore((state) => state.update)
   const remove = useTransactionStore((state) => state.remove)
@@ -333,7 +313,6 @@ export function useTransactionPage(): TransactionPageProps {
     seedDate,
     seedWalletId,
     wallets,
-    allTransactions,
   )
 
   const {
@@ -349,7 +328,7 @@ export function useTransactionPage(): TransactionPageProps {
     toExchangeRate,
     repeatConfig,
     transferAmount,
-    adjustmentTargetBalance,
+    adjustmentAmount,
     cleared,
     markedPaid,
   } = draft
@@ -395,7 +374,7 @@ export function useTransactionPage(): TransactionPageProps {
     toExchangeRate,
     repeatConfig,
     transferAmount,
-    adjustmentTargetBalance,
+    adjustmentAmount,
     wallets,
     currencies,
     isEditMode,
@@ -434,8 +413,9 @@ export function useTransactionPage(): TransactionPageProps {
       if (type === 'transfer') {
         return updateDraft({ transferAmount: result })
       }
+
       if (type === 'adjustment') {
-        return updateDraft({ adjustmentTargetBalance: result })
+        return updateDraft({ adjustmentAmount: result })
       }
 
       return updateDraft({

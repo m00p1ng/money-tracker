@@ -1,12 +1,12 @@
 import cx from 'classnames'
 
 import { Icon } from '@/components'
-import { formatAmount } from '@/lib'
+import { formatFocusedAmount, formatSignedAmount } from '@/lib'
 import type { Wallet } from '@/types/domain'
 
 interface AdjustmentPrimaryCardProps {
   wallet: Wallet | undefined
-  targetBalance: number
+  adjustmentAmount: number
   currency: string
   isAmountFocused: boolean
   onWalletClick: () => void
@@ -15,7 +15,7 @@ interface AdjustmentPrimaryCardProps {
 
 export function AdjustmentPrimaryCard({
   wallet,
-  targetBalance,
+  adjustmentAmount,
   currency,
   isAmountFocused,
   onWalletClick,
@@ -23,40 +23,46 @@ export function AdjustmentPrimaryCard({
 }: AdjustmentPrimaryCardProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-white/8.5 bg-white/8">
-      <button
-        aria-label="Wallet"
-        type="button"
-        className="flex w-full items-center gap-1 px-4 py-2 text-left"
-        onClick={onWalletClick}
-      >
-        <span className="grid h-10 w-10 shrink-0 place-items-center text-lg" style={{ color: '#63758F' }}>
-          <Icon name={wallet?.icon ?? 'fa-wallet'} />
-        </span>
-        <div className="min-w-0 flex-1 px-1">
-          <p className="truncate font-medium">{wallet?.name ?? 'Cash'}</p>
-        </div>
-        <Icon name="fa-chevron-right" className="text-white/20 text-sm" />
-      </button>
-
-      <button
-        type="button"
+      <div
         className={cx(
-          'flex w-full items-center justify-between border-t px-4 py-3 transition-colors',
+          'flex items-center transition-colors',
           isAmountFocused
-            ? 'border-accent/40 bg-accent/20'
-            : 'border-accent/20 bg-accent/10',
+            ? 'bg-accent/6'
+            : '',
         )}
-        onClick={(e) => {
-          e.stopPropagation()
-          onAmountClick()
-        }}
       >
-        <span className="text-[9px] uppercase tracking-[1px] text-white/40">Target Balance</span>
-        <span className="text-xl font-bold text-accent-light">
-          {formatAmount(targetBalance)}
-          <span className="ml-1.5 text-[10px] font-normal opacity-50">{currency}</span>
-        </span>
-      </button>
+        <button
+          aria-label="Wallet"
+          type="button"
+          className="flex min-w-0 flex-1 items-center gap-3 px-4 py-2"
+          onClick={onWalletClick}
+        >
+          <span
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
+            style={{ color: '#63758F' }}
+          >
+            <Icon name={wallet?.icon ?? 'fa-wallet'} style={{ height: 40 }} />
+          </span>
+          <div className="min-w-0 text-left">
+            <p className="truncate text-sm font-semibold">
+              {wallet?.name ?? 'Cash'}
+            </p>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          className="shrink-0 px-4 py-3 text-sm font-bold text-accent-light"
+          onClick={(e) => {
+            e.stopPropagation()
+            onAmountClick()
+          }}
+        >
+          {isAmountFocused
+            ? formatFocusedAmount(adjustmentAmount)
+            : formatSignedAmount(adjustmentAmount, currency)}
+        </button>
+      </div>
     </div>
   )
 }

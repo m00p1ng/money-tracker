@@ -413,7 +413,7 @@ describe('TransactionPage adjustment mode', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByText('Target Balance')).toBeInTheDocument()
+    expect(screen.getByLabelText('Wallet')).toBeInTheDocument()
   })
 
   it('editing existing adjustment shows Balance Adjustment title', async () => {
@@ -439,7 +439,7 @@ describe('TransactionPage adjustment mode', () => {
     )
 
     expect(screen.getByText('Balance Adjustment')).toBeInTheDocument()
-    expect(screen.getByText('Target Balance')).toBeInTheDocument()
+    expect(screen.getByLabelText('Wallet')).toBeInTheDocument()
     expect(screen.getByLabelText('Delete transaction')).toBeInTheDocument()
   })
 })

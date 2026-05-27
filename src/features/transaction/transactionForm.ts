@@ -99,6 +99,7 @@ export function buildTransaction(input: {
   currency: string
   items: TransactionItem[]
   transferAmount?: number
+  adjustmentAmount?: number
   exchangeRate?: number
   toExchangeRate?: number
   date: string
@@ -116,7 +117,9 @@ export function buildTransaction(input: {
   })
   const items = input.type === 'transfer'
     ? [{ categoryId: 'transfer', amount: input.transferAmount ?? 0 }]
-    : input.items
+    : input.type === 'adjustment'
+      ? [{ categoryId: 'adjustment-balance-adjustment', amount: input.adjustmentAmount ?? 0 }]
+      : input.items
   const transferFields = input.type === 'transfer'
     ? {
       toWalletId: input.toWalletId,

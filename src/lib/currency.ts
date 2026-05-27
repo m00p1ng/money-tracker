@@ -35,3 +35,12 @@ export function formatSignedAmount(amount: number, currency: string): string {
 
   return formatted
 }
+export function formatFocusedAmount(amount: number): string {
+  if (!Number.isFinite(amount)) {
+    return ''
+  }
+
+  return Number.isInteger(amount)
+    ? String(amount)
+    : amount.toFixed(2).replace(/0+$/, '').replace(/\.$/, '')
+}

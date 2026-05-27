@@ -39,7 +39,7 @@ export interface TransactionPageProps {
   toExchangeRate: string
   repeatConfig: RepeatConfig
   transferAmount: number
-  adjustmentTargetBalance: number
+  adjustmentAmount: number
   wallets: Wallet[]
   currencies: Currency[]
   isEditMode: boolean
@@ -85,7 +85,7 @@ export function TransactionPage({
   toExchangeRate,
   repeatConfig,
   transferAmount,
-  adjustmentTargetBalance,
+  adjustmentAmount,
   wallets,
   currencies,
   isEditMode,
@@ -153,7 +153,7 @@ export function TransactionPage({
 
   function handleFocusAdjustmentAmount() {
     onFocusAdjustmentAmount()
-    setCalc(createCalcState(adjustmentTargetBalance))
+    setCalc(createCalcState(adjustmentAmount))
   }
 
   const wallet = wallets.find((w) => w.id === walletId)
@@ -163,7 +163,7 @@ export function TransactionPage({
       return (
         <AdjustmentPrimaryCard
           wallet={wallet}
-          targetBalance={adjustmentTargetBalance}
+          adjustmentAmount={adjustmentAmount}
           currency={currency}
           isAmountFocused={focusedIndex !== null}
           onWalletClick={() => setWalletPickerTarget('wallet')}
@@ -233,6 +233,7 @@ export function TransactionPage({
         date={date}
         status={status}
         walletReconciliationEnabled={type !== 'transfer' && type !== 'adjustment' && walletReconciliationEnabled}
+        showStatus={type !== 'adjustment'}
         cleared={cleared}
         repeatConfig={repeatConfig}
         note={note}

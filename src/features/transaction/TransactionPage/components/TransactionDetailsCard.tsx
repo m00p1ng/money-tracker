@@ -8,6 +8,7 @@ interface TransactionDetailsCardProps {
   date: string
   status: TransactionStatus
   walletReconciliationEnabled: boolean
+  showStatus?: boolean
   cleared: boolean
   repeatConfig: RepeatConfig
   note: string
@@ -23,6 +24,7 @@ export function TransactionDetailsCard({
   date,
   status,
   walletReconciliationEnabled,
+  showStatus = true,
   cleared,
   repeatConfig,
   note,
@@ -42,6 +44,7 @@ export function TransactionDetailsCard({
         date={date}
         status={status}
         variant="flat"
+        showStatus={showStatus}
         onClick={onUpdateDate}
         onToggleStatus={onToggleStatus}
       />
