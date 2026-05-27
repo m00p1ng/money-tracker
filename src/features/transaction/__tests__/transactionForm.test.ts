@@ -201,6 +201,25 @@ describe('transactionForm', () => {
     })
   })
 
+  it('accepts adjustment draft with only walletId (no items needed)', () => {
+    expect(
+      validateDraft({
+        type: 'adjustment',
+        walletId: 'wallet-cash',
+        items: [],
+      }),
+    ).toEqual([])
+  })
+
+  it('rejects adjustment draft without walletId', () => {
+    expect(
+      validateDraft({
+        type: 'adjustment',
+        items: [],
+      }),
+    ).toContain('Select a wallet')
+  })
+
   it('drops repeat from paid transfers', () => {
     const transaction = buildTransaction({
       type: 'transfer',

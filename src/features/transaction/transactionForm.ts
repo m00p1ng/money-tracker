@@ -33,6 +33,10 @@ export function validateDraft(draft: TransactionDraft): string[] {
     return errors
   }
 
+  if (draft.type === 'adjustment') {
+    return errors
+  }
+
   if (draft.items.length === 0) {
     errors.push('Add at least one category')
   }
