@@ -2,6 +2,7 @@ export {
   default as CategoryItemsCard,
   CategoryItemsCard as CategoryItemsCardView,
 } from './CategoryItemsCard'
+export { AdjustmentPrimaryCard } from './AdjustmentPrimaryCard'
 export { ReconciliationRow } from './ReconciliationRow'
 export { RepeatRow } from './RepeatRow'
 export { TransactionDetailsCard } from './TransactionDetailsCard'
