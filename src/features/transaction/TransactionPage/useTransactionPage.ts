@@ -7,7 +7,7 @@ import {
 } from 'react-router'
 
 import { useBackNavigate } from '@/context/navigationDirection'
-import { isReconciliationEnabled } from '@/features/balance'
+import { isReconciliationEnabled, walletCurrentAmount } from '@/features/balance'
 import {
   buildTransaction,
   deriveTransactionStatus,
@@ -89,6 +89,7 @@ function useTransactionPageDraft(
   seedDate: string | undefined,
   seedWalletId: string | undefined,
   wallets: TransactionPageProps['wallets'],
+  allTransactions: Transaction[],
 ) {
   const draftStore = useTransactionDraftStore()
   const updateDraft = draftStore.update
@@ -98,34 +99,55 @@ function useTransactionPageDraft(
   const queryWallet = wallets.find((wallet) => wallet.id === seedWalletId)
   const initialWalletId = initial?.walletId ?? queryWallet?.id ?? wallets[0]?.id ?? 'wallet-cash'
 
-  const initialDraft = useMemo(() => ({
-    id: existing?.id,
-    type: initialType,
-    walletId: initialWalletId,
-    toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
-    items: initial?.items ?? (seedCategoryId
-      ? [{ categoryId: seedCategoryId, amount: 0 }]
-      : []),
-    focusedIndex: seedCategoryId
-      ? 0
-      : null,
-    date: initial
-      ? toDatetimeLocalValue(new Date(initial.date))
-      : seedDate
-        ? toDatetimeLocalValue(new Date(`${seedDate}T00:00`))
-        : toDatetimeLocalValue(new Date()),
-    note: initial?.note ?? '',
-    currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
-    exchangeRate: String(initial?.exchangeRate ?? ''),
-    toExchangeRate: String(initial?.toExchangeRate ?? ''),
-    repeatConfig: initial?.repeat ?? { preset: 'never' },
-    transferAmount: initial?.type === 'transfer'
-      ? initial.items[0]?.amount ?? 0
-      : 0,
-    cleared: existing?.cleared ?? false,
-    markedPaid: existing?.status === 'paid' || existing?.status === undefined,
+  const initialDraft = useMemo(() => {
+    const wallet = wallets.find((w) => w.id === initialWalletId)
+    const currentBalance = wallet
+      ? walletCurrentAmount(wallet, allTransactions)
+      : 0
+
+    const existingDelta = initial?.type === 'adjustment'
+      ? (initial.items[0]?.amount ?? 0)
+      : 0
+
+    const adjustmentBaseBalance = initial?.type === 'adjustment'
+      ? currentBalance - existingDelta
+      : currentBalance
+
+    const adjustmentTargetBalance = currentBalance
+
+    return {
+      id: existing?.id,
+      type: initialType,
+      walletId: initialWalletId,
+      toWalletId: initial?.toWalletId ?? wallets.find((w) => w.id !== initialWalletId)?.id,
+      items: initial?.items ?? (seedCategoryId
+        ? [{ categoryId: seedCategoryId, amount: 0 }]
+        : []),
+      focusedIndex: initialType === 'adjustment'
+        ? 0
+        : seedCategoryId
+          ? 0
+          : null,
+      date: initial
+        ? toDatetimeLocalValue(new Date(initial.date))
+        : seedDate
+          ? toDatetimeLocalValue(new Date(`${seedDate}T00:00`))
+          : toDatetimeLocalValue(new Date()),
+      note: initial?.note ?? '',
+      currency: initial?.currency ?? wallets.find((w) => w.id === initialWalletId)?.currency ?? 'THB',
+      exchangeRate: String(initial?.exchangeRate ?? ''),
+      toExchangeRate: String(initial?.toExchangeRate ?? ''),
+      repeatConfig: initial?.repeat ?? { preset: 'never' },
+      transferAmount: initial?.type === 'transfer'
+        ? initial.items[0]?.amount ?? 0
+        : 0,
+      adjustmentTargetBalance,
+      adjustmentBaseBalance,
+      cleared: existing?.cleared ?? false,
+      markedPaid: existing?.status === 'paid' || existing?.status === undefined,
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [])
+  }, [])
 
   useEffect(() => {
     if (!draftStore.draft) {
@@ -181,6 +203,8 @@ function useTransactionSaveHandler({
       toWalletId,
       items,
       transferAmount,
+      adjustmentTargetBalance,
+      adjustmentBaseBalance,
       currency,
       exchangeRate,
       toExchangeRate,
@@ -214,6 +238,11 @@ function useTransactionSaveHandler({
 
       return
     }
+
+    const adjustmentItems = type === 'adjustment'
+      ? [{ categoryId: 'adjustment-balance-adjustment', amount: adjustmentTargetBalance - adjustmentBaseBalance }]
+      : items
+
     const effectiveMarkedPaid = isRepeatMaterialization
       ? true
       : markedPaid
@@ -223,7 +252,7 @@ function useTransactionSaveHandler({
       walletId,
       toWalletId,
       currency,
-      items,
+      items: adjustmentItems,
       transferAmount,
       exchangeRate: currency !== wallet?.currency
         ? Number(exchangeRate || defaultRate)
@@ -287,6 +316,7 @@ export function useTransactionPage(): TransactionPageProps {
 
   const wallets = useWalletStore((state) => state.items)
   const currencies = useCurrencyStore((state) => state.items)
+  const allTransactions = useTransactionStore((state) => state.items)
   const add = useTransactionStore((state) => state.add)
   const update = useTransactionStore((state) => state.update)
   const remove = useTransactionStore((state) => state.remove)
@@ -303,6 +333,7 @@ export function useTransactionPage(): TransactionPageProps {
     seedDate,
     seedWalletId,
     wallets,
+    allTransactions,
   )
 
   const {
@@ -318,6 +349,7 @@ export function useTransactionPage(): TransactionPageProps {
     toExchangeRate,
     repeatConfig,
     transferAmount,
+    adjustmentTargetBalance,
     cleared,
     markedPaid,
   } = draft
@@ -363,6 +395,7 @@ export function useTransactionPage(): TransactionPageProps {
     toExchangeRate,
     repeatConfig,
     transferAmount,
+    adjustmentTargetBalance,
     wallets,
     currencies,
     isEditMode,
@@ -397,14 +430,22 @@ export function useTransactionPage(): TransactionPageProps {
       navigate(`/transaction/category?${params.toString()}`)
     },
     onAddCategory: () => navigate(`/transaction/category?addCategory=true&type=${type}`),
-    onPressCalcKey: (_key: string, result: number) => type === 'transfer'
-      ? updateDraft({ transferAmount: result })
-      : updateDraft({
+    onPressCalcKey: (_key: string, result: number) => {
+      if (type === 'transfer') {
+        return updateDraft({ transferAmount: result })
+      }
+      if (type === 'adjustment') {
+        return updateDraft({ adjustmentTargetBalance: result })
+      }
+
+      return updateDraft({
         items: items.map((item, index) => (index === focusedIndex
           ? { ...item, amount: result }
           : item)),
-      }),
+      })
+    },
     onOpenCurrencyPicker: () => { /* handled in dumb component */ },
+    onFocusAdjustmentAmount: () => updateDraft({ focusedIndex: 0 }),
     onSave,
     onBack: () => {
       clearDraft()
