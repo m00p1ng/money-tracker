@@ -241,6 +241,8 @@ describe('CategorySelectionPage with draft store', () => {
       toExchangeRate: '',
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
+      adjustmentTargetBalance: 0,
+      adjustmentBaseBalance: 0,
       cleared: false,
       markedPaid: true,
     })

@@ -361,3 +361,85 @@ describe('TransactionPage type switching', () => {
     expect(useTransactionDraftStore.getState().draft?.items).toHaveLength(0)
   })
 })
+
+describe('TransactionPage adjustment mode', () => {
+  beforeEach(() => {
+    useTransactionDraftStore.getState().clear()
+    useWalletStore.setState({
+      items: [{
+        id: 'wallet-cash',
+        name: 'Cash',
+        type: 'payment' as const,
+        currency: 'THB',
+        balance: 1000,
+        icon: 'fa-wallet',
+        color: '#10b981',
+      }],
+    })
+    useCategoryStore.setState({ items: [] })
+    useTransactionStore.setState({ items: [] })
+  })
+
+  it('shows "Balance Adjustment" title when type=adjustment', async () => {
+    render(
+      <MemoryRouter initialEntries={['/transaction/new?type=adjustment']}>
+        <Routes>
+          <Route path="/transaction/new" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Balance Adjustment')).toBeInTheDocument()
+  })
+
+  it('does not show type dropdown for adjustment', async () => {
+    render(
+      <MemoryRouter initialEntries={['/transaction/new?type=adjustment']}>
+        <Routes>
+          <Route path="/transaction/new" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+  })
+
+  it('shows Target Balance row with current wallet balance as default', async () => {
+    render(
+      <MemoryRouter initialEntries={['/transaction/new?type=adjustment']}>
+        <Routes>
+          <Route path="/transaction/new" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Target Balance')).toBeInTheDocument()
+  })
+
+  it('editing existing adjustment shows Balance Adjustment title', async () => {
+    useTransactionStore.setState({
+      items: [{
+        id: 'tx-adj-1',
+        type: 'adjustment',
+        walletId: 'wallet-cash',
+        currency: 'THB',
+        items: [{ categoryId: 'adjustment-balance-adjustment', amount: 500 }],
+        date: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        status: 'paid',
+      }],
+    })
+
+    render(
+      <MemoryRouter initialEntries={['/transaction/tx-adj-1']}>
+        <Routes>
+          <Route path="/transaction/:id" element={<TransactionPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Balance Adjustment')).toBeInTheDocument()
+    expect(screen.getByText('Target Balance')).toBeInTheDocument()
+    expect(screen.getByLabelText('Delete transaction')).toBeInTheDocument()
+  })
+})

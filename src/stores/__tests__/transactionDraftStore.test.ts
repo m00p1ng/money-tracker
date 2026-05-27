@@ -29,6 +29,8 @@ describe('transactionDraftStore', () => {
       toExchangeRate: '',
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
+      adjustmentTargetBalance: 0,
+      adjustmentBaseBalance: 0,
       cleared: false,
       markedPaid: true,
     })
@@ -49,6 +51,8 @@ describe('transactionDraftStore', () => {
       toExchangeRate: '',
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
+      adjustmentTargetBalance: 0,
+      adjustmentBaseBalance: 0,
       cleared: false,
       markedPaid: true,
     })
@@ -75,6 +79,8 @@ describe('transactionDraftStore', () => {
       toExchangeRate: '',
       repeatConfig: { preset: 'never' },
       transferAmount: 0,
+      adjustmentTargetBalance: 0,
+      adjustmentBaseBalance: 0,
       cleared: false,
       markedPaid: true,
     })
