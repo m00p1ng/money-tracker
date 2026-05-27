@@ -20,6 +20,8 @@ export type TransactionDraft = {
   toExchangeRate: string
   repeatConfig: RepeatConfig
   transferAmount: number
+  adjustmentTargetBalance: number
+  adjustmentBaseBalance: number
   cleared: boolean
   markedPaid: boolean
 }
