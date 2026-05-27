@@ -14,14 +14,18 @@ export function TransactionHeader({
   onBack,
   onSave,
 }: TransactionHeaderProps) {
+  const title = type === 'adjustment'
+    ? <span className="font-semibold">Balance Adjustment</span>
+    : (
+      <TransactionTypeDropdown
+        value={type}
+        onChange={(value) => onChangeType(value as TransactionType)}
+      />
+    )
+
   return (
     <PageHeader
-      title={
-        <TransactionTypeDropdown
-          value={type}
-          onChange={(value) => onChangeType(value as TransactionType)}
-        />
-      }
+      title={title}
       onBack={onBack}
       rightSlot={
         <button
