@@ -92,8 +92,8 @@ describe('CategorySelectionPage', () => {
 
   it('renders 3-column grid', () => {
     renderPage()
-    // The grid container has class grid-cols-3
-    const grid = document.querySelector('.grid-cols-3')
+    // The grid container has class grid-cols-4
+    const grid = document.querySelector('.grid-cols-4')
     expect(grid).toBeInTheDocument()
   })
 
@@ -155,11 +155,11 @@ describe('CategorySelectionPage edit mode', () => {
 
   it('shows Add Category card button only in edit mode', async () => {
     renderPage()
-    expect(screen.queryByRole('button', { name: 'Add Category' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Add' })).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
 
-    expect(screen.getByRole('button', { name: 'Add Category' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument()
   })
 
   it('places Add Category after existing categories in edit mode', async () => {
@@ -167,14 +167,14 @@ describe('CategorySelectionPage edit mode', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
 
-    const grid = document.querySelector('.grid-cols-3')
+    const grid = document.querySelector('.grid-cols-4')
     expect(grid).toBeInTheDocument()
     const gridButtons = within(grid as HTMLElement)
       .getAllByRole('button')
       .filter((button) => !button.getAttribute('aria-label')?.startsWith('Remove '))
     expect(gridButtons.map((button) => button.textContent)).toEqual([
       'Food & Drink',
-      'Add Category',
+      'Add',
     ])
   })
 
@@ -182,7 +182,7 @@ describe('CategorySelectionPage edit mode', () => {
     renderPage()
 
     await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
-    await userEvent.click(screen.getByRole('button', { name: 'Add Category' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Add' }))
 
     expect(screen.getByRole('heading', { name: 'New Category' })).toBeInTheDocument()
   })

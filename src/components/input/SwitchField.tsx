@@ -15,12 +15,16 @@ export function Switch({
   onChange,
 }: SwitchField) {
   return (
-    <label className="flex cursor-pointer items-center justify-between gap-4 rounded-lg bg-white/[0.03] px-3 py-3">
+    <label className={[
+      'flex cursor-pointer items-center justify-between gap-4',
+      'rounded-xl border border-white/5 bg-white/[0.03] px-3 py-3',
+      'transition-colors duration-150 hover:bg-white/[0.05]',
+    ].join(' ')}>
       <span className="min-w-0">
         <span className="block text-sm font-medium text-slate-200">{label}</span>
         {description
           ? (
-            <span className="mt-0.5 block text-xs leading-5 text-white/40">{description}</span>
+            <span className="mt-0.5 block text-xs leading-5 text-white/38">{description}</span>
           )
           : null}
       </span>
@@ -34,11 +38,17 @@ export function Switch({
         />
         <span
           className={cx(
-            'block h-6 w-11 rounded-full transition-colors',
+            'block h-6 w-11 rounded-full transition-colors duration-200',
             checked
               ? 'bg-accent'
-              : 'bg-white/15',
+              : 'bg-white/12',
           )}
+          style={checked
+            ? {
+              background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))',
+              boxShadow: '0 0 10px color-mix(in srgb, var(--accent) 30%, transparent)',
+            }
+            : undefined}
         />
         <motion.span
           animate={{
@@ -46,13 +56,13 @@ export function Switch({
               ? 20
               : 2,
           }}
-          className="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow"
+          className="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-md"
           initial={false}
           transition={{
             type: 'spring',
-            stiffness: 300,
-            damping: 25,
-            mass: 0.8,
+            stiffness: 320,
+            damping: 26,
+            mass: 0.75,
           }}
           whileTap={{
             width: 26,

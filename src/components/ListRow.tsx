@@ -23,24 +23,29 @@ export function ListRow({
     <Link
       to={to}
       className={[
-        'flex cursor-pointer items-center gap-1 border-b border-white/5',
-        'px-4 py-3.5 last:border-b-0 hover:bg-white/[0.03] active:bg-white/3',
+        'flex cursor-pointer items-center gap-3 border-b border-white/5',
+        'px-4 py-3.5 last:border-b-0',
+        'transition-colors duration-150 ease-[cubic-bezier(0.16,1,0.3,1)]',
+        'hover:bg-white/4 active:bg-white/6',
       ].join(' ')}
     >
       {left
         ?? (
           <div
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-lg text-slate-500"
+            className={[
+              'flex h-10 w-10 shrink-0 items-center justify-center',
+              'rounded-[10px] text-base bg-white/5 text-white/55',
+            ].join(' ')}
           >
             <Icon name={icon ?? ''} />
           </div>
         )}
-      <div className="flex-1 min-w-0">
-        <p className="text-base font-medium">{label}</p>
+      <div className="min-w-0 flex-1">
+        <p className="text-base font-medium leading-tight">{label}</p>
         {sub && <p className="mt-0.5 text-sm text-white/40">{sub}</p>}
       </div>
-      <div className="flex shrink-0 items-center gap-2 text-white/25">
-        {trailing ?? <Icon name="fa-chevron-right" className="text-base" />}
+      <div className="flex shrink-0 items-center gap-2 text-white/20">
+        {trailing ?? <Icon name="fa-chevron-right" className="text-xs" />}
       </div>
     </Link>
   )

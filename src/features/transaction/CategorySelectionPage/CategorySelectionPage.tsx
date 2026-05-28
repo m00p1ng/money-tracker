@@ -178,7 +178,7 @@ function SortableCategoryCell({
                 e.stopPropagation(); onRequestDelete(category.id)
               }}
               className={[
-                'absolute -left-1.5 -top-1.5 z-10 flex h-4.5 w-4.5',
+                'absolute left-2 z-10 flex h-4.5 w-4.5',
                 'items-center justify-center rounded-full bg-red-500 text-white',
               ].join(' ')}
             >
@@ -192,7 +192,9 @@ function SortableCategoryCell({
               ? { scale: 1.05 }
               : { scale: 1 }}
             transition={{
-              type: 'spring', stiffness: 400, damping: 25,
+              type: 'spring',
+              stiffness: 400,
+              damping: 25,
             }}
             style={
               isReparentTarget
@@ -213,22 +215,24 @@ function SortableCategoryCell({
                   : undefined
             }
             className={[
-              'flex w-full flex-col items-center gap-3 rounded-2xl',
-              'border px-2 py-3.5',
+              'flex w-full flex-col items-center gap-3 rounded-2xl py-2',
               isDragging
-                ? 'border-dashed border-white/20 bg-white/2 opacity-40'
-                : 'border-white/[0.07] bg-white/4',
+                ? 'opacity-40'
+                : '',
             ].join(' ')}
           >
             <span
-              className="grid h-11 w-11 place-items-center rounded-xl text-xl text-slate-50"
+              className="grid h-14 w-14 place-items-center rounded-xl text-xl text-white/55"
               style={{
                 background: isActive
                   ? 'color-mix(in srgb, var(--accent) 20%, transparent)'
-                  : 'rgba(255,255,255,0.1)',
+                  : 'rgba(255,255,255,0.05)',
+                color: isActive
+                  ? 'var(--accent-light)'
+                  : 'rgba(255,255,255,0.55)',
               }}
             >
-              <Icon name={category.icon} />
+              <Icon name={category.icon} className="text-2xl" />
             </span>
             <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
           </motion.button>
@@ -287,7 +291,7 @@ function ParentCategoryHeader({
           : '',
       ].join(' ')}
     >
-      <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl">
+      <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-white/55 text-xl">
         <Icon name={parent.icon} />
       </span>
       <span>{parent.name}</span>
@@ -492,7 +496,7 @@ export function CategorySelectionPage({
       exit={{
         opacity: 0, x: -16, transition: { duration: 0.15 },
       }}
-      className="grid grid-cols-3 gap-2.5"
+      className="grid grid-cols-4 gap-2.5"
     >
       {visible.map((category, index) => (
         isEditMode
@@ -515,31 +519,24 @@ export function CategorySelectionPage({
               whileTap={{ scale: 0.96 }}
               onClick={() => onSelect(category)}
               type="button"
-              style={
-                activeThisMonth.has(category.id)
-                  ? {
-                    borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)',
-                    backgroundColor: 'color-mix(in srgb, var(--accent) 6%, transparent)',
-                    boxShadow: [
-                      '0 0 10px color-mix(in srgb, var(--accent) 20%, transparent)',
-                      'inset 0 0 8px color-mix(in srgb, var(--accent) 5%, transparent)',
-                    ].join(', '),
-                  }
-                  : undefined
-              }
-              className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/4 px-2 py-3.5"
+              className="flex flex-col items-center gap-3 rounded-2xl py-2"
             >
               <span
-                className="grid h-11 w-11 place-items-center rounded-xl text-xl text-slate-50"
+                className="grid h-14 w-14 place-items-center rounded-xl text-xl text-slate-50"
                 style={{
                   background: activeThisMonth.has(category.id)
                     ? 'color-mix(in srgb, var(--accent) 20%, transparent)'
-                    : 'rgba(255,255,255,0.1)',
+                    : 'rgba(255,255,255,0.05)',
+                  color: activeThisMonth.has(category.id)
+                    ? 'var(--accent-light)'
+                    : 'rgba(255,255,255,0.55)',
                 }}
               >
-                <Icon name={category.icon} />
+                <Icon name={category.icon} className="text-2xl" />
               </span>
-              <span className="text-center text-[12px] font-semibold leading-tight">{category.name}</span>
+              <span className="text-center text-xs leading-tight text-white">
+                {category.name}
+              </span>
             </motion.button>
           )
       ))}
@@ -551,15 +548,15 @@ export function CategorySelectionPage({
           onClick={onAddCategory}
           type="button"
           className={[
-            'flex flex-col items-center gap-3 rounded-2xl border border-dashed',
-            'border-white/12 bg-white/3 px-2 py-3.5 text-accent-light',
+            'flex flex-col items-center gap-3 rounded-2xl',
+            'px-2 py-3.5',
             'active:bg-white/5',
           ].join(' ')}
         >
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-accent/10 text-xl">
-            <Icon name="fa-plus" />
+          <span className="grid h-14 w-14 place-items-center rounded-xl border-6 border-white/5 text-white/40">
+            <Icon name="fa-plus" className="text-xl" />
           </span>
-          <span className="text-center text-[12px] font-semibold leading-tight">Add Category</span>
+          <span className="text-center text-[12px] font-semibold leading-tight">Add</span>
         </motion.button>
       )}
     </motion.div>

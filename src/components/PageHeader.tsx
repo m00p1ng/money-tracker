@@ -22,7 +22,9 @@ export function PageHeader({
             onClick={onBack}
             className={[
               'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center',
-              'rounded-xl bg-white/5 text-slate-300 hover:bg-white/10 active:scale-95',
+              'rounded-xl text-slate-300',
+              'transition-all duration-150 ease-[cubic-bezier(0.16,1,0.3,1)]',
+              'active:bg-white/5',
             ].join(' ')}
             type="button"
           >
@@ -32,7 +34,7 @@ export function PageHeader({
         : (
           leftSlot ?? <div />
         )}
-      <h1 className="text-lg font-bold">{title}</h1>
+      <h1 className="text-lg font-bold tracking-tight">{title}</h1>
       <div className="flex justify-end">{rightSlot}</div>
     </header>
   )

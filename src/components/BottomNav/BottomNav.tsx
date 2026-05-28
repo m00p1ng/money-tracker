@@ -48,7 +48,7 @@ export function BottomNav({ pathname, onSettingsPress }: BottomNavProps) {
       aria-label="Primary"
       className={[
         'fixed inset-x-0 bottom-0 z-20 border-t border-(--nav-border)',
-        'bg-app-bg/95 pb-7 pt-2.5 backdrop-blur-xl',
+        'bg-app-bg/92 pb-7 pt-2 backdrop-blur-2xl',
       ].join(' ')}
     >
       <div className="mx-auto grid max-w-107.5 grid-cols-5">
@@ -56,39 +56,46 @@ export function BottomNav({ pathname, onSettingsPress }: BottomNavProps) {
           const active = item.to === '/'
             ? pathname === '/'
             : pathname.startsWith(item.to)
-          const activeLabel = 'font-semibold bg-gradient-to-br'
-            + ' from-[var(--accent-btn-2)] to-[var(--accent)] bg-clip-text text-transparent'
           const content = (
-            <>
-              <Icon
-                name={item.icon}
-                className={cx('text-[19px] mb-1', active
-                  ? 'text-accent'
-                  : 'text-white/22')}
-                style={active
-                  ? { color: 'var(--accent-btn-2)' }
-                  : undefined}
-              />
+            <span className="relative flex flex-col items-center gap-0.5">
               <span
                 className={cx(
-                  'text-[10px] leading-none',
-                  active
-                    ? activeLabel
-                    : 'text-white/22',
+                  'flex h-8 w-12 items-center justify-center rounded-xl',
+                  'transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]',
                 )}
-              >{item.label}</span>
-              {active && (
-                <span
-                  className="mt-1 block h-1 w-1 rounded-full"
-                  style={{ background: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }}
+                style={active
+                  ? {
+                    background: 'color-mix(in srgb, var(--accent) 15%, transparent)',
+                  }
+                  : undefined}
+              >
+                <Icon
+                  name={item.icon}
+                  className={cx('text-lg', active
+                    ? ''
+                    : 'text-white/30')}
+                  style={active
+                    ? { color: 'var(--accent-btn-2)' }
+                    : undefined}
                 />
-              )}
-            </>
+              </span>
+              <span
+                className={cx(
+                  'text-[10px] font-medium leading-none',
+                  active
+                    ? 'font-semibold'
+                    : 'text-white/25',
+                )}
+                style={active
+                  ? { color: 'var(--accent-light)' }
+                  : undefined}
+              >{item.label}</span>
+            </span>
           )
 
           if (!item.enabled) {
             return (
-              <button key={item.label} className="flex flex-col items-center py-1.5" disabled type="button">
+              <button key={item.label} className="flex flex-col items-center py-1" disabled type="button">
                 {content}
               </button>
             )
@@ -97,7 +104,7 @@ export function BottomNav({ pathname, onSettingsPress }: BottomNavProps) {
           return (
             <Link
               key={item.label}
-              className="flex flex-col items-center py-1.5"
+              className="flex flex-col items-center py-1"
               onClick={item.label === 'Settings'
                 ? onSettingsPress
                 : undefined}

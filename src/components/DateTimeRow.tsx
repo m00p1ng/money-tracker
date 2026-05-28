@@ -14,20 +14,20 @@ interface DateTimeRowProps {
 
 const statusBadgeStyle: Record<TransactionStatus, { border: string; bg: string; text: string; label: string }> = {
   paid: {
-    border: 'border-green-500/25',
-    bg: 'bg-green-500/12',
+    border: 'border-green-500/20',
+    bg: 'bg-green-500/10',
     text: 'text-green-400',
     label: 'Paid',
   },
   overdue: {
-    border: 'border-danger/25',
-    bg: 'bg-danger/12',
+    border: 'border-danger/20',
+    bg: 'bg-danger/10',
     text: 'text-danger',
     label: 'Overdue',
   },
   planned: {
-    border: 'border-amber-400/25',
-    bg: 'bg-amber-400/12',
+    border: 'border-amber-400/20',
+    bg: 'bg-amber-400/10',
     text: 'text-amber-400',
     label: 'Planned',
   },
@@ -46,8 +46,8 @@ export function DateTimeRow({
   return (
     <div
       className={cx(
-        'flex w-full items-center gap-1 px-4 py-3 text-left',
-        variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/4',
+        'flex w-full items-center gap-2 px-4 py-3 text-left',
+        variant === 'standalone' && 'rounded-2xl border border-white/[0.07] bg-white/[0.04]',
       )}
     >
       <button
@@ -56,7 +56,7 @@ export function DateTimeRow({
         onClick={onClick}
         type="button"
       >
-        <span className={cx('block font-medium', showStatus
+        <span className={cx('block font-medium leading-tight', showStatus
           ? badge.text
           : 'text-white')}>
           {formatDatetimeLocalDisplay(date)}
@@ -67,7 +67,8 @@ export function DateTimeRow({
           type="button"
           aria-label={`Status: ${badge.label}`}
           className={cx(
-            'shrink-0 rounded-lg border px-2.5 py-1 text-sm font-bold',
+            'shrink-0 rounded-lg border px-2.5 py-1 text-xs font-bold tracking-wide',
+            'transition-colors duration-150',
             badge.border,
             badge.bg,
             badge.text,

@@ -28,7 +28,7 @@ export function AnimatedBar({
 
   return (
     <div
-      className="relative h-8 overflow-hidden border border-white/5 rounded-md"
+      className="relative h-8 overflow-hidden rounded-lg border border-white/8"
       style={{ background: textColor }}
     >
       <span
@@ -46,8 +46,8 @@ export function AnimatedBar({
         animate={{ width: widthPercent }}
         transition={{
           type: 'spring',
-          stiffness: 80,
-          damping: 20,
+          stiffness: 90,
+          damping: 22,
           delay,
         }}
       >

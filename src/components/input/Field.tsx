@@ -8,8 +8,8 @@ export function Field({
   children,
 }: FieldProps) {
   return (
-    <label className="block space-y-2">
-      <span className="text-sm font-medium text-slate-300">{label}</span>
+    <label className="block space-y-1.5">
+      <span className="block text-xs font-semibold uppercase tracking-[1.5px] text-white/40">{label}</span>
       {children}
       {error
         ? <span className="block text-xs text-danger">{error}</span>

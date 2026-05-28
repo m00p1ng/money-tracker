@@ -61,26 +61,29 @@ export function SelectInput({
           }
         }}
         className={[
-          'flex min-h-11 w-full items-center justify-between rounded-lg border px-3',
-          'bg-white/5 text-slate-50 outline-none transition-colors',
+          'flex min-h-11 w-full items-center justify-between rounded-xl border px-3',
+          'bg-white/[0.04] text-slate-50 outline-none',
+          'transition-all duration-150 ease-[cubic-bezier(0.16,1,0.3,1)]',
           isOpen
-            ? 'border-(--accent)'
+            ? 'border-(--accent) shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_15%,transparent)]'
             : 'border-white/10',
           disabled
             ? 'cursor-not-allowed opacity-50'
             : 'cursor-pointer',
         ].join(' ')}
       >
-        <span>{selected?.label ?? placeholder ?? ''}</span>
+        <span className={selected
+          ? ''
+          : 'text-white/25'}>{selected?.label ?? placeholder ?? ''}</span>
         <svg
-          width="16"
-          height="16"
+          width="14"
+          height="14"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           className={[
-            'shrink-0 text-slate-500 transition-transform duration-200',
+            'shrink-0 text-white/35 transition-transform duration-200',
             isOpen
               ? 'rotate-180'
               : '',
@@ -92,13 +95,20 @@ export function SelectInput({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
+            initial={{
+              opacity: 0, y: -6, scale: 0.98,
+            }}
+            animate={{
+              opacity: 1, y: 0, scale: 1,
+            }}
+            exit={{
+              opacity: 0, y: -4, scale: 0.98,
+            }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className={[
-              'absolute left-0 right-0 top-[calc(100%+4px)] z-10',
-              'overflow-hidden rounded-lg border border-white/10 bg-(--bg)',
+              'absolute left-0 right-0 top-[calc(100%+6px)] z-10',
+              'overflow-hidden rounded-xl border border-white/10 bg-(--bg)',
+              'shadow-[0_8px_32px_rgba(0,0,0,0.4)]',
             ].join(' ')}
           >
             {options.map((option) => (
@@ -110,21 +120,26 @@ export function SelectInput({
                   setIsOpen(false)
                 }}
                 className={[
-                  'flex w-full items-center justify-between px-3 py-2.5 text-sm transition-colors',
+                  'flex w-full items-center justify-between px-3 py-2.5 text-sm',
+                  'transition-colors duration-100',
                   option.value === value
-                    ? 'bg-accent/10 text-accent-light'
-                    : 'text-white/60 hover:bg-white/5 hover:text-slate-50',
+                    ? 'text-accent-light'
+                    : 'text-white/55 hover:bg-white/[0.04] hover:text-slate-50',
                 ].join(' ')}
+                style={option.value === value
+                  ? { background: 'color-mix(in srgb, var(--accent) 10%, transparent)' }
+                  : undefined}
               >
                 <span>{option.label}</span>
                 {option.value === value && (
                   <svg
-                    width="14"
-                    height="14"
+                    width="13"
+                    height="13"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2.5"
+                    style={{ color: 'var(--accent-light)' }}
                   >
                     <polyline points="20 6 9 17 4 12" />
                   </svg>

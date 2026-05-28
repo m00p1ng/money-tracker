@@ -52,20 +52,24 @@ export function TransactionRow({
     <Link
       to={to}
       className={[
-        'flex items-center gap-1 rounded-2xl border border-white/6 bg-white/4',
-        'px-3 py-3 backdrop-blur transition-[background,box-shadow]',
-        'hover:bg-accent/8 hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--accent)_15%,transparent)]',
+        'flex items-center gap-3 rounded-2xl border border-white/6 bg-white/[0.035]',
+        'px-3 py-3 backdrop-blur',
+        'transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]',
+        'hover:border-[color-mix(in_srgb,var(--accent)_20%,transparent)]',
+        'hover:bg-[color-mix(in_srgb,var(--accent)_6%,transparent)]',
+        'hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--accent)_12%,transparent)]',
+        'active:scale-[0.99]',
       ].join(' ')}
       style={{ display: 'flex', transform: 'translateX(0)' }}
     >
       <span
-        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-slate-500"
+        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-base bg-white/5 text-white/55"
       >
-        <Icon name={icon} style={{ height: 40 }} />
+        <Icon name={icon} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate font-medium">{title}</span>
-        <span className="flex items-center gap-1 truncate text-sm text-white/40">
+        <span className="block truncate font-medium leading-tight">{title}</span>
+        <span className="mt-0.5 flex items-center gap-1 text-sm text-white/38">
           {showSecondaryClock && (
             <Icon
               name="fa-clock"

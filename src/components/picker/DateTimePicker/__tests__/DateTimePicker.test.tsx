@@ -64,7 +64,7 @@ describe('DatePicker', () => {
     )
 
     expect(screen.queryByRole('grid')).not.toBeInTheDocument()
-    expect(screen.getByText('Date')).toBeInTheDocument()
+    expect(screen.getByText('Date & Time')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Today' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'Tue 26 May' })).toBeInTheDocument()
   })

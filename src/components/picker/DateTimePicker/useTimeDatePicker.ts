@@ -25,17 +25,17 @@ export function useDateTimePicker(
   const columns = useMemo(() => [
     {
       name: 'date',
-      label: 'Date',
+      // label: 'Date',
       options: dateOptions,
     },
     {
       name: 'hour',
-      label: 'Hour',
+      // label: 'Hour',
       options: HOUR_OPTIONS,
     },
     {
       name: 'minute',
-      label: 'Minute',
+      // label: 'Minute',
       options: MINUTE_OPTIONS,
     },
   ], [dateOptions])

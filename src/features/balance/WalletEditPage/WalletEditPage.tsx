@@ -85,7 +85,7 @@ export function WalletEditPage({
           onClick={() => setIconPickerOpen(true)}
           className={[
             'flex h-12 w-12 shrink-0 items-center justify-center',
-            'rounded-[14px] bg-white/10 text-base text-slate-50',
+            'rounded-[14px] bg-white/5 text-base text-white/55',
             'active:bg-white/20',
           ].join(' ')}
         >

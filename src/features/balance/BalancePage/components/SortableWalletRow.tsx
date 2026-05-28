@@ -36,17 +36,20 @@ export function SortableWalletRow({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-1 border-b border-white/5 px-4 py-3.5 last:border-b-0 active:bg-white/3"
+      className="flex items-center gap-3 border-b border-white/5 px-4 py-3.5 last:border-b-0 active:bg-white/3"
       {...attributes}
       onClick={() => onEdit(wallet.id)}
     >
       <div
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-sm text-slate-500"
+        className={[
+          'flex h-10 w-10 shrink-0 items-center justify-center',
+          'rounded-[10px] text-base bg-white/5 text-white/55',
+        ].join(' ')}
       >
-        <Icon name={wallet.icon} style={{ height: 40 }} />
+        <Icon name={wallet.icon} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-base font-medium">{wallet.name}</p>
+        <p className="text-base font-medium leading-tight">{wallet.name}</p>
       </div>
       <div className="flex shrink-0 items-center gap-2 text-white/55">
         <span className="text-sm font-semibold">
@@ -56,11 +59,11 @@ export function SortableWalletRow({
           ref={setActivatorNodeRef}
           type="button"
           aria-label="Drag to reorder"
-          className="touch-none p-1"
+          className="touch-none text-white/20"
           onClick={(e) => e.stopPropagation()}
           {...listeners}
         >
-          <Icon name="fa-bars" className="text-base text-white/25" />
+          <Icon name="fa-bars" className="text-base" />
         </button>
       </div>
     </div>

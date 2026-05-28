@@ -73,10 +73,10 @@ export function TodayTransactions({
         ? (
           <div className="mt-3 space-y-1 text-right text-sm font-medium text-slate-300">
             {totalExpense
-              ? <p>Total Expenses: {totalExpense}</p>
+              ? <p className="text-white/38">Total Expenses: {totalExpense}</p>
               : null}
             {totalIncome
-              ? <p>Total Income: {totalIncome}</p>
+              ? <p className="text-white/38">Total Income: {totalIncome}</p>
               : null}
           </div>
         )

@@ -8,6 +8,6 @@ interface SectionLabelProps {
 
 export function SectionLabel({ children, className }: SectionLabelProps) {
   return (
-    <h2 className={cx('text-sm tracking-[1.5px] text-white/30', className)}>{children}</h2>
+    <h2 className={cx('text-xs font-semibold uppercase tracking-[2px] text-white/35', className)}>{children}</h2>
   )
 }
