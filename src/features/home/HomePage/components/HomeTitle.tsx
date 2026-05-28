@@ -31,8 +31,11 @@ export function HomeTitle({ onAddTransaction, onNavigateToCalendar }: HomeTitleP
       <button
         aria-label="Add transaction"
         onClick={onAddTransaction}
-        className="grid h-11 w-11 place-items-center rounded-xl text-white"
-        style={{ background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))' }}
+        className="grid h-11 w-11 cursor-pointer place-items-center rounded-xl text-white active:scale-95"
+        style={{
+          background: 'linear-gradient(135deg, var(--accent-btn-1), var(--accent-btn-2))',
+          boxShadow: '0 4px 14px color-mix(in srgb, var(--accent) 45%, transparent)',
+        }}
         type="button"
       >
         <Icon name="fa-plus" />

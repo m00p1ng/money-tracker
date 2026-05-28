@@ -38,8 +38,7 @@ export function AdjustmentPrimaryCard({
           onClick={onWalletClick}
         >
           <span
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
-            style={{ color: '#63758F' }}
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-slate-500"
           >
             <Icon name={wallet?.icon ?? 'fa-wallet'} style={{ height: 40 }} />
           </span>

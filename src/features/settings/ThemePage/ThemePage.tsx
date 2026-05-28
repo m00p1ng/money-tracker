@@ -33,7 +33,10 @@ export function ThemePage({
         <button
           aria-label="Back"
           onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-300"
+          className={[
+            'flex h-9 w-9 cursor-pointer items-center justify-center',
+            'rounded-xl bg-white/5 text-slate-300 hover:bg-white/10 active:scale-95',
+          ].join(' ')}
           type="button"
         >
           <Icon name="fa-chevron-left" />
@@ -51,10 +54,10 @@ export function ThemePage({
                 key={theme}
                 type="button"
                 className={cx(
-                  'rounded-xl border-2 py-2.5 px-2 text-center',
+                  'cursor-pointer rounded-xl border-2 py-2.5 px-2 text-center active:scale-95',
                   selected === theme
-                    ? 'border-accent'
-                    : 'border-transparent',
+                    ? 'border-accent bg-accent/5'
+                    : 'border-transparent hover:border-white/15',
                 )}
                 onClick={() => onSelectTheme(theme)}
               >

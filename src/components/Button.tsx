@@ -27,7 +27,8 @@ export function Button({
       className={cx(
         [
           'inline-flex min-h-11 items-center justify-center gap-2',
-          'rounded-lg px-4 font-medium transition active:scale-[0.98] disabled:opacity-40',
+          'cursor-pointer rounded-xl px-4 font-medium transition',
+          'active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40',
         ].join(' '),
         { 'w-full': fullWidth },
         variantClass,

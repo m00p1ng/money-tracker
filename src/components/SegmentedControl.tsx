@@ -22,10 +22,10 @@ export function SegmentedControl<T extends string>({
         <button
           key={segment.value}
           className={cx(
-            'rounded-[9px] px-3.5 py-1.5 text-xs font-semibold',
+            'cursor-pointer rounded-[9px] px-3.5 py-1.5 text-xs font-semibold',
             segment.value === value
               ? 'text-white'
-              : 'text-white/40',
+              : 'text-white/40 hover:text-white/60',
           )}
           style={segment.value === value
             ? {

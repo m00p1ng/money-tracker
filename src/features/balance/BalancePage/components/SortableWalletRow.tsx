@@ -41,8 +41,7 @@ export function SortableWalletRow({
       onClick={() => onEdit(wallet.id)}
     >
       <div
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-sm"
-        style={{ color: '#63758F' }}
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-sm text-slate-500"
       >
         <Icon name={wallet.icon} style={{ height: 40 }} />
       </div>

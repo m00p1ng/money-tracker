@@ -45,7 +45,7 @@ export function CategoryItemsCard({
               className="flex min-w-0 flex-1 items-center gap-3 px-4 py-2"
               onClick={() => onChangeCategory(index)}
             >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ color: '#63758F' }}>
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-slate-500">
                 <Icon name={category?.icon ?? 'fa-ellipsis'} style={{ height: 40 }} />
               </span>
               <div className="min-w-0 text-left">

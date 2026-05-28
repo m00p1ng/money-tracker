@@ -43,7 +43,7 @@ export function BottomSheet({
               damping: 38,
             }}
           >
-            <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-white/15" />
+            <div className="mx-auto mt-3 h-1 w-12 rounded-full bg-white/20" />
             <h3 className="px-5 pb-2.5 pt-3.5 text-center text-base font-bold">{title}</h3>
             <div className="mx-5 mb-2.5 h-px bg-white/6" />
             {children}

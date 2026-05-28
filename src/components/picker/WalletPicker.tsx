@@ -24,8 +24,7 @@ function walletToOption(wallet: Wallet): SelectorOption<string> {
     description: `${wallet.currency} · ${wallet.balance.toFixed(2)}`,
     leading: (
       <div
-        className="flex h-8 w-8 shrink-0 items-center justify-center text-lg"
-        style={{ color: '#63758F' }}
+        className="flex h-8 w-8 shrink-0 items-center justify-center text-lg text-slate-500"
       >
         <Icon name={wallet.icon} />
       </div>

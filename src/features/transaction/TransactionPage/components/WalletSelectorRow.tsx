@@ -33,7 +33,7 @@ export function WalletSelectorRow({
       onClick={onClick}
       type="button"
     >
-      <span className="grid h-10 w-10 shrink-0 place-items-center text-lg" style={{ color: '#63758F' }}>
+      <span className="grid h-10 w-10 shrink-0 place-items-center text-lg text-slate-500">
         <Icon name={wallet?.icon ?? 'fa-wallet'} />
       </span>
       <div className="min-w-0 flex-1 px-1">

@@ -20,7 +20,10 @@ export function PageHeader({
           <button
             aria-label="Back"
             onClick={onBack}
-            className="flex h-9 w-9 shrink-0 items-center justify-center bg-transparent text-slate-300"
+            className={[
+              'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center',
+              'rounded-xl bg-white/5 text-slate-300 hover:bg-white/10 active:scale-95',
+            ].join(' ')}
             type="button"
           >
             <Icon name="fa-chevron-left" />

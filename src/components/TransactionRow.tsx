@@ -59,14 +59,13 @@ export function TransactionRow({
       style={{ display: 'flex', transform: 'translateX(0)' }}
     >
       <span
-        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
-        style={{ color: '#63758F' }}
+        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-slate-500"
       >
         <Icon name={icon} style={{ height: 40 }} />
       </span>
       <span className="min-w-0 flex-1">
         <span className="block truncate font-medium">{title}</span>
-        <span className="flex items-center gap-1 truncate text-sm text-slate-500">
+        <span className="flex items-center gap-1 truncate text-sm text-white/40">
           {showSecondaryClock && (
             <Icon
               name="fa-clock"

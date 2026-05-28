@@ -54,7 +54,7 @@ export function TransactionTypeDropdown({
     <div ref={wrapperRef} className="relative flex justify-center">
       <button
         type="button"
-        className="flex items-center gap-2 text-lg text-white"
+        className="flex cursor-pointer items-center gap-2 text-lg text-white"
         onClick={() => {
           if (!locked) {
             setOpen((prev) => !prev)
@@ -97,10 +97,11 @@ export function TransactionTypeDropdown({
                   key={t.value}
                   type="button"
                   className={cx(
-                    'flex w-full items-center justify-between rounded-xl px-8 py-2.5 text-sm font-medium',
+                    'flex w-full cursor-pointer items-center justify-between',
+                    'rounded-xl px-8 py-2.5 text-sm font-medium',
                     value === t.value
                       ? 'bg-(--accent)/12 font-bold text-(--accent-light)'
-                      : 'text-white/70',
+                      : 'text-white/70 hover:text-white/90 hover:bg-white/5',
                   )}
                   onClick={() => {
                     onChange(t.value)
