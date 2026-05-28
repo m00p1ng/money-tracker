@@ -89,8 +89,7 @@ a {
     background-color 200ms ease,
     color 200ms ease,
     border-color 200ms ease,
-    box-shadow 200ms ease,
-    opacity 200ms ease;
+    box-shadow 200ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
