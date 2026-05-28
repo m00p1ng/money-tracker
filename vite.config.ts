@@ -16,7 +16,7 @@ export default defineConfig({
         description: 'Personal finance tracker',
         start_url: '/money-tracker/',
         scope: '/money-tracker/',
-        display: 'standalone',
+        display: 'fullscreen',
         theme_color: '#1a1a2e',
         background_color: '#1a1a2e',
         icons: [

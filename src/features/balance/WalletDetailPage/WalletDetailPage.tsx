@@ -138,7 +138,7 @@ export function WalletDetailPage({
       )}
 
       <section>
-        {rows.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No transactions</p>}
+        {rows.length === 0 && <p className="py-8 text-center text-sm text-white/55">No transactions</p>}
         {rows.map((row) => {
           if (reconciliation) {
             return (

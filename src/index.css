@@ -37,6 +37,8 @@
 }
 
 html {
+  min-height: 100%;
+  background: var(--bg);
   overscroll-behavior-y: contain;
 }
 
@@ -52,7 +54,13 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: transparent;
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 button {

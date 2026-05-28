@@ -48,8 +48,13 @@ export function BottomNav({ pathname, onSettingsPress }: BottomNavProps) {
       aria-label="Primary"
       className={[
         'fixed inset-x-0 bottom-0 z-20 border-t border-(--nav-border)',
-        'bg-app-bg/92 pb-7 pt-2 backdrop-blur-2xl',
+        'bg-app-bg/92 pt-2 backdrop-blur-2xl',
       ].join(' ')}
+      style={{
+        paddingRight: 'env(safe-area-inset-right, 0px)',
+        paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',
+        paddingLeft: 'env(safe-area-inset-left, 0px)',
+      }}
     >
       <div className="mx-auto grid max-w-107.5 grid-cols-5">
         {navItems.map((item) => {

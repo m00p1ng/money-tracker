@@ -52,7 +52,7 @@ export function TodayTransactions({
         animate="visible"
       >
         {rows.length === 0
-          ? <p className="py-8 text-center text-sm text-slate-500">No transactions today</p>
+          ? <p className="py-8 text-center text-sm text-white/55">No transactions today</p>
           : null
         }
         {rows.map((row) => (

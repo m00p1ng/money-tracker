@@ -82,7 +82,7 @@ export function CalendarPage({
       </div>
       <div className="space-y-2 pt-4">
         {listRows.length === 0
-          ? <p className="py-8 text-center text-sm text-slate-500">No transactions</p>
+          ? <p className="py-8 text-center text-sm text-white/55">No transactions</p>
           : (
             <div className="space-y-2">
               {listRows.map((row) => (
