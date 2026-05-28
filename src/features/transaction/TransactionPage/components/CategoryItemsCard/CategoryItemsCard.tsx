@@ -87,7 +87,7 @@ export function CategoryItemsCard({
         type="button"
         className={[
           'flex w-full items-center justify-end',
-          'border-t border-dashed border-white/8 px-4 py-3 text-accent-light',
+          'px-4 py-3 text-accent-light',
         ].join(' ')}
       >
         <Icon name="fa-plus" className="text-base" />
